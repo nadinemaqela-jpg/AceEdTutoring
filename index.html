@@ -54,11 +54,33 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
-        .logo {
+        /* REMOVED: .logo class */
+        /* ADDED: Logo container and image styling */
+        .logo-container {
+            margin-bottom: 15px;
+        }
+        
+        .logo-image {
+            max-width: 400px;
+            height: auto;
+            margin: 0 auto 10px auto;
+        }
+        
+        .logo-image img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            max-height: 120px; /* Adjust this based on your logo height */
+            object-fit: contain;
+        }
+        
+        /* Fallback text in case image doesn't load */
+        .logo-fallback {
             font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 10px;
             letter-spacing: 1px;
+            display: none; /* Hidden by default */
         }
         
         .tagline {
@@ -247,7 +269,11 @@
                 flex-direction: column;
             }
             
-            .logo {
+            .logo-image {
+                max-width: 300px;
+            }
+            
+            .logo-fallback {
                 font-size: 2.2rem;
             }
             
@@ -380,12 +406,38 @@
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+        
+        /* For very small screens */
+        @media (max-width: 480px) {
+            .logo-image {
+                max-width: 250px;
+            }
+            
+            .logo-fallback {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="logo">AceEd Tutoring</div>
+            <!-- REPLACED: Text logo with image logo -->
+            <div class="logo-container">
+                <div class="logo-image">
+                    <!-- OPTION 1: If your image is in same folder as HTML file -->
+                    <img src="logo.png" alt="AceEd Tutoring Logo" 
+                         onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';">
+                    
+                    <!-- OPTION 2: If using a URL (uncomment and replace with your URL) -->
+                    <!-- <img src="https://your-image-url.com/logo.png" alt="AceEd Tutoring Logo" 
+                         onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';"> -->
+                </div>
+                
+                <!-- Fallback text logo (hidden by default, shows if image fails) -->
+                <div class="logo-fallback" id="fallbackLogo">AceEd Tutoring</div>
+            </div>
+            
             <div class="tagline">Expert Tutoring for Grade 11 & 12 Students</div>
             <div class="highlight">Assignment and Homework Help</div>
             
