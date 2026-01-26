@@ -511,6 +511,9 @@
                 <div class="card">
                     <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
                     <form id="contactForm" action="https://formspree.io/f/xwvobqpq" method="POST">
+                    <input type="hidden" name="_subject" value="New Tutoring Request - AceEd Website">
+                    <input type="hidden" name="_replyto" value="{{email}}">
+                    <input type="text" name="_gotcha" style="display:none">
                         <div class="form-group">
                             <label for="name">Your Name *</label>
                             <input type="text" id="name" name="name" required placeholder="Enter your full name">
@@ -634,38 +637,47 @@
             });
         });
         
-        // Contact form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // In a real application, you would send this data to a server
-            // For demo purposes, we'll just show a success message
-            
-            // Get form values
-            const name = document.getElementById('name').value;
-            const subject = document.getElementById('subject').value;
-            
-            // Show success message
-            const successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'block';
-            successMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i> 
-                Thank you ${name}! We've received your request for ${document.getElementById('subject').options[document.getElementById('subject').selectedIndex].text} tutoring. 
-                We'll contact you within 24 hours to discuss your needs.
-            `;
-            
-            // Reset form
-            this.reset();
-            
-            // Scroll to success message
-            successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            // Hide success message after 10 seconds
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 10000);
-        });
+        // Contact form submission with Formspree
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    // Keep the loading animation
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    submitBtn.disabled = true;
+    
+    // Store form data for success message
+    const name = document.getElementById('name').value;
+    const subject = document.getElementById('subject').value;
+    
+    // Let the form submit to Formspree (NO e.preventDefault())
+    // Formspree will handle the email sending
+    
+    // After 2 seconds, show success message (in case redirect doesn't happen)
+    setTimeout(() => {
+        const successMessage = document.getElementById('successMessage');
+        successMessage.style.display = 'block';
+        successMessage.innerHTML = `
+            <i class="fas fa-check-circle"></i> 
+            Thank you ${name}! We've received your request for ${document.getElementById('subject').options[document.getElementById('subject').selectedIndex].text} tutoring. 
+            We'll contact you within 24 hours.
+        `;
         
+        // Reset button
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        
+        // Reset form
+        this.reset();
+        
+        // Scroll to success message
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Hide success message after 10 seconds
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 10000);
+    }, 2000);
+});
         // Initialize phone links
         document.querySelectorAll('.contact-person a').forEach(link => {
             link.setAttribute('aria-label', link.textContent);
@@ -689,6 +701,7 @@
     </script>
 </body>
 </html>
+
 
 
 
