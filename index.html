@@ -507,76 +507,65 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="card">
-                    <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
-                    <form id="contactForm" action="https://formspree.io/f/xwvobqpq" method="POST">
-                    <input type="hidden" name="_subject" value="New Tutoring Request - AceEd Website">
-                    <input type="hidden" name="_replyto" value="{{email}}">
-                    <input type="text" name="_gotcha" style="display:none">
-                        <div class="form-group">
-                            <label for="name">Your Name *</label>
-                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Your Email *</label>
-                            <input type="email" id="email" name="email" required placeholder="Enter your email address">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Your Phone Number</label>
-                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="grade">Grade *</label>
-                            <select id="grade" name="grade" required>
-                                <option value="">Select Grade</option>
-                                <option value="11">Grade 11</option>
-                                <option value="12">Grade 12</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="grade">Grade *</label>
-                            <select id="grade" name="grade" required>
-                                <option value="">Select Grade</option>
-                                <option value="11">Grade 11</option>
-                                <option value="12">Grade 12</option>
-                            </select>
-                        </div>
-
-                        
-                        <div class="form-group">
-                            <label for="subject">Subject(s) Needed *</label>
-                            <select id="subject" name="subject" required>
-                                <option value="">Select Subject</option>
-                                <option value="maths">Mathematics</option>
-                                <option value="science">Physical Sciences</option>
-                                <option value="bio">Life Sciences</option>
-                                <option value="accounting">Accounting</option>
-                                <option value="economics">Economics</option>
-                                <option value="geography">Geography</option>
-                                <option value="english">mathematical literacy</option>
-                                <option value="business">Business Studies</option>
-                                <option value="multiple">Multiple Subjects</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Your Message</label>
-                            <textarea id="message" name="message" rows="4" placeholder="Tell us about your tutoring needs..."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
-                    </form>
-                    
-                    <div id="successMessage" class="success-message">
-                        <i class="fas fa-check-circle"></i> Thank you for your message! We'll contact you within 24 hours.
-                    </div>
-                </div>
-                
+    <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
+    <form id="contactForm" action="https://formspree.io/f/xwvobqpq" method="POST">
+        <!-- Formspree hidden fields -->
+        <input type="hidden" name="_subject" value="New Tutoring Request - AceEd Website">
+        <input type="text" name="_gotcha" style="display:none">
+        
+        <div class="form-group">
+            <label for="name">Your Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Your Email *</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address">
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Your Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+        </div>
+        
+        <div class="form-group">
+            <label for="grade">Grade *</label>
+            <select id="grade" name="grade" required>
+                <option value="">Select Grade</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="subject">Subject(s) Needed *</label>
+            <select id="subject" name="subject" required>
+                <option value="">Select Subject</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="maths_lit">Mathematical Literacy</option>
+                <option value="physical_sciences">Physical Sciences</option>
+                <option value="life_sciences">Life Sciences</option>
+                <option value="accounting">Accounting</option>
+                <option value="economics">Economics</option>
+                <option value="geography">Geography</option>
+                <option value="business_studies">Business Studies</option>
+                <option value="multiple">Multiple Subjects</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tell us about your tutoring needs..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+    </form>
+    
+    <div id="successMessage" class="success-message" style="display: none;">
+        <i class="fas fa-check-circle"></i> Thank you for your message! We'll contact you within 24 hours.
+    </div>
+</div>
                 <div class="card">
                     <h2><i class="fas fa-clock"></i> Flexible Scheduling</h2>
                     <p>We understand that students have busy schedules. Our tutors offer flexible time slots including:</p>
@@ -711,6 +700,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     </script>
 </body>
 </html>
+
 
 
 
