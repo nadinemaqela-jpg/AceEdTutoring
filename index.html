@@ -397,11 +397,11 @@
                 <div class="session-type">Weekend Classes</div>
             </div>
             
-            <!-- UPDATED NAVIGATION: Changed "Our Tutors" to "Get Help" -->
+            <!-- UPDATED: "Get Help" now points to #messageForm -->
             <div class="nav-links">
                 <a href="#subjects" class="nav-link">Our Subjects</a>
                 <a href="#contact" class="nav-link">Contact Us</a>
-                <a href="#contact" class="nav-link">Get Help</a>
+                <a href="#messageForm" class="nav-link">Get Help</a>
             </div>
         </div>
     </header>
@@ -427,7 +427,7 @@
                     </div>
                 </div>
                 
-                <!-- MOVED: Flexible Scheduling Card to left side -->
+                <!-- Flexible Scheduling Card -->
                 <div class="card">
                     <h2><i class="fas fa-clock"></i> Flexible Scheduling</h2>
                     <p>We understand that students have busy schedules. Our tutors offer flexible time slots including:</p>
@@ -451,7 +451,7 @@
                     </ul>
                 </div>
                 
-                <!-- MOVED: Upcoming Programs Card to left side -->
+                <!-- Upcoming Programs Card -->
                 <div class="card">
                     <h2><i class="fas fa-calendar-alt"></i> Upcoming Programs</h2>
                     <ul style="margin-top: 15px; padding-left: 20px;">
@@ -477,7 +477,7 @@
                         <li>Study schedule planning</li>
                     </ul>
                     
-                    <a href="#contact" class="btn btn-contact" aria-label="Contact us for tutoring services">Contact Us Now</a>
+                    <a href="#messageForm" class="btn btn-contact" aria-label="Contact us for tutoring services">Get Help Now</a>
                 </div>
             </div>
             
@@ -526,8 +526,8 @@
                     </div>
                 </div>
                 
-                <!-- Send us a Message Card -->
-                <div class="card">
+                <!-- Send us a Message Card - ADDED id="messageForm" -->
+                <div class="card" id="messageForm">
                     <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
                     <form id="contactForm" action="https://formspree.io/f/xwvobqpq" method="POST">
                         <input type="hidden" name="_subject" value="New Tutoring Request - AceEd Website">
@@ -593,13 +593,22 @@
         <div class="container">
             <p>© 2026 AceEd Tutoring. All rights reserved.</p>
             <p>Grade 11 & 12 Tutoring Specialists | CAPS Curriculum Experts</p>
+            
+            <!-- ADDED: Get Help Button in Footer -->
+            <div style="margin: 20px 0;">
+                <a href="#messageForm" class="btn" style="background-color: #e74c3c;">
+                    <i class="fas fa-hand-paper"></i> Get Help Now
+                </a>
+            </div>
+            
             <p style="margin-top: 15px;">
                 <i class="fas fa-map-marker-alt"></i> Serving Bizana and Surrounding Areas |
                 <i class="fas fa-globe"></i> Online Tutoring Available
             </p>
             <p style="margin-top: 10px; font-size: 0.9rem;">
                 <a href="#contact" style="color: #7f8c8d; text-decoration: none;">Contact</a> | 
-                <a href="#subjects" style="color: #7f8c8d; text-decoration: none;">Subjects</a>
+                <a href="#subjects" style="color: #7f8c8d; text-decoration: none;">Subjects</a> |
+                <a href="#messageForm" style="color: #7f8c8d; text-decoration: none;">Get Help</a>
             </p>
         </div>
     </footer>
