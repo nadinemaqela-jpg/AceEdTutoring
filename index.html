@@ -7,7 +7,7 @@
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Expert Grade 11 & 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R100 per subject tutoring in South Africa.">
-    <meta name="keywords" content="tutoring, grade 111, grade 12, South Africa, CAPS curriculum, homework help, mathematics, physical sciences, life sciences, accounting, economics, geography">
+    <meta name="keywords" content="tutoring, grade 11, grade 12, South Africa, CAPS curriculum, homework help, mathematics, physical sciences, life sciences, accounting, economics, geography">
     <meta name="author" content="AceEd Tutoring">
     
     <!-- Open Graph Tags for Social Media -->
@@ -54,8 +54,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
-        /* REMOVED: .logo class */
-        /* ADDED: Logo container and image styling */
         .logo-container {
             margin-bottom: 15px;
         }
@@ -70,17 +68,16 @@
             width: 100%;
             height: auto;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            max-height: 120px; /* Adjust this based on your logo height */
+            max-height: 120px;
             object-fit: contain;
         }
         
-        /* Fallback text in case image doesn't load */
         .logo-fallback {
             font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 10px;
             letter-spacing: 1px;
-            display: none; /* Hidden by default */
+            display: none;
         }
         
         .tagline {
@@ -298,7 +295,6 @@
             color: #3498db;
         }
         
-        /* Form Styles */
         .form-group {
             margin-bottom: 20px;
         }
@@ -327,9 +323,6 @@
             border-color: #3498db;
         }
         
-        
-      
-        /* Service Area */
         .location-info {
             display: flex;
             align-items: center;
@@ -342,7 +335,6 @@
             color: #e74c3c;
         }
         
-        /* Success Message */
         .success-message {
             background-color: #d4edda;
             color: #155724;
@@ -353,7 +345,6 @@
             border: 1px solid #c3e6cb;
         }
         
-        /* Navigation */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -374,7 +365,6 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
         
-        /* For very small screens */
         @media (max-width: 480px) {
             .logo-image {
                 max-width: 250px;
@@ -389,19 +379,11 @@
 <body>
     <header>
         <div class="container">
-            <!-- REPLACED: Text logo with image logo -->
             <div class="logo-container">
                 <div class="logo-image">
-                    <!-- OPTION 1: If your image is in same folder as HTML file -->
                     <img src="logo.png" alt="AceEd Tutoring Logo" 
                          onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';">
-                    
-                    <!-- OPTION 2: If using a URL (uncomment and replace with your URL) -->
-                    <!-- <img src="https://your-image-url.com/logo.png" alt="AceEd Tutoring Logo" 
-                         onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';"> -->
                 </div>
-                
-                <!-- Fallback text logo (hidden by default, shows if image fails) -->
                 <div class="logo-fallback" id="fallbackLogo">AceEd Tutoring</div>
             </div>
             
@@ -415,10 +397,11 @@
                 <div class="session-type">Weekend Classes</div>
             </div>
             
+            <!-- UPDATED NAVIGATION: Changed "Our Tutors" to "Get Help" -->
             <div class="nav-links">
                 <a href="#subjects" class="nav-link">Our Subjects</a>
                 <a href="#contact" class="nav-link">Contact Us</a>
-                <a href="#tutors" class="nav-link">Our Tutors</a>
+                <a href="#contact" class="nav-link">Get Help</a>
             </div>
         </div>
     </header>
@@ -426,6 +409,7 @@
     <div class="container">
         <div class="content">
             <div class="main-content">
+                <!-- Our Subjects Card -->
                 <div class="card" id="subjects">
                     <h2><i class="fas fa-book-open"></i> Our Subjects</h2>
                     <ul class="services-list">
@@ -443,7 +427,42 @@
                     </div>
                 </div>
                 
+                <!-- MOVED: Flexible Scheduling Card to left side -->
+                <div class="card">
+                    <h2><i class="fas fa-clock"></i> Flexible Scheduling</h2>
+                    <p>We understand that students have busy schedules. Our tutors offer flexible time slots including:</p>
+                    
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>After-school hours (6pm - 9pm)</li>
+                        <li>Weekend sessions (9am - 5pm)</li>
+                        <li>School holiday intensive programs</li>
+                        <li>Online sessions via Zoom/Teams/whatsapp</li>
+                        <li>Cross night sessions for struggling students</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 20px;">Why Choose AceEd Tutoring?</h3>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Experienced tutors familiar with the CAPS curriculum</li>
+                        <li>Personalized learning plans for each student</li>
+                        <li>Affordable rates with no long-term contracts</li>
+                        <li>Progress tracking and regular feedback to parents</li>
+                        <li>Online and in-person options available</li>
+                        <li>Exam preparation and past paper practice</li>
+                    </ul>
+                </div>
                 
+                <!-- MOVED: Upcoming Programs Card to left side -->
+                <div class="card">
+                    <h2><i class="fas fa-calendar-alt"></i> Upcoming Programs</h2>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li><strong>June Holiday Intensive:</strong> Exam prep for mid-year exams</li>
+                        <li><strong>September Spring Classes:</strong> Final push for prelims</li>
+                        <li><strong>November Bootcamp:</strong> Final exam preparation</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic;">Limited spots available - Contact us to reserve your place!</p>
+                </div>
+                
+                <!-- Do you need a tutor? Card -->
                 <div class="card">
                     <h2><i class="fas fa-question-circle"></i> Do you need a tutor?</h2>
                     <p>Struggling with Grade 11 or 12 subjects? Our tutors provide personalized assistance to help you excel in your studies. We offer both one-on-one and group sessions to fit your learning style and budget.</p>
@@ -460,14 +479,13 @@
                     
                     <a href="#contact" class="btn btn-contact" aria-label="Contact us for tutoring services">Contact Us Now</a>
                 </div>
-                
-               
             </div>
             
             <div class="sidebar">
+                <!-- Contact Information Card -->
                 <div class="card" id="contact">
                     <h2><i class="fas fa-phone-alt"></i> Contact Information</h2>
-                    <p>For more information about our tutoring services, contact our tutors directly(also available via whatsapp):</p>
+                    <p>For more information about our tutoring services, contact our tutors directly (also available via WhatsApp):</p>
                     
                     <div class="contact-info">
                         <div class="contact-person">
@@ -507,96 +525,65 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-    <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
-    <form id="contactForm" action="https://formspree.io/f/xwvobqpq" method="POST">
-        <!-- Formspree hidden fields -->
-        <input type="hidden" name="_subject" value="New Tutoring Request - AceEd Website">
-        <input type="text" name="_gotcha" style="display:none">
-        
-        <div class="form-group">
-            <label for="name">Your Name *</label>
-            <input type="text" id="name" name="name" required placeholder="Enter your full name">
-        </div>
-        
-        <div class="form-group">
-            <label for="email">Your Email *</label>
-            <input type="email" id="email" name="email" required placeholder="Enter your email address">
-        </div>
-        
-        <div class="form-group">
-            <label for="phone">Your Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
-        </div>
-        
-        <div class="form-group">
-            <label for="grade">Grade *</label>
-            <select id="grade" name="grade" required>
-                <option value="">Select Grade</option>
-                <option value="11">Grade 11</option>
-                <option value="12">Grade 12</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="subject">Subject(s) Needed *</label>
-            <select id="subject" name="subject" required>
-                <option value="">Select Subject</option>
-                <option value="mathematics">Mathematics</option>
-                <option value="maths_lit">Mathematical Literacy</option>
-                <option value="physical_sciences">Physical Sciences</option>
-                <option value="life_sciences">Life Sciences</option>
-                <option value="accounting">Accounting</option>
-                <option value="economics">Economics</option>
-                <option value="geography">Geography</option>
-                <option value="business_studies">Business Studies</option>
-                <option value="multiple">Multiple Subjects</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="message">Your Message</label>
-            <textarea id="message" name="message" rows="4" placeholder="Tell us about your tutoring needs..."></textarea>
-        </div>
-        
-        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
-    </form>
-    
-    <div id="successMessage" class="success-message" style="display: none;">
-        <i class="fas fa-check-circle"></i> Thank you for your message! We'll contact you within 24 hours.
-    </div>
-</div>
-                <div class="card">
-                    <h2><i class="fas fa-clock"></i> Flexible Scheduling</h2>
-                    <p>We understand that students have busy schedules. Our tutors offer flexible time slots including:</p>
-                    
-                    <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>After-school hours (6pm - 9pm)</li>
-                        <li>Weekend sessions (9am - 5pm)</li>
-                        <li>School holiday intensive programs</li>
-                        <li>Online sessions via Zoom/Teams/whatsapp</li>
-                        <li>Cross night sessions for struggling students</li>
-                    </ul>
-                    
-                    <h3 style="margin-top: 20px;">Why Choose AceEd Tutoring?</h3>
-                    <ul style="margin-top: 10px; padding-left: 20px;">
-                        <li>Experienced tutors familiar with the CAPS curriculum</li>
-                        <li>Personalized learning plans for each student</li>
-                        <li>Affordable rates with no long-term contracts</li>
-                        <li>Progress tracking and regular feedback to parents</li>
-                        <li>Online and in-person options available</li>
-                        <li>Exam preparation and past paper practice</li>
-                    </ul>
-                </div>
                 
+                <!-- Send us a Message Card -->
                 <div class="card">
-                    <h2><i class="fas fa-calendar-alt"></i> Upcoming Programs</h2>
-                    <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li><strong>June Holiday Intensive:</strong> Exam prep for mid-year exams</li>
-                        <li><strong>September Spring Classes:</strong> Final push for prelims</li>
-                        <li><strong>November Bootcamp:</strong> Final exam preparation</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic;">Limited spots available - Contact us to reserve your place!</p>
+                    <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
+                    <form id="contactForm" action="https://formspree.io/f/xwvobqpq" method="POST">
+                        <input type="hidden" name="_subject" value="New Tutoring Request - AceEd Website">
+                        <input type="text" name="_gotcha" style="display:none">
+                        
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Your Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Your Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="grade">Grade *</label>
+                            <select id="grade" name="grade" required>
+                                <option value="">Select Grade</option>
+                                <option value="11">Grade 11</option>
+                                <option value="12">Grade 12</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject(s) Needed *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select Subject</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="maths_lit">Mathematical Literacy</option>
+                                <option value="physical_sciences">Physical Sciences</option>
+                                <option value="life_sciences">Life Sciences</option>
+                                <option value="accounting">Accounting</option>
+                                <option value="economics">Economics</option>
+                                <option value="geography">Geography</option>
+                                <option value="business_studies">Business Studies</option>
+                                <option value="multiple">Multiple Subjects</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" rows="4" placeholder="Tell us about your tutoring needs..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                    </form>
+                    
+                    <div id="successMessage" class="success-message">
+                        <i class="fas fa-check-circle"></i> Thank you for your message! We'll contact you within 24 hours.
+                    </div>
                 </div>
             </div>
         </div>
@@ -612,138 +599,94 @@
             </p>
             <p style="margin-top: 10px; font-size: 0.9rem;">
                 <a href="#contact" style="color: #7f8c8d; text-decoration: none;">Contact</a> | 
-                <a href="#subjects" style="color: #7f8c8d; text-decoration: none;">Subjects</a> | 
+                <a href="#subjects" style="color: #7f8c8d; text-decoration: none;">Subjects</a>
             </p>
         </div>
     </footer>
     
     <script>
-    // This is where my email gets the forms.
-        // Simple script for smooth scrolling
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if(targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if(targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
-        }
-    });
-});
-
-// Formspree form handling
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    // Show loading state
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    submitBtn.disabled = true;
-    
-    // Store the form reference
-    const form = this;
-    const formData = new FormData(form);
-    
-    // Use Fetch API to submit to Formspree
-    e.preventDefault();
-    
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            // Show success message
-            const successMessage = document.getElementById('successMessage');
-            const name = document.getElementById('name').value;
-            const subject = document.getElementById('subject').options[document.getElementById('subject').selectedIndex].text;
-            
-            successMessage.style.display = 'block';
-            successMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i> 
-                Thank you ${name}! We've received your request for ${subject} tutoring. 
-                We'll contact you within 24 hours.
-            `;
-            
-            // Reset form
-            form.reset();
-            
-            // Scroll to success message
-            successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            // Hide success message after 10 seconds
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 10000);
-        } else {
-            alert('There was an error submitting the form. Please try again or contact us directly.');
-        }
-    })
-    .catch(error => {
-        alert('There was an error submitting the form. Please try again or contact us directly.');
-    })
-    .finally(() => {
-        // Reset button state
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    });
-});
-
-// Initialize phone links
-document.querySelectorAll('.contact-person a').forEach(link => {
-    link.setAttribute('aria-label', link.textContent);
-});
-        // Initialize phone links
-        document.querySelectorAll('.contact-person a').forEach(link => {
-            link.setAttribute('aria-label', link.textContent);
         });
-        
-        // Add loading animation for form submission
-        const form = document.getElementById('contactForm');
-        const submitBtn = form.querySelector('button[type="submit"]');
-        
-        form.addEventListener('submit', function() {
+
+        // Formspree form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
             
-            // Reset button after 2 seconds (simulating server processing)
-            setTimeout(() => {
+            // Store the form reference
+            const form = this;
+            const formData = new FormData(form);
+            
+            // Use Fetch API to submit to Formspree
+            e.preventDefault();
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    const successMessage = document.getElementById('successMessage');
+                    const name = document.getElementById('name').value;
+                    const subject = document.getElementById('subject').options[document.getElementById('subject').selectedIndex].text;
+                    
+                    successMessage.style.display = 'block';
+                    successMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i> 
+                        Thank you ${name}! We've received your request for ${subject} tutoring. 
+                        We'll contact you within 24 hours.
+                    `;
+                    
+                    // Reset form
+                    form.reset();
+                    
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    
+                    // Hide success message after 10 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 10000);
+                } else {
+                    alert('There was an error submitting the form. Please try again or contact us directly.');
+                }
+            })
+            .catch(error => {
+                alert('There was an error submitting the form. Please try again or contact us directly.');
+            })
+            .finally(() => {
+                // Reset button state
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-            }, 2000);
+            });
+        });
+
+        // Initialize phone links for accessibility
+        document.querySelectorAll('.contact-person a').forEach(link => {
+            link.setAttribute('aria-label', link.textContent);
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
