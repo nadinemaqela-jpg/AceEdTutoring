@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AceEd Tutoring - Grade 8 to 12 Tutoring</title>
+    <title>AceEd Tutoring - Grade 10 to 12 Tutoring</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Expert Grade 8 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R300 per subject tutoring in South Africa.">
-    <meta name="keywords" content="tutoring, grade 8, grade 9, grade 10, grade 11, grade 12, South Africa, CAPS curriculum">
+    <meta name="description" content="Expert Grade 10 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R300 per subject tutoring in South Africa.">
+    <meta name="keywords" content="tutoring, grade 10, grade 11, grade 12, South Africa, CAPS curriculum, Bizana, Stellenbosch, Durban">
     <meta name="author" content="AceEd Tutoring">
     
     <!-- Font Awesome Icons -->
@@ -258,9 +258,11 @@
         }
         
         .contact-person p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
         }
         
         .contact-person a {
@@ -276,6 +278,28 @@
         .contact-person i {
             margin-right: 10px;
             color: #2c3e50;
+            width: 25px;
+        }
+        
+        .location-badge {
+            background-color: #f1f8ff;
+            color: #3498db;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .lead-tag {
+            background-color: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 8px;
         }
         
         .btn {
@@ -336,6 +360,16 @@
             color: #e74c3c;
             font-weight: 600;
             margin-bottom: 10px;
+        }
+        
+        .director-location {
+            background-color: #f1f8ff;
+            color: #3498db;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 10px 0;
         }
         
         .location-info {
@@ -404,7 +438,7 @@
                 <div class="logo-fallback" id="fallbackLogo">AceEd Tutoring</div>
             </div>
             
-            <div class="tagline">Expert Tutoring for Grade 8 to 12 Students</div>
+            <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
             <div class="highlight">Assignment and Homework Help</div>
             
             <div class="session-types">
@@ -420,8 +454,6 @@
                 <div class="dropdown">
                     <a href="#" class="nav-link">Grades <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="grades/grade-8/index.html">Grade 8</a>
-                        <a href="grades/grade-9/index.html">Grade 9</a>
                         <a href="grades/grade-10/index.html">Grade 10</a>
                         <a href="grades/grade-11/index.html">Grade 11</a>
                         <a href="grades/grade-12/index.html">Grade 12</a>
@@ -453,26 +485,19 @@
             <div class="main-content">
                 <div class="card">
                     <h2><i class="fas fa-info-circle"></i> About AceEd Tutoring</h2>
-                    <p>Founded in 2024, AceEd Tutoring is dedicated to helping Grade 8 to 12 students excel in their studies. We understand the challenges of the CAPS curriculum and provide personalized support to ensure every student reaches their full potential.</p>
-                    <p style="margin-top: 15px;">Our mission is to make quality education accessible and affordable for all students in Bizana and surrounding areas. With experienced tutors and flexible learning options, we're committed to your success.</p>
+                    <p>Founded in 2024, AceEd Tutoring is dedicated to helping Grade 10 to 12 students excel in their studies. We understand the challenges of the CAPS curriculum and provide personalized support to ensure every student reaches their full potential.</p>
+                    <p style="margin-top: 15px;">Our mission is to make quality education accessible and affordable for all students across South Africa. With experienced lead tutors in Bizana, Stellenbosch, and Durban, plus flexible online options, we're committed to your success.</p>
                 </div>
                 
                 <div class="card">
-                    <h2><i class="fas fa-users"></i> Meet Our Directors</h2>
+                    <h2><i class="fas fa-users"></i> Meet Our Lead Tutors</h2>
                     
                     <div class="directors-grid">
                         <div class="director-card">
                             <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
-                            <h3>Eyethu</h3>
-                            <div class="director-role">Director & Accounting Specialist</div>
-                            <p>Accounting, Economics, Business Studies</p>
-                            <a href="tutors/eyethu.html" class="btn" style="padding: 8px 20px;">View Profile</a>
-                        </div>
-                        
-                        <div class="director-card">
-                            <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
                             <h3>Nkululeko</h3>
-                            <div class="director-role">Director & Sciences Specialist</div>
+                            <div class="director-role">Lead Tutor - Bizana</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</div>
                             <p>Mathematics, Physical Sciences, Life Sciences</p>
                             <a href="tutors/nkululeko.html" class="btn" style="padding: 8px 20px;">View Profile</a>
                         </div>
@@ -480,17 +505,28 @@
                         <div class="director-card">
                             <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
                             <h3>Mihlali</h3>
-                            <div class="director-role">Director & Mathematics Specialist</div>
+                            <div class="director-role">Lead Tutor - Stellenbosch</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</div>
                             <p>Mathematics, Physical Sciences</p>
                             <a href="tutors/mihlali.html" class="btn" style="padding: 8px 20px;">View Profile</a>
                         </div>
                         
                         <div class="director-card">
                             <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
-                            <h3>Sinobomi</h3>
-                            <div class="director-role">Director & Life Sciences Specialist</div>
+                            <h3>Sinobom</h3>
+                            <div class="director-role">Lead Tutor - Durban</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
                             <p>Mathematics, Life Sciences</p>
-                            <a href="tutors/sinobomi.html" class="btn" style="padding: 8px 20px;">View Profile</a>
+                            <a href="tutors/sinobom.html" class="btn" style="padding: 8px 20px;">View Profile</a>
+                        </div>
+                        
+                        <div class="director-card">
+                            <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
+                            <h3>Ntuthuko</h3>
+                            <div class="director-role">Lead Tutor - Durban</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
+                            <p>Accounting, Economics, Business Studies</p>
+                            <a href="tutors/ntuthuko.html" class="btn" style="padding: 8px 20px;">View Profile</a>
                         </div>
                     </div>
                 </div>
@@ -502,7 +538,7 @@
                         <div style="text-align: center;">
                             <i class="fas fa-graduation-cap" style="font-size: 2.5rem; color: #3498db;"></i>
                             <h3 style="margin: 10px 0;">Experienced Tutors</h3>
-                            <p>All tutors are subject matter experts</p>
+                            <p>Lead tutors in 3 locations across South Africa</p>
                         </div>
                         
                         <div style="text-align: center;">
@@ -533,8 +569,6 @@
                         <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-12/index.html" style="text-decoration: none; color: inherit;">Grade 12 (Matric)</a></li>
                         <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-11/index.html" style="text-decoration: none; color: inherit;">Grade 11</a></li>
                         <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-10/index.html" style="text-decoration: none; color: inherit;">Grade 10</a></li>
-                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-9/index.html" style="text-decoration: none; color: inherit;">Grade 9</a></li>
-                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-8/index.html" style="text-decoration: none; color: inherit;">Grade 8</a></li>
                     </ul>
                     
                     <div class="price-tag">
@@ -544,12 +578,37 @@
                 </div>
                 
                 <div class="card">
-                    <h2><i class="fas fa-phone-alt"></i> Quick Contact</h2>
-                    <div style="margin-top: 15px;">
-                        <p><i class="fas fa-phone"></i> Nkululeko: <a href="tel:+27631158739">063 115 8739</a></p>
-                        <p><i class="fas fa-phone"></i> Mihlali: <a href="tel:+27655294232">065 529 4232</a></p>
-                        <p><i class="fas fa-phone"></i> Sinobomi: <a href="tel:+27632790549">063 279 0549</a></p>
+                    <h2><i class="fas fa-phone-alt"></i> Contact Our Lead Tutors</h2>
+                    <div class="contact-info">
+                        <div class="contact-person">
+                            <h4>Nkululeko <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27631158739">+27 63 115 8739</a></p>
+                            <p><i class="fas fa-envelope"></i> <a href="mailto:nongcawulankululeko1@gmail.com">nongcawulankululeko1@gmail.com</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</p>
+                        </div>
+                        
+                        <div class="contact-person">
+                            <h4>Mihlali <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27655294232">+27 65 529 4232</a></p>
+                            <p><i class="fas fa-envelope"></i> <a href="mailto:nadinemaqela@gmail.com">nadinemaqela@gmail.com</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</p>
+                        </div>
+
+                        <div class="contact-person">
+                            <h4>Sinobom <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27632790549">+27 63 279 0549</a></p>
+                            <p><i class="fas fa-envelope"></i> <a href="mailto:nongcawulasnobom@gmail.com">nongcawulasnobom@gmail.com</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</p>
+                        </div>
+                        
+                        <div class="contact-person">
+                            <h4>Ntuthuko <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27656476472">+27 65 647 6472</a></p>
+                            <p><i class="fas fa-envelope"></i> <a href="mailto:ntuthukomkhize3012@gmail.com">ntuthukomkhize3012@gmail.com</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</p>
+                        </div>
                     </div>
+                    
                     <a href="get-help.html" class="btn btn-contact" style="margin-top: 20px;">Get Help Now</a>
                 </div>
                 
@@ -557,8 +616,11 @@
                     <div class="location-info">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
-                            <h4>Service Area</h4>
-                            <p>Serving Bizana and surrounding areas • Online tutoring available</p>
+                            <h4>Service Areas</h4>
+                            <p><strong>Bizana:</strong> In-person tutoring available</p>
+                            <p><strong>Stellenbosch:</strong> In-person tutoring available</p>
+                            <p><strong>Durban:</strong> In-person tutoring available</p>
+                            <p><strong>Online:</strong> Available nationwide</p>
                         </div>
                     </div>
                 </div>
@@ -569,7 +631,7 @@
     <footer>
         <div class="container">
             <p>© 2026 AceEd Tutoring. All rights reserved.</p>
-            <p>Grade 8 - 12 Tutoring Specialists | CAPS Curriculum Experts</p>
+            <p>Grade 10 - 12 Tutoring Specialists | CAPS Curriculum Experts</p>
             
             <div class="footer-links">
                 <a href="index.html">Home</a> |
@@ -577,7 +639,7 @@
                 <a href="get-help.html">Get Help</a>
             </div>
             
-            <p><i class="fas fa-map-marker-alt"></i> Serving Bizana and Surrounding Areas</p>
+            <p><i class="fas fa-map-marker-alt"></i> Serving Bizana, Stellenbosch, Durban & Online Nationwide</p>
         </div>
     </footer>
     
