@@ -40,7 +40,7 @@
             z-index: 2;
         }
         
-        /* Parallax Logo Background */
+        /* Parallax Logo Background - More Prominent */
         .parallax-logo {
             position: fixed;
             top: 0;
@@ -57,26 +57,29 @@
             top: 20%;
             left: 50%;
             transform: translateX(-50%);
-            width: 300px;
-            opacity: 0.05;
+            width: 400px;
+            opacity: 0.15;
             transition: transform 0.1s ease-out;
             pointer-events: none;
         }
         
         @media (min-width: 768px) {
             .parallax-logo img {
-                width: 500px;
+                width: 600px;
+                opacity: 0.2;
             }
         }
         
         @media (min-width: 1200px) {
             .parallax-logo img {
-                width: 700px;
+                width: 800px;
+                opacity: 0.25;
             }
         }
         
+        /* Header - Lighter Background for Logo Visibility */
         header {
-            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.85), rgba(74, 100, 145, 0.85));
             color: white;
             padding: 30px 20px;
             text-align: center;
@@ -84,14 +87,16 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 3;
+            backdrop-filter: blur(2px);
         }
         
+        /* Bigger Logo in Header - Faded */
         .logo-container {
             margin-bottom: 15px;
         }
         
         .logo-image {
-            max-width: 400px;
+            max-width: 500px;
             height: auto;
             margin: 0 auto 10px auto;
         }
@@ -99,22 +104,24 @@
         .logo-image img {
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            max-height: 120px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            max-height: 150px;
             object-fit: contain;
+            opacity: 0.9;
         }
         
         .logo-fallback {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 10px;
             letter-spacing: 1px;
             display: none;
+            opacity: 0.9;
         }
         
         .tagline {
             font-size: 1.2rem;
-            opacity: 0.9;
+            opacity: 0.95;
             margin-bottom: 20px;
         }
         
@@ -141,10 +148,12 @@
             padding: 8px 16px;
             border-radius: 20px;
             transition: background-color 0.3s;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         
         .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
         }
         
         .dropdown {
@@ -191,11 +200,11 @@
         }
         
         .session-type {
-            background-color: #f1f8ff;
+            background-color: rgba(241, 248, 255, 0.9);
             padding: 10px 20px;
             border-radius: 30px;
             font-weight: 600;
-            color: #3498db;
+            color: #2c3e50;
         }
         
         .content {
@@ -323,17 +332,6 @@
             width: 25px;
         }
         
-        .location-badge {
-            background-color: #f1f8ff;
-            color: #3498db;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-left: 10px;
-        }
-        
         .lead-tag {
             background-color: #e74c3c;
             color: white;
@@ -378,7 +376,7 @@
             background-color: #c0392b;
         }
         
-        /* BIGGER TUTOR PROFILES */
+        /* BIGGER TUTOR PROFILES WITH PICTURES */
         .directors-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -492,7 +490,7 @@
             }
             
             .logo-image {
-                max-width: 300px;
+                max-width: 350px;
             }
             
             .directors-grid {
@@ -508,22 +506,30 @@
                 width: 120px;
                 height: 120px;
             }
+            
+            .parallax-logo img {
+                width: 300px;
+            }
         }
         
         @media (max-width: 480px) {
             .logo-image {
-                max-width: 250px;
+                max-width: 280px;
             }
             
             .tutor-photo {
                 width: 100px;
                 height: 100px;
             }
+            
+            .parallax-logo img {
+                width: 250px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Parallax Logo Background -->
+    <!-- Parallax Logo Background - More Prominent -->
     <div class="parallax-logo" id="parallaxLogo">
         <img src="logo.png" alt="AceEd Tutoring Logo Background">
     </div>
@@ -596,7 +602,7 @@
                         <!-- Nkululeko - Bizana -->
                         <div class="director-card">
                             <img src="tutors/nkululeko.jpg" alt="Nkululeko" class="tutor-photo" 
-                                 onerror="this.src='https://via.placeholder.com/150x150?text=NK'">
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=Nkululeko'">
                             <h3>Nkululeko</h3>
                             <div class="director-role">Lead Tutor - Bizana</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</div>
@@ -607,7 +613,7 @@
                         <!-- Mihlali - Stellenbosch -->
                         <div class="director-card">
                             <img src="tutors/mihlali.jpg" alt="Mihlali" class="tutor-photo" 
-                                 onerror="this.src='https://via.placeholder.com/150x150?text=MH'">
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=Mihlali'">
                             <h3>Mihlali</h3>
                             <div class="director-role">Lead Tutor - Stellenbosch</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</div>
@@ -618,7 +624,7 @@
                         <!-- Sinobom - Durban -->
                         <div class="director-card">
                             <img src="tutors/sinobom.jpg" alt="Sinobom" class="tutor-photo" 
-                                 onerror="this.src='https://via.placeholder.com/150x150?text=SB'">
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=Sinobom'">
                             <h3>Sinobom</h3>
                             <div class="director-role">Lead Tutor - Durban</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
@@ -629,7 +635,7 @@
                         <!-- Ntuthuko - Durban -->
                         <div class="director-card">
                             <img src="tutors/ntuthuko.jpg" alt="Ntuthuko" class="tutor-photo" 
-                                 onerror="this.src='https://via.placeholder.com/150x150?text=NT'">
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=Ntuthuko'">
                             <h3>Ntuthuko</h3>
                             <div class="director-role">Lead Tutor - Durban</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
@@ -759,8 +765,8 @@
         if (logoImg) {
             window.addEventListener('scroll', function() {
                 let scrollPosition = window.pageYOffset;
-                // Logo moves up slower than scroll (0.3 speed)
-                let moveY = scrollPosition * 0.3;
+                // Logo moves up slower than scroll (0.2 speed - slower for smoother effect)
+                let moveY = scrollPosition * 0.2;
                 logoImg.style.transform = `translateX(-50%) translateY(${moveY}px)`;
             });
         }
