@@ -36,6 +36,43 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Parallax Logo Background */
+        .parallax-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .parallax-logo img {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            opacity: 0.05;
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
+        }
+        
+        @media (min-width: 768px) {
+            .parallax-logo img {
+                width: 500px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .parallax-logo img {
+                width: 700px;
+            }
         }
         
         header {
@@ -45,6 +82,8 @@
             text-align: center;
             border-radius: 0 0 15px 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 3;
         }
         
         .logo-container {
@@ -183,6 +222,8 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 25px;
             transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
         
         .card:hover {
@@ -255,6 +296,7 @@
         .contact-person h4 {
             color: #3498db;
             margin-bottom: 5px;
+            font-size: 1.2rem;
         }
         
         .contact-person p {
@@ -336,40 +378,75 @@
             background-color: #c0392b;
         }
         
+        /* BIGGER TUTOR PROFILES */
         .directors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
             margin-top: 20px;
         }
         
         .director-card {
-            background: linear-gradient(135deg, #f8f9fa, #ffffff);
-            border-radius: 10px;
-            padding: 20px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 20px;
+            padding: 30px 25px;
             text-align: center;
-            border-left: 4px solid #3498db;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        .director-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Tutor Profile Picture */
+        .tutor-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
+            border: 4px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-color: #f1f8ff;
         }
         
         .director-card h3 {
             color: #2c3e50;
-            margin: 10px 0;
+            margin: 15px 0 5px;
+            font-size: 1.6rem;
         }
         
         .director-role {
             color: #e74c3c;
             font-weight: 600;
             margin-bottom: 10px;
+            font-size: 1rem;
         }
         
         .director-location {
             background-color: #f1f8ff;
             color: #3498db;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
             display: inline-block;
             margin: 10px 0;
+        }
+        
+        .director-card p {
+            margin: 15px 0;
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .director-card .btn {
+            margin-top: 15px;
+            padding: 10px 25px;
+            font-size: 0.95rem;
         }
         
         .location-info {
@@ -390,6 +467,9 @@
             margin-top: 40px;
             color: #7f8c8d;
             border-top: 1px solid #eee;
+            position: relative;
+            z-index: 2;
+            background-color: #f8f9fa;
         }
         
         .footer-links {
@@ -417,6 +497,16 @@
             
             .directors-grid {
                 grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .director-card {
+                padding: 25px 20px;
+            }
+            
+            .tutor-photo {
+                width: 120px;
+                height: 120px;
             }
         }
         
@@ -424,10 +514,20 @@
             .logo-image {
                 max-width: 250px;
             }
+            
+            .tutor-photo {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Parallax Logo Background -->
+    <div class="parallax-logo" id="parallaxLogo">
+        <img src="logo.png" alt="AceEd Tutoring Logo Background">
+    </div>
+
     <header>
         <div class="container">
             <div class="logo-container">
@@ -493,40 +593,48 @@
                     <h2><i class="fas fa-users"></i> Meet Our Lead Tutors</h2>
                     
                     <div class="directors-grid">
+                        <!-- Nkululeko - Bizana -->
                         <div class="director-card">
-                            <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
+                            <img src="tutors/nkululeko.jpg" alt="Nkululeko" class="tutor-photo" 
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=NK'">
                             <h3>Nkululeko</h3>
                             <div class="director-role">Lead Tutor - Bizana</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</div>
-                            <p>Mathematics, Physical Sciences, Life Sciences</p>
-                            <a href="tutors/nkululeko.html" class="btn" style="padding: 8px 20px;">View Profile</a>
+                            <p>📐 Mathematics | ⚛️ Physical Sciences | 🧬 Life Sciences</p>
+                            <a href="tutors/nkululeko.html" class="btn">View Full Profile</a>
                         </div>
                         
+                        <!-- Mihlali - Stellenbosch -->
                         <div class="director-card">
-                            <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
+                            <img src="tutors/mihlali.jpg" alt="Mihlali" class="tutor-photo" 
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=MH'">
                             <h3>Mihlali</h3>
                             <div class="director-role">Lead Tutor - Stellenbosch</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</div>
-                            <p>Mathematics, Physical Sciences</p>
-                            <a href="tutors/mihlali.html" class="btn" style="padding: 8px 20px;">View Profile</a>
+                            <p>📐 Mathematics | ⚛️ Physical Sciences</p>
+                            <a href="tutors/mihlali.html" class="btn">View Full Profile</a>
                         </div>
                         
+                        <!-- Sinobom - Durban -->
                         <div class="director-card">
-                            <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
+                            <img src="tutors/sinobom.jpg" alt="Sinobom" class="tutor-photo" 
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=SB'">
                             <h3>Sinobom</h3>
                             <div class="director-role">Lead Tutor - Durban</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
-                            <p>Mathematics, Life Sciences</p>
-                            <a href="tutors/sinobom.html" class="btn" style="padding: 8px 20px;">View Profile</a>
+                            <p>📐 Mathematics | 🧬 Life Sciences</p>
+                            <a href="tutors/sinobom.html" class="btn">View Full Profile</a>
                         </div>
                         
+                        <!-- Ntuthuko - Durban -->
                         <div class="director-card">
-                            <i class="fas fa-user-tie" style="font-size: 3rem; color: #3498db;"></i>
+                            <img src="tutors/ntuthuko.jpg" alt="Ntuthuko" class="tutor-photo" 
+                                 onerror="this.src='https://via.placeholder.com/150x150?text=NT'">
                             <h3>Ntuthuko</h3>
                             <div class="director-role">Lead Tutor - Durban</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
-                            <p>Accounting, Economics, Business Studies</p>
-                            <a href="tutors/ntuthuko.html" class="btn" style="padding: 8px 20px;">View Profile</a>
+                            <p>📊 Accounting | 📈 Economics | 💼 Business Studies</p>
+                            <a href="tutors/ntuthuko.html" class="btn">View Full Profile</a>
                         </div>
                     </div>
                 </div>
@@ -644,6 +752,20 @@
     </footer>
     
     <script>
+        // Parallax Scrolling Effect for Logo Background
+        const parallaxLogo = document.getElementById('parallaxLogo');
+        const logoImg = parallaxLogo ? parallaxLogo.querySelector('img') : null;
+        
+        if (logoImg) {
+            window.addEventListener('scroll', function() {
+                let scrollPosition = window.pageYOffset;
+                // Logo moves up slower than scroll (0.3 speed)
+                let moveY = scrollPosition * 0.3;
+                logoImg.style.transform = `translateX(-50%) translateY(${moveY}px)`;
+            });
+        }
+        
+        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
