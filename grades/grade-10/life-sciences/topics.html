@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 10 Life Sciences Topics - AceEd Tutoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .logo-image {
+            max-width: 250px;
+            margin: 0 auto;
+        }
+        
+        .logo-image img {
+            width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .page-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .topic-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .topic-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .topic-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+            transition: transform 0.3s;
+        }
+        
+        .topic-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .topic-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .topic-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #219653;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img src="../../../logo.png" alt="AceEd Tutoring Logo">
+            </div>
+            <div class="nav-links">
+                <a href="../../../index.html" class="nav-link">Home</a>
+                <a href="../../../tutors.html" class="nav-link">Our Tutors</a>
+                <a href="../../../get-help.html" class="nav-link" style="background-color: #e74c3c;">Get Help</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-leaf"></i> Grade 10 Life Sciences</h1>
+            <p>Study notes, summaries, and revision materials</p>
+        </div>
+
+        <!-- Topics Section -->
+        <div class="topic-section">
+            <h2><i class="fas fa-book-open"></i> Topics & Study Notes</h2>
+            <div class="topics-grid">
+                
+                <!-- DNA Code of Life -->
+                <div class="topic-card">
+                    <h3><i class="fas fa-dna"></i> DNA - The Code of Life</h3>
+                    <p>Learn about DNA structure, replication, and its role in heredity. Includes diagrams and easy-to-understand explanations.</p>
+                    <a href="../../../resources/grade-10/life-sciences/topics/dna-code-of-life.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                </div>
+                
+                <!-- Cell Division -->
+                <div class="topic-card">
+                    <h3><i class="fas fa-divide"></i> Cell Division</h3>
+                    <p>Mitosis and meiosis explained with diagrams and step-by-step breakdown.</p>
+                    <a href="../../../resources/grade-10/life-sciences/topics/cell-division.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                </div>
+                
+                <!-- Plant and Animal Tissues -->
+                <div class="topic-card">
+                    <h3><i class="fas fa-microscope"></i> Plant and Animal Tissues</h3>
+                    <p>Types of tissues, their structures, and functions.</p>
+                    <a href="../../../resources/grade-10/life-sciences/topics/tissues.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                </div>
+                
+                <!-- Support and Transport Systems -->
+                <div class="topic-card">
+                    <h3><i class="fas fa-heartbeat"></i> Support and Transport Systems</h3>
+                    <p>Skeleton system, circulatory system, and transport in plants.</p>
+                    <a href="../../../resources/grade-10/life-sciences/topics/transport-systems.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                </div>
+                
+                <!-- Biosphere to Ecosystems -->
+                <div class="topic-card">
+                    <h3><i class="fas fa-globe-africa"></i> Biosphere to Ecosystems</h3>
+                    <p>Understanding ecosystems, food chains, and energy flow.</p>
+                    <a href="../../../resources/grade-10/life-sciences/topics/ecosystems.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Papers Section -->
+        <div class="topic-section">
+            <h2><i class="fas fa-file-pdf"></i> Past Exam Papers</h2>
+            <div class="topics-grid">
+                
+                <!-- June 2023 Paper -->
+                <div class="topic-card">
+                    <h3>June 2023 Exam Paper</h3>
+                    <p>Grade 10 Life Sciences June exam with memo</p>
+                    <a href="../../../resources/grade-10/life-sciences/papers/june-2023-paper.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Paper
+                    </a>
+                    <a href="../../../resources/grade-10/life-sciences/papers/june-2023-memo.pdf" class="btn" style="background-color: #e74c3c;" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Memo
+                    </a>
+                </div>
+                
+                <!-- November 2023 Paper -->
+                <div class="topic-card">
+                    <h3>November 2023 Exam Paper</h3>
+                    <p>Grade 10 Life Sciences November exam with memo</p>
+                    <a href="../../../resources/grade-10/life-sciences/papers/nov-2023-paper.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Paper
+                    </a>
+                    <a href="../../../resources/grade-10/life-sciences/papers/nov-2023-memo.pdf" class="btn" style="background-color: #e74c3c;" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Memo
+                    </a>
+                </div>
+                
+                <!-- March 2024 Paper -->
+                <div class="topic-card">
+                    <h3>March 2024 Test Paper</h3>
+                    <p>Term 1 test with memo</p>
+                    <a href="../../../resources/grade-10/life-sciences/papers/march-2024-test.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Paper
+                    </a>
+                    <a href="../../../resources/grade-10/life-sciences/papers/march-2024-memo.pdf" class="btn" style="background-color: #e74c3c;" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Memo
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Grade 10 Home</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 AceEd Tutoring. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
