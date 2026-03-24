@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AceEd Tutoring - Grade 10 to 12 Tutoring</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Expert Grade 10 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R300 per subject tutoring in South Africa.">
+    <meta name="keywords" content="tutoring, grade 10, grade 11, grade 12, South Africa, CAPS curriculum, Bizana, Stellenbosch, Durban">
+    <meta name="author" content="AceEd Tutoring">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -12,6 +19,11 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
         }
         
         body {
@@ -46,7 +58,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.09;
+            opacity: 0.08;
         }
         
         header {
@@ -66,10 +78,7 @@
         
         .logo-image img {
             width: 100%;
-            max-height: 350px;
-            max-width: 500px;
-            align-items: top;
-            opacity: 0.09;
+            max-height: 80px;
             object-fit: contain;
         }
         
@@ -120,6 +129,7 @@
             border-radius: 8px;
             top: 100%;
             left: 0;
+            z-index: 10;
         }
         
         .dropdown:hover .dropdown-content {
@@ -132,6 +142,7 @@
             text-decoration: none;
             display: block;
             font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .dropdown-content a:hover {
@@ -180,6 +191,10 @@
             margin-bottom: 25px;
             position: relative;
             z-index: 2;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
         }
         
         .card h2 {
@@ -396,6 +411,7 @@
             
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
+                
                 <div class="dropdown">
                     <a href="#" class="nav-link">Grades ▼</a>
                     <div class="dropdown-content">
@@ -404,15 +420,21 @@
                         <a href="grades/grade-12/index.html">Grade 12</a>
                     </div>
                 </div>
+                
                 <div class="dropdown">
                     <a href="#" class="nav-link">Subjects ▼</a>
                     <div class="dropdown-content">
-                        <a href="grades/grade-12/mathematics.html">Mathematics</a>
-                        <a href="grades/grade-12/physical-sciences.html">Physical Sciences</a>
-                        <a href="grades/grade-12/life-sciences.html">Life Sciences</a>
-                        <a href="grades/grade-12/accounting.html">Accounting</a>
+                        <a href="grades/grade-12/mathematics/mathematics.html">Mathematics</a>
+                        <a href="grades/grade-12/mathematical-literacy/mathematical-literacy.html">Math Literacy</a>
+                        <a href="grades/grade-12/physical-sciences/physical-sciences.html">Physical Sciences</a>
+                        <a href="grades/grade-12/life-sciences/life-sciences.html">Life Sciences</a>
+                        <a href="grades/grade-12/accounting/accounting.html">Accounting</a>
+                        <a href="grades/grade-12/economics/economics.html">Economics</a>
+                        <a href="grades/grade-12/geography/geography.html">Geography</a>
+                        <a href="grades/grade-12/business-studies/business-studies.html">Business Studies</a>
                     </div>
                 </div>
+                
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
                 <a href="get-help.html" class="nav-link" style="background-color: #e74c3c;">Get Help</a>
             </div>
@@ -432,40 +454,44 @@
                     <h2><i class="fas fa-users"></i> Meet Our Lead Tutors</h2>
                     
                     <div class="directors-grid">
+                        <!-- Nkululeko - Bizana -->
                         <div class="director-card">
                             <img src="tutors/nkululeko.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=NK'">
                             <h3>Nkululeko</h3>
                             <div class="director-role">Lead Tutor - Bizana</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</div>
                             <p>Mathematics | Physical Sciences | Life Sciences</p>
-                            
+                            <a href="tutors/nkululeko.html" class="btn">View Profile</a>
                         </div>
                         
+                        <!-- Mihlali - Stellenbosch -->
                         <div class="director-card">
                             <img src="tutors/mihlali.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=MH'">
                             <h3>Mihlali</h3>
                             <div class="director-role">Lead Tutor - Stellenbosch</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</div>
                             <p>Mathematics | Physical Sciences</p>
-                            
+                            <a href="tutors/mihlali.html" class="btn">View Profile</a>
                         </div>
                         
+                        <!-- Sinobom - Durban -->
                         <div class="director-card">
                             <img src="tutors/sinobom.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=SB'">
                             <h3>Sinobom</h3>
                             <div class="director-role">Lead Tutor - Durban</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
                             <p>Mathematics | Life Sciences</p>
-                            
+                            <a href="tutors/sinobom.html" class="btn">View Profile</a>
                         </div>
                         
+                        <!-- Ntuthuko - Durban -->
                         <div class="director-card">
                             <img src="tutors/ntuthuko.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=NT'">
                             <h3>Ntuthuko</h3>
                             <div class="director-role">Lead Tutor - Durban</div>
                             <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
                             <p>Accounting | Economics | Business Studies</p>
-                            
+                            <a href="tutors/ntuthuko.html" class="btn">View Profile</a>
                         </div>
                     </div>
                 </div>
@@ -551,15 +577,12 @@
     <footer>
         <div class="container">
             <p>© 2026 AceEd Tutoring. All rights reserved.</p>
-            <p>Grade 10 - 12 Tutoring Specialists | CAPS Curriculum Experts</p>
-            <div class="footer-links" style="margin-top: 15px;">
-                <a href="../../index.html" style="color: #7f8c8d; text-decoration: none; margin: 0 10px;">Home</a> |
-                <a href="../../tutors.html" style="color: #7f8c8d; text-decoration: none; margin: 0 10px;">Tutors</a> |
-                <a href="../../get-help.html" style="color: #7f8c8d; text-decoration: none; margin: 0 10px;">Get Help</a>
+            <div class="footer-links">
+                <a href="index.html">Home</a> | 
+                <a href="tutors.html">Tutors</a> | 
+                <a href="get-help.html">Get Help</a>
             </div>
         </div>
     </footer>
-    
-    <!-- NO JAVASCRIPT - REMOVED TO PREVENT LOOPING ISSUES -->
 </body>
 </html>
