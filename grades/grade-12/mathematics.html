@@ -99,7 +99,6 @@
             background-color: #3498db;
         }
         
-        /* Breadcrumb */
         .breadcrumb {
             margin: 20px 0;
             color: #666;
@@ -111,7 +110,6 @@
             text-decoration: none;
         }
         
-        /* Subject Header */
         .subject-header {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
@@ -126,12 +124,6 @@
             margin-bottom: 10px;
         }
         
-        .subject-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        /* Section Styles */
         .section {
             background: white;
             border-radius: 12px;
@@ -192,6 +184,8 @@
             font-size: 0.85rem;
             margin-top: 10px;
             transition: all 0.3s;
+            border: none;
+            cursor: pointer;
         }
         
         .btn:hover {
@@ -237,6 +231,7 @@
         .paper-buttons {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
         
         .btn-small {
@@ -333,14 +328,12 @@
     </header>
 
     <div class="container">
-        <!-- Breadcrumb Navigation -->
         <div class="breadcrumb">
             <a href="../../index.html">Home</a> > 
             <a href="index.html">Grade 12</a> > 
             <span style="color: #2c3e50;">Mathematics</span>
         </div>
 
-        <!-- Subject Header -->
         <div class="subject-header">
             <h1><i class="fas fa-calculator"></i> Grade 12 Mathematics</h1>
             <p>Master Algebra, Calculus, Functions, Geometry and more</p>
@@ -351,74 +344,50 @@
             <h2><i class="fas fa-book-open"></i> Topics & Study Notes</h2>
             <div class="topics-grid">
                 
-                <!-- Algebra -->
                 <div class="topic-card">
                     <h3><i class="fas fa-square-root-alt"></i> Algebra</h3>
                     <p>Exponents, surds, equations, inequalities, and number patterns.</p>
-                    <a href="../..grade-12/mathematics/topics/algebra.pdf" class="btn" target="_blank">
+                    <a href="topics/algebra.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download Notes
                     </a>
                 </div>
                 
-                <!-- Functions -->
                 <div class="topic-card">
                     <h3><i class="fas fa-chart-line"></i> Functions</h3>
                     <p>Linear, quadratic, hyperbolic, exponential, and logarithmic functions.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/functions.pdf" class="btn" target="_blank">
+                    <a href="topics/functions.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download Notes
                     </a>
                 </div>
                 
-                <!-- Calculus -->
                 <div class="topic-card">
                     <h3><i class="fas fa-chart-line"></i> Calculus</h3>
                     <p>Limits, differentiation, cubic functions, and optimization problems.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/calculus.pdf" class="btn" target="_blank">
+                    <a href="topics/calculus.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download Notes
                     </a>
                 </div>
                 
-                <!-- Trigonometry -->
                 <div class="topic-card">
                     <h3><i class="fas fa-chart-simple"></i> Trigonometry</h3>
                     <p>Identities, equations, graphs, and 2D/3D problems.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/trigonometry.pdf" class="btn" target="_blank">
-                        <i class="fas-file-pdf"></i> Download Notes
+                    <a href="topics/trigonometry.pdf" class="btn" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download Notes
                     </a>
                 </div>
                 
-                <!-- Euclidean Geometry -->
                 <div class="topic-card">
                     <h3><i class="fas fa-shapes"></i> Euclidean Geometry</h3>
                     <p>Circle geometry, theorems, proofs, and riders.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/geometry.pdf" class="btn" target="_blank">
+                    <a href="topics/geometry.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download Notes
                     </a>
                 </div>
                 
-                <!-- Analytical Geometry -->
                 <div class="topic-card">
-                    <h3><i class="fas fa-chart-line"></i> Analytical Geometry</h3>
-                    <p>Lines, circles, tangents, and coordinate geometry.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/analytical-geometry.pdf" class="btn" target="_blank">
-                        <i class="fas fa-file-pdf"></i> Download Notes
-                    </a>
-                </div>
-                
-                <!-- Statistics -->
-                <div class="topic-card">
-                    <h3><i class="fas fa-chart-bar"></i> Statistics</h3>
-                    <p>Regression, correlation, and data handling.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/statistics.pdf" class="btn" target="_blank">
-                        <i class="fas fa-file-pdf"></i> Download Notes
-                    </a>
-                </div>
-                
-                <!-- Probability -->
-                <div class="topic-card">
-                    <h3><i class="fas fa-dice"></i> Probability</h3>
-                    <p>Venn diagrams, tree diagrams, and counting principles.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/probability.pdf" class="btn" target="_blank">
+                    <h3><i class="fas fa-chart-bar"></i> Statistics & Probability</h3>
+                    <p>Regression, correlation, Venn diagrams, and counting principles.</p>
+                    <a href="topics/statistics-probability.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download Notes
                     </a>
                 </div>
@@ -430,73 +399,64 @@
             <h2><i class="fas fa-file-pdf"></i> Past Exam Papers</h2>
             <div class="papers-grid">
                 
-                <!-- November 2023 -->
                 <div class="paper-card">
                     <div class="paper-info">
                         <h4>November 2023</h4>
-                        <p>Final Exam | Paper 1 & 2 with Memos</p>
+                        <p>Final Exam | Paper 1 & 2 with Memo</p>
                     </div>
                     <div class="paper-buttons">
-                        <a href="../../grade-12/mathematics/papers/nov-2023-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
-                        <a href="../../grade-12/mathematics/papers/nov-2023-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
-                        <a href="../../grade-12/mathematics/papers/nov-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
+                        <a href="papers/nov-2023-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
+                        <a href="papers/nov-2023-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
+                        <a href="papers/nov-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
                     </div>
                 </div>
                 
-                <!-- September 2023 Prelim -->
                 <div class="paper-card">
                     <div class="paper-info">
                         <h4>September 2023 (Prelim)</h4>
-                        <p>Preliminary Exam | Paper 1 & 2 with Memos</p>
+                        <p>Preliminary Exam | Paper 1 & 2 with Memo</p>
                     </div>
                     <div class="paper-buttons">
-                        <a href="../../resources/grade-12/mathematics/papers/sept-2023-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
-                        <a href="../../resources/grade-12/mathematics/papers/sept-2023-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
-                        <a href="../../resources/grade-12/mathematics/papers/sept-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
+                        <a href="papers/sept-2023-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
+                        <a href="papers/sept-2023-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
+                        <a href="papers/sept-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
                     </div>
                 </div>
                 
-                <!-- June 2023 -->
                 <div class="paper-card">
                     <div class="paper-info">
                         <h4>June 2023</h4>
-                        <p>Mid-Year Exam | Paper 1 & 2 with Memos</p>
+                        <p>Mid-Year Exam | Paper 1 & 2 with Memo</p>
                     </div>
                     <div class="paper-buttons">
-                        <a href="../../resources/grade-12/mathematics/papers/june-2023-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
-                        <a href="../../resources/grade-12/mathematics/papers/june-2023-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
-                        <a href="../../resources/grade-12/mathematics/papers/june-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
+                        <a href="papers/june-2023-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
+                        <a href="papers/june-2023-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
+                        <a href="papers/june-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
                     </div>
                 </div>
                 
-                <!-- March 2023 -->
                 <div class="paper-card">
                     <div class="paper-info">
                         <h4>March 2023</h4>
-                        <p>Term 1 Test | Paper with Memo</p>
+                        <p>Term 1 Test | Test with Memo</p>
                     </div>
                     <div class="paper-buttons">
-                        <a href="../../resources/grade-12/mathematics/papers/march-2023-test.pdf" class="btn btn-small" target="_blank">Test</a>
-                        <a href="../../resources/grade-12/mathematics/papers/march-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
+                        <a href="papers/march-2023-test.pdf" class="btn btn-small" target="_blank">Test</a>
+                        <a href="papers/march-2023-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
                     </div>
                 </div>
                 
-                <!-- November 2022 -->
                 <div class="paper-card">
                     <div class="paper-info">
                         <h4>November 2022</h4>
-                        <p>Final Exam | Paper 1 & 2 with Memos</p>
+                        <p>Final Exam | Paper 1 & 2 with Memo</p>
                     </div>
                     <div class="paper-buttons">
-                        <a href="../../resources/grade-12/mathematics/papers/nov-2022-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
-                        <a href="../../resources/grade-12/mathematics/papers/nov-2022-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
-                        <a href="../../resources/grade-12/mathematics/papers/nov-2022-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
+                        <a href="papers/nov-2022-p1.pdf" class="btn btn-small" target="_blank">Paper 1</a>
+                        <a href="papers/nov-2022-p2.pdf" class="btn btn-small" target="_blank">Paper 2</a>
+                        <a href="papers/nov-2022-memo.pdf" class="btn btn-small btn-paper" target="_blank">Memo</a>
                     </div>
                 </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="past-papers.html" class="btn">View All Past Papers</a>
             </div>
         </div>
 
@@ -507,14 +467,14 @@
                 <div class="topic-card">
                     <h3>Complete Formula Sheet</h3>
                     <p>All formulas you need for Grade 12 Mathematics exams.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/formula-sheet.pdf" class="btn" target="_blank">
+                    <a href="topics/formula-sheet.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download PDF
                     </a>
                 </div>
                 <div class="topic-card">
                     <h3>Quick Reference Card</h3>
                     <p>Key formulas and theorems summarized.</p>
-                    <a href="../../resources/grade-12/mathematics/topics/quick-reference.pdf" class="btn" target="_blank">
+                    <a href="topics/quick-reference.pdf" class="btn" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download PDF
                     </a>
                 </div>
@@ -546,7 +506,7 @@
         <div class="container">
             <p>© 2026 AceEd Tutoring. All rights reserved.</p>
             <p>Grade 10 - 12 Tutoring Specialists | CAPS Curriculum Experts</p>
-            <div class="footer-links" style="margin-top: 15px;">
+            <div style="margin-top: 15px;">
                 <a href="../../index.html" style="color: #7f8c8d; text-decoration: none; margin: 0 10px;">Home</a> |
                 <a href="../../tutors.html" style="color: #7f8c8d; text-decoration: none; margin: 0 10px;">Tutors</a> |
                 <a href="../../get-help.html" style="color: #7f8c8d; text-decoration: none; margin: 0 10px;">Get Help</a>
