@@ -6,5 +6,7 @@
 * Subjects button must be used for Tutor resources
 * Change the get help button to register now
 * Add a book a session now button
+* Add a price list button
+   
 
 
