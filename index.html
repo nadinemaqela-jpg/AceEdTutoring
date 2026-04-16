@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AceEd Tutoring - Grade 10 to 12 Tutoring</title>
+    <title>AceEd Tutoring - Grade 10 to 12 Tutoring | Expert CAPS Support</title>
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Expert Grade 10 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R300 per subject tutoring in South Africa.">
@@ -28,7 +28,7 @@
         
         body {
             background-color: #f8f9fa;
-            color: #333;
+            color: #1e2a3e;
             line-height: 1.6;
         }
         
@@ -58,17 +58,18 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.08;
+            opacity: 0.06;
         }
         
         header {
-            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             color: white;
             padding: 20px;
             text-align: center;
-            border-radius: 0 0 15px 15px;
+            border-radius: 0 0 20px 20px;
             position: relative;
             z-index: 3;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
         }
         
         .logo-image {
@@ -80,20 +81,23 @@
             width: 100%;
             max-height: 2000px;
             object-fit: cover;
-        
         }
         
         .tagline {
             font-size: 1rem;
             margin: 15px 0;
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
         
         .highlight {
-            background-color: #e74c3c;
-            padding: 5px 15px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 5px 20px;
+            border-radius: 40px;
             display: inline-block;
             font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         
         .nav-links {
@@ -108,12 +112,14 @@
             color: white;
             text-decoration: none;
             padding: 6px 12px;
-            border-radius: 20px;
+            border-radius: 30px;
             font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
         
         .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
         
         .dropdown {
@@ -126,11 +132,12 @@
             position: absolute;
             background-color: #2c3e50;
             min-width: 180px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 8px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
             top: 100%;
             left: 0;
             z-index: 10;
+            backdrop-filter: blur(2px);
         }
         
         .dropdown:hover .dropdown-content {
@@ -144,10 +151,12 @@
             display: block;
             font-size: 0.85rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
         }
         
         .dropdown-content a:hover {
             background-color: #3498db;
+            border-radius: 0 0 12px 12px;
         }
         
         .session-types {
@@ -159,12 +168,14 @@
         }
         
         .session-type {
-            background-color: #f1f8ff;
-            padding: 5px 12px;
-            border-radius: 20px;
+            background-color: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 5px 14px;
+            border-radius: 40px;
             font-weight: 600;
-            color: #3498db;
+            color: white;
             font-size: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
         .content {
@@ -186,23 +197,26 @@
         
         .card {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
             margin-bottom: 25px;
             position: relative;
             z-index: 2;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid rgba(0,0,0,0.03);
         }
         
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12);
         }
         
         .card h2 {
-            color: #2c3e50;
+            color: #1e2a3a;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #eef2f6;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -220,38 +234,51 @@
             align-items: center;
         }
         
+        .services-list li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .services-list li a:hover {
+            color: #3498db;
+        }
+        
         .check-icon {
             color: #27ae60;
             margin-right: 12px;
         }
         
         .price-tag {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            background: linear-gradient(135deg, #1e4668, #2c5a8c);
             color: white;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 20px;
             text-align: center;
             margin-top: 20px;
         }
         
         .price-tag h3 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 700;
         }
         
         .directors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
             margin-top: 20px;
         }
         
         .director-card {
             background: white;
-            border-radius: 16px;
-            padding: 25px 20px;
+            border-radius: 24px;
+            padding: 25px 18px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(52, 152, 219, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(52, 152, 219, 0.15);
+            transition: all 0.2s;
         }
         
         .tutor-photo {
@@ -262,8 +289,8 @@
             margin: 0 auto 15px;
             display: block;
             border: 3px solid #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-            background-color: #f1f8ff;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+            background-color: #eef2fa;
         }
         
         .director-card h3 {
@@ -278,10 +305,10 @@
         }
         
         .director-location {
-            background-color: #f1f8ff;
-            color: #3498db;
+            background-color: #eef2fc;
+            color: #2c5a8c;
             padding: 5px 12px;
-            border-radius: 20px;
+            border-radius: 30px;
             font-size: 0.8rem;
             display: inline-block;
             margin: 10px 0;
@@ -291,16 +318,21 @@
             display: inline-block;
             background-color: #3498db;
             color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
+            padding: 10px 24px;
+            border-radius: 40px;
             text-decoration: none;
             font-weight: 600;
             margin-top: 10px;
             font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
         }
         
         .btn:hover {
-            background-color: #2980b9;
+            background-color: #2471a3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(52,152,219,0.3);
         }
         
         .btn-contact {
@@ -309,20 +341,26 @@
             text-align: center;
         }
         
+        .btn-contact:hover {
+            background-color: #c0392b;
+            box-shadow: 0 5px 12px rgba(231,76,60,0.3);
+        }
+        
         .contact-info {
-            background-color: #f8f9fa;
+            background-color: #f8fafd;
             padding: 20px;
-            border-radius: 12px;
-            border-left: 5px solid #3498db;
+            border-radius: 18px;
+            border-left: 4px solid #3498db;
         }
         
         .contact-person {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         
         .contact-person h4 {
-            color: #3498db;
+            color: #1e4668;
             margin-bottom: 5px;
+            font-size: 1rem;
         }
         
         .contact-person p {
@@ -332,27 +370,39 @@
             gap: 8px;
         }
         
+        .contact-person a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact-person a:hover {
+            color: #3498db;
+        }
+        
         .lead-tag {
             background-color: #e74c3c;
             color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-size: 0.65rem;
             margin-left: 8px;
+            font-weight: 600;
         }
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
         
         .feature-item {
             text-align: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
+            padding: 14px;
+            background: #f8fcff;
+            border-radius: 18px;
+            transition: all 0.2s;
         }
         
         .feature-item i {
@@ -366,12 +416,147 @@
             gap: 15px;
         }
         
-        footer {
+        /* MODERN FOOTER SECTION */
+        .footer-modern {
+            background: #0f1720;
+            color: #e2e8f0;
+            margin-top: 60px;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #e74c3c;
+            border-radius: 3px;
+        }
+        
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #e74c3c;
+            padding-left: 4px;
+        }
+        
+        /* Special red register button in footer */
+        .footer-register-btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(231,76,60,0.3);
+        }
+        
+        .footer-register-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231,76,60,0.4);
+        }
+        
+        /* Black / dark buttons for other footer links */
+        .footer-dark-btn {
+            background: #2d3e50;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        
+        .footer-dark-btn:hover {
+            background: #1e2f40;
+            transform: translateY(-1px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            background: #1e2a3a;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        
+        .social-icons a:hover {
+            background: #e74c3c;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
             text-align: center;
-            padding: 25px;
-            margin-top: 40px;
-            color: #7f8c8d;
-            border-top: 1px solid #eee;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .footer-bottom a {
+            color: #e2e8f0;
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            color: #e74c3c;
         }
         
         @media (max-width: 768px) {
@@ -384,6 +569,9 @@
             .tutor-photo {
                 width: 100px;
                 height: 100px;
+            }
+            .footer-grid {
+                gap: 30px;
             }
         }
     </style>
@@ -432,7 +620,7 @@
                 </div>
                 
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <a href="get-help.html" class="nav-link" style="background-color: #e74c3c;">Register Now</a>
+                <a href="get-help.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
             </div>
         </div>
     </header>
@@ -497,9 +685,9 @@
                 <div class="card">
                     <h2><i class="fas fa-book-open"></i> Quick Access</h2>
                     <ul class="services-list">
-                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-12/index.html" style="text-decoration: none; color: inherit;">Grade 12 (Matric)</a></li>
-                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-11/index.html" style="text-decoration: none; color: inherit;">Grade 11</a></li>
-                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-10/index.html" style="text-decoration: none; color: inherit;">Grade 10</a></li>
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-12/index.html">Grade 12 (Matric)</a></li>
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-11/index.html">Grade 11</a></li>
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-10/index.html">Grade 10</a></li>
                     </ul>
                     
                     <div class="price-tag">
@@ -559,7 +747,7 @@
                 
                 <div class="card">
                     <div class="location-info">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <i class="fas fa-map-marker-alt" style="color: #e74c3c;"></i>
                         <div>
                             <h4>Service Areas</h4>
                             <p>Bizana • Stellenbosch • Durban • Online Nationwide</p>
@@ -570,13 +758,58 @@
         </div>
     </div>
     
-    <footer>
+    <!-- NEW MODERN FOOTER with rich info and styled buttons -->
+    <footer class="footer-modern">
         <div class="container">
-            <p>© 2026 AceEd Tutoring. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="index.html">Home</a> | 
-                <a href="tutors.html">Tutors</a> | 
-                <a href="get-help.html">Register Now</a>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tutors.html">Our Tutors</a></li>
+                        <li><a href="grades/grade-10/index.html">Grade 10</a></li>
+                        <li><a href="grades/grade-11/index.html">Grade 11</a></li>
+                        <li><a href="grades/grade-12/index.html">Grade 12 (Matric)</a></li>
+                        <li><a href="get-help.html">Student Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences</li>
+                        <li>Life Sciences</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> hello@aceed.co.za</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <!-- REGISTER BUTTON (RED) in footer -->
+                    <a href="get-help.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <!-- Black / dark buttons for other actions -->
+                    <div style="margin-top: 12px;">
+                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="grades/grade-12/index.html" class="footer-dark-btn"><i class="fas fa-book"></i> Matric Prep</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a> | <i class="fas fa-heart" style="color: #e74c3c;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
             </div>
         </div>
     </footer>
