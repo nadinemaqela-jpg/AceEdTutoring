@@ -14,25 +14,49 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
             min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Faded Background Logo */
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
+            position: relative;
+            z-index: 2;
         }
         
-        /* Header Styles */
+        /* Header Styles - Dark Green */
         .header {
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
             color: white;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
             border-radius: 20px;
             margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
         
         .back-home {
@@ -52,12 +76,13 @@
         }
         
         .grade-badge {
-            background: #e74c3c;
+            background: #ff8f00;
             display: inline-block;
             padding: 5px 20px;
             border-radius: 30px;
             font-size: 0.9rem;
             margin-top: 10px;
+            font-weight: 600;
         }
         
         /* Subject Grid */
@@ -75,18 +100,19 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(46, 125, 50, 0.2);
         }
         
         .subject-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            border-color: #2e7d32;
         }
         
         .subject-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #3498db, #2c3e50);
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -101,12 +127,12 @@
         
         .subject-card h3 {
             font-size: 1.4rem;
-            color: #2c3e50;
+            color: #1b5e20;
             margin-bottom: 10px;
         }
         
         .subject-card p {
-            color: #7f8c8d;
+            color: #6d6d6d;
             font-size: 0.85rem;
             margin-bottom: 15px;
         }
@@ -115,7 +141,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #e74c3c;
+            background: #2e7d32;
             color: white;
             padding: 10px 20px;
             border-radius: 40px;
@@ -127,7 +153,7 @@
         }
         
         .pdf-link:hover {
-            background: #c0392b;
+            background: #1b5e20;
             transform: translateX(5px);
         }
         
@@ -136,34 +162,177 @@
         }
         
         .info-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+            background: #e8f5e9;
+            border-left: 4px solid #2e7d32;
             padding: 15px 20px;
             border-radius: 12px;
             margin-bottom: 30px;
+            color: #1b5e20;
         }
         
-        footer {
-            text-align: center;
+        /* Dark Green Footer */
+        .footer-modern {
+            background: #0a2e0f;
+            color: #e8f5e9;
             margin-top: 60px;
-            padding: 30px;
-            color: #7f8c8d;
-            border-top: 1px solid #ddd;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #ff8f00;
+            border-radius: 3px;
+        }
+        
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #c8e6c9;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #ff8f00;
+            padding-left: 4px;
+        }
+        
+        .footer-register-btn {
+            display: inline-block;
+            background: #ff8f00;
+            color: #0a2e0f;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(255,143,0,0.3);
+        }
+        
+        .footer-register-btn:hover {
+            background: #e67e00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,143,0,0.4);
+            color: white;
+        }
+        
+        .footer-dark-btn {
+            background: #1b5e20;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        
+        .footer-dark-btn:hover {
+            background: #0a2e0f;
+            transform: translateY(-1px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            background: #1b5e20;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        
+        .social-icons a:hover {
+            background: #ff8f00;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .footer-bottom a {
+            color: #c8e6c9;
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            color: #ff8f00;
         }
         
         @media (max-width: 768px) {
             .subjects-grid {
                 grid-template-columns: 1fr;
             }
+            .footer-grid {
+                gap: 30px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Faded Background Logo -->
+    <div class="bg-logo">
+        <img src="../logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
+
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-calendar-alt"></i> Grade 10 ATPs</h1>
             <p>Annual Teaching Plans (ATP) for CAPS Curriculum</p>
-            <div class="grade-badge">Grade 10</div>
+            <div class="grade-badge">🍃 Grade 10</div>
             <br>
             <a href="../../index.html" class="back-home"><i class="fas fa-home"></i> Back to Home</a>
         </div>
@@ -172,7 +341,7 @@
             <i class="fas fa-info-circle"></i> <strong>What are ATPs?</strong> Annual Teaching Plans outline the curriculum schedule for the academic year, helping students and teachers stay on track with CAPS requirements.
         </div>
         
-        <h2><i class="fas fa-book-open"></i> Select a Subject</h2>
+        <h2 style="color: #1b5e20;"><i class="fas fa-book-open"></i> Select a Subject</h2>
         <div class="subjects-grid">
             <!-- Mathematics -->
             <div class="subject-card">
@@ -280,8 +449,58 @@
         </div>
     </div>
     
-    <footer>
-        <p>© 2026 AceEd Tutoring. All rights reserved. | ATP documents follow CAPS curriculum guidelines</p>
+    <!-- Dark Green Footer -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../tutors.html">Our Tutors</a></li>
+                        <li><a href="../grade-10/index.html">Grade 10</a></li>
+                        <li><a href="../grade-11/index.html">Grade 11</a></li>
+                        <li><a href="../grade-12/index.html">Grade 12 (Matric)</a></li>
+                        <li><a href="../../get-help.html">Student Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences</li>
+                        <li>Life Sciences</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> aceed.sa@gmail.com</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="../../get-help.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="../../tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="../grade-12/index.html" class="footer-dark-btn"><i class="fas fa-book"></i> Matric Prep</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="../../privacy.html">Privacy Policy</a> | <a href="../../terms.html">Terms of Service</a> | <i class="fas fa-heart" style="color: #ff8f00;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
