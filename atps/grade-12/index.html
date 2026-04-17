@@ -1,1 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 10 ATPs - Annual Teaching Plans | AceEd Tutoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Faded Background Logo */
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Header Styles - Dark Green */
+        .header {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .back-home {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .back-home:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .grade-badge {
+            background: #ff8f00;
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        /* Subject Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .subject-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(46, 125, 50, 0.2);
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            border-color: #2e7d32;
+        }
+        
+        .subject-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .subject-icon i {
+            font-size: 28px;
+            color: white;
+        }
+        
+        .subject-card h3 {
+            font-size: 1.4rem;
+            color: #1b5e20;
+            margin-bottom: 10px;
+        }
+        
+        .subject-card p {
+            color: #6d6d6d;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #2e7d32;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .pdf-link:hover {
+            background: #1b5e20;
+            transform: translateX(5px);
+        }
+        
+        .pdf-link i {
+            font-size: 1rem;
+        }
+        
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            color: #1b5e20;
+        }
+        
+        /* Dark Green Footer */
+        .footer-modern {
+            background: #0a2e0f;
+            color: #e8f5e9;
+            margin-top: 60px;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #ff8f00;
+            border-radius: 3px;
+        }
+        
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #c8e6c9;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #ff8f00;
+            padding-left: 4px;
+        }
+        
+        .footer-register-btn {
+            display: inline-block;
+            background: #ff8f00;
+            color: #0a2e0f;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(255,143,0,0.3);
+        }
+        
+        .footer-register-btn:hover {
+            background: #e67e00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,143,0,0.4);
+            color: white;
+        }
+        
+        .footer-dark-btn {
+            background: #1b5e20;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        
+        .footer-dark-btn:hover {
+            background: #0a2e0f;
+            transform: translateY(-1px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            background: #1b5e20;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        
+        .social-icons a:hover {
+            background: #ff8f00;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .footer-bottom a {
+            color: #c8e6c9;
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            color: #ff8f00;
+        }
+        
+        @media (max-width: 768px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Faded Background Logo -->
+    <div class="bg-logo">
+        <img src="../logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
 
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calendar-alt"></i> Grade 10 ATPs</h1>
+            <p>Annual Teaching Plans (ATP) for CAPS Curriculum</p>
+            <div class="grade-badge">🍃 Grade 10</div>
+            <br>
+            <a href="../../index.html" class="back-home"><i class="fas fa-home"></i> Back to Home</a>
+        </div>
+        
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i> <strong>What are ATPs?</strong> Annual Teaching Plans outline the curriculum schedule for the academic year, helping students and teachers stay on track with CAPS requirements.
+        </div>
+        
+        <h2 style="color: #1b5e20;"><i class="fas fa-book-open"></i> Select a Subject</h2>
+        <div class="subjects-grid">
+            <!-- Mathematics -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-calculator"></i></div>
+                <h3>Mathematics</h3>
+                <p>Grade 10 Mathematics ATP - Topics, dates, and assessment guidelines</p>
+                <a href="../pdfs/mathematics-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Maths Literacy -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Mathematical Literacy</h3>
+                <p>Grade 10 Mathematical Literacy ATP</p>
+                <a href="../pdfs/maths-lit-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Physical Sciences -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-flask"></i></div>
+                <h3>Physical Sciences</h3>
+                <p>Grade 10 Physical Sciences ATP</p>
+                <a href="../pdfs/physical-sciences-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Life Science -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-leaf"></i></div>
+                <h3>Life Sciences</h3>
+                <p>Grade 10 Life Sciences ATP</p>
+                <a href="../pdfs/life-science-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Accounting -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-chart-bar"></i></div>
+                <h3>Accounting</h3>
+                <p>Grade 10 Accounting ATP</p>
+                <a href="../pdfs/accounting-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Business Studies -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-briefcase"></i></div>
+                <h3>Business Studies</h3>
+                <p>Grade 10 Business Studies ATP</p>
+                <a href="../pdfs/business-studies-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Economics -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Economics</h3>
+                <p>Grade 10 Economics ATP</p>
+                <a href="../pdfs/economics-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Geography -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-globe-africa"></i></div>
+                <h3>Geography</h3>
+                <p>Grade 10 Geography ATP</p>
+                <a href="../pdfs/geography-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- History -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-landmark"></i></div>
+                <h3>History</h3>
+                <p>Grade 10 History ATP</p>
+                <a href="../pdfs/history-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Tourism -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-plane"></i></div>
+                <h3>Tourism</h3>
+                <p>Grade 10 Tourism ATP</p>
+                <a href="../pdfs/tourism-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- CAT -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Computer Applications Technology (CAT)</h3>
+                <p>Grade 10 CAT ATP</p>
+                <a href="../pdfs/cat-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- Afrikaans -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-language"></i></div>
+                <h3>Afrikaans (Eerste Addisionele Taal)</h3>
+                <p>Grade 10 Afrikaans ATP</p>
+                <a href="../pdfs/afrikaans-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+            
+            <!-- English Home Language -->
+            <div class="subject-card">
+                <div class="subject-icon"><i class="fas fa-book"></i></div>
+                <h3>English Home Language</h3>
+                <p>Grade 10 English HL ATP</p>
+                <a href="../pdfs/english-hl-gr10-atp.pdf" class="pdf-link" target="_blank"><i class="fas fa-file-pdf"></i> Download ATP (PDF)</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dark Green Footer -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../tutors.html">Our Tutors</a></li>
+                        <li><a href="../grade-10/index.html">Grade 10</a></li>
+                        <li><a href="../grade-11/index.html">Grade 11</a></li>
+                        <li><a href="../grade-12/index.html">Grade 12 (Matric)</a></li>
+                        <li><a href="../../get-help.html">Student Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences</li>
+                        <li>Life Sciences</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> aceed.sa@gmail.com</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="../../get-help.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="../../tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="../grade-12/index.html" class="footer-dark-btn"><i class="fas fa-book"></i> Matric Prep</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="../../privacy.html">Privacy Policy</a> | <a href="../../terms.html">Terms of Service</a> | <i class="fas fa-heart" style="color: #ff8f00;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
