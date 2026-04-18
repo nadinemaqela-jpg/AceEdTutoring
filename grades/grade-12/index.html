@@ -58,6 +58,8 @@
             text-align: center;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
         }
         
         .logo-image {
@@ -107,7 +109,7 @@
             border-radius: 12px;
             top: 100%;
             left: 0;
-            z-index: 10;
+            z-index: 200;
         }
         
         .dropdown:hover .dropdown-content {
@@ -137,6 +139,8 @@
             text-align: center;
             margin: 30px 0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
         }
         
         .grade-header h1 {
@@ -188,21 +192,6 @@
             margin: 2px;
         }
         
-        .btn {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        
         /* Cool Maroon Footer */
         .footer-modern {
             background: #2a0a0a;
@@ -210,6 +199,8 @@
             margin-top: 60px;
             padding: 50px 0 25px;
             border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 1;
         }
         
         .footer-grid {
@@ -372,12 +363,10 @@
             <div class="nav-links">
                 <a href="../../index.html" class="nav-link">Home</a>
                 
-                <!-- Grades Dropdown - Now includes Grade 8 & 9 -->
+                <!-- Grades Dropdown - Grade 10-12 only -->
                 <div class="dropdown">
                     <a href="#" class="nav-link">Grades ▼</a>
                     <div class="dropdown-content">
-                        <a href="../../grades/grade-8/index.html">Grade 8</a>
-                        <a href="../../grades/grade-9/index.html">Grade 9</a>
                         <a href="../../grades/grade-10/index.html">Grade 10</a>
                         <a href="../../grades/grade-11/index.html">Grade 11</a>
                         <a href="../../grades/grade-12/index.html">Grade 12</a>
@@ -505,7 +494,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 8–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
                     <div class="social-icons">
                         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -518,8 +507,6 @@
                     <ul>
                         <li><a href="../../index.html">Home</a></li>
                         <li><a href="../../tutors.html">Our Tutors</a></li>
-                        <li><a href="../../grades/grade-8/index.html">Grade 8</a></li>
-                        <li><a href="../../grades/grade-9/index.html">Grade 9</a></li>
                         <li><a href="../../grades/grade-10/index.html">Grade 10</a></li>
                         <li><a href="../../grades/grade-11/index.html">Grade 11</a></li>
                         <li><a href="../../grades/grade-12/index.html">Grade 12</a></li>
