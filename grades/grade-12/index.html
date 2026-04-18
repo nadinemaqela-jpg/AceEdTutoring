@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grade 12 - AceEd Tutoring</title>
+    <title>Grade 12 - AceEd Tutoring | Matric Subjects & Study Materials</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -15,23 +15,49 @@
         }
         
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #fce4e4 0%, #f5c6c6 100%);
             color: #333;
             line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Faded Background Logo */
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 2;
         }
         
         header {
-            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            background: linear-gradient(135deg, #800000, #a52a2a);
             color: white;
             padding: 20px;
             text-align: center;
-            border-radius: 0 0 15px 15px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
         }
         
         .logo-image {
@@ -57,12 +83,14 @@
             color: white;
             text-decoration: none;
             padding: 6px 12px;
-            border-radius: 20px;
+            border-radius: 30px;
             font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
         
         .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
         
         .dropdown {
@@ -75,8 +103,8 @@
             position: absolute;
             background-color: #2c3e50;
             min-width: 180px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 8px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
             top: 100%;
             left: 0;
             z-index: 10;
@@ -93,15 +121,22 @@
             display: block;
             font-size: 0.85rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #3498db;
+            border-radius: 0 0 12px 12px;
         }
         
         .grade-header {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #a52a2a, #800000);
             color: white;
             padding: 40px;
-            border-radius: 12px;
+            border-radius: 20px;
             text-align: center;
             margin: 30px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
         .grade-header h1 {
@@ -118,32 +153,33 @@
         
         .subject-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 16px;
             padding: 25px;
             text-decoration: none;
             color: inherit;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            border-left: 4px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #a52a2a;
         }
         
         .subject-card:hover {
             transform: translateY(-5px);
-            border-left-color: #e74c3c;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+            border-left-color: #800000;
         }
         
         .subject-card h3 {
-            color: #2c3e50;
+            color: #800000;
             margin: 15px 0 10px;
         }
         
         .subject-card i {
             font-size: 2rem;
-            color: #3498db;
+            color: #a52a2a;
         }
         
         .badge {
-            background-color: #3498db;
+            background-color: #a52a2a;
             color: white;
             padding: 3px 8px;
             border-radius: 12px;
@@ -167,12 +203,146 @@
             background-color: #2980b9;
         }
         
-        footer {
+        /* Cool Maroon Footer */
+        .footer-modern {
+            background: #2a0a0a;
+            color: #fce4e4;
+            margin-top: 60px;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #ff8f00;
+            border-radius: 3px;
+        }
+        
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #f5c6c6;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #ff8f00;
+            padding-left: 4px;
+        }
+        
+        .footer-register-btn {
+            display: inline-block;
+            background: #ff8f00;
+            color: #2a0a0a;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(255,143,0,0.3);
+        }
+        
+        .footer-register-btn:hover {
+            background: #e67e00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,143,0,0.4);
+            color: white;
+        }
+        
+        .footer-dark-btn {
+            background: #800000;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        
+        .footer-dark-btn:hover {
+            background: #2a0a0a;
+            transform: translateY(-1px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            background: #800000;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        
+        .social-icons a:hover {
+            background: #ff8f00;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
             text-align: center;
-            padding: 25px;
-            margin-top: 40px;
-            color: #7f8c8d;
-            border-top: 1px solid #eee;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .footer-bottom a {
+            color: #f5c6c6;
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            color: #ff8f00;
         }
         
         @media (max-width: 768px) {
@@ -182,44 +352,65 @@
             .subject-grid {
                 grid-template-columns: 1fr;
             }
+            .footer-grid {
+                gap: 30px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Faded Background Logo -->
+    <div class="bg-logo">
+        <img src="../../logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
+
     <header>
         <div class="container">
             <div class="logo-image">
-                <img src="../../logo.png" alt="AceEd Tutoring Logo">
+                <img src="../../logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
             </div>
             <div class="nav-links">
                 <a href="../../index.html" class="nav-link">Home</a>
                 
+                <!-- Grades Dropdown - Now includes Grade 8 & 9 -->
                 <div class="dropdown">
                     <a href="#" class="nav-link">Grades ▼</a>
                     <div class="dropdown-content">
-                        <a href="../grade-10/index.html">Grade 10</a>
-                        <a href="../grade-11/index.html">Grade 11</a>
-                        <a href="../grade-12/index.html">Grade 12</a>
+                        <a href="../../grades/grade-8/index.html">Grade 8</a>
+                        <a href="../../grades/grade-9/index.html">Grade 9</a>
+                        <a href="../../grades/grade-10/index.html">Grade 10</a>
+                        <a href="../../grades/grade-11/index.html">Grade 11</a>
+                        <a href="../../grades/grade-12/index.html">Grade 12</a>
+                    </div>
+                </div>
+                
+                <!-- ATP Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="nav-link">ATP ▼</a>
+                    <div class="dropdown-content">
+                        <a href="../../atps/grade-10/index.html">Grade 10 ATPs</a>
+                        <a href="../../atps/grade-11/index.html">Grade 11 ATPs</a>
+                        <a href="../../atps/grade-12/index.html">Grade 12 ATPs</a>
                     </div>
                 </div>
                 
                 <a href="../../tutors.html" class="nav-link">Our Tutors</a>
-                <a href="../../get-help.html" class="nav-link" style="background-color: #e74c3c;">Get Help</a>
+                <a href="../../register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
             </div>
         </div>
     </header>
     
     <div class="container">
         <div class="grade-header">
-            <h1>Grade 12</h1>
+            <h1>Grade 12 | Matric</h1>
             <p>Choose a subject to access topics, study materials, and past papers</p>
         </div>
         
-        <h2 style="margin: 30px 0 20px;"><i class="fas fa-book-open"></i> Available Subjects</h2>
+        <h2 style="margin: 30px 0 20px; color: #800000;"><i class="fas fa-book-open"></i> Available Subjects</h2>
         
         <div class="subject-grid">
-            <!-- Mathematics - UPDATED PATH -->
-            <a href="mathematics/mathematics.html" class="subject-card">
+            <!-- Mathematics -->
+            <a href="mathematics/index.html" class="subject-card">
                 <i class="fas fa-calculator"></i>
                 <h3>Mathematics</h3>
                 <p>Algebra, Calculus, Functions, Geometry</p>
@@ -229,8 +420,8 @@
                 </div>
             </a>
             
-            <!-- Mathematical Literacy - UPDATED PATH -->
-            <a href="mathematical-literacy/mathematical-literacy.html" class="subject-card">
+            <!-- Mathematical Literacy -->
+            <a href="mathematical-literacy/index.html" class="subject-card">
                 <i class="fas fa-chart-pie"></i>
                 <h3>Mathematical Literacy</h3>
                 <p>Finance, Measurement, Data Handling</p>
@@ -240,8 +431,8 @@
                 </div>
             </a>
             
-            <!-- Physical Sciences - UPDATED PATH -->
-            <a href="physical-sciences/physical-sciences.html" class="subject-card">
+            <!-- Physical Sciences -->
+            <a href="physical-sciences/index.html" class="subject-card">
                 <i class="fas fa-flask"></i>
                 <h3>Physical Sciences</h3>
                 <p>Physics, Chemistry, Mechanics</p>
@@ -251,8 +442,8 @@
                 </div>
             </a>
             
-            <!-- Life Sciences - UPDATED PATH -->
-            <a href="life-sciences/life-sciences.html" class="subject-card">
+            <!-- Life Sciences -->
+            <a href="life-sciences/index.html" class="subject-card">
                 <i class="fas fa-leaf"></i>
                 <h3>Life Sciences</h3>
                 <p>Biology, Human Body, Ecosystems</p>
@@ -262,8 +453,8 @@
                 </div>
             </a>
             
-            <!-- Accounting - UPDATED PATH -->
-            <a href="accounting/accounting.html" class="subject-card">
+            <!-- Accounting -->
+            <a href="accounting/index.html" class="subject-card">
                 <i class="fas fa-chart-line"></i>
                 <h3>Accounting</h3>
                 <p>Financial Statements, Ledgers, Ratios</p>
@@ -273,8 +464,8 @@
                 </div>
             </a>
             
-            <!-- Economics - UPDATED PATH -->
-            <a href="economics/economics.html" class="subject-card">
+            <!-- Economics -->
+            <a href="economics/index.html" class="subject-card">
                 <i class="fas fa-chart-bar"></i>
                 <h3>Economics</h3>
                 <p>Microeconomics, Macroeconomics</p>
@@ -284,8 +475,8 @@
                 </div>
             </a>
             
-            <!-- Geography - UPDATED PATH -->
-            <a href="geography/geography.html" class="subject-card">
+            <!-- Geography -->
+            <a href="geography/index.html" class="subject-card">
                 <i class="fas fa-globe-africa"></i>
                 <h3>Geography</h3>
                 <p>Climate, Geomorphology, Maps</p>
@@ -295,8 +486,8 @@
                 </div>
             </a>
             
-            <!-- Business Studies - UPDATED PATH -->
-            <a href="business-studies/business-studies.html" class="subject-card">
+            <!-- Business Studies -->
+            <a href="business-studies/index.html" class="subject-card">
                 <i class="fas fa-briefcase"></i>
                 <h3>Business Studies</h3>
                 <p>Management, Entrepreneurship</p>
@@ -308,9 +499,58 @@
         </div>
     </div>
     
-    <footer>
+    <!-- Cool Maroon Footer -->
+    <footer class="footer-modern">
         <div class="container">
-            <p>© 2026 AceEd Tutoring. All rights reserved.</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 8–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../tutors.html">Our Tutors</a></li>
+                        <li><a href="../../grades/grade-8/index.html">Grade 8</a></li>
+                        <li><a href="../../grades/grade-9/index.html">Grade 9</a></li>
+                        <li><a href="../../grades/grade-10/index.html">Grade 10</a></li>
+                        <li><a href="../../grades/grade-11/index.html">Grade 11</a></li>
+                        <li><a href="../../grades/grade-12/index.html">Grade 12</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences</li>
+                        <li>Life Sciences</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> hello@aceed.co.za</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="../../register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="../../tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="../../atps/grade-12/index.html" class="footer-dark-btn"><i class="fas fa-book"></i> Matric ATPs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="../../privacy.html">Privacy Policy</a> | <a href="../../terms.html">Terms of Service</a> | <i class="fas fa-heart" style="color: #ff8f00;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
         </div>
     </footer>
 </body>
