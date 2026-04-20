@@ -17,7 +17,7 @@
         body {
             background-color: #f8f9fa;
             color: #1e2a3e;
-            line-height: 1.6;
+            line-height: 1.5;
             position: relative;
             min-height: 100vh;
         }
@@ -138,50 +138,55 @@
         
         .page-header {
             text-align: center;
-            margin: 40px 0;
+            margin: 30px 0 25px;
         }
         
         .page-header h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #1e2a3e;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .page-header p {
             color: #7f8c8d;
+            font-size: 0.9rem;
         }
         
-        /* Tutor Profile Card */
+        /* Tutor Grid - 3 columns on laptop */
+        .tutors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        /* Compact Tutor Card */
         .tutor-card {
             background: white;
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
         }
         
         .tutor-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
         }
         
-        /* Left Side - Photo */
+        /* Left Side - Photo (smaller) */
         .tutor-photo-section {
-            flex: 0 0 200px;
             text-align: center;
+            margin-bottom: 15px;
         }
         
         .tutor-avatar {
-            width: 180px;
-            height: 180px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 3px solid #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             background: linear-gradient(135deg, #3498db, #2c3e50);
             display: flex;
             align-items: center;
@@ -190,90 +195,102 @@
         }
         
         .tutor-avatar i {
-            font-size: 5rem;
+            font-size: 3rem;
             color: white;
         }
         
-        /* Right Side - Info */
+        .tutor-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Right Side - Info (compact) */
         .tutor-info {
-            flex: 1;
-            min-width: 250px;
+            text-align: center;
         }
         
         .tutor-name {
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             color: #1e2a3e;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         
         .tutor-location {
             color: #3498db;
             font-weight: 500;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 5px;
         }
         
         .subjects-container {
-            margin: 15px 0;
+            margin: 12px 0;
         }
         
         .subjects-title {
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            text-align: left;
         }
         
         .subject-badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
+            justify-content: center;
         }
         
         .subject-badge {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
             font-weight: 500;
         }
         
         .subject-badge span {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             opacity: 0.8;
-            margin-left: 5px;
+            margin-left: 3px;
         }
         
-        /* Availability Table */
+        /* Compact Availability */
         .availability {
-            margin: 20px 0;
+            margin: 12px 0;
             background: #f8fafd;
-            border-radius: 16px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 10px;
         }
         
         .availability-title {
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 5px;
         }
         
         .availability-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
         }
         
         .day-slot {
             background: white;
-            border-radius: 12px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 5px;
             text-align: center;
             border: 1px solid #e0e0e0;
         }
@@ -281,33 +298,29 @@
         .day-name {
             font-weight: bold;
             color: #2c3e50;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
         }
         
         .day-time {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: #27ae60;
             font-weight: 500;
         }
         
-        .day-unavailable {
-            font-size: 0.7rem;
-            color: #e74c3c;
-        }
-        
+        /* Book Button - smaller */
         .book-btn {
             display: inline-block;
             background: linear-gradient(135deg, #27ae60, #1e8449);
             color: white;
-            padding: 12px 30px;
-            border-radius: 40px;
+            padding: 8px 16px;
+            border-radius: 30px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 15px;
+            margin-top: 12px;
             transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.8rem;
+            width: 100%;
+            text-align: center;
         }
         
         .book-btn:hover {
@@ -456,22 +469,20 @@
         }
         
         @media (max-width: 768px) {
-            .tutor-card {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .tutor-location {
-                justify-content: center;
-            }
-            .subject-badges {
-                justify-content: center;
+            .tutors-grid {
+                grid-template-columns: 1fr;
             }
             .availability-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
             .footer-grid {
                 gap: 30px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .tutors-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
@@ -523,81 +534,143 @@
             <p>Qualified and experienced tutors ready to help you succeed</p>
         </div>
         
-        <!-- Tutor Profile - Nkululeko -->
-        <div class="tutor-card">
-            <!-- Left: Photo -->
-            <div class="tutor-photo-section">
-                <div class="tutor-avatar">
-                    <img src="tutors/nkululeko.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/180x180?text=NK'">
+        <div class="tutors-grid">
+            <!-- Tutor 1 - Nkululeko -->
+            <div class="tutor-card">
+                <div class="tutor-photo-section">
+                    <div class="tutor-avatar">
+                        <img src="tutors/nkululeko.png" onerror="this.src='https://via.placeholder.com/100x100?text=NK'">
+                    </div>
+                </div>
+                
+                <div class="tutor-info">
+                    <h3 class="tutor-name">Nkululeko</h3>
+                    <div class="tutor-location">
+                        <i class="fas fa-map-marker-alt"></i> Bizana, EC
+                        <span style="background: #eef2fc; padding: 2px 6px; border-radius: 20px; font-size: 0.6rem;">In-person & Online</span>
+                    </div>
+                    
+                    <div class="subjects-container">
+                        <div class="subjects-title"><i class="fas fa-book-open"></i> Subjects</div>
+                        <div class="subject-badges">
+                            <span class="subject-badge">Maths <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Physics <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Life Sci <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Nat Sci <span>Gr 8-9</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="availability">
+                        <div class="availability-title">
+                            <i class="fas fa-clock"></i> Availability
+                        </div>
+                        <div class="availability-grid">
+                            <div class="day-slot"><div class="day-name">Mon</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Tue</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Wed</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Thu</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Fri</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Sat</div><div class="day-time">9-3pm</div></div>
+                            <div class="day-slot"><div class="day-name">Sun</div><div class="day-time">2-5pm</div></div>
+                        </div>
+                    </div>
+                    
+                    <a href="book-tutor.html?tutor=Nkululeko" class="book-btn">
+                        <i class="fas fa-calendar-check"></i> Book Session
+                    </a>
                 </div>
             </div>
             
-            <!-- Right: Info -->
-            <div class="tutor-info">
-                <h2 class="tutor-name">Nkululeko Nongcawula</h2>
-                <div class="tutor-location">
-                    <i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape
-                    <span style="margin-left: 10px; background: #eef2fc; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem;">In-person & Online</span>
-                </div>
-                
-                <!-- Subjects with Grades -->
-                <div class="subjects-container">
-                    <div class="subjects-title"><i class="fas fa-book-open"></i> Subjects & Grades</div>
-                    <div class="subject-badges">
-                        <span class="subject-badge">Mathematics <span>Gr 10-12</span></span>
-                        <span class="subject-badge">Physical Sciences <span>Gr 10-12</span></span>
-                        <span class="subject-badge">Life Sciences <span>Gr 10-12</span></span>
-                        <span class="subject-badge">Natural Sciences <span>Gr 8-9</span></span>
+            <!-- Tutor 2 - Mihlali -->
+            <div class="tutor-card">
+                <div class="tutor-photo-section">
+                    <div class="tutor-avatar">
+                        <img src="tutors/mihlali.png" onerror="this.src='https://via.placeholder.com/100x100?text=MH'">
                     </div>
                 </div>
                 
-                <!-- Availability -->
-                <div class="availability">
-                    <div class="availability-title">
-                        <i class="fas fa-clock"></i> Availability
+                <div class="tutor-info">
+                    <h3 class="tutor-name">Mihlali</h3>
+                    <div class="tutor-location">
+                        <i class="fas fa-map-marker-alt"></i> Stellenbosch, WC
+                        <span style="background: #eef2fc; padding: 2px 6px; border-radius: 20px; font-size: 0.6rem;">In-person & Online</span>
                     </div>
-                    <div class="availability-grid">
-                        <div class="day-slot">
-                            <div class="day-name">Monday</div>
-                            <div class="day-time">7pm - 9pm</div>
+                    
+                    <div class="subjects-container">
+                        <div class="subjects-title"><i class="fas fa-book-open"></i> Subjects</div>
+                        <div class="subject-badges">
+                            <span class="subject-badge">Maths <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Physics <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Maths Lit <span>Gr 10-12</span></span>
                         </div>
-                        <div class="day-slot">
-                            <div class="day-name">Tuesday</div>
-                            <div class="day-time">7pm - 9pm</div>
+                    </div>
+                    
+                    <div class="availability">
+                        <div class="availability-title">
+                            <i class="fas fa-clock"></i> Availability
                         </div>
-                        <div class="day-slot">
-                            <div class="day-name">Wednesday</div>
-                            <div class="day-time">7pm - 9pm</div>
+                        <div class="availability-grid">
+                            <div class="day-slot"><div class="day-name">Mon</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Tue</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Wed</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Thu</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Fri</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Sat</div><div class="day-time">9-3pm</div></div>
+                            <div class="day-slot"><div class="day-name">Sun</div><div class="day-time">2-5pm</div></div>
                         </div>
-                        <div class="day-slot">
-                            <div class="day-name">Thursday</div>
-                            <div class="day-time">7pm - 9pm</div>
-                        </div>
-                        <div class="day-slot">
-                            <div class="day-name">Friday</div>
-                            <div class="day-time">7pm - 9pm</div>
-                        </div>
-                        <div class="day-slot">
-                            <div class="day-name">Saturday</div>
-                            <div class="day-time">9am - 3pm</div>
-                        </div>
-                        <div class="day-slot">
-                            <div class="day-name">Sunday</div>
-                            <div class="day-time">2pm - 5pm</div>
-                        </div>
+                    </div>
+                    
+                    <a href="book-tutor.html?tutor=Mihlali" class="book-btn">
+                        <i class="fas fa-calendar-check"></i> Book Session
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Tutor 3 - Sinobom -->
+            <div class="tutor-card">
+                <div class="tutor-photo-section">
+                    <div class="tutor-avatar">
+                        <img src="tutors/sinobom.png" onerror="this.src='https://via.placeholder.com/100x100?text=SB'">
                     </div>
                 </div>
                 
-                <!-- Book Now Button -->
-                <a href="book-tutor.html?tutor=Nkululeko" class="book-btn">
-                    <i class="fas fa-calendar-check"></i> Book a Session with Nkululeko
-                </a>
+                <div class="tutor-info">
+                    <h3 class="tutor-name">Sinobom</h3>
+                    <div class="tutor-location">
+                        <i class="fas fa-map-marker-alt"></i> Durban, KZN
+                        <span style="background: #eef2fc; padding: 2px 6px; border-radius: 20px; font-size: 0.6rem;">In-person & Online</span>
+                    </div>
+                    
+                    <div class="subjects-container">
+                        <div class="subjects-title"><i class="fas fa-book-open"></i> Subjects</div>
+                        <div class="subject-badges">
+                            <span class="subject-badge">Maths <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Life Sci <span>Gr 10-12</span></span>
+                            <span class="subject-badge">Nat Sci <span>Gr 8-9</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="availability">
+                        <div class="availability-title">
+                            <i class="fas fa-clock"></i> Availability
+                        </div>
+                        <div class="availability-grid">
+                            <div class="day-slot"><div class="day-name">Mon</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Tue</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Wed</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Thu</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Fri</div><div class="day-time">7-9pm</div></div>
+                            <div class="day-slot"><div class="day-name">Sat</div><div class="day-time">9-3pm</div></div>
+                            <div class="day-slot"><div class="day-name">Sun</div><div class="day-time">2-5pm</div></div>
+                        </div>
+                    </div>
+                    
+                    <a href="book-tutor.html?tutor=Sinobom" class="book-btn">
+                        <i class="fas fa-calendar-check"></i> Book Session
+                    </a>
+                </div>
             </div>
         </div>
-        
-        <!-- You can copy the above .tutor-card block and paste below for more tutors -->
-        <!-- Just change the name, photo, subjects, availability, and book link -->
-        
     </div>
     
     <!-- Modern Footer -->
