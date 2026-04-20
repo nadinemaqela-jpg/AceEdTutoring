@@ -10,12 +10,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AceEd Tutoring - Grade 10 to 12 Tutoring | Expert CAPS Support</title>
-
-    
-    
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Expert Grade 10 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R300 per subject tutoring in South Africa.">
+    <meta name="description" content="Expert Grade 10 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R50/hour tutoring in South Africa.">
     <meta name="keywords" content="tutoring, grade 10, grade 11, grade 12, South Africa, CAPS curriculum, Bizana, Stellenbosch, Durban">
     <meta name="author" content="AceEd Tutoring">
     
@@ -88,8 +85,8 @@
         
         .logo-image img {
             width: 100%;
-            max-height: 2000px;
-            object-fit: cover;
+            max-height: 80px;
+            object-fit: contain;
         }
         
         .tagline {
@@ -165,7 +162,6 @@
         
         .dropdown-content a:hover {
             background-color: #3498db;
-            border-radius: 0 0 12px 12px;
         }
         
         .session-types {
@@ -257,20 +253,6 @@
         .check-icon {
             color: #27ae60;
             margin-right: 12px;
-        }
-        
-        .price-tag {
-            background: linear-gradient(135deg, #1e4668, #2c5a8c);
-            color: white;
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .price-tag h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
         }
         
         .directors-grid {
@@ -425,6 +407,51 @@
             gap: 15px;
         }
         
+        /* Pricing Section Styles */
+        .pricing-section-sidebar {
+            margin-bottom: 15px;
+        }
+        
+        .pricing-section-sidebar h3 {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            border-left: 3px solid #3498db;
+            padding-left: 10px;
+        }
+        
+        .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+        
+        .pricing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-price {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .offer-banner-small {
+            background: linear-gradient(135deg, #ff8f00, #e67e00);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .offer-banner-small p {
+            color: white;
+            font-weight: bold;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+        
         /* MODERN FOOTER SECTION */
         .footer-modern {
             background: #0f1720;
@@ -486,7 +513,6 @@
             padding-left: 4px;
         }
         
-        /* Special red register button in footer */
         .footer-register-btn {
             display: inline-block;
             background: #e74c3c;
@@ -507,7 +533,6 @@
             box-shadow: 0 8px 20px rgba(231,76,60,0.4);
         }
         
-        /* Black / dark buttons for other footer links */
         .footer-dark-btn {
             background: #2d3e50;
             color: white;
@@ -598,7 +623,7 @@
             </div>
             
             <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
-            <div class="highlight">Assignment and Homework Help</div>
+            <div class="highlight">First Session FREE!</div>
             
             <div class="session-types">
                 <div class="session-type">1-on-1 Sessions</div>
@@ -619,7 +644,7 @@
                     </div>
                 </div>
                 
-               <div class="dropdown">
+                <div class="dropdown">
                     <a href="#" class="nav-link">ATP ▼</a>
                     <div class="dropdown-content">
                         <a href="atps/grade-10/index.html">📘 Grade 10 ATPs</a>
@@ -629,7 +654,8 @@
                 </div>
                 
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <a href="get-help.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
+                <a href="pricing.html" class="nav-link" style="background-color: #27ae60; border-radius: 40px;">Pricing</a>
+                <a href="register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
             </div>
         </div>
     </header>
@@ -640,7 +666,7 @@
                 <div class="card">
                     <h2><i class="fas fa-info-circle"></i> About AceEd Tutoring</h2>
                     <p>Founded in 2026, AceEd Tutoring is all about helping Grade 10 to 12 students do better in school and feel more confident in their studies. We understand how challenging the CAPS curriculum can be, so we offer personalized support to help every student reach their full potential.</p>
-                    <p style="margin-top: 15px;">Our goal is simple: to make quality education accessible and affordable for students across South Africa. With dedicated tutors in Bizana, Stellenbosch, and Durban, plus flexible online lessons, we’re here to support you every step of the way.</p>
+                    <p style="margin-top: 15px;">Our goal is simple: to make quality education accessible and affordable for students across South Africa. With dedicated tutors in Bizana, Stellenbosch, and Durban, plus flexible online lessons, we're here to support you every step of the way.</p>
                 </div>
                 
                 <div class="card">
@@ -694,11 +720,70 @@
                 <div class="card">
                     <h2><i class="fas fa-book-open"></i> Quick Access</h2>
                     <ul class="services-list">
-                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-12/index.html">Grade 12</a></li>
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-12/index.html">Grade 12 (Matric)</a></li>
                         <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-11/index.html">Grade 11</a></li>
                         <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-10/index.html">Grade 10</a></li>
                     </ul>
                     
+                    <div class="offer-banner-small">
+                        <p><i class="fas fa-gift"></i> First Session FREE! No obligation</p>
+                    </div>
+                    
+                    <a href="pricing.html" class="btn" style="background-color: #27ae60; width: 100%; text-align: center; margin-top: 10px;">View Full Pricing <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="card">
+                    <h2><i class="fas fa-tag"></i> Starting at R50/hour</h2>
+                    
+                    <div class="pricing-section-sidebar">
+                        <h3><i class="fas fa-graduation-cap"></i> Core Tutoring</h3>
+                        <div class="pricing-row">
+                            <span>1-on-1 / House Calls</span>
+                            <span class="pricing-price">R50/hour</span>
+                        </div>
+                        <div class="pricing-row">
+                            <span>Monthly Subscription</span>
+                            <span class="pricing-price">R300/month</span>
+                        </div>
+                        <div class="pricing-row">
+                            <span>Group Sessions</span>
+                            <span class="pricing-price">R35/hour</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-section-sidebar">
+                        <h3><i class="fas fa-pen"></i> Exam & Assessment</h3>
+                        <div class="pricing-row">
+                            <span>Exam Prep Bootcamp (3hrs/week)</span>
+                            <span class="pricing-price">R100/week</span>
+                        </div>
+                        <div class="pricing-row">
+                            <span>Mock Exam Marking</span>
+                            <span class="pricing-price">R80/paper</span>
+                        </div>
+                        <div class="pricing-row">
+                            <span>Assignment Review</span>
+                            <span class="pricing-price">R80</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-section-sidebar">
+                        <h3><i class="fas fa-university"></i> Applications</h3>
+                        <div class="pricing-row">
+                            <span>University Application Form</span>
+                            <span class="pricing-price">R80</span>
+                        </div>
+                        <div class="pricing-row">
+                            <span>Bursary Application Form</span>
+                            <span class="pricing-price">R120</span>
+                        </div>
+                        <div class="pricing-row">
+                            <span>NSFAS Application Form</span>
+                            <span class="pricing-price">R70</span>
+                        </div>
+                    </div>
+                    
+                    <a href="pricing.html" class="btn btn-contact" style="margin-top: 15px;">View Complete Price List</a>
                 </div>
                 
                 <div class="card">
@@ -747,13 +832,13 @@
                             <p><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</p>
                         </div>
                     </div>
-                    <a href="get-help.html" class="btn btn-contact" style="margin-top: 20px;">Register Now</a>
+                    <a href="register.html" class="btn btn-contact" style="margin-top: 20px;">Register Now</a>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- NEW MODERN FOOTER with rich info and styled buttons -->
+    <!-- MODERN FOOTER -->
     <footer class="footer-modern">
         <div class="container">
             <div class="footer-grid">
@@ -772,10 +857,11 @@
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="tutors.html">Our Tutors</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
                         <li><a href="grades/grade-10/index.html">Grade 10</a></li>
                         <li><a href="grades/grade-11/index.html">Grade 11</a></li>
                         <li><a href="grades/grade-12/index.html">Grade 12 (Matric)</a></li>
-                        <li><a href="get-help.html">Student Support</a></li>
+                        <li><a href="register.html">Register Now</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -786,24 +872,21 @@
                         <li>Tourism & History</li>
                         <li>Accounting & Economics</li>
                         <li>Geography & Business Studies</li>
-                        <li>Afrikaans(HL) & English(HL)</li>
+                        <li>Afrikaans (HL) & English (HL)</li>
                         <li>CAT & Computer Science</li>
-
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Get In Touch</h4>
                     <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
                     <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
-                    <p><i class="fas fa-phone-alt"></i> +27 65 294 232 (Stellenbosch)</p
-                     <p><i class="fas fa-phone-alt"></i> +27 65 647 6472 (Durban)</p
+                    <p><i class="fas fa-phone-alt"></i> +27 65 529 4232 (Stellenbosch)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 647 6472 (Durban)</p>
                     <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
-                    <!-- REGISTER BUTTON (RED) in footer -->
-                    <a href="get-help.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
-                    <!-- Black / dark buttons for other actions -->
+                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
                     <div style="margin-top: 12px;">
                         <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
-                        <a href="grades/grade-12/index.html" class="footer-dark-btn"><i class="fas fa-book"></i> Matric Prep</a>
+                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
                     </div>
                 </div>
             </div>
