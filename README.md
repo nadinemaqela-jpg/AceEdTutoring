@@ -8,6 +8,8 @@
 * Add a " Book a session now" button
 * Add a price list button
 * get help and register the problem ( most referencing is wrong)
+* favicon must be added to other pages aswell.
+  
    
 
 
