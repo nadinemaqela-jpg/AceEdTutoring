@@ -319,9 +319,9 @@
                 <div class="dropdown">
                     <a href="#" class="nav-link">ATP ▼</a>
                     <div class="dropdown-content">
-                        <a href="atps/grade-10/index.html">📘 Grade 10 ATPs</a>
-                        <a href="atps/grade-11/index.html">📗 Grade 11 ATPs</a>
-                        <a href="atps/grade-12/index.html">📕 Grade 12 ATPs</a>
+                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
                     </div>
                 </div>
                 
@@ -410,14 +410,14 @@
                             <input type="radio" name="session_type" value="1-on-1" checked> 1-on-1 (R50/hour)
                         </label>
                         <label class="session-option">
-                            <input type="radio" name="session_type" value="Group"> Group Session (R35/hour)
+                            <input type="radio" name="session_type" value="Group"> Group Session (R300/month)
                         </label>
                         <label class="session-option">
                             <input type="radio" name="session_type" value="Online"> Online (R50/hour)
                         </label>
                     </div>
                 </div>
-                
+
                 <div class="date-time-group">
                     <div class="form-group">
                         <label>Preferred Date <span class="required">*</span></label>
@@ -425,20 +425,10 @@
                     </div>
                     <div class="form-group">
                         <label>Preferred Time <span class="required">*</span></label>
-                        <select name="preferred_time" required>
-                            <option value="">Select Time</option>
-                            <option>7:00 PM - 8:00 PM</option>
-                            <option>8:00 PM - 9:00 PM</option>
-                            <option>9:00 AM - 10:00 AM (Sat)</option>
-                            <option>10:00 AM - 11:00 AM (Sat)</option>
-                            <option>11:00 AM - 12:00 PM (Sat)</option>
-                            <option>2:00 PM - 3:00 PM (Sun)</option>
-                            <option>3:00 PM - 4:00 PM (Sun)</option>
-                            <option>4:00 PM - 5:00 PM (Sun)</option>
-                        </select>
-                    </div>
+                        <input type="text" name="preferred_time" required placeholder="e.g., 4pm, 7pm, right after school">
                 </div>
-                
+            </div>
+        
                 <div class="form-group">
                     <label>Additional Information</label>
                     <textarea name="message" rows="3" placeholder="Any specific topics you need help with?"></textarea>
