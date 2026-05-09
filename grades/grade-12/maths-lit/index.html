@@ -1,1 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 12 Mathematics - Past Papers & Memos | AceEd Tutoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fce4e4 0%, #f5c6c6 100%);
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #800000, #a52a2a);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo-image {
+            max-width: 250px;
+            margin: 0 auto;
+        }
+        
+        .logo-image img {
+            width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #2c3e50;
+            min-width: 180px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            top: 100%;
+            left: 0;
+            z-index: 200;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-content a {
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #3498db;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #a52a2a, #800000);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .page-header h1 i {
+            margin-right: 15px;
+        }
+        
+        .page-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* Year Tabs */
+        .year-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .year-btn {
+            background: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #800000;
+            border: 2px solid #800000;
+        }
+        
+        .year-btn:hover {
+            background: #800000;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .year-btn.active {
+            background: #800000;
+            color: white;
+            box-shadow: 0 5px 15px rgba(128,0,0,0.3);
+        }
+        
+        /* Year Content */
+        .year-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .year-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Exam Section */
+        .exam-section {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .exam-header {
+            background: #a52a2a;
+            color: white;
+            padding: 18px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        
+        .exam-header:hover {
+            background: #800000;
+        }
+        
+        .exam-header h3 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .exam-header i {
+            transition: transform 0.3s;
+        }
+        
+        .exam-header i.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .exam-content {
+            display: none;
+            padding: 20px;
+            background: #fff5f5;
+        }
+        
+        .exam-content.show {
+            display: block;
+        }
+        
+        /* Paper Section */
+        .paper-section {
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .paper-header {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #800000;
+        }
+        
+        .paper-header:hover {
+            background: #f0f0f0;
+        }
+        
+        .paper-header i {
+            transition: transform 0.3s;
+        }
+        
+        .paper-header i.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .paper-content {
+            display: none;
+            padding: 20px;
+            background: white;
+        }
+        
+        .paper-content.show {
+            display: block;
+        }
+        
+        /* Download Buttons */
+        .download-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .download-btn {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn.paper {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .download-btn.paper:hover {
+            background: #1e2a3a;
+            transform: translateY(-3px);
+        }
+        
+        .download-btn.memo {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .download-btn.memo:hover {
+            background: #1e8449;
+            transform: translateY(-3px);
+        }
+        
+        .download-btn i {
+            font-size: 1.3rem;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        /* Back Button */
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            color: #800000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        .footer-modern {
+            background: #2a0a0a;
+            color: #fce4e4;
+            margin-top: 60px;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #ff8f00;
+            border-radius: 3px;
+        }
+        
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #f5c6c6;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #ff8f00;
+            padding-left: 4px;
+        }
+        
+        .footer-register-btn {
+            display: inline-block;
+            background: #ff8f00;
+            color: #2a0a0a;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .footer-register-btn:hover {
+            background: #e67e00;
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .footer-dark-btn {
+            background: #800000;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        
+        .footer-dark-btn:hover {
+            background: #2a0a0a;
+            transform: translateY(-1px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            background: #800000;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        
+        .social-icons a:hover {
+            background: #ff8f00;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .footer-bottom a {
+            color: #f5c6c6;
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            color: #ff8f00;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            .download-row {
+                flex-direction: column;
+            }
+            .footer-grid {
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-logo">
+        <img src="../../../logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
 
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img src="../../../logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
+            </div>
+            <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
+            <div class="nav-links">
+                <a href="../../../index.html" class="nav-link">Home</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Grades ▼</a>
+                    <div class="dropdown-content">
+                        <a href="../../grade-10/index.html">Grade 10</a>
+                        <a href="../../grade-11/index.html">Grade 11</a>
+                        <a href="../../grade-12/index.html">Grade 12</a>
+                    </div>
+                </div>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">ATP ▼</a>
+                    <div class="dropdown-content">
+                        <a href="../../../atps/grade-10/index.html">Grade 10 ATPs</a>
+                        <a href="../../../atps/grade-11/index.html">Grade 11 ATPs</a>
+                        <a href="../../../atps/grade-12/index.html">Grade 12 ATPs</a>
+                    </div>
+                </div>
+                
+                <a href="../../../tutors.html" class="nav-link">Our Tutors</a>
+                <a href="../../../pricing.html" class="nav-link" style="background-color: #27ae60; border-radius: 40px;">Pricing</a>
+                <a href="../../../register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-calculator"></i> Grade 12 Mathematics</h1>
+            <p>Past Papers & Memos for Mid-Year, Trials, and Final Exams</p>
+        </div>
+        
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Subjects</a>
+        
+        <!-- Year Tabs -->
+        <div class="year-tabs">
+            <button class="year-btn active" data-year="2025">2025</button>
+            <button class="year-btn" data-year="2024">2024</button>
+            <button class="year-btn" data-year="2023">2023</button>
+        </div>
+        
+        <!-- 2025 Content -->
+        <div id="year-2025" class="year-content active">
+            <!-- Mid Year -->
+            <div class="exam-section">
+                <div class="exam-header" data-exam="midyear-2025">
+                    <h3><i class="fas fa-calendar-alt"></i> Mid Year (June 2025)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="midyear-2025">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-mid-2025">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-mid-2025">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-june-2025.pdf" class="download-btn paper" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📄 Question Paper 1
+                                </a>
+                                <a href="papers/mathematics-gr12-p1-june-2025-memo.pdf" class="download-btn memo" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📝 Memo Paper 1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-mid-2025">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-mid-2025">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-june-2025.pdf" class="download-btn paper" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📄 Question Paper 2
+                                </a>
+                                <a href="papers/mathematics-gr12-p2-june-2025-memo.pdf" class="download-btn memo" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📝 Memo Paper 2
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trials -->
+            <div class="exam-section">
+                <div class="exam-header" data-exam="trials-2025">
+                    <h3><i class="fas fa-chalkboard-user"></i> Trials (September 2025)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="trials-2025">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-trials-2025">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-trials-2025">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-sept-2025.pdf" class="download-btn paper" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📄 Question Paper 1
+                                </a>
+                                <a href="papers/mathematics-gr12-p1-sept-2025-memo.pdf" class="download-btn memo" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📝 Memo Paper 1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-trials-2025">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-trials-2025">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-sept-2025.pdf" class="download-btn paper" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📄 Question Paper 2
+                                </a>
+                                <a href="papers/mathematics-gr12-p2-sept-2025-memo.pdf" class="download-btn memo" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📝 Memo Paper 2
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finals -->
+            <div class="exam-section">
+                <div class="exam-header" data-exam="finals-2025">
+                    <h3><i class="fas fa-graduation-cap"></i> Finals (December 2025)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="finals-2025">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-finals-2025">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-finals-2025">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-dec-2025.pdf" class="download-btn paper" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📄 Question Paper 1
+                                </a>
+                                <a href="papers/mathematics-gr12-p1-dec-2025-memo.pdf" class="download-btn memo" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📝 Memo Paper 1
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-finals-2025">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-finals-2025">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-dec-2025.pdf" class="download-btn paper" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📄 Question Paper 2
+                                </a>
+                                <a href="papers/mathematics-gr12-p2-dec-2025-memo.pdf" class="download-btn memo" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 📝 Memo Paper 2
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2024 Content (Same structure) -->
+        <div id="year-2024" class="year-content">
+            <div class="exam-section">
+                <div class="exam-header" data-exam="midyear-2024">
+                    <h3><i class="fas fa-calendar-alt"></i> Mid Year (June 2024)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="midyear-2024">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-mid-2024">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-mid-2024">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-june-2024.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 1</a>
+                                <a href="papers/mathematics-gr12-p1-june-2024-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 1</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-mid-2024">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-mid-2024">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-june-2024.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 2</a>
+                                <a href="papers/mathematics-gr12-p2-june-2024-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-section">
+                <div class="exam-header" data-exam="trials-2024">
+                    <h3><i class="fas fa-chalkboard-user"></i> Trials (September 2024)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="trials-2024">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-trials-2024">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-trials-2024">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-sept-2024.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 1</a>
+                                <a href="papers/mathematics-gr12-p1-sept-2024-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 1</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-trials-2024">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-trials-2024">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-sept-2024.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 2</a>
+                                <a href="papers/mathematics-gr12-p2-sept-2024-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-section">
+                <div class="exam-header" data-exam="finals-2024">
+                    <h3><i class="fas fa-graduation-cap"></i> Finals (December 2024)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="finals-2024">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-finals-2024">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-finals-2024">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-dec-2024.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 1</a>
+                                <a href="papers/mathematics-gr12-p1-dec-2024-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 1</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-finals-2024">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-finals-2024">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-dec-2024.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 2</a>
+                                <a href="papers/mathematics-gr12-p2-dec-2024-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2023 Content (Same structure) -->
+        <div id="year-2023" class="year-content">
+            <div class="exam-section">
+                <div class="exam-header" data-exam="midyear-2023">
+                    <h3><i class="fas fa-calendar-alt"></i> Mid Year (June 2023)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="midyear-2023">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-mid-2023">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-mid-2023">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-june-2023.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 1</a>
+                                <a href="papers/mathematics-gr12-p1-june-2023-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 1</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-mid-2023">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-mid-2023">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-june-2023.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 2</a>
+                                <a href="papers/mathematics-gr12-p2-june-2023-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-section">
+                <div class="exam-header" data-exam="trials-2023">
+                    <h3><i class="fas fa-chalkboard-user"></i> Trials (September 2023)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="trials-2023">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-trials-2023">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-trials-2023">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-sept-2023.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 1</a>
+                                <a href="papers/mathematics-gr12-p1-sept-2023-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 1</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-trials-2023">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-trials-2023">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-sept-2023.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 2</a>
+                                <a href="papers/mathematics-gr12-p2-sept-2023-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-section">
+                <div class="exam-header" data-exam="finals-2023">
+                    <h3><i class="fas fa-graduation-cap"></i> Finals (December 2023)</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="exam-content" id="finals-2023">
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper1-finals-2023">
+                            <span><i class="fas fa-file-alt"></i> Paper 1</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper1-finals-2023">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p1-dec-2023.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 1</a>
+                                <a href="papers/mathematics-gr12-p1-dec-2023-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 1</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paper-section">
+                        <div class="paper-header" data-paper="paper2-finals-2023">
+                            <span><i class="fas fa-file-alt"></i> Paper 2</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="paper-content" id="paper2-finals-2023">
+                            <div class="download-row">
+                                <a href="papers/mathematics-gr12-p2-dec-2023.pdf" class="download-btn paper" target="_blank"><i class="fas fa-file-pdf"></i> 📄 Question Paper 2</a>
+                                <a href="papers/mathematics-gr12-p2-dec-2023-memo.pdf" class="download-btn memo" target="_blank"><i class="fas fa-file-pdf"></i> 📝 Memo Paper 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/27631158739" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../../index.html">Home</a></li>
+                        <li><a href="../../../tutors.html">Our Tutors</a></li>
+                        <li><a href="../../../atps/grade-10/index.html">Grade 10 ATPs</a></li>
+                        <li><a href="../../../atps/grade-11/index.html">Grade 11 ATPs</a></li>
+                        <li><a href="../../../atps/grade-12/index.html">Grade 12 ATPs</a></li>
+                        <li><a href="../../../register.html">Register Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences & Life Science</li>
+                        <li>Tourism & History</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                        <li>Afrikaans (HL) & English (HL)</li>
+                        <li>CAT & Computer Science</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 529 4232 (Stellenbosch)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 647 6472 (Durban)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="../../../register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="../../../tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="../../../atps/grade-12/index.html" class="footer-dark-btn"><i class="fas fa-book"></i> Matric ATPs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="../../../privacy.html">Privacy Policy</a> | <a href="../../../terms.html">Terms of Service</a> | <i class="fas fa-heart" style="color: #ff8f00;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Year Tabs
+        const yearBtns = document.querySelectorAll('.year-btn');
+        const yearContents = document.querySelectorAll('.year-content');
+        
+        yearBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const year = btn.dataset.year;
+                
+                yearBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                yearContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`year-${year}`).classList.add('active');
+            });
+        });
+        
+        // Exam Section Dropdowns
+        const examHeaders = document.querySelectorAll('.exam-header');
+        
+        examHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const examId = header.dataset.exam;
+                const content = document.getElementById(examId);
+                const icon = header.querySelector('i:last-child');
+                
+                content.classList.toggle('show');
+                icon.classList.toggle('rotated');
+            });
+        });
+        
+        // Paper Section Dropdowns
+        const paperHeaders = document.querySelectorAll('.paper-header');
+        
+        paperHeaders.forEach(header => {
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const paperId = header.dataset.paper;
+                const content = document.getElementById(paperId);
+                const icon = header.querySelector('i:last-child');
+                
+                content.classList.toggle('show');
+                icon.classList.toggle('rotated');
+            });
+        });
+    </script>
+</body>
+</html>
