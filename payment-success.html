@@ -1,1 +1,199 @@
-111
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - AceEd Tutoring</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(39,174,96,0.3);
+        }
+        
+        h1 {
+            color: #1e2a3a;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        
+        .order-details {
+            background: #f8fafd;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .order-details p {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .order-details p:last-child {
+            border-bottom: none;
+        }
+        
+        .order-details .label {
+            color: #7f8c8d;
+        }
+        
+        .order-details .value {
+            font-weight: 600;
+            color: #1e2a3a;
+        }
+        
+        .btn-dashboard {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .btn-dashboard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+        
+        .btn-home {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .btn-home:hover {
+            text-decoration: underline;
+        }
+        
+        .whatsapp-btn {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        
+        <h1>Payment Successful! 🎉</h1>
+        <p class="subtitle">Thank you for your payment. Your order has been confirmed.</p>
+        
+        <div class="order-details">
+            <p>
+                <span class="label">Order ID</span>
+                <span class="value" id="orderId">Loading...</span>
+            </p>
+            <p>
+                <span class="label">Amount Paid</span>
+                <span class="value" id="orderAmount">Loading...</span>
+            </p>
+            <p>
+                <span class="label">Status</span>
+                <span class="value" style="color: #27ae60;">✅ Paid</span>
+            </p>
+        </div>
+        
+        <p style="color: #555; margin-bottom: 20px;">
+            <i class="fas fa-envelope"></i> A confirmation email has been sent to your email address.
+        </p>
+        
+        <div style="margin: 20px 0;">
+            <a href="https://wa.me/27698251610" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> Chat with Us
+            </a>
+        </div>
+        
+        <a href="member-dashboard.html" class="btn-dashboard">
+            <i class="fas fa-user-graduate"></i> Go to Dashboard
+        </a>
+        <br>
+        <a href="index.html" class="btn-home"><i class="fas fa-home"></i> Back to Home</a>
+    </div>
+    
+    <script>
+        // Get order details from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('m_payment_id') || 'ACE' + Date.now();
+        const amount = urlParams.get('amount') || 'R0.00';
+        
+        document.getElementById('orderId').textContent = orderId;
+        document.getElementById('orderAmount').textContent = 'R' + parseFloat(amount).toFixed(2);
+        
+        // Clear cart after successful payment
+        localStorage.removeItem('aceed_cart');
+    </script>
+</body>
+</html>
