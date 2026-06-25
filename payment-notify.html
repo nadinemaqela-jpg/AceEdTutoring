@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Notification</title>
+</head>
+<body>
+    <h1>Payment Notification Received</h1>
+    <p>This page handles PayFast's server-to-server notifications.</p>
+    
+    <script>
+        // This is a server-side listener for PayFast ITN (Instant Transaction Notifications)
+        // For GitHub Pages, this only logs the data. In a real app, you'd use a server.
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        console.log('🔔 PayFast Notification Received:');
+        console.log('Order ID:', urlParams.get('m_payment_id'));
+        console.log('Payment Status:', urlParams.get('payment_status'));
+        console.log('Amount:', urlParams.get('amount'));
+        console.log('Email:', urlParams.get('email_address'));
+        
+        document.body.innerHTML = `
+            <div style="max-width: 600px; margin: 50px auto; font-family: Arial; padding: 20px; background: #f8fafd; border-radius: 12px;">
+                <h2>✅ Payment Notification Received</h2>
+                <p><strong>Order ID:</strong> ${urlParams.get('m_payment_id') || 'N/A'}</p>
+                <p><strong>Status:</strong> ${urlParams.get('payment_status') || 'N/A'}</p>
+                <p><strong>Amount:</strong> ${urlParams.get('amount') || 'N/A'}</p>
+                <p><strong>Email:</strong> ${urlParams.get('email_address') || 'N/A'}</p>
+                <hr>
+                <p style="font-size: 0.85rem; color: #7f8c8d;">
+                    <i class="fas fa-info-circle"></i> 
+                    For production, this page would verify the signature and update your database.
+                </p>
+                <p style="font-size: 0.85rem; color: #7f8c8d;">
+                    <i class="fas fa-check-circle" style="color: #27ae60;"></i> 
+                    Payment data logged to console.
+                </p>
+            </div>
+        `;
+    </script>
+</body>
+</html>
