@@ -14,61 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Promotions & Special Offers - AceEd Tutoring</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="/js/cart.js"></script>
+    
     <style>
-        /* Cart Button in Navigation */
-.cart-link {
-    position: relative;
-    background-color: #f39c12;
-    border-radius: 40px;
-    padding: 6px 15px !important;
-    color: white !important;
-}
-
-.cart-link:hover {
-    background-color: #e67e22 !important;
-}
-
-/* Cart Badge - shows item count */
-.cart-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #e74c3c;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 8px;
-    font-size: 0.65rem;
-    font-weight: bold;
-    display: none;
-}
-
-.cart-badge.show {
-    display: inline-block;
-}
-
-/* Add to Cart Button */
-.add-to-cart {
-    background: #f39c12;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 40px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-    transition: all 0.3s;
-}
-
-.add-to-cart:hover {
-    background: #e67e22;
-    transform: translateY(-2px);
-}
-
-.add-to-cart i {
-    margin-right: 8px;
-}
         * {
             margin: 0;
             padding: 0;
@@ -220,7 +167,6 @@
             opacity: 0.95;
         }
         
-        /* Special Offer Banner */
         .offer-banner {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
@@ -268,7 +214,6 @@
             color: #ff8f00;
         }
         
-        /* Pricing Section */
         .pricing-section {
             background: white;
             border-radius: 24px;
@@ -298,6 +243,9 @@
             padding: 25px;
             text-align: center;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .package-card:hover {
@@ -325,6 +273,7 @@
             list-style: none;
             text-align: left;
             margin: 20px 0;
+            flex: 1;
         }
         
         .package-card ul li {
@@ -342,12 +291,13 @@
             display: inline-block;
             background: #ff8f00;
             color: #1e4668;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 40px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 15px;
+            margin-top: 10px;
             transition: all 0.3s;
+            font-size: 0.85rem;
         }
         
         .btn-register:hover {
@@ -355,7 +305,32 @@
             transform: translateY(-2px);
         }
         
-        /* Referral Program */
+        .add-to-cart {
+            background: #f39c12 !important;
+            color: white !important;
+            border: none !important;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            pointer-events: auto !important;
+            z-index: 999 !important;
+        }
+        
+        .add-to-cart:hover {
+            background: #e67e22 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243,156,18,0.3);
+        }
+        
+        .add-to-cart i {
+            margin-right: 8px;
+        }
+        
         .referral-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -403,7 +378,6 @@
             margin-top: 5px;
         }
         
-        /* Note Box */
         .note-box {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -437,6 +411,35 @@
         
         .btn-large i {
             margin-right: 10px;
+        }
+        
+        .cart-link {
+            position: relative;
+            background-color: #f39c12;
+            border-radius: 40px;
+            padding: 6px 15px !important;
+            color: white !important;
+        }
+        
+        .cart-link:hover {
+            background-color: #e67e22 !important;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .cart-badge.show {
+            display: inline-block;
         }
         
         .footer-modern {
@@ -643,9 +646,21 @@
                 <a href="pricing.html" class="nav-link" style="background-color: #27ae60; border-radius: 40px;">Pricing</a>
                 <a href="free-classes.html" class="nav-link" style="background-color: #e67e22; border-radius: 40px;">🎓 Free Classes</a>
                 <a href="subjects.html" class="nav-link">Subjects Covered</a>
-                <a href="register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
                 <a href="promotions.html" class="nav-link" style="background-color: #f39c12; border-radius: 40px;">🎯 Promotions</a>
                 <a href="contact.html" class="nav-link">Contact Us</a>
+                
+                <!-- 🛒 CART BUTTON -->
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
+                
+                <span class="auth-buttons">
+                    <a href="signup.html" class="nav-link" id="signupBtn" style="background-color: #2ecc71; border-radius: 40px;">📝 Sign Up</a>
+                    <a href="signin.html" class="nav-link" id="signinBtn" style="background-color: #3498db; border-radius: 40px;">🔑 Sign In</a>
+                    <a href="member-dashboard.html" class="nav-link" id="dashboardLink" style="display: none; background-color: #8e44ad; border-radius: 40px;">📊 Dashboard</a>
+                    <a href="#" class="nav-link" id="logoutBtn" style="display: none; background-color: #e74c3c; border-radius: 40px;">🚪 Logout</a>
+                </span>
             </div>
         </div>
     </header>
@@ -676,23 +691,26 @@
         <div class="pricing-section">
             <h2><i class="fas fa-gem"></i> Package Deals (Online)</h2>
             <div class="package-grid">
+                <!-- Bronze -->
                 <div class="package-card">
-                <h3>Bronze</h3>
-                <div class="package-price">R600<span style="font-size: 1rem;">/month</span></div>
-                <ul>
-                    <li><i class="fas fa-check"></i> 2 hours tutoring/week</li>
-                    <li><i class="fas fa-check"></i> 1 subject</li>
-                    <li><i class="fas fa-check"></i> WhatsApp support</li>
-                </ul>
-                <a href="register.html" class="btn-register">Get Started</a>
-                <button class="add-to-cart" 
-                        data-id="bronze-package" 
-                        data-item="Bronze Package" 
-                        data-price="600" 
-                        data-type="Monthly Package">
-                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
+                    <h3>Bronze</h3>
+                    <div class="package-price">R600<span style="font-size: 1rem;">/month</span></div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 2 hours tutoring/week</li>
+                        <li><i class="fas fa-check"></i> 1 subject</li>
+                        <li><i class="fas fa-check"></i> WhatsApp support</li>
+                    </ul>
+                    <a href="register.html" class="btn-register">Get Started</a>
+                    <button class="add-to-cart" 
+                            data-id="bronze-package" 
+                            data-item="Bronze Package" 
+                            data-price="600" 
+                            data-type="Monthly Package">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                 </div>
+                
+                <!-- Silver -->
                 <div class="package-card">
                     <h3>Silver</h3>
                     <div class="package-price">R1,100<span style="font-size: 1rem;">/month</span></div>
@@ -703,7 +721,16 @@
                         <li><i class="fas fa-check"></i> Monthly progress report</li>
                     </ul>
                     <a href="register.html" class="btn-register">Get Started</a>
+                    <button class="add-to-cart" 
+                            data-id="silver-package" 
+                            data-item="Silver Package" 
+                            data-price="1100" 
+                            data-type="Monthly Package">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                 </div>
+                
+                <!-- Gold -->
                 <div class="package-card">
                     <h3>Gold</h3>
                     <div class="package-price">R1,600<span style="font-size: 1rem;">/month</span></div>
@@ -715,7 +742,16 @@
                         <li><i class="fas fa-check"></i> 1 mock exam marking</li>
                     </ul>
                     <a href="register.html" class="btn-register">Get Started</a>
+                    <button class="add-to-cart" 
+                            data-id="gold-package" 
+                            data-item="Gold Package" 
+                            data-price="1600" 
+                            data-type="Monthly Package">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                 </div>
+                
+                <!-- Platinum -->
                 <div class="package-card">
                     <h3>Platinum</h3>
                     <div class="package-price">R2,000<span style="font-size: 1rem;">/month</span></div>
@@ -728,6 +764,13 @@
                         <li><i class="fas fa-check"></i> Application form help</li>
                     </ul>
                     <a href="register.html" class="btn-register">Get Started</a>
+                    <button class="add-to-cart" 
+                            data-id="platinum-package" 
+                            data-item="Platinum Package" 
+                            data-price="2000" 
+                            data-type="Monthly Package">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
@@ -825,5 +868,18 @@
             </div>
         </div>
     </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    
+    <script>
+        // Update navigation buttons based on auth status
+        updateNavButtons();
+        
+        // Update cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
 </body>
 </html>
