@@ -230,97 +230,98 @@
         <input type="hidden" name="cell_no" id="payfast_phone">
     </form>
     
-    <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
-    
-    <script>
-        // Protect page - only logged-in users can checkout
-        protectPage();
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+    // Protect page
+    protectPage();
+
+    function renderOrderSummary() {
+        const cart = getCart();
+        const container = document.getElementById('orderItems');
+        const totalEl = document.getElementById('orderTotal');
         
-        // Render order summary
-        function renderOrderSummary() {
-            const cart = getCart();
-            const container = document.getElementById('orderItems');
-            const totalEl = document.getElementById('orderTotal');
-            
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="color: #e74c3c;">Your cart is empty. Please add items before checking out.</p>';
-                return;
-            }
-            
-            let html = '';
-            let total = 0;
-            
-            cart.forEach(item => {
-                const subtotal = item.price * item.quantity;
-                total += subtotal;
-                html += `
-                    <div class="order-item">
-                        <span>${item.name} × ${item.quantity}</span>
-                        <span>R${subtotal.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            totalEl.textContent = `R${total.toFixed(2)}`;
+        if (cart.length === 0) {
+            container.innerHTML = '<p style="color: #e74c3c;">Your cart is empty.</p>';
+            totalEl.textContent = 'R0.00';
+            return;
         }
         
-        // Load user data
-        async function loadUserData() {
-            const user = await getCurrentUser();
+        let html = '';
+        let total = 0;
+        
+        cart.forEach(item => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+            html += `
+                <div class="order-item">
+                    <span>${item.name} × ${item.quantity}</span>
+                    <span>R${subtotal.toFixed(2)}</span>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        totalEl.textContent = `R${total.toFixed(2)}`;
+        
+        // Set the PayFast amount
+        document.getElementById('amount').value = total.toFixed(2);
+        document.getElementById('item_name').value = cart.map(i => i.name).join(', ');
+        document.getElementById('item_description').value = cart.map(i => `${i.name} × ${i.quantity}`).join(', ');
+    }
+    
+    // Load user data and render order
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load user info
+        getCurrentUser().then(user => {
             if (user) {
                 document.getElementById('fullName').value = user.fullName || '';
                 document.getElementById('email').value = user.email || '';
                 document.getElementById('phone').value = user.phone || '';
             }
-        }
-        
-        // Process checkout
-        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const cart = getCart();
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
-            }
-            
-            const fullName = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const notes = document.getElementById('notes').value.trim();
-            
-            if (!fullName || !email || !phone) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-            
-            const total = getCartTotal();
-            const orderId = 'ACE' + Date.now();
-            const itemNames = cart.map(item => item.name).join(', ');
-            
-            // Populate PayFast form
-            document.getElementById('m_payment_id').value = orderId;
-            document.getElementById('amount').value = total.toFixed(2);
-            document.getElementById('item_name').value = 'AceEd Tutoring Services';
-            document.getElementById('item_description').value = itemNames;
-            document.getElementById('payfast_email').value = email;
-            document.getElementById('payfast_name').value = fullName.split(' ')[0] || fullName;
-            document.getElementById('payfast_last').value = fullName.split(' ').slice(1).join(' ') || '';
-            document.getElementById('payfast_phone').value = phone;
-            <!-- ============================================================ -->
-            <!-- ADD SPLIT PAYMENT FIELDS HERE 👇                             -->
-            <!-- ============================================================ -->
-
-            
-            // Submit to PayFast
-            document.getElementById('payfastForm').submit();
         });
         
-        // Initialize
+        // Render order summary
         renderOrderSummary();
-        loadUserData();
-    </script>
+    });
+    
+    // Handle checkout form submission
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const cart = getCart();
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        
+        if (!fullName || !email || !phone) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        const total = getCartTotal();
+        const orderId = 'ACE' + Date.now();
+        const itemNames = cart.map(item => item.name).join(', ');
+        
+        // Populate PayFast form
+        document.getElementById('m_payment_id').value = orderId;
+        document.getElementById('amount').value = total.toFixed(2);
+        document.getElementById('item_name').value = 'AceEd Tutoring Services';
+        document.getElementById('item_description').value = itemNames;
+        document.getElementById('payfast_email').value = email;
+        document.getElementById('payfast_name').value = fullName.split(' ')[0] || fullName;
+        document.getElementById('payfast_last').value = fullName.split(' ').slice(1).join(' ') || '';
+        document.getElementById('payfast_phone').value = phone;
+        
+        // Submit to PayFast
+        document.getElementById('payfastForm').submit();
+    });
+</script>
 </body>
 </html>
