@@ -184,41 +184,26 @@
     </div>
     
     <script>
-        // ============================================================
-        // GET ORDER DETAILS FROM URL
-        // ============================================================
+        // Get order details
         const urlParams = new URLSearchParams(window.location.search);
-        
-        // Get order ID
         const orderId = urlParams.get('m_payment_id') || 'ACE' + Date.now();
         
-        // Get amount - try multiple possible parameter names
-        let amount = urlParams.get('amount') || 
-                     urlParams.get('amt') || 
-                     urlParams.get('payment_amount') || 
-                     '0.00';
+        // ✅ Get amount from localStorage (saved in checkout)
+        let amount = localStorage.getItem('aceed_payment_amount') || '0.00';
         
-        // Clean up amount (remove any non-numeric characters except decimal)
+        // Clean up amount
         amount = amount.replace(/[^0-9.]/g, '');
         
         // Parse and format
         const parsedAmount = parseFloat(amount);
         const displayAmount = isNaN(parsedAmount) || parsedAmount <= 0 ? '0.00' : parsedAmount.toFixed(2);
         
-        // Debug - log what was received
-        console.log('🔍 URL Parameters:', window.location.search);
-        console.log('🔍 Amount received:', amount);
-        console.log('🔍 Display amount:', displayAmount);
+        // Clear the stored amount
+        localStorage.removeItem('aceed_payment_amount');
         
         // Update page
         document.getElementById('orderId').textContent = orderId;
         document.getElementById('orderAmount').textContent = 'R' + displayAmount;
-        
-        // If amount is 0.00, show a friendly message
-        if (displayAmount === '0.00') {
-            document.getElementById('orderAmount').textContent = '✅ Payment Processed';
-            document.getElementById('orderAmount').style.color = '#27ae60';
-        }
         
         // Clear cart after successful payment
         localStorage.removeItem('aceed_cart');
