@@ -297,5 +297,22 @@
     // Render cart on page load
     document.addEventListener('DOMContentLoaded', renderCart);
 </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔍 Debugging cart.html:');
+        console.log('1. protectPage:', typeof protectPage);
+        console.log('2. getCart:', typeof getCart);
+        console.log('3. renderCart:', typeof renderCart);
+        console.log('4. cartContent element:', document.getElementById('cartContent'));
+        
+        // Force render
+        if (typeof renderCart === 'function') {
+            console.log('✅ renderCart exists! Running...');
+            renderCart();
+        } else {
+            console.log('❌ renderCart is missing!');
+        }
+    });
+</script>
 </body>
 </html>
