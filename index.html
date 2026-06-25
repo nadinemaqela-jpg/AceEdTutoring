@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="js/cart.js"></script>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
 <script>
@@ -659,6 +660,12 @@
         }
     </style>
 </head>
+    <script>
+        // Update cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
 <body>
     <!-- Faded Background Logo -->
     <div class="bg-logo">
