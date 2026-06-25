@@ -36,6 +36,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
             color: #333;
             min-height: 100vh;
+            position: relative;
         }
         
         .container {
@@ -182,7 +183,7 @@
             color: white;
             padding: 30px;
             border-radius: 20px;
-            margin-bottom: 30px;
+            margin: 30px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -224,7 +225,7 @@
         
         .resource-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin: 30px 0;
         }
@@ -313,10 +314,6 @@
     </style>
 </head>
 <body>
-    <div class="bg-logo">
-        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
-    </div>
-
     <header>
         <div class="container">
             <div class="logo-image">
@@ -351,7 +348,7 @@
                 <a href="promotions.html" class="nav-link" style="background-color: #f39c12; border-radius: 40px;">🎯 Promotions</a>
                 <a href="contact.html" class="nav-link">Contact Us</a>
                 
-                <!-- 🛒 CART BUTTON -->
+                <!-- Cart Button -->
                 <a href="cart.html" class="nav-link cart-link">
                     <i class="fas fa-shopping-cart"></i> Cart
                     <span class="cart-badge" id="cartCount">0</span>
@@ -413,41 +410,6 @@
             <i class="fas fa-info-circle"></i> <strong>Tip:</strong> All resources are free for registered members. Paid services (tutoring sessions) can be booked separately.
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer-modern" style="background: #0f1720; color: #e2e8f0; margin-top: 60px; padding: 50px 0 25px; border-top: 1px solid rgba(255,255,255,0.05);">
-        <div class="container">
-            <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 35px; margin-bottom: 35px;">
-                <div class="footer-col">
-                    <h4 style="color: white; font-size: 1.2rem; margin-bottom: 18px; position: relative; display: inline-block;">AceEd Tutoring</h4>
-                    <p style="font-size: 0.9rem; line-height: 1.7; opacity: 0.85;">Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
-                    <div class="social-icons" style="display: flex; gap: 14px; margin-top: 15px;">
-                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank" style="background: #1e2a3a; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; transition: all 0.2s;"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" target="_blank" style="background: #1e2a3a; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; transition: all 0.2s;"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/27698251610" target="_blank" style="background: #1e2a3a; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; transition: all 0.2s;"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" target="_blank" style="background: #1e2a3a; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; transition: all 0.2s;"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4 style="color: white; font-size: 1.2rem; margin-bottom: 18px; position: relative; display: inline-block;">Quick Links</h4>
-                    <ul style="list-style: none; padding: 0; font-size: 0.9rem; line-height: 1.7; opacity: 0.85;">
-                        <li style="margin-bottom: 10px;"><a href="index.html" style="color: #cbd5e1; text-decoration: none; transition: color 0.2s;">Home</a></li>
-                        <li style="margin-bottom: 10px;"><a href="tutors.html" style="color: #cbd5e1; text-decoration: none; transition: color 0.2s;">Our Tutors</a></li>
-                        <li style="margin-bottom: 10px;"><a href="pricing.html" style="color: #cbd5e1; text-decoration: none; transition: color 0.2s;">Pricing</a></li>
-                        <li style="margin-bottom: 10px;"><a href="register.html" style="color: #cbd5e1; text-decoration: none; transition: color 0.2s;">Register Now</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4 style="color: white; font-size: 1.2rem; margin-bottom: 18px; position: relative; display: inline-block;">Contact</h4>
-                    <p style="font-size: 0.9rem; line-height: 1.7; opacity: 0.85;"><i class="fas fa-envelope"></i> info@aceed.co.za</p>
-                    <p style="font-size: 0.9rem; line-height: 1.7; opacity: 0.85;"><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
-                </div>
-            </div>
-            <div class="footer-bottom" style="text-align: center; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.7;">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <i class="fas fa-heart" style="color: #e74c3c;"></i> Supporting South African students</p>
-            </div>
-        </div>
-    </footer>
 
     <script src="js/auth.js"></script>
     
