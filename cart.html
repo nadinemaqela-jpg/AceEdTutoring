@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart - AceEd Tutoring</title>
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -82,6 +87,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            justify-content: flex-end;
         }
         
         .quantity-btn {
@@ -180,6 +186,7 @@
             .cart-item-actions {
                 width: 100%;
                 margin-top: 10px;
+                justify-content: flex-start;
             }
         }
     </style>
@@ -194,130 +201,135 @@
         
         <a href="index.html" class="continue-btn"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
     </div>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-<script src="js/auth.js"></script>
-<script src="js/cart.js"></script>
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
 
-<script>
-    // Protect page - redirect to signin if not logged in
-    protectPage();
+    <script>
+        // ============================================================
+        // 1. PROTECT PAGE - Redirect to signin if not logged in
+        // ============================================================
+        protectPage();
 
-    // ============================================================
-    // RENDER CART FUNCTION
-    // ============================================================
-    function renderCart() {
-        console.log('🛒 renderCart called');
-        const cart = getCart();
-        console.log('Cart items:', cart.length);
-        
-        const container = document.getElementById('cartContent');
-        console.log('Container found?', container);
-        
-        if (!container) {
-            console.error('❌ cartContent div not found!');
-            return;
-        }
-        
-        if (cart.length === 0) {
-            container.innerHTML = `
-                <div class="cart-empty">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h2>Your cart is empty</h2>
-                    <p>Browse our services and add items to your cart.</p>
-                    <a href="pricing.html" style="display: inline-block; margin-top: 20px; background: #3498db; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none;">Browse Services</a>
-                </div>
-            `;
-            return;
-        }
-        
-        let html = '';
-        let total = 0;
-        
-        cart.forEach((item, index) => {
-            const subtotal = item.price * item.quantity;
-            total += subtotal;
+        // ============================================================
+        // 2. RENDER CART FUNCTION
+        // ============================================================
+        function renderCart() {
+            console.log('🛒 renderCart called');
             
-            html += `
-                <div class="cart-item">
-                    <div class="cart-item-info">
-                        <h3>${item.name}</h3>
-                        <p>${item.type || 'Service'}</p>
+            const cart = getCart();
+            console.log('📦 Cart items:', cart.length);
+            
+            const container = document.getElementById('cartContent');
+            
+            if (!container) {
+                console.error('❌ cartContent div not found!');
+                return;
+            }
+            
+            // If cart is empty
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h2>Your cart is empty</h2>
+                        <p>Browse our services and add items to your cart.</p>
+                        <a href="pricing.html" style="display: inline-block; margin-top: 20px; background: #3498db; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none;">Browse Services</a>
                     </div>
-                    <div style="text-align: right;">
-                        <div class="cart-item-price">R${subtotal.toFixed(2)}</div>
-                        <div class="cart-item-actions">
-                            <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
-                            <span class="quantity-display">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
-                            <button class="remove-btn" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button>
+                `;
+                return;
+            }
+            
+            // Build cart items HTML
+            let html = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <h3>${item.name}</h3>
+                            <p>${item.type || 'Service'}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="cart-item-price">R${subtotal.toFixed(2)}</div>
+                            <div class="cart-item-actions">
+                                <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                                <button class="remove-btn" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
+                `;
+            });
+            
+            // Add summary
+            html += `
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <span>Total</span>
+                        <span class="total-price">R${total.toFixed(2)}</span>
+                    </div>
+                    <a href="checkout.html" class="checkout-btn"><i class="fas fa-lock"></i> Proceed to Checkout</a>
                 </div>
             `;
-        });
-        
-        html += `
-            <div class="cart-summary">
-                <div class="cart-total">
-                    <span>Total</span>
-                    <span class="total-price">R${total.toFixed(2)}</span>
-                </div>
-                <a href="checkout.html" class="checkout-btn"><i class="fas fa-lock"></i> Proceed to Checkout</a>
-            </div>
-        `;
-        
-        container.innerHTML = html;
-        console.log('✅ Cart rendered successfully!');
-    }
+            
+            container.innerHTML = html;
+            console.log('✅ Cart rendered successfully!');
+        }
 
-    // ============================================================
-    // CHANGE QUANTITY
-    // ============================================================
-    function changeQuantity(index, delta) {
-        const cart = getCart();
-        const item = cart[index];
-        if (item) {
-            item.quantity += delta;
-            if (item.quantity <= 0) {
-                cart.splice(index, 1);
+        // ============================================================
+        // 3. CHANGE QUANTITY
+        // ============================================================
+        function changeQuantity(index, delta) {
+            const cart = getCart();
+            const item = cart[index];
+            
+            if (item) {
+                item.quantity += delta;
+                
+                if (item.quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                
+                saveCart(cart);
+                renderCart();
+                updateCartCount();
             }
+        }
+
+        // ============================================================
+        // 4. REMOVE ITEM
+        // ============================================================
+        function removeItem(index) {
+            const cart = getCart();
+            cart.splice(index, 1);
             saveCart(cart);
             renderCart();
             updateCartCount();
         }
-    }
 
-    // ============================================================
-    // REMOVE ITEM
-    // ============================================================
-    function removeItem(index) {
-        const cart = getCart();
-        cart.splice(index, 1);
-        saveCart(cart);
-        renderCart();
-        updateCartCount();
-    }
+        // ============================================================
+        // 5. RENDER CART ON PAGE LOAD
+        // ============================================================
+        // Wait for page to load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOMContentLoaded fired');
+            renderCart();
+        });
 
-    // ============================================================
-    // RENDER CART WHEN PAGE LOADS
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('📄 Page loaded, rendering cart...');
-        renderCart();
-    });
-
-    // Also try rendering immediately (in case DOMContentLoaded already fired)
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        console.log('🔄 Page already loaded, rendering immediately...');
-        renderCart();
-    }
-</script>
-
+        // Fallback: if DOMContentLoaded already fired, render immediately
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            console.log('🔄 Page already loaded, rendering immediately...');
+            renderCart();
+        }
+    </script>
 </body>
-</html>
-
 </html>
