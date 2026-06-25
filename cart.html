@@ -198,17 +198,29 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
+
 <script src="js/auth.js"></script>
 <script src="js/cart.js"></script>
 
 <script>
-    // Protect page - only logged-in users can access cart
+    // Protect page - redirect to signin if not logged in
     protectPage();
 
+    // ============================================================
+    // RENDER CART FUNCTION
+    // ============================================================
     function renderCart() {
+        console.log('🛒 renderCart called');
         const cart = getCart();
+        console.log('Cart items:', cart.length);
+        
         const container = document.getElementById('cartContent');
+        console.log('Container found?', container);
+        
+        if (!container) {
+            console.error('❌ cartContent div not found!');
+            return;
+        }
         
         if (cart.length === 0) {
             container.innerHTML = `
@@ -259,8 +271,12 @@
         `;
         
         container.innerHTML = html;
+        console.log('✅ Cart rendered successfully!');
     }
-    
+
+    // ============================================================
+    // CHANGE QUANTITY
+    // ============================================================
     function changeQuantity(index, delta) {
         const cart = getCart();
         const item = cart[index];
@@ -274,7 +290,10 @@
             updateCartCount();
         }
     }
-    
+
+    // ============================================================
+    // REMOVE ITEM
+    // ============================================================
     function removeItem(index) {
         const cart = getCart();
         cart.splice(index, 1);
@@ -282,37 +301,23 @@
         renderCart();
         updateCartCount();
     }
-    
-    // Render cart on page load
-    document.addEventListener('DOMContentLoaded', renderCart);
-<script>
-    function removeItem(index) {
-        const cart = getCart();
-        cart.splice(index, 1);
-        saveCart(cart);
-        renderCart();
-        updateCartCount();
-    }
-    
-    // Render cart on page load
-    document.addEventListener('DOMContentLoaded', renderCart);
-</script>
-    <script>
+
+    // ============================================================
+    // RENDER CART WHEN PAGE LOADS
+    // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🔍 Debugging cart.html:');
-        console.log('1. protectPage:', typeof protectPage);
-        console.log('2. getCart:', typeof getCart);
-        console.log('3. renderCart:', typeof renderCart);
-        console.log('4. cartContent element:', document.getElementById('cartContent'));
-        
-        // Force render
-        if (typeof renderCart === 'function') {
-            console.log('✅ renderCart exists! Running...');
-            renderCart();
-        } else {
-            console.log('❌ renderCart is missing!');
-        }
+        console.log('📄 Page loaded, rendering cart...');
+        renderCart();
     });
+
+    // Also try rendering immediately (in case DOMContentLoaded already fired)
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        console.log('🔄 Page already loaded, rendering immediately...');
+        renderCart();
+    }
 </script>
+
 </body>
+</html>
+
 </html>
