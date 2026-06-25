@@ -202,35 +202,23 @@
         <a href="index.html" class="continue-btn"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
 
     <script>
-        // ============================================================
-        // 1. PROTECT PAGE - Redirect to signin if not logged in
-        // ============================================================
+        // Protect page
         protectPage();
 
-        // ============================================================
-        // 2. RENDER CART FUNCTION
-        // ============================================================
+        // Render cart function
         function renderCart() {
-            console.log('🛒 renderCart called');
-            
             const cart = getCart();
-            console.log('📦 Cart items:', cart.length);
-            
             const container = document.getElementById('cartContent');
             
             if (!container) {
-                console.error('❌ cartContent div not found!');
+                console.error('cartContent not found');
                 return;
             }
             
-            // If cart is empty
             if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="cart-empty">
@@ -243,12 +231,11 @@
                 return;
             }
             
-            // Build cart items HTML
             let html = '';
             let total = 0;
             
-            cart.forEach((item, index) => {
-                const subtotal = item.price * item.quantity;
+            cart.forEach(function(item, index) {
+                var subtotal = item.price * item.quantity;
                 total += subtotal;
                 
                 html += `
@@ -270,7 +257,6 @@
                 `;
             });
             
-            // Add summary
             html += `
                 <div class="cart-summary">
                     <div class="cart-total">
@@ -282,15 +268,11 @@
             `;
             
             container.innerHTML = html;
-            console.log('✅ Cart rendered successfully!');
         }
 
-        // ============================================================
-        // 3. CHANGE QUANTITY
-        // ============================================================
         function changeQuantity(index, delta) {
-            const cart = getCart();
-            const item = cart[index];
+            var cart = getCart();
+            var item = cart[index];
             
             if (item) {
                 item.quantity += delta;
@@ -305,31 +287,18 @@
             }
         }
 
-        // ============================================================
-        // 4. REMOVE ITEM
-        // ============================================================
         function removeItem(index) {
-            const cart = getCart();
+            var cart = getCart();
             cart.splice(index, 1);
             saveCart(cart);
             renderCart();
             updateCartCount();
         }
 
-        // ============================================================
-        // 5. RENDER CART ON PAGE LOAD
-        // ============================================================
-        // Wait for page to load
+        // Render cart when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 DOMContentLoaded fired');
             renderCart();
         });
-
-        // Fallback: if DOMContentLoaded already fired, render immediately
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            console.log('🔄 Page already loaded, rendering immediately...');
-            renderCart();
-        }
     </script>
 </body>
 </html>
