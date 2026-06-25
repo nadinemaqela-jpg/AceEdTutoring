@@ -286,46 +286,53 @@
         renderOrderSummary();
     });
     
-    // Handle checkout form submission
-    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const cart = getCart();
-        if (cart.length === 0) {
-            alert('Your cart is empty!');
-            return;
-        }
-        
-        const fullName = document.getElementById('fullName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        
-        if (!fullName || !email || !phone) {
-            alert('Please fill in all required fields.');
-            return;
-        }
-        
-        const total = getCartTotal();
-        const orderId = 'ACE' + Date.now();
-        const itemNames = cart.map(item => item.name).join(', ');
-        
-        // Populate PayFast form
-        document.getElementById('m_payment_id').value = orderId;
-        document.getElementById('amount').value = total.toFixed(2);
-        document.getElementById('item_name').value = 'AceEd Tutoring Services';
-        document.getElementById('item_description').value = itemNames;
-        document.getElementById('payfast_email').value = email;
-        document.getElementById('payfast_name').value = fullName.split(' ')[0] || fullName;
-        document.getElementById('payfast_last').value = fullName.split(' ').slice(1).join(' ') || '';
-        document.getElementById('payfast_phone').value = phone;
-
-                // Save amount to localStorage before redirecting
-        const total = getCartTotal();
-        localStorage.setItem('aceed_payment_amount', total.toFixed(2));
-        
-        // Submit to PayFast
-        document.getElementById('payfastForm').submit();
-    });
+// ============================================================
+// CHECKOUT FORM SUBMIT
+// ============================================================
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // ✅ STEP 1: Get cart and total FIRST
+    const cart = getCart();
+    const total = getCartTotal();
+    
+    console.log('🔍 Cart:', cart);
+    console.log('🔍 Total:', total);
+    
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+    
+    // ✅ STEP 2: Save amount to localStorage
+    localStorage.setItem('aceed_payment_amount', total.toFixed(2));
+    
+    // ✅ STEP 3: Get user details
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    
+    if (!fullName || !email || !phone) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    // ✅ STEP 4: Populate PayFast form
+    const orderId = 'ACE' + Date.now();
+    const itemNames = cart.map(item => item.name).join(', ');
+    
+    document.getElementById('m_payment_id').value = orderId;
+    document.getElementById('amount').value = total.toFixed(2);
+    document.getElementById('item_name').value = 'AceEd Tutoring Services';
+    document.getElementById('item_description').value = itemNames;
+    document.getElementById('payfast_email').value = email;
+    document.getElementById('payfast_name').value = fullName.split(' ')[0] || fullName;
+    document.getElementById('payfast_last').value = fullName.split(' ').slice(1).join(' ') || '';
+    document.getElementById('payfast_phone').value = phone;
+    
+    // ✅ STEP 5: Submit to PayFast
+    document.getElementById('payfastForm').submit();
+});
 </script>
 </body>
 </html>
