@@ -1,8 +1,8 @@
 // ============================================================
-// 1. Firebase Configuration - YOUR CONFIG
+// 1. Firebase Configuration - NEW SECURE KEY
 // ============================================================
 const firebaseConfig = {
-    apiKey: "AIzaSyCnEx9xLtbac3e0ivdIa7BGuiT3AK3yBb8",
+    apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
     authDomain: "aceed-tutoring.firebaseapp.com",
     projectId: "aceed-tutoring",
     storageBucket: "aceed-tutoring.firebasestorage.app",
