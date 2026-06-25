@@ -1,0 +1,23 @@
+<!-- PayFast Payment Form -->
+<form id="payfastForm" action="https://sandbox.payfast.co.za/eng/process" method="POST">
+    
+    <!-- Merchant Details -->
+    <input type="hidden" name="merchant_id" value="34577679">
+    <input type="hidden" name="merchant_key" value="avzit6efio3bl">
+    
+    <!-- Order Details -->
+    <input type="hidden" name="return_url" value="https://aceed.co.za/payment-success.html">
+    <input type="hidden" name="cancel_url" value="https://aceed.co.za/payment-cancel.html">
+    <input type="hidden" name="notify_url" value="https://aceed.co.za/payment-notify.html">
+    
+    <input type="hidden" name="m_payment_id" id="m_payment_id">
+    <input type="hidden" name="amount" id="amount">
+    <input type="hidden" name="item_name" id="item_name">
+    <input type="hidden" name="item_description" id="item_description">
+    
+    <!-- Student Details -->
+    <input type="hidden" name="email_address" id="payfast_email">
+    <input type="hidden" name="name_first" id="payfast_name">
+    
+    <button type="submit">Pay Now</button>
+</form>
