@@ -318,6 +318,10 @@
         document.getElementById('payfast_name').value = fullName.split(' ')[0] || fullName;
         document.getElementById('payfast_last').value = fullName.split(' ').slice(1).join(' ') || '';
         document.getElementById('payfast_phone').value = phone;
+
+                // Save amount to localStorage before redirecting
+        const total = getCartTotal();
+        localStorage.setItem('aceed_payment_amount', total.toFixed(2));
         
         // Submit to PayFast
         document.getElementById('payfastForm').submit();
