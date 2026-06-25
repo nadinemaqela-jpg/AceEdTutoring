@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18209594553');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects Covered - AceEd Tutoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo-image {
+            max-width: 250px;
+            margin: 0 auto;
+        }
+        
+        .logo-image img {
+            width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #2c3e50;
+            min-width: 180px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            top: 100%;
+            left: 0;
+            z-index: 200;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-content a {
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #3498db;
+        }
+        
+        .page-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            border-radius: 24px;
+            margin: 30px 0;
+            color: white;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .grade-section {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .grade-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .grade-section h2 {
+            color: #1e2a3a;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .grade-section h2 i {
+            color: #3498db;
+        }
+        
+        .grade-section .grade-badge {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .subject-item {
+            background: #f8fafd;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .subject-item:hover {
+            background: #eef2fc;
+            border-color: #3498db;
+            transform: translateX(5px);
+        }
+        
+        .subject-item i {
+            color: #3498db;
+            font-size: 1.3rem;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .subject-item .subject-name {
+            font-weight: 500;
+            color: #1e2a3a;
+        }
+        
+        .subject-item .subject-code {
+            font-size: 0.7rem;
+            color: #999;
+            margin-left: auto;
+            background: #e9edf2;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        
+        .grade-8-9 {
+            border-left-color: #27ae60;
+        }
+        
+        .grade-8-9 h2 i {
+            color: #27ae60;
+        }
+        
+        .grade-8-9 .grade-badge {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+        }
+        
+        .grade-8-9 .subject-item i {
+            color: #27ae60;
+        }
+        
+        .grade-8-9 .subject-item:hover {
+            border-color: #27ae60;
+            background: #e8f5e9;
+        }
+        
+        .grade-10-12 {
+            border-left-color: #e74c3c;
+        }
+        
+        .grade-10-12 h2 i {
+            color: #e74c3c;
+        }
+        
+        .grade-10-12 .grade-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .grade-10-12 .subject-item i {
+            color: #e74c3c;
+        }
+        
+        .grade-10-12 .subject-item:hover {
+            border-color: #e74c3c;
+            background: #fce4e4;
+        }
+        
+        .total-count {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafd;
+            border-radius: 16px;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .total-count span {
+            font-weight: bold;
+            color: #3498db;
+            font-size: 1.5rem;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            border-radius: 24px;
+            margin: 30px 0;
+        }
+        
+        .cta-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .cta-section .btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .cta-section .btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231,76,60,0.3);
+        }
+        
+        .footer-modern {
+            background: #0f1720;
+            color: #e2e8f0;
+            margin-top: 60px;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #e74c3c;
+            border-radius: 3px;
+        }
+        
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #e74c3c;
+            padding-left: 4px;
+        }
+        
+        .footer-register-btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(231,76,60,0.3);
+        }
+        
+        .footer-register-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .footer-dark-btn {
+            background: #2d3e50;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        
+        .footer-dark-btn:hover {
+            background: #1e2f40;
+            transform: translateY(-1px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            background: #1e2a3a;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        
+        .social-icons a:hover {
+            background: #e74c3c;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .footer-bottom a {
+            color: #e2e8f0;
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            color: #e74c3c;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .grade-section {
+                padding: 25px;
+            }
+            .subjects-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .footer-grid {
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-logo">
+        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
+            </div>
+            <div class="tagline">Expert Tutoring for Grade 8 to 12 Students</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Grades ▼</a>
+                    <div class="dropdown-content">
+
+                        <a href="grades/grade-10/index.html">Grade 10</a>
+                        <a href="grades/grade-11/index.html">Grade 11</a>
+                        <a href="grades/grade-12/index.html">Grade 12</a>
+                    </div>
+                </div>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">ATP ▼</a>
+                    <div class="dropdown-content">
+                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
+                    </div>
+                </div>
+                
+                <a href="tutors.html" class="nav-link">Our Tutors</a>
+                <a href="pricing.html" class="nav-link" style="background-color: #27ae60; border-radius: 40px;">Pricing</a>
+                <a href="free-classes.html" class="nav-link" style="background-color: #e67e22; border-radius: 40px;">🎓 Free Classes</a>
+                <a href="subjects.html" class="nav-link" style="background-color: #3498db; border-radius: 40px;">Subjects Covered</a>
+                <a href="register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
+                <a href="promotions.html" class="nav-link" style="background-color: #f39c12; border-radius: 40px;">🎯 Promotions</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-book-open"></i> Subjects We Cover</h1>
+            <p>From Grade 8 to 12, we offer expert tutoring across all major CAPS subjects.</p>
+        </div>
+
+        <!-- Grade 8 & 9 Section -->
+        <div class="grade-section grade-8-9">
+            <h2>
+                <i class="fas fa-users"></i> Grade 8 & 9
+                <span class="grade-badge">Foundation Phase</span>
+            </h2>
+            <div class="subjects-grid">
+                <div class="subject-item">
+                    <i class="fas fa-calculator"></i>
+                    <span class="subject-name">Mathematics</span>
+                    <span class="subject-code">Gr 8-9</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-flask"></i>
+                    <span class="subject-name">Natural Sciences</span>
+                    <span class="subject-code">Gr 8-9</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade 10-12 Section -->
+        <div class="grade-section grade-10-12">
+            <h2>
+                <i class="fas fa-graduation-cap"></i> Grade 10, 11 & 12
+                <span class="grade-badge">Senior Phase</span>
+            </h2>
+            <div class="subjects-grid">
+                <div class="subject-item">
+                    <i class="fas fa-calculator"></i>
+                    <span class="subject-name">Mathematics</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="subject-name">Mathematical Literacy</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-flask"></i>
+                    <span class="subject-name">Physical Sciences</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-leaf"></i>
+                    <span class="subject-name">Life Sciences</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="subject-name">Accounting</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="subject-name">Economics</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span class="subject-name">Business Studies</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-globe-africa"></i>
+                    <span class="subject-name">Geography</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-landmark"></i>
+                    <span class="subject-name">History</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-plane"></i>
+                    <span class="subject-name">Tourism</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-laptop-code"></i>
+                    <span class="subject-name">Computer Applications Technology (CAT)</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-language"></i>
+                    <span class="subject-name">Afrikaans (Eerste Addisionele Taal)</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+                <div class="subject-item">
+                    <i class="fas fa-book"></i>
+                    <span class="subject-name">English Home Language</span>
+                    <span class="subject-code">Gr 10-12</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="total-count">
+            <span>15</span> Subjects Covered Across <span>5</span> Grades
+        </div>
+
+        <div class="cta-section">
+            <h2><i class="fas fa-chalkboard-user"></i> Ready to Excel?</h2>
+            <p>Book a session with one of our expert tutors today!</p>
+            <a href="register.html" class="btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 8–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tutors.html">Our Tutors</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="free-classes.html">Free Classes</a></li>
+                        <li><a href="subjects.html">Subjects Covered</a></li>
+                        <li><a href="register.html">Register Now</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences & Life Science</li>
+                        <li>Tourism & History</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                        <li>Afrikaans (HL) & English (HL)</li>
+                        <li>CAT & Computer Science</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 529 4232 (Stellenbosch)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 647 6472 (Durban)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a> | <i class="fas fa-heart" style="color: #e74c3c;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
