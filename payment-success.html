@@ -187,10 +187,14 @@
         // Get order details from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const orderId = urlParams.get('m_payment_id') || 'ACE' + Date.now();
-        const amount = urlParams.get('amount') || 'R0.00';
+        const amount = urlParams.get('amount') || '0.00';
+        
+        // Fix: Make sure amount is a valid number
+        const parsedAmount = parseFloat(amount);
+        const displayAmount = isNaN(parsedAmount) ? '0.00' : parsedAmount.toFixed(2);
         
         document.getElementById('orderId').textContent = orderId;
-        document.getElementById('orderAmount').textContent = 'R' + parseFloat(amount).toFixed(2);
+        document.getElementById('orderAmount').textContent = 'R' + displayAmount;
         
         // Clear cart after successful payment
         localStorage.removeItem('aceed_cart');
