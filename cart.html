@@ -281,7 +281,17 @@
     
     // Render cart on page load
     document.addEventListener('DOMContentLoaded', renderCart);
-</script>
+<script>
+    function removeItem(index) {
+        const cart = getCart();
+        cart.splice(index, 1);
+        saveCart(cart);
+        renderCart();
+        updateCartCount();
+    }
     
+    // Render cart on page load
+    document.addEventListener('DOMContentLoaded', renderCart);
+</script>
 </body>
 </html>
