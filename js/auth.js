@@ -133,12 +133,11 @@ function updateNavButtons() {
 function protectPage() {
     auth.onAuthStateChanged(user => {
         if (!user) {
-            // If not logged in, redirect to signin
-            window.location.href = 'signin.html?redirect=' + encodeURIComponent(window.location.pathname);
+            // Redirect to signin.html in the root folder
+            window.location.href = '/signin.html?redirect=' + encodeURIComponent(window.location.pathname);
         }
     });
 }
-
 // ============================================================
 // 9. Show/Hide Content Based on Auth
 // ============================================================
