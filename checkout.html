@@ -309,6 +309,11 @@
             document.getElementById('payfast_name').value = fullName.split(' ')[0] || fullName;
             document.getElementById('payfast_last').value = fullName.split(' ').slice(1).join(' ') || '';
             document.getElementById('payfast_phone').value = phone;
+            <!-- ============================================================ -->
+            <!-- ADD SPLIT PAYMENT FIELDS HERE 👇                             -->
+            <!-- ============================================================ -->
+            <input type="hidden" name="split_payment" value="1">
+            <input type="hidden" name="split_amount" id="split_amount" value="0.00">
             
             // Submit to PayFast
             document.getElementById('payfastForm').submit();
