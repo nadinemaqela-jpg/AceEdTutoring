@@ -334,9 +334,14 @@
     </style>
 </head>
 <body>
-    <!-- 🔒 PROTECT THIS PAGE -->
-    <script src="../../js/auth.js"></script>
-    <script>protectPage();</script>
+    <head>
+    <!-- 1️⃣ FIRST: Load Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- 2️⃣ SECOND: Load auth.js (which uses firebase) -->
+    <script src="/js/auth.js"></script>
     <!-- Faded Background Logo -->
     <div class="bg-logo">
         <img src="../../logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
