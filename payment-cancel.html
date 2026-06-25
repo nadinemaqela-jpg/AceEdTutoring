@@ -1,1 +1,151 @@
-222
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - AceEd Tutoring</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fce4e4 0%, #f5c6c6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .cancel-icon {
+            width: 100px;
+            height: 100px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(231,76,60,0.3);
+        }
+        
+        h1 {
+            color: #1e2a3a;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        
+        .btn-retry {
+            display: inline-block;
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .btn-retry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230,126,34,0.3);
+        }
+        
+        .btn-home {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .btn-home:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-cart {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 14px 35px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .btn-cart:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cancel-icon">
+            <i class="fas fa-times"></i>
+        </div>
+        
+        <h1>Payment Cancelled</h1>
+        <p class="subtitle">Your payment was not completed. You can try again or contact us for help.</p>
+        
+        <div style="background: #f8fafd; border-radius: 16px; padding: 20px; margin: 25px 0; text-align: left;">
+            <p style="color: #555; font-size: 0.9rem;">
+                <i class="fas fa-info-circle" style="color: #3498db;"></i>
+                <strong>Why was my payment cancelled?</strong>
+            </p>
+            <ul style="padding-left: 20px; color: #555; font-size: 0.85rem; margin-top: 10px; list-style: none;">
+                <li>• You may have closed the payment window before completing</li>
+                <li>• Your bank may have declined the transaction</li>
+                <li>• You may have selected "Cancel" on the payment page</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <a href="checkout.html" class="btn-retry">
+                <i class="fas fa-credit-card"></i> Try Again
+            </a>
+            <br>
+            <a href="cart.html" class="btn-cart">
+                <i class="fas fa-shopping-cart"></i> Return to Cart
+            </a>
+        </div>
+        
+        <a href="index.html" class="btn-home"><i class="fas fa-home"></i> Back to Home</a>
+    </div>
+</body>
+</html>
