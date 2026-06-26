@@ -720,6 +720,49 @@
     <div class="bg-logo">
         <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
     </div>
+    
+        <!-- ============================================================ -->
+    <!-- PROFILE SIDEBAR (Left) -->
+    <!-- ============================================================ -->
+    
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-left" id="profileSidebar">
+        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+    
+        <!-- Logged In Content -->
+        <div id="profileLoggedIn" style="display: none;">
+            <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    
+        <!-- Logged Out Content -->
+        <div id="profileLoggedOut">
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+        </div>
+    </div>
+    
+    <!-- ============================================================ -->
+    <!-- DOT MENU SIDEBAR (Right) -->
+    <!-- ============================================================ -->
+    
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-right" id="dotSidebar">
+        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        <h3><i class="fas fa-bars"></i> Menu</h3>
+        <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
+        <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
+        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
+        <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+    </div>
 
     <header>
         <div class="container">
@@ -728,31 +771,46 @@
             </div>
             
             <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
-            
             <div class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
-                
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                
-                <div class="dropdown">
-                    <a href="#" class="nav-link">ATP ▼</a>
-                    <div class="dropdown-content">
-                        <a href="atps/grade-10/index.html"> Grade 10 ATPs</a>
-                        <a href="atps/grade-11/index.html"> Grade 11 ATPs</a>
-                        <a href="atps/grade-12/index.html"> Grade 12 ATPs</a>
-                    </div>
-                </div>
-                
-                <a href="tutors.html" class="nav-link" style="background-color: #3498db; border-radius: 40px;">Our Tutors</a>
-                <a href="pricing.html" class="nav-link" style="background-color: #27ae60; border-radius: 40px;">Pricing</a>
-                <a href="register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
+    <!-- Main Links -->
+    <a href="index.html" class="nav-link">Home</a>
+
+    <div class="dropdown">
+        <a href="#" class="nav-link">Grades ▼</a>
+        <div class="dropdown-content">
+            <a href="grades/grade-10/index.html">Grade 10</a>
+            <a href="grades/grade-11/index.html">Grade 11</a>
+            <a href="grades/grade-12/index.html">Grade 12</a>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <a href="#" class="nav-link">ATP ▼</a>
+        <div class="dropdown-content">
+            <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+            <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+            <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
+        </div>
+    </div>
+
+    <a href="tutors.html" class="nav-link">Our Tutors</a>
+
+    <!-- Profile Button (Opens Left Sidebar) -->
+    <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
+        <i class="fas fa-user-circle"></i>
+    </button>
+
+    <!-- Cart (isolated) -->
+    <a href="cart.html" class="nav-link cart-link">
+        <i class="fas fa-shopping-cart"></i> Cart
+        <span class="cart-badge" id="cartCount">0</span>
+    </a>
+
+    <!-- Dot Menu Button (Opens Right Sidebar) -->
+    <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+</div>
             </div>
         </div>
     </header>
@@ -1050,5 +1108,122 @@
             </div>
         </div>
     </footer>
+    <script>
+    // ============================================================
+    // SIDEBAR CONTROLS
+    // ============================================================
+
+    function openSidebar(type) {
+        if (type === 'profile') {
+            document.getElementById('profileSidebar').classList.add('open');
+            document.getElementById('profileOverlay').classList.add('active');
+        } else if (type === 'dot') {
+            document.getElementById('dotSidebar').classList.add('open');
+            document.getElementById('dotOverlay').classList.add('active');
+        }
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar(type) {
+        if (type === 'profile') {
+            document.getElementById('profileSidebar').classList.remove('open');
+            document.getElementById('profileOverlay').classList.remove('active');
+        } else if (type === 'dot') {
+            document.getElementById('dotSidebar').classList.remove('open');
+            document.getElementById('dotOverlay').classList.remove('active');
+        }
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close sidebars with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeSidebar('profile');
+            closeSidebar('dot');
+        }
+    });
+
+    // ============================================================
+    // AUTH - UPDATE UI BASED ON LOGIN STATE
+    // ============================================================
+
+    function updateAuthUI(user) {
+        const loggedIn = document.getElementById('profileLoggedIn');
+        const loggedOut = document.getElementById('profileLoggedOut');
+
+        if (user) {
+            loggedIn.style.display = 'block';
+            loggedOut.style.display = 'none';
+        } else {
+            loggedIn.style.display = 'none';
+            loggedOut.style.display = 'block';
+        }
+    }
+
+    // Listen for auth changes
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
+        });
+
+        // Initial check
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
+        });
+    }
+
+    // Handle logout from sidebar
+    function handleLogout() {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().signOut().then(function() {
+                window.location.href = 'index.html';
+            }).catch(function(error) {
+                console.error('Logout error:', error);
+            });
+        }
+    }
+
+    // ============================================================
+    // CART BADGE
+    // ============================================================
+
+    function updateCartBadge() {
+        if (typeof getCart === 'function') {
+            const cart = getCart();
+            const count = cart.reduce(function(total, item) {
+                return total + item.quantity;
+            }, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.textContent = count;
+                badge.classList.toggle('show', count > 0);
+            }
+        }
+    }
+
+    // Update cart badge on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartBadge();
+    });
+
+    // Listen for cart updates (custom event)
+    document.addEventListener('cartUpdated', function() {
+        updateCartBadge();
+    });
+
+    // Override addToCart to dispatch event
+    if (typeof window.addToCart === 'function') {
+        const originalAddToCart = window.addToCart;
+        window.addToCart = function(item) {
+            originalAddToCart(item);
+            document.dispatchEvent(new Event('cartUpdated'));
+        };
+    }
+
+    // Update cart badge when cart.js loads
+    if (typeof getCart === 'function') {
+        updateCartBadge();
+    }
+</script>
 </body>
 </html>
