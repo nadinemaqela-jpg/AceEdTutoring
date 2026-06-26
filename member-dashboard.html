@@ -114,7 +114,7 @@
         }
 
         /* ============================================================
-           SIDEBARS (Sliding Menus)
+           SIDEBARS
            ============================================================ */
         .sidebar-overlay {
             position: fixed;
@@ -221,7 +221,6 @@
             transform: translateY(-1px);
         }
 
-        /* Dropdowns */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -254,7 +253,6 @@
             background-color: #3498db;
         }
 
-        /* Icon Buttons */
         .icon-btn {
             background: none;
             border: none;
@@ -276,7 +274,6 @@
             font-size: 1.2rem;
         }
 
-        /* Cart Link & Badge */
         .cart-link {
             position: relative;
             background-color: #f39c12;
@@ -308,7 +305,7 @@
         }
 
         /* ============================================================
-           DASHBOARD HERO (Like Homepage Highlight)
+           DASHBOARD HERO
            ============================================================ */
         .dashboard-hero {
             background: linear-gradient(135deg, #2c3e50, #1e2a3a);
@@ -362,12 +359,12 @@
         }
 
         /* ============================================================
-           RESOURCE CARDS
+           RESOURCE GRID - HORIZONTAL DROPDOWNS
            ============================================================ */
         .resource-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
             margin: 30px 0;
         }
         .resource-card {
@@ -389,61 +386,84 @@
         }
         .resource-card h3 {
             color: #1e2a3a;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .resource-card p {
             color: #7f8c8d;
             font-size: 0.9rem;
             margin-bottom: 15px;
         }
-        .btn {
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+
+        /* Dropdown inside resource card */
+        .resource-dropdown {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
         }
-        .btn-blue {
+        .resource-dropdown select {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            color: #1e2a3a;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        .resource-dropdown select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .resource-dropdown select option {
+            padding: 10px;
+        }
+        .resource-dropdown .go-btn {
             background: #3498db;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
         }
-        .btn-blue:hover {
+        .resource-dropdown .go-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
         }
-        .btn-green {
-            background: #27ae60;
-            color: white;
+
+        /* Colors for each card */
+        .card-atp i {
+            color: #3498db;
         }
-        .btn-green:hover {
-            background: #1e8449;
-            transform: translateY(-2px);
+        .card-atp .go-btn {
+            background: #3498db;
         }
-        .btn-orange {
-            background: #e67e22;
-            color: white;
-        }
-        .btn-orange:hover {
-            background: #d35400;
-            transform: translateY(-2px);
+        .card-atp .go-btn:hover {
+            background: #2980b9;
         }
 
-        .tip-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 30px 0;
+        .card-papers i {
+            color: #e74c3c;
         }
-        .tip-box i {
-            color: #ffc107;
-            margin-right: 10px;
+        .card-papers .go-btn {
+            background: #e74c3c;
+        }
+        .card-papers .go-btn:hover {
+            background: #c0392b;
         }
 
         /* ============================================================
-           BACK LINK (Same as Homepage style)
+           BACK LINK
            ============================================================ */
         .back-link {
             display: inline-block;
@@ -691,7 +711,6 @@
     <!-- MAIN CONTENT -->
     <!-- ============================================================ -->
     <div class="container">
-        <!-- Dashboard Hero (Like Homepage Highlight) -->
         <div class="dashboard-hero">
             <div>
                 <h1><i class="fas fa-tachometer-alt"></i> My Dashboard</h1>
@@ -709,30 +728,41 @@
         <h2 style="margin: 30px 0 20px; color: #1e2a3a;"><i class="fas fa-folder-open"></i> My Resources</h2>
 
         <div class="resource-grid">
-            <div class="resource-card">
-                <i class="fas fa-calendar-alt" style="color: #3498db;"></i>
+            <!-- ATPs Card -->
+            <div class="resource-card card-atp">
+                <i class="fas fa-calendar-alt"></i>
                 <h3>ATPs (Annual Teaching Plans)</h3>
-                <p>Access all ATPs for Grade 10-12</p>
-                <a href="atps/grade-10/index.html" class="btn btn-blue">View ATPs</a>
+                <p>Select a grade to access ATPs</p>
+                <div class="resource-dropdown">
+                    <select id="atpGradeSelect">
+                        <option value="">-- Select Grade --</option>
+                        <option value="atps/grade-10/index.html">Grade 10</option>
+                        <option value="atps/grade-11/index.html">Grade 11</option>
+                        <option value="atps/grade-12/index.html">Grade 12</option>
+                    </select>
+                    <button class="go-btn" onclick="goToResource('atpGradeSelect')">
+                        <i class="fas fa-arrow-right"></i> Go to ATPs
+                    </button>
+                </div>
             </div>
 
-            <div class="resource-card">
-                <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
+            <!-- Past Papers Card -->
+            <div class="resource-card card-papers">
+                <i class="fas fa-file-pdf"></i>
                 <h3>Past Papers</h3>
-                <p>Access past papers & memos for all subjects</p>
-                <a href="grades/grade-12/index.html" class="btn btn-green">View Papers</a>
+                <p>Select a grade to access past papers</p>
+                <div class="resource-dropdown">
+                    <select id="papersGradeSelect">
+                        <option value="">-- Select Grade --</option>
+                        <option value="grades/grade-10/index.html">Grade 10</option>
+                        <option value="grades/grade-11/index.html">Grade 11</option>
+                        <option value="grades/grade-12/index.html">Grade 12</option>
+                    </select>
+                    <button class="go-btn" onclick="goToResource('papersGradeSelect')">
+                        <i class="fas fa-arrow-right"></i> Go to Papers
+                    </button>
+                </div>
             </div>
-
-            <div class="resource-card">
-                <i class="fas fa-chalkboard-user" style="color: #e67e22;"></i>
-                <h3>Book a Session</h3>
-                <p>Book a tutoring session with our expert tutors</p>
-                <a href="book-tutor.html" class="btn btn-orange">Book Now</a>
-            </div>
-        </div>
-
-        <div class="tip-box">
-            <i class="fas fa-info-circle"></i> <strong>Tip:</strong> All resources are free for registered members. Paid services (tutoring sessions) can be booked separately.
         </div>
     </div>
 
@@ -879,7 +909,6 @@
                     document.getElementById('userName').textContent = 'Welcome back, User!';
                 }
             } else {
-                // Fallback: check Firebase directly
                 if (typeof firebase !== 'undefined' && firebase.auth) {
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
@@ -904,6 +933,20 @@
                 });
             }
         });
+
+        // ============================================================
+        // RESOURCE DROPDOWN NAVIGATION
+        // ============================================================
+
+        function goToResource(selectId) {
+            const select = document.getElementById(selectId);
+            const url = select.value;
+            if (url) {
+                window.location.href = url;
+            } else {
+                alert('Please select a grade first.');
+            }
+        }
 
         // ============================================================
         // CART BADGE
