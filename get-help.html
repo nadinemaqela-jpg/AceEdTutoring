@@ -537,33 +537,45 @@
             <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
             
             <div class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
-                
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades <i class="fas fa-chevron-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Subjects <i class="fas fa-chevron-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-12/mathematics.html">Mathematics</a>
-                        <a href="grades/grade-12/mathematical-literacy.html">Math Literacy</a>
-                        <a href="grades/grade-12/physical-sciences.html">Physical Sciences</a>
-                        <a href="grades/grade-12/life-sciences.html">Life Sciences</a>
-                        <a href="grades/grade-12/accounting.html">Accounting</a>
-                        <a href="grades/grade-12/economics.html">Economics</a>
-                        <a href="grades/grade-12/geography.html">Geography</a>
-                        <a href="grades/grade-12/business-studies.html">Business Studies</a>
-                    </div>
-                </div>
-                
-                <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <a href="get-help.html" class="nav-link" style="background-color: #e74c3c;">Get Help</a>
+    <!-- Main Links -->
+    <a href="index.html" class="nav-link">Home</a>
+
+    <div class="dropdown">
+        <a href="#" class="nav-link">Grades ▼</a>
+        <div class="dropdown-content">
+            <a href="grades/grade-10/index.html">Grade 10</a>
+            <a href="grades/grade-11/index.html">Grade 11</a>
+            <a href="grades/grade-12/index.html">Grade 12</a>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <a href="#" class="nav-link">ATP ▼</a>
+        <div class="dropdown-content">
+            <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+            <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+            <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
+        </div>
+    </div>
+
+    <a href="tutors.html" class="nav-link">Our Tutors</a>
+
+    <!-- Profile Button (Opens Left Sidebar) -->
+    <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
+        <i class="fas fa-user-circle"></i>
+    </button>
+
+    <!-- Cart (isolated) -->
+    <a href="cart.html" class="nav-link cart-link">
+        <i class="fas fa-shopping-cart"></i> Cart
+        <span class="cart-badge" id="cartCount">0</span>
+    </a>
+
+    <!-- Dot Menu Button (Opens Right Sidebar) -->
+    <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+</div>
             </div>
         </div>
     </header>
