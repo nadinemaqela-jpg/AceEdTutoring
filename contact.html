@@ -755,33 +755,45 @@
             </div>
             <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
             <div class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
-                
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                
-                <div class="dropdown">
-                    <a href="#" class="nav-link">ATP ▼</a>
-                    <div class="dropdown-content">
-                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
-                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
-                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
-                    </div>
-                </div>
-                
-                <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <a href="pricing.html" class="nav-link" style="background-color: #27ae60; border-radius: 40px;">Pricing</a>
-                <a href="free-classes.html" class="nav-link" style="background-color: #e67e22; border-radius: 40px;">🎓 Free Classes</a>
-                <a href="subjects.html" class="nav-link">Subjects Covered</a>
-                <a href="register.html" class="nav-link" style="background-color: #e74c3c; border-radius: 40px;">Register Now</a>
-                <a href="promotions.html" class="nav-link" style="background-color: #f39c12; border-radius: 40px;">🎯 Promotions</a>
-                <a href="contact.html" class="nav-link" style="background-color: #3498db; border-radius: 40px;">Contact Us</a>
+    <!-- Main Links -->
+    <a href="index.html" class="nav-link">Home</a>
+
+    <div class="dropdown">
+        <a href="#" class="nav-link">Grades ▼</a>
+        <div class="dropdown-content">
+            <a href="grades/grade-10/index.html">Grade 10</a>
+            <a href="grades/grade-11/index.html">Grade 11</a>
+            <a href="grades/grade-12/index.html">Grade 12</a>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <a href="#" class="nav-link">ATP ▼</a>
+        <div class="dropdown-content">
+            <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+            <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+            <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
+        </div>
+    </div>
+
+    <a href="tutors.html" class="nav-link">Our Tutors</a>
+
+    <!-- Profile Button (Opens Left Sidebar) -->
+    <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
+        <i class="fas fa-user-circle"></i>
+    </button>
+
+    <!-- Cart (isolated) -->
+    <a href="cart.html" class="nav-link cart-link">
+        <i class="fas fa-shopping-cart"></i> Cart
+        <span class="cart-badge" id="cartCount">0</span>
+    </a>
+
+    <!-- Dot Menu Button (Opens Right Sidebar) -->
+    <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+</div>>
             </div>
         </div>
     </header>
