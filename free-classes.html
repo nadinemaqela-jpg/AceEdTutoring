@@ -1145,11 +1145,6 @@
         }
     }
 
-    // Update cart badge on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCartBadge();
-    });
-
     // Listen for cart updates (custom event)
     document.addEventListener('cartUpdated', function() {
         updateCartBadge();
@@ -1168,6 +1163,17 @@
     if (typeof getCart === 'function') {
         updateCartBadge();
     }
+</script>
+    <!-- ============================================================ -->
+<!-- CART BADGE - Update cart count on page load -->
+<!-- ============================================================ -->
+<script src="js/cart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof updateCartBadge === 'function') {
+            updateCartBadge();
+        }
+    });
 </script>
 </body>
 </html>
