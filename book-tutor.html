@@ -2,253 +2,253 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18209594553');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18209594553');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Favicon -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
     <title>Book a Tutor - AceEd Tutoring</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/cart.js"></script>
     
     <style>
+        /* ============================================================
+           SIDEBAR STYLES (Sliding Menus)
+           ============================================================ */
+
+        /* Overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Sidebar Container */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            width: 320px;
+            height: 100%;
+            background: #1e2a3a;
+            color: white;
+            z-index: 1001;
+            padding: 30px 20px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+        .sidebar-left {
+            left: 0;
+            transform: translateX(-100%);
+        }
+        .sidebar-left.open {
+            transform: translateX(0);
+        }
+        .sidebar-right {
+            right: 0;
+            transform: translateX(100%);
+        }
+        .sidebar-right.open {
+            transform: translateX(0);
+        }
+
+        /* Sidebar Close Button */
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .sidebar-close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Sidebar Content */
+        .sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f39c12;
+        }
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .sidebar a:hover {
+            color: #fff;
+            padding-left: 5px;
+        }
+        .sidebar a i {
+            width: 25px;
+            color: #f39c12;
+        }
 
         /* ============================================================
-   SIDEBAR STYLES (Sliding Menus)
-   ============================================================ */
+           NAVIGATION STYLES
+           ============================================================ */
 
-/* Overlay */
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-.sidebar-overlay.active {
-    display: block;
-    opacity: 1;
-}
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
 
-/* Sidebar Container */
-.sidebar {
-    position: fixed;
-    top: 0;
-    width: 320px;
-    height: 100%;
-    background: #1e2a3a;
-    color: white;
-    z-index: 1001;
-    padding: 30px 20px;
-    overflow-y: auto;
-    transition: transform 0.3s ease;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-}
-.sidebar-left {
-    left: 0;
-    transform: translateX(-100%);
-}
-.sidebar-left.open {
-    transform: translateX(0);
-}
-.sidebar-right {
-    right: 0;
-    transform: translateX(100%);
-}
-.sidebar-right.open {
-    transform: translateX(0);
-}
+        /* Dropdowns */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #2c3e50;
+            min-width: 180px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            top: 100%;
+            left: 0;
+            z-index: 10;
+            backdrop-filter: blur(2px);
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s;
+        }
+        .dropdown-content a:hover {
+            background-color: #3498db;
+        }
 
-/* Sidebar Close Button */
-.sidebar-close {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    float: right;
-    margin-bottom: 20px;
-    transition: transform 0.2s;
-}
-.sidebar-close:hover {
-    transform: rotate(90deg);
-}
+        /* Icon Buttons (Profile & Dot Menu) */
+        .icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 30px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        .profile-btn {
+            font-size: 1.2rem;
+        }
 
-/* Sidebar Content */
-.sidebar h3 {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: #f39c12;
-}
-.sidebar a {
-    display: block;
-    color: #cbd5e1;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    text-decoration: none;
-    transition: all 0.2s;
-    font-size: 0.95rem;
-}
-.sidebar a:hover {
-    color: #fff;
-    padding-left: 5px;
-}
-.sidebar a i {
-    width: 25px;
-    color: #f39c12;
-}
+        /* Cart Link & Badge */
+        .cart-link {
+            position: relative;
+            background-color: #f39c12;
+            border-radius: 40px;
+            padding: 6px 15px;
+            color: white !important;
+        }
+        .cart-link:hover {
+            background-color: #e67e22 !important;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: none;
+        }
+        .cart-badge.show {
+            display: inline-block;
+        }
 
-/* ============================================================
-   NAVIGATION STYLES
-   ============================================================ */
+        /* Hide old auth buttons */
+        .auth-buttons {
+            display: none !important;
+        }
 
-.nav-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
-.nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
-}
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+            }
+        }
 
-/* Dropdowns */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #2c3e50;
-    min-width: 180px;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    top: 100%;
-    left: 0;
-    z-index: 10;
-    backdrop-filter: blur(2px);
-}
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-.dropdown-content a {
-    color: white;
-    padding: 10px 16px;
-    text-decoration: none;
-    display: block;
-    font-size: 0.85rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: background 0.2s;
-}
-.dropdown-content a:hover {
-    background-color: #3498db;
-}
-
-/* Icon Buttons (Profile & Dot Menu) */
-.icon-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.3rem;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 30px;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.icon-btn:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
-}
-.profile-btn {
-    font-size: 1.2rem;
-}
-
-/* Cart Link & Badge */
-.cart-link {
-    position: relative;
-    background-color: #f39c12;
-    border-radius: 40px;
-    padding: 6px 15px;
-    color: white !important;
-}
-.cart-link:hover {
-    background-color: #e67e22 !important;
-}
-.cart-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #e74c3c;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 8px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    display: none;
-}
-.cart-badge.show {
-    display: inline-block;
-}
-
-/* Hide old auth buttons */
-.auth-buttons {
-    display: none !important;
-}
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 280px;
-    }
-}
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
             min-height: 100vh;
             position: relative;
         }
-        
+
         .bg-logo {
             position: fixed;
             top: 0;
@@ -261,14 +261,14 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .bg-logo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0.06;
         }
-        
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -276,7 +276,7 @@
             position: relative;
             z-index: 2;
         }
-        
+
         header {
             background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             color: white;
@@ -287,81 +287,24 @@
             position: relative;
             z-index: 100;
         }
-        
+
         .logo-image {
             max-width: 250px;
             margin: 0 auto;
         }
-        
+
         .logo-image img {
             width: 100%;
             max-height: 80px;
             object-fit: contain;
         }
-        
+
         .tagline {
             font-size: 1rem;
             margin: 15px 0;
             font-weight: 500;
         }
-        
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #2c3e50;
-            min-width: 180px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-            border-radius: 12px;
-            top: 100%;
-            left: 0;
-            z-index: 200;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-content a {
-            color: white;
-            padding: 10px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: background 0.2s;
-        }
-        
-        .dropdown-content a:hover {
-            background-color: #3498db;
-        }
-        
+
         /* Form Card */
         .form-card {
             background: white;
@@ -369,18 +312,18 @@
             padding: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        
+
         .form-card h1 {
             color: #1e2a3e;
             margin-bottom: 10px;
             font-size: 1.8rem;
         }
-        
+
         .form-card p {
             color: #7f8c8d;
             margin-bottom: 30px;
         }
-        
+
         .tutor-info-banner {
             background: linear-gradient(135deg, #3498db, #2c3e50);
             color: white;
@@ -392,37 +335,39 @@
             gap: 15px;
             flex-wrap: wrap;
         }
-        
+
         .tutor-info-banner i {
             font-size: 2rem;
         }
-        
+
         .tutor-info-banner h3 {
             margin: 0;
             font-size: 1.2rem;
         }
-        
+
         .tutor-info-banner p {
             margin: 0;
             color: rgba(255,255,255,0.9);
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
         }
-        
+
         label .required {
             color: #e74c3c;
         }
-        
-        input, select, textarea {
+
+        input,
+        select,
+        textarea {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e0e0e0;
@@ -430,37 +375,39 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-        
-        input:focus, select:focus, textarea:focus {
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: #3498db;
         }
-        
+
         .date-time-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        
+
         .session-type-group {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             margin-top: 8px;
         }
-        
+
         .session-option {
             display: flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
         }
-        
+
         .session-option input {
             width: auto;
         }
-        
-        button {
+
+        .btn-request {
             background: linear-gradient(135deg, #27ae60, #1e8449);
             color: white;
             border: none;
@@ -472,12 +419,39 @@
             width: 100%;
             transition: all 0.3s;
         }
-        
-        button:hover {
+
+        .btn-request:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
         }
-        
+
+        /* ============================================================
+           ADD TO CART BUTTON
+           ============================================================ */
+        .btn-cart {
+            background: #f39c12 !important;
+            color: white !important;
+            border: none !important;
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cart:hover {
+            background: #e67e22 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-cart i {
+            margin-right: 8px;
+        }
+
         .success-message {
             background: #d4edda;
             color: #155724;
@@ -486,7 +460,7 @@
             margin-bottom: 20px;
             display: none;
         }
-        
+
         .error-message {
             background: #f8d7da;
             color: #721c24;
@@ -495,7 +469,7 @@
             margin-bottom: 20px;
             display: none;
         }
-        
+
         .back-link {
             display: block;
             text-align: center;
@@ -503,11 +477,11 @@
             color: #3498db;
             text-decoration: none;
         }
-        
+
         .back-link:hover {
             text-decoration: underline;
         }
-        
+
         @media (max-width: 600px) {
             .form-card {
                 padding: 25px;
@@ -526,48 +500,50 @@
     <div class="bg-logo">
         <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
     </div>
-<!-- ============================================================ -->
-<!-- PROFILE SIDEBAR (Left) -->
-<!-- ============================================================ -->
 
-<!-- Overlay -->
-<div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
+    <!-- ============================================================ -->
+    <!-- PROFILE SIDEBAR (Left) -->
+    <!-- ============================================================ -->
 
-<!-- Sidebar -->
-<div class="sidebar sidebar-left" id="profileSidebar">
-    <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
-    <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
 
-    <!-- Logged In Content -->
-    <div id="profileLoggedIn" style="display: none;">
-        <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-left" id="profileSidebar">
+        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+
+        <!-- Logged In Content -->
+        <div id="profileLoggedIn" style="display: none;">
+            <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+
+        <!-- Logged Out Content -->
+        <div id="profileLoggedOut">
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+        </div>
     </div>
 
-    <!-- Logged Out Content -->
-    <div id="profileLoggedOut">
-        <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-        <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+    <!-- ============================================================ -->
+    <!-- DOT MENU SIDEBAR (Right) -->
+    <!-- ============================================================ -->
+
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-right" id="dotSidebar">
+        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        <h3><i class="fas fa-bars"></i> Menu</h3>
+        <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
+        <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
+        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
+        <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
     </div>
-</div>
 
-<!-- ============================================================ -->
-<!-- DOT MENU SIDEBAR (Right) -->
-<!-- ============================================================ -->
-
-<!-- Overlay -->
-<div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
-
-<!-- Sidebar -->
-<div class="sidebar sidebar-right" id="dotSidebar">
-    <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
-    <h3><i class="fas fa-bars"></i> Menu</h3>
-    <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
-    <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
-    <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
-    <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
-    <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
-</div>
     <header>
         <div class="container">
             <div class="logo-image">
@@ -575,45 +551,44 @@
             </div>
             <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
             <div class="nav-links">
-    <!-- Main Links -->
-    <a href="index.html" class="nav-link">Home</a>
+                <!-- Main Links -->
+                <a href="index.html" class="nav-link">Home</a>
 
-    <div class="dropdown">
-        <a href="#" class="nav-link">Grades ▼</a>
-        <div class="dropdown-content">
-            <a href="grades/grade-10/index.html">Grade 10</a>
-            <a href="grades/grade-11/index.html">Grade 11</a>
-            <a href="grades/grade-12/index.html">Grade 12</a>
-        </div>
-    </div>
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Grades ▼</a>
+                    <div class="dropdown-content">
+                        <a href="grades/grade-10/index.html">Grade 10</a>
+                        <a href="grades/grade-11/index.html">Grade 11</a>
+                        <a href="grades/grade-12/index.html">Grade 12</a>
+                    </div>
+                </div>
 
-    <div class="dropdown">
-        <a href="#" class="nav-link">ATP ▼</a>
-        <div class="dropdown-content">
-            <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
-            <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
-            <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
-        </div>
-    </div>
+                <div class="dropdown">
+                    <a href="#" class="nav-link">ATP ▼</a>
+                    <div class="dropdown-content">
+                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
+                    </div>
+                </div>
 
-    <a href="tutors.html" class="nav-link">Our Tutors</a>
+                <a href="tutors.html" class="nav-link">Our Tutors</a>
 
-    <!-- Profile Button (Opens Left Sidebar) -->
-    <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
-        <i class="fas fa-user-circle"></i>
-    </button>
+                <!-- Profile Button (Opens Left Sidebar) -->
+                <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
+                    <i class="fas fa-user-circle"></i>
+                </button>
 
-    <!-- Cart (isolated) -->
-    <a href="cart.html" class="nav-link cart-link">
-        <i class="fas fa-shopping-cart"></i> Cart
-        <span class="cart-badge" id="cartCount">0</span>
-    </a>
+                <!-- Cart (isolated) -->
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
 
-    <!-- Dot Menu Button (Opens Right Sidebar) -->
-    <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
-        <i class="fas fa-ellipsis-v"></i>
-    </button>
-</div>
+                <!-- Dot Menu Button (Opens Right Sidebar) -->
+                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
             </div>
         </div>
     </header>
@@ -622,15 +597,15 @@
         <div class="form-card">
             <h1><i class="fas fa-calendar-check"></i> Book a Session</h1>
             <p>Fill in your details and we'll confirm your booking within 24 hours</p>
-            
+
             <div id="successMessage" class="success-message">
                 <i class="fas fa-check-circle"></i> Booking request sent successfully! A tutor will confirm your session within 24 hours via WhatsApp.
             </div>
-            
+
             <div id="errorMessage" class="error-message">
                 <i class="fas fa-exclamation-triangle"></i> Something went wrong. Please try again or contact us directly on WhatsApp.
             </div>
-            
+
             <div id="tutorInfo" class="tutor-info-banner">
                 <i class="fas fa-chalkboard-user"></i>
                 <div>
@@ -638,27 +613,27 @@
                     <p id="selectedTutorLocation"></p>
                 </div>
             </div>
-            
+
             <!-- IMPORTANT: Replace YOUR_FORM_ID with your actual Formspree ID -->
             <form id="bookingForm" action="https://formspree.io/f/mqewljay" method="POST">
                 <!-- Hidden field to identify the tutor -->
                 <input type="hidden" id="tutor_name" name="tutor_name">
-                
+
                 <div class="form-group">
                     <label>Full Name <span class="required">*</span></label>
                     <input type="text" name="student_name" required placeholder="Enter your full name">
                 </div>
-                
+
                 <div class="form-group">
                     <label>WhatsApp Number <span class="required">*</span></label>
                     <input type="tel" name="phone" required placeholder="e.g., 0631158739">
                 </div>
-                
+
                 <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" name="email" placeholder="your@email.com (optional)">
                 </div>
-                
+
                 <div class="form-group">
                     <label>Grade <span class="required">*</span></label>
                     <select name="grade" required>
@@ -668,7 +643,7 @@
                         <option value="12">Grade 12</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Subject <span class="required">*</span></label>
                     <select name="subject" required>
@@ -688,15 +663,12 @@
                         <option>CAT</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Session Type <span class="required">*</span></label>
                     <div class="session-type-group">
                         <label class="session-option">
-                            <input type="radio" name="session_type" value="Group"> Group Session (R300/month)
-                        </label>
-                        <label class="session-option">
-                            <input type="radio" name="session_type" value="Online"> Online (R100/hour)
+                            <input type="radio" name="session_type" value="Online" checked> Online (R100/hour)
                         </label>
                     </div>
                 </div>
@@ -709,230 +681,180 @@
                     <div class="form-group">
                         <label>Preferred Time <span class="required">*</span></label>
                         <input type="text" name="preferred_time" required placeholder="e.g., 4pm, 7pm, right after school">
+                    </div>
                 </div>
-            </div>
-        
+
                 <div class="form-group">
                     <label>Additional Information</label>
                     <textarea name="message" rows="3" placeholder="Any specific topics you need help with?"></textarea>
                 </div>
-                
-                <!-- Hidden field to prevent spam (optional but recommended) -->
+
+                <!-- Hidden field to prevent spam -->
                 <input type="text" name="_gotcha" style="display:none">
-                
-                <button type="submit"><i class="fas fa-paper-plane"></i> Request Booking</button>
+
+                <button type="submit" class="btn-request"><i class="fas fa-paper-plane"></i> Request Booking</button>
+
+                <!-- ============================================================ -->
+                <!-- ADD TO CART BUTTON (R100) -->
+                <!-- ============================================================ -->
+                <button type="button" class="btn-cart" onclick="addBookSessionToCart()">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart (R100)
+                </button>
             </form>
-            
+
             <a href="tutors.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tutors</a>
         </div>
     </div>
-    
+
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+
     <script>
-        // Get tutor name from URL parameter
-        function getTutorFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('tutor');
+        // ============================================================
+        // SIDEBAR CONTROLS
+        // ============================================================
+
+        function openSidebar(type) {
+            if (type === 'profile') {
+                document.getElementById('profileSidebar').classList.add('open');
+                document.getElementById('profileOverlay').classList.add('active');
+            } else if (type === 'dot') {
+                document.getElementById('dotSidebar').classList.add('open');
+                document.getElementById('dotOverlay').classList.add('active');
+            }
+            document.body.style.overflow = 'hidden';
         }
-        
-        // Tutor details
-const tutorDetails = {
-    'Fortunate': {
-        name: 'Fortunate',
-        location: 'Stellenbosch, Western Cape • Maths | Physics | Life Scie | Geo'
-    },
-    'Mihlali': {
-        name: 'Mihlali',
-        location: 'Stellenbosch, Western Cape • Maths | Physics'
-    },
-    'Sphiwe': {
-        name: 'Sphiwe',
-        location: 'Stellenbosch, Western Cape • Maths | Life Scie | Physics | Geo'
-    },
-    'Nkululeko': {
-        name: 'Nkululeko',
-        location: 'Mount Frere, Eastern Cape • Maths | Life Scie | Physics'
-    },
-    'Sinobom': {
-        name: 'Sinobom',
-        location: 'Durban, KZN  • Maths | Life Scie | Physics'
-    }
-};
-        // Display tutor info
-        const tutorName = getTutorFromURL();
-        const tutorInfoDiv = document.getElementById('tutorInfo');
-        const tutorNameInput = document.getElementById('tutor_name');
-        
-        if (tutorName && tutorDetails[tutorName]) {
-            const tutor = tutorDetails[tutorName];
-            document.getElementById('selectedTutorName').innerHTML = `<i class="fas fa-user-graduate"></i> Booking with: ${tutor.name}`;
-            document.getElementById('selectedTutorLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${tutor.location}`;
-            tutorNameInput.value = tutor.name;
-        } else {
-            tutorInfoDiv.style.display = 'none';
+
+        function closeSidebar(type) {
+            if (type === 'profile') {
+                document.getElementById('profileSidebar').classList.remove('open');
+                document.getElementById('profileOverlay').classList.remove('active');
+            } else if (type === 'dot') {
+                document.getElementById('dotSidebar').classList.remove('open');
+                document.getElementById('dotOverlay').classList.remove('active');
+            }
+            document.body.style.overflow = 'auto';
         }
-        
-        // Form submission
-        const form = document.getElementById('bookingForm');
-        const successDiv = document.getElementById('successMessage');
-        const errorDiv = document.getElementById('errorMessage');
-        
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            successDiv.style.display = 'none';
-            errorDiv.style.display = 'none';
-            
-            const formData = new FormData(form);
-            
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (response.ok) {
-                    successDiv.style.display = 'block';
-                    form.reset();
-                    if (tutorName && tutorDetails[tutorName]) {
-                        tutorNameInput.value = tutorName;
-                    }
-                    
-                    // Scroll to success message
-                    successDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    
-                    // Auto-hide success message after 5 seconds
-                    setTimeout(() => {
-                        successDiv.style.display = 'none';
-                    }, 5000);
-                } else {
-                    errorDiv.style.display = 'block';
-                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            } catch (error) {
-                errorDiv.style.display = 'block';
-                errorDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Close sidebars with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSidebar('profile');
+                closeSidebar('dot');
             }
         });
-    </script>
-    <script>
-    // ============================================================
-    // SIDEBAR CONTROLS
-    // ============================================================
 
-    function openSidebar(type) {
-        if (type === 'profile') {
-            document.getElementById('profileSidebar').classList.add('open');
-            document.getElementById('profileOverlay').classList.add('active');
-        } else if (type === 'dot') {
-            document.getElementById('dotSidebar').classList.add('open');
-            document.getElementById('dotOverlay').classList.add('active');
+        // ============================================================
+        // AUTH - UPDATE UI BASED ON LOGIN STATE
+        // ============================================================
+
+        function updateAuthUI(user) {
+            const loggedIn = document.getElementById('profileLoggedIn');
+            const loggedOut = document.getElementById('profileLoggedOut');
+
+            if (user) {
+                loggedIn.style.display = 'block';
+                loggedOut.style.display = 'none';
+            } else {
+                loggedIn.style.display = 'none';
+                loggedOut.style.display = 'block';
+            }
         }
-        document.body.style.overflow = 'hidden';
-    }
 
-    function closeSidebar(type) {
-        if (type === 'profile') {
-            document.getElementById('profileSidebar').classList.remove('open');
-            document.getElementById('profileOverlay').classList.remove('active');
-        } else if (type === 'dot') {
-            document.getElementById('dotSidebar').classList.remove('open');
-            document.getElementById('dotOverlay').classList.remove('active');
-        }
-        document.body.style.overflow = 'auto';
-    }
-
-    // Close sidebars with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeSidebar('profile');
-            closeSidebar('dot');
-        }
-    });
-
-    // ============================================================
-    // AUTH - UPDATE UI BASED ON LOGIN STATE
-    // ============================================================
-
-    function updateAuthUI(user) {
-        const loggedIn = document.getElementById('profileLoggedIn');
-        const loggedOut = document.getElementById('profileLoggedOut');
-
-        if (user) {
-            loggedIn.style.display = 'block';
-            loggedOut.style.display = 'none';
-        } else {
-            loggedIn.style.display = 'none';
-            loggedOut.style.display = 'block';
-        }
-    }
-
-    // Listen for auth changes
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-        firebase.auth().onAuthStateChanged(function(user) {
-            updateAuthUI(user);
-        });
-
-        // Initial check
-        firebase.auth().onAuthStateChanged(function(user) {
-            updateAuthUI(user);
-        });
-    }
-
-    // Handle logout from sidebar
-    function handleLogout() {
+        // Listen for auth changes
         if (typeof firebase !== 'undefined' && firebase.auth) {
-            firebase.auth().signOut().then(function() {
-                window.location.href = 'index.html';
-            }).catch(function(error) {
-                console.error('Logout error:', error);
+            firebase.auth().onAuthStateChanged(function(user) {
+                updateAuthUI(user);
+            });
+
+            // Initial check
+            firebase.auth().onAuthStateChanged(function(user) {
+                updateAuthUI(user);
             });
         }
-    }
 
-    // ============================================================
-    // CART BADGE
-    // ============================================================
-
-    function updateCartBadge() {
-        if (typeof getCart === 'function') {
-            const cart = getCart();
-            const count = cart.reduce(function(total, item) {
-                return total + item.quantity;
-            }, 0);
-            const badge = document.getElementById('cartCount');
-            if (badge) {
-                badge.textContent = count;
-                badge.classList.toggle('show', count > 0);
+        // Handle logout from sidebar
+        function handleLogout() {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                firebase.auth().signOut().then(function() {
+                    window.location.href = 'index.html';
+                }).catch(function(error) {
+                    console.error('Logout error:', error);
+                });
             }
         }
-    }
 
-    // Update cart badge on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCartBadge();
-    });
+        // ============================================================
+        // CART BADGE
+        // ============================================================
 
-    // Listen for cart updates (custom event)
-    document.addEventListener('cartUpdated', function() {
-        updateCartBadge();
-    });
+        function updateCartBadge() {
+            if (typeof getCart === 'function') {
+                const cart = getCart();
+                const count = cart.reduce(function(total, item) {
+                    return total + item.quantity;
+                }, 0);
+                const badge = document.getElementById('cartCount');
+                if (badge) {
+                    badge.textContent = count;
+                    badge.classList.toggle('show', count > 0);
+                }
+            }
+        }
 
-    // Override addToCart to dispatch event
-    if (typeof window.addToCart === 'function') {
-        const originalAddToCart = window.addToCart;
-        window.addToCart = function(item) {
-            originalAddToCart(item);
-            document.dispatchEvent(new Event('cartUpdated'));
-        };
-    }
+        // Update cart badge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+        });
 
-    // Update cart badge when cart.js loads
-    if (typeof getCart === 'function') {
-        updateCartBadge();
-    }
-</script>
+        // Listen for cart updates (custom event)
+        document.addEventListener('cartUpdated', function() {
+            updateCartBadge();
+        });
+
+        // Override addToCart to dispatch event
+        if (typeof window.addToCart === 'function') {
+            const originalAddToCart = window.addToCart;
+            window.addToCart = function(item) {
+                originalAddToCart(item);
+                document.dispatchEvent(new Event('cartUpdated'));
+            };
+        }
+
+        // Update cart badge when cart.js loads
+        if (typeof getCart === 'function') {
+            updateCartBadge();
+        }
+
+        // ============================================================
+        // ADD BOOK SESSION TO CART (R100)
+        // ============================================================
+        function addBookSessionToCart() {
+            const tutorName = document.getElementById('tutor_name').value || 'Tutor';
+            const sessionType = document.querySelector('input[name="session_type"]:checked');
+            const sessionTypeValue = sessionType ? sessionType.value : 'Online';
+
+            const item = {
+                id: 'book-session-' + Date.now(),
+                name: 'Book a Session (' + tutorName + ')',
+                price: 100,
+                type: 'Booking',
+                tutor: tutorName,
+                sessionType: sessionTypeValue
+            };
+
+            addToCart(item);
+
+            // Show feedback on the button
+            const btn = document.querySelector('.btn-cart');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Added to Cart!';
+            btn.style.backgroundColor = '#27ae60 !important';
+            setTimeout(function() {
+                btn.innerHTML = originalText;
+                btn.style.backgroundColor = '#f39c12 !important';
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
