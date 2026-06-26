@@ -70,14 +70,24 @@ function getCartCount() {
     return cart.reduce((count, item) => count + item.quantity, 0);
 }
 
-// Update cart count badge
-function updateCartCount() {
-    const count = getCartCount();
+// Update cart badge (for all pages)
+function updateCartBadge() {
+    const cart = getCart();
+    const count = cart.reduce(function(total, item) {
+        return total + item.quantity;
+    }, 0);
     const badge = document.getElementById('cartCount');
     if (badge) {
         badge.textContent = count;
-        badge.style.display = count > 0 ? 'inline-block' : 'none';
+        badge.classList.toggle('show', count > 0);
     }
+}
+
+// Call on page load if cart.js is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateCartBadge);
+} else {
+    updateCartBadge();
 }
 
 // Add to cart button handlers
