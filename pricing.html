@@ -19,7 +19,12 @@
     
     <title>Pricing - AceEd Tutoring | Affordable Rates for Grade 10-12</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ============================================================ -->
+    <!-- IMPORTANT: Load cart.js FIRST -->
+    <!-- ============================================================ -->
     <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
     
     <style>
         /* ============================================================
@@ -604,6 +609,9 @@
             opacity: 0.7;
         }
         
+        /* ============================================================
+           ADD TO CART BUTTON STYLES
+           ============================================================ */
         .add-to-cart {
             background: #f39c12 !important;
             color: white !important;
@@ -626,6 +634,10 @@
         
         .add-to-cart i {
             margin-right: 8px;
+        }
+        
+        .add-to-cart.added {
+            background: #27ae60 !important;
         }
 
         @media (max-width: 768px) {
@@ -1038,9 +1050,6 @@
         </div>
     </footer>
 
-    <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
-
     <script>
         // ============================================================
         // SIDEBAR CONTROLS
@@ -1159,7 +1168,7 @@
         }
 
         // ============================================================
-        // ADD TO CART - FIX FOR DATA ATTRIBUTES
+        // ADD TO CART - WITH "Added! ✅" FEEDBACK
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.add-to-cart').forEach(function(button) {
@@ -1171,16 +1180,24 @@
                         type: this.dataset.type || 'Service'
                     };
                     
+                    // Add to cart
                     addToCart(item);
                     
-                    // Show feedback
+                    // Update badge
+                    updateCartBadge();
+                    
+                    // Dispatch event for other pages
+                    document.dispatchEvent(new Event('cartUpdated'));
+                    
+                    // Show feedback on button
                     const originalText = this.innerHTML;
-                    this.innerHTML = '<i class="fas fa-check"></i> Added!';
-                    this.style.backgroundColor = '#27ae60';
+                    this.innerHTML = '<i class="fas fa-check"></i> Added! ✅';
+                    this.classList.add('added');
+                    
                     setTimeout(function() {
                         button.innerHTML = originalText;
-                        button.style.backgroundColor = '#f39c12';
-                    }, 2000);
+                        button.classList.remove('added');
+                    }, 2500);
                 });
             });
         });
