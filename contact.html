@@ -21,6 +21,220 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+
+        /* ============================================================
+   SIDEBAR STYLES (Sliding Menus)
+   ============================================================ */
+
+/* Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    width: 320px;
+    height: 100%;
+    background: #1e2a3a;
+    color: white;
+    z-index: 1001;
+    padding: 30px 20px;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+.sidebar-left {
+    left: 0;
+    transform: translateX(-100%);
+}
+.sidebar-left.open {
+    transform: translateX(0);
+}
+.sidebar-right {
+    right: 0;
+    transform: translateX(100%);
+}
+.sidebar-right.open {
+    transform: translateX(0);
+}
+
+/* Sidebar Close Button */
+.sidebar-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    float: right;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+.sidebar-close:hover {
+    transform: rotate(90deg);
+}
+
+/* Sidebar Content */
+.sidebar h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f39c12;
+}
+.sidebar a {
+    display: block;
+    color: #cbd5e1;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+.sidebar a:hover {
+    color: #fff;
+    padding-left: 5px;
+}
+.sidebar a i {
+    width: 25px;
+    color: #f39c12;
+}
+
+/* ============================================================
+   NAVIGATION STYLES
+   ============================================================ */
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Dropdowns */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #2c3e50;
+    min-width: 180px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    backdrop-filter: blur(2px);
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content a {
+    color: white;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.2s;
+}
+.dropdown-content a:hover {
+    background-color: #3498db;
+}
+
+/* Icon Buttons (Profile & Dot Menu) */
+.icon-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 30px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+.profile-btn {
+    font-size: 1.2rem;
+}
+
+/* Cart Link & Badge */
+.cart-link {
+    position: relative;
+    background-color: #f39c12;
+    border-radius: 40px;
+    padding: 6px 15px;
+    color: white !important;
+}
+.cart-link:hover {
+    background-color: #e67e22 !important;
+}
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: none;
+}
+.cart-badge.show {
+    display: inline-block;
+}
+
+/* Hide old auth buttons */
+.auth-buttons {
+    display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 280px;
+    }
+}
+        
         * {
             margin: 0;
             padding: 0;
