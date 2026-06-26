@@ -1131,5 +1131,16 @@
         updateCartBadge();
     }
 </script>
+    <!-- ============================================================ -->
+<!-- CART BADGE - Update cart count on page load -->
+<!-- ============================================================ -->
+<script src="js/cart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof updateCartBadge === 'function') {
+            updateCartBadge();
+        }
+    });
+</script>
 </body>
 </html>
