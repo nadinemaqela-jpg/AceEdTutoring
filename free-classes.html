@@ -1052,5 +1052,122 @@
             }
         });
     </script>
+    <script>
+    // ============================================================
+    // SIDEBAR CONTROLS
+    // ============================================================
+
+    function openSidebar(type) {
+        if (type === 'profile') {
+            document.getElementById('profileSidebar').classList.add('open');
+            document.getElementById('profileOverlay').classList.add('active');
+        } else if (type === 'dot') {
+            document.getElementById('dotSidebar').classList.add('open');
+            document.getElementById('dotOverlay').classList.add('active');
+        }
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar(type) {
+        if (type === 'profile') {
+            document.getElementById('profileSidebar').classList.remove('open');
+            document.getElementById('profileOverlay').classList.remove('active');
+        } else if (type === 'dot') {
+            document.getElementById('dotSidebar').classList.remove('open');
+            document.getElementById('dotOverlay').classList.remove('active');
+        }
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close sidebars with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeSidebar('profile');
+            closeSidebar('dot');
+        }
+    });
+
+    // ============================================================
+    // AUTH - UPDATE UI BASED ON LOGIN STATE
+    // ============================================================
+
+    function updateAuthUI(user) {
+        const loggedIn = document.getElementById('profileLoggedIn');
+        const loggedOut = document.getElementById('profileLoggedOut');
+
+        if (user) {
+            loggedIn.style.display = 'block';
+            loggedOut.style.display = 'none';
+        } else {
+            loggedIn.style.display = 'none';
+            loggedOut.style.display = 'block';
+        }
+    }
+
+    // Listen for auth changes
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
+        });
+
+        // Initial check
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
+        });
+    }
+
+    // Handle logout from sidebar
+    function handleLogout() {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().signOut().then(function() {
+                window.location.href = 'index.html';
+            }).catch(function(error) {
+                console.error('Logout error:', error);
+            });
+        }
+    }
+
+    // ============================================================
+    // CART BADGE
+    // ============================================================
+
+    function updateCartBadge() {
+        if (typeof getCart === 'function') {
+            const cart = getCart();
+            const count = cart.reduce(function(total, item) {
+                return total + item.quantity;
+            }, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.textContent = count;
+                badge.classList.toggle('show', count > 0);
+            }
+        }
+    }
+
+    // Update cart badge on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartBadge();
+    });
+
+    // Listen for cart updates (custom event)
+    document.addEventListener('cartUpdated', function() {
+        updateCartBadge();
+    });
+
+    // Override addToCart to dispatch event
+    if (typeof window.addToCart === 'function') {
+        const originalAddToCart = window.addToCart;
+        window.addToCart = function(item) {
+            originalAddToCart(item);
+            document.dispatchEvent(new Event('cartUpdated'));
+        };
+    }
+
+    // Update cart badge when cart.js loads
+    if (typeof getCart === 'function') {
+        updateCartBadge();
+    }
+</script>
 </body>
 </html>
