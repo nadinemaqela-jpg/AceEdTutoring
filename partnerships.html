@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18209594553');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High School Partnerships - AceEd Tutoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Cart & Auth -->
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9edf2 100%);
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo-image {
+            max-width: 250px;
+            margin: 0 auto;
+        }
+        .logo-image img {
+            width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        .tagline {
+            font-size: 1rem;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        /* ============================================================
+           SIDEBAR STYLES
+           ============================================================ */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            width: 320px;
+            height: 100%;
+            background: #1e2a3a;
+            color: white;
+            z-index: 1001;
+            padding: 30px 20px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+        .sidebar-left {
+            left: 0;
+            transform: translateX(-100%);
+        }
+        .sidebar-left.open {
+            transform: translateX(0);
+        }
+        .sidebar-right {
+            right: 0;
+            transform: translateX(100%);
+        }
+        .sidebar-right.open {
+            transform: translateX(0);
+        }
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .sidebar-close:hover {
+            transform: rotate(90deg);
+        }
+        .sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #f39c12;
+        }
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .sidebar a:hover {
+            color: #fff;
+            padding-left: 5px;
+        }
+        .sidebar a i {
+            width: 25px;
+            color: #f39c12;
+        }
+        
+        /* ============================================================
+           NAVIGATION
+           ============================================================ */
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #2c3e50;
+            min-width: 180px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            top: 100%;
+            left: 0;
+            z-index: 10;
+            backdrop-filter: blur(2px);
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
+        }
+        .dropdown-content a:hover {
+            background-color: #3498db;
+        }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 30px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        .profile-btn {
+            font-size: 1.2rem;
+        }
+        
+        .cart-link {
+            position: relative;
+            background-color: #f39c12;
+            border-radius: 40px;
+            padding: 6px 15px;
+            color: white !important;
+        }
+        .cart-link:hover {
+            background-color: #e67e22 !important;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: none;
+        }
+        .cart-badge.show {
+            display: inline-block;
+        }
+        .auth-buttons {
+            display: none !important;
+        }
+        
+        /* ============================================================
+           PARTNERSHIPS PAGE STYLES
+           ============================================================ */
+        .hero-section {
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: white;
+            padding: 60px 30px;
+            border-radius: 24px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .hero-section h1 i {
+            color: #f39c12;
+            margin-right: 15px;
+        }
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .benefit-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .benefit-card i {
+            font-size: 3rem;
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+        .benefit-card h3 {
+            color: #1e2a3a;
+            margin-bottom: 10px;
+        }
+        .benefit-card p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #1e2a3a;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f39c12;
+            display: inline-block;
+        }
+        
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .service-item {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+        .service-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .service-item i {
+            font-size: 2rem;
+            color: #3498db;
+            width: 50px;
+            text-align: center;
+        }
+        .service-item h4 {
+            color: #1e2a3a;
+            font-size: 1rem;
+        }
+        .service-item p {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .step-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .step-number {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 auto 15px;
+        }
+        .step-card h4 {
+            color: #1e2a3a;
+            margin-bottom: 8px;
+        }
+        .step-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* ============================================================
+           PARTNERSHIP MODEL (5:2:1)
+           ============================================================ */
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 20px 0 30px;
+        }
+        .model-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-top: 4px solid #f39c12;
+            transition: all 0.3s ease;
+        }
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .model-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .model-card h3 {
+            color: #1e2a3a;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .model-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .model-highlight {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border-top-color: #1e2a3a;
+        }
+        .model-highlight h3,
+        .model-highlight p {
+            color: white;
+        }
+        
+        /* ============================================================
+           PAY IT FORWARD
+           ============================================================ */
+        .pay-forward-section {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .pay-forward-section h2 {
+            color: #1e2a3a;
+            margin-bottom: 10px;
+        }
+        .pay-forward-section .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .commitments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .commitment-item {
+            background: #f8fafd;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        .commitment-item:hover {
+            background: #eef2fc;
+            transform: translateX(5px);
+        }
+        .commitment-item i {
+            color: #f39c12;
+            font-size: 1.3rem;
+            width: 30px;
+            text-align: center;
+        }
+        .commitment-item span {
+            color: #1e2a3a;
+            font-size: 0.95rem;
+        }
+        
+        /* ============================================================
+           MENTORSHIP PROGRAM
+           ============================================================ */
+        .mentorship-section {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .mentorship-section h2 {
+            color: #1e2a3a;
+            margin-bottom: 10px;
+        }
+        .mentorship-section .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .mentorship-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .mentor-card {
+            background: #f8fafd;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid #3498db;
+        }
+        .mentor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .mentor-card i {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        .mentor-card h4 {
+            color: #1e2a3a;
+            margin-bottom: 8px;
+        }
+        .mentor-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .mentor-card.highlight {
+            border-left-color: #e74c3c;
+        }
+        .mentor-card.highlight i {
+            color: #e74c3c;
+        }
+        .mentor-card.highlight2 {
+            border-left-color: #27ae60;
+        }
+        .mentor-card.highlight2 i {
+            color: #27ae60;
+        }
+        
+        /* ============================================================
+           SUBJECTS SECTION
+           ============================================================ */
+        .subjects-section {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .subjects-section h2 {
+            color: #1e2a3a;
+            margin-bottom: 10px;
+        }
+        .subjects-section .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .grade-group {
+            margin-bottom: 30px;
+        }
+        .grade-group h3 {
+            color: #1e2a3a;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .grade-group h3 .badge {
+            background: #27ae60;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .grade-group .badge-senior {
+            background: #e74c3c;
+        }
+        .subject-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .subject-tag {
+            background: #f8fafd;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #1e2a3a;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .subject-tag:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        .subject-tag .code {
+            font-size: 0.65rem;
+            color: #7f8c8d;
+            margin-left: 5px;
+        }
+        .subject-tag:hover .code {
+            color: white;
+        }
+        
+        .total-count {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafd;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #1e2a3a;
+        }
+        .total-count span {
+            font-weight: bold;
+            color: #f39c12;
+            font-size: 1.5rem;
+        }
+        
+        /* ============================================================
+           CTA SECTION
+           ============================================================ */
+        .cta-box {
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .cta-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .cta-box p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .cta-box .btn {
+            display: inline-block;
+            background: #f39c12;
+            color: #1e2a3a;
+            padding: 14px 35px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .cta-box .btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .contact-details a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .contact-details a:hover {
+            color: #f39c12;
+        }
+        .contact-details i {
+            margin-right: 8px;
+        }
+        
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer-modern {
+            background: #0f1720;
+            color: #e2e8f0;
+            margin-top: 60px;
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        .footer-col h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            position: relative;
+            display: inline-block;
+        }
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40px;
+            height: 3px;
+            background: #e74c3c;
+            border-radius: 3px;
+        }
+        .footer-col p, .footer-col ul {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col ul li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-col ul li a:hover {
+            color: #e74c3c;
+            padding-left: 4px;
+        }
+        .footer-register-btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(231,76,60,0.3);
+        }
+        .footer-register-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        .footer-dark-btn {
+            background: #2d3e50;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 8px;
+        }
+        .footer-dark-btn:hover {
+            background: #1e2f40;
+            transform: translateY(-1px);
+        }
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        .social-icons a {
+            background: #1e2a3a;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        .social-icons a:hover {
+            background: #e74c3c;
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        .footer-bottom a {
+            color: #e2e8f0;
+            text-decoration: none;
+        }
+        .footer-bottom a:hover {
+            color: #e74c3c;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            .services-list {
+                grid-template-columns: 1fr;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            .model-grid {
+                grid-template-columns: 1fr;
+            }
+            .commitments-grid {
+                grid-template-columns: 1fr;
+            }
+            .mentorship-grid {
+                grid-template-columns: 1fr;
+            }
+            .subject-tags {
+                justify-content: center;
+            }
+            .cta-box {
+                padding: 25px;
+            }
+            .contact-details {
+                flex-direction: column;
+                align-items: center;
+            }
+            .sidebar {
+                width: 280px;
+            }
+            .footer-grid {
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-logo">
+        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PROFILE SIDEBAR (Left) -->
+    <!-- ============================================================ -->
+    <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
+    <div class="sidebar sidebar-left" id="profileSidebar">
+        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+        <div id="profileLoggedIn" style="display: none;">
+            <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+        <div id="profileLoggedOut">
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- DOT MENU SIDEBAR (Right) -->
+    <!-- ============================================================ -->
+    <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
+    <div class="sidebar sidebar-right" id="dotSidebar">
+        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        <h3><i class="fas fa-bars"></i> Menu</h3>
+        <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
+        <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
+        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
+        <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+        <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
+            </div>
+            <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Grades ▼</a>
+                    <div class="dropdown-content">
+                        <a href="grades/grade-10/index.html">Grade 10</a>
+                        <a href="grades/grade-11/index.html">Grade 11</a>
+                        <a href="grades/grade-12/index.html">Grade 12</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a href="#" class="nav-link">ATP ▼</a>
+                    <div class="dropdown-content">
+                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
+                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
+                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
+                    </div>
+                </div>
+                <a href="tutors.html" class="nav-link">Our Tutors</a>
+                <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
+                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <div class="container">
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1><i class="fas fa-handshake"></i> High School Partnerships</h1>
+            <p>Partner with AceEd Tutoring to provide your students with expert academic support in Grade 10–12 subjects.</p>
+        </div>
+
+        <!-- Benefits -->
+        <h2 class="section-title"><i class="fas fa-star"></i> Why Partner with AceEd?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Boost Student Performance</h3>
+                <p>Help your students improve their marks in key subjects with expert CAPS-aligned tutoring.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-wallet"></i>
+                <h3>Cost-Effective</h3>
+                <p>Affordable rates designed to make quality tutoring accessible for schools and students.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-trophy"></i>
+                <h3>Proven Results</h3>
+                <p>Experienced tutors who understand the CAPS curriculum and what it takes to succeed.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-clock"></i>
+                <h3>Flexible Options</h3>
+                <p>In-person and online sessions to suit your school's schedule.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Safe & Secure</h3>
+                <p>All tutors are vetted and background-checked for your peace of mind.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-heart"></i>
+                <h3>Community Impact</h3>
+                <p>We believe in giving back — every group includes a free tutoring spot.</p>
+            </div>
+        </div>
+
+        <!-- What We Offer -->
+        <h2 class="section-title"><i class="fas fa-list"></i> What We Offer Schools</h2>
+        <div class="services-list">
+            <div class="service-item">
+                <i class="fas fa-school"></i>
+                <div>
+                    <h4>On-Site Tutoring</h4>
+                    <p>Tutors come to your school during or after school hours.</p>
+                </div>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-laptop"></i>
+                <div>
+                    <h4>Online Tutoring</h4>
+                    <p>Remote sessions for students who need extra support.</p>
+                </div>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-bolt"></i>
+                <div>
+                    <h4>Exam Bootcamps</h4>
+                    <p>Intensive revision sessions before exams.</p>
+                </div>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <div>
+                    <h4>Teacher Support</h4>
+                    <p>Additional resources and materials for teachers.</p>
+                </div>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-users"></i>
+                <div>
+                    <h4>Parent Information Sessions</h4>
+                    <p>Workshops to help parents support their children.</p>
+                </div>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-hand-holding-heart"></i>
+                <div>
+                    <h4>Pay-It-Forward Scholarships</h4>
+                    <p>Free tutoring spots for students in need.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <h2 class="section-title"><i class="fas fa-route"></i> How It Works</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h4>School Partners With Us</h4>
+                <p>We partner with your school to provide tutoring support.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h4>Groups of 5 Students</h4>
+                <p>Each group has 5 students + 2 tutors. One student receives free tutoring.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h4>School Selects Free Student</h4>
+                <p>The school chooses which student receives the free spot.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h4>Sessions Begin</h4>
+                <p>Tutoring starts — 4 paying students, 1 free student per group.</p>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PARTNERSHIP MODEL (5:2:1) -->
+        <!-- ============================================================ -->
+        <h2 class="section-title"><i class="fas fa-users"></i> Our Partnership Model</h2>
+        <div class="model-grid">
+            <div class="model-card">
+                <i class="fas fa-chalkboard-teacher" style="color: #3498db;"></i>
+                <h3>2 Tutors</h3>
+                <p>Qualified, experienced tutors leading each session.</p>
+            </div>
+            <div class="model-card">
+                <i class="fas fa-user-graduate" style="color: #27ae60;"></i>
+                <h3>5 Students</h3>
+                <p>Small groups for personalized attention and effective learning.</p>
+            </div>
+            <div class="model-card model-highlight">
+                <i class="fas fa-gift" style="color: white;"></i>
+                <h3>1 Free Spot</h3>
+                <p>One student per group receives free tutoring — selected by the school.</p>
+            </div>
+            <div class="model-card">
+                <i class="fas fa-handshake" style="color: #e74c3c;"></i>
+                <h3>Pay It Forward</h3>
+                <p>Free student commits to helping others in the future.</p>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PAY IT FORWARD -->
+        <!-- ============================================================ -->
+        <div class="pay-forward-section">
+            <h2><i class="fas fa-heart" style="color: #e74c3c;"></i> Pay It Forward</h2>
+            <p class="subtitle">Students who receive free tutoring agree to give back to the community.</p>
+            <div class="commitments-grid">
+                <div class="commitment-item">
+                    <i class="fas fa-users"></i>
+                    <span>Peer Tutoring — Help younger students (Gr 8–9)</span>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Social Media Ambassador — Share your experience</span>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-star"></i>
+                    <span>Referral Program — Refer other students to AceEd</span>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-pen"></i>
+                    <span>Testimonial — Share your success story</span>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Future Mentor — After first year, mentor new students</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- MENTORSHIP PROGRAM -->
+        <!-- ============================================================ -->
+        <div class="mentorship-section">
+            <h2><i class="fas fa-seedling" style="color: #27ae60;"></i> Mentorship Program</h2>
+            <p class="subtitle">Students who complete our program can return as mentors to guide the next generation.</p>
+            <div class="mentorship-grid">
+                <div class="mentor-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>First-Year Students</h4>
+                    <p>Receive mentorship from third-year or final-year students who have completed the program.</p>
+                </div>
+                <div class="mentor-card highlight">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4>Third-Year / Final-Year Mentors</h4>
+                    <p>Experienced students guide and support first-year participants.</p>
+                </div>
+                <div class="mentor-card highlight2">
+                    <i class="fas fa-rocket"></i>
+                    <h4>Building Leadership</h4>
+                    <p>Students develop leadership skills while helping others succeed.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- SUBJECTS WE COVER -->
+        <!-- ============================================================ -->
+        <div class="subjects-section">
+            <h2><i class="fas fa-book-open"></i> Subjects We Cover</h2>
+            <p class="subtitle">From Grade 8 to 12, we offer expert tutoring across all major CAPS subjects.</p>
+
+            <!-- Grade 8 & 9 -->
+            <div class="grade-group">
+                <h3>Grade 8 & 9 <span class="badge">Foundation Phase</span></h3>
+                <div class="subject-tags">
+                    <span class="subject-tag">Mathematics <span class="code">Gr 8-9</span></span>
+                    <span class="subject-tag">Natural Sciences <span class="code">Gr 8-9</span></span>
+                </div>
+            </div>
+
+            <!-- Grade 10, 11 & 12 -->
+            <div class="grade-group">
+                <h3>Grade 10, 11 & 12 <span class="badge badge-senior">Senior Phase</span></h3>
+                <div class="subject-tags">
+                    <span class="subject-tag">Mathematics <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Mathematical Literacy <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Physical Sciences <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Life Sciences <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Accounting <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Economics <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Business Studies <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Geography <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">History <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Tourism <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">CAT <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">Afrikaans (EAT) <span class="code">Gr 10-12</span></span>
+                    <span class="subject-tag">English Home Language <span class="code">Gr 10-12</span></span>
+                </div>
+            </div>
+
+            <div class="total-count">
+                <span>15</span> Subjects Covered Across <span>5</span> Grades
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- CALL TO ACTION -->
+        <!-- ============================================================ -->
+        <div class="cta-box">
+            <h2><i class="fas fa-handshake"></i> Ready to Partner with Us?</h2>
+            <p>Contact us today to discuss how AceEd Tutoring can support your students.</p>
+            <a href="contact.html" class="btn"><i class="fas fa-envelope"></i> Get in Touch</a>
+            <div class="contact-details">
+                <a href="mailto:info@aceed.co.za"><i class="fas fa-envelope"></i> info@aceed.co.za</a>
+                <a href="https://wa.me/27698251610"><i class="fab fa-whatsapp"></i> +27 69 825 1610</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tutors.html">Our Tutors</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="partnerships.html">School Partnerships</a></li>
+                        <li><a href="grades/grade-10/index.html">Grade 10</a></li>
+                        <li><a href="grades/grade-11/index.html">Grade 11</a></li>
+                        <li><a href="grades/grade-12/index.html">Grade 12</a></li>
+                        <li><a href="register.html">Register Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences & Life Science</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                        <li>History & Tourism</li>
+                        <li>CAT</li>
+                        <li>Afrikaans & English</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 529 4232 (Stellenbosch)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 647 6472 (Durban)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a> | <i class="fas fa-heart" style="color: #e74c3c;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // SIDEBAR CONTROLS
+        // ============================================================
+
+        function openSidebar(type) {
+            if (type === 'profile') {
+                document.getElementById('profileSidebar').classList.add('open');
+                document.getElementById('profileOverlay').classList.add('active');
+            } else if (type === 'dot') {
+                document.getElementById('dotSidebar').classList.add('open');
+                document.getElementById('dotOverlay').classList.add('active');
+            }
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar(type) {
+            if (type === 'profile') {
+                document.getElementById('profileSidebar').classList.remove('open');
+                document.getElementById('profileOverlay').classList.remove('active');
+            } else if (type === 'dot') {
+                document.getElementById('dotSidebar').classList.remove('open');
+                document.getElementById('dotOverlay').classList.remove('active');
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSidebar('profile');
+                closeSidebar('dot');
+            }
+        });
+
+        // ============================================================
+        // AUTH - UPDATE UI BASED ON LOGIN STATE
+        // ============================================================
+
+        function updateAuthUI(user) {
+            const loggedIn = document.getElementById('profileLoggedIn');
+            const loggedOut = document.getElementById('profileLoggedOut');
+
+            if (user) {
+                loggedIn.style.display = 'block';
+                loggedOut.style.display = 'none';
+            } else {
+                loggedIn.style.display = 'none';
+                loggedOut.style.display = 'block';
+            }
+        }
+
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().onAuthStateChanged(function(user) {
+                updateAuthUI(user);
+            });
+        }
+
+        function handleLogout() {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                firebase.auth().signOut().then(function() {
+                    window.location.href = 'index.html';
+                }).catch(function(error) {
+                    console.error('Logout error:', error);
+                });
+            }
+        }
+
+        // ============================================================
+        // CART BADGE
+        // ============================================================
+
+        function updateCartBadge() {
+            if (typeof getCart === 'function') {
+                const cart = getCart();
+                const count = cart.reduce(function(total, item) {
+                    return total + item.quantity;
+                }, 0);
+                const badge = document.getElementById('cartCount');
+                if (badge) {
+                    badge.textContent = count;
+                    badge.classList.toggle('show', count > 0);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+        });
+
+        document.addEventListener('cartUpdated', function() {
+            updateCartBadge();
+        });
+
+        if (typeof getCart === 'function') {
+            updateCartBadge();
+        }
+    </script>
+</body>
+</html>
