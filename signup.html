@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - AceEd Tutoring</title>
-    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
     <script>
@@ -13,13 +9,21 @@
         gtag('js', new Date());
         gtag('config', 'AW-18209594553');
     </script>
-
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AceEd Tutoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <style>
         * {
@@ -42,7 +46,7 @@
             background: white;
             border-radius: 24px;
             padding: 40px;
-            max-width: 450px;
+            max-width: 500px;
             width: 100%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
@@ -71,7 +75,11 @@
             font-size: 0.9rem;
         }
         
-        input {
+        label .required {
+            color: #e74c3c;
+        }
+        
+        input, select {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e0e0e0;
@@ -80,9 +88,50 @@
             transition: border-color 0.3s;
         }
         
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #2ecc71;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+            background: #f8fafd;
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .radio-group label:hover {
+            border-color: #3498db;
+            background: #eef2fc;
+        }
+        
+        .radio-group label.selected {
+            border-color: #2ecc71;
+            background: #e8f5e9;
+        }
+        
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+        
+        .radio-group label i {
+            font-size: 1.2rem;
+            margin-right: 8px;
         }
         
         .btn-signup {
@@ -101,6 +150,11 @@
         .btn-signup:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(46,204,113,0.3);
+        }
+        
+        .btn-signup:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         .error-message {
@@ -136,24 +190,40 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+        
+        .role-description {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 25px;
+            }
+            .radio-group {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="signup-container">
         <h1><i class="fas fa-user-plus"></i> Create Account</h1>
-        <p>Sign up to access past papers & ATPs</p>
+        <p>Sign up to access resources or request tutoring</p>
         
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
         
         <form id="signupForm">
             <div class="form-group">
-                <label>Full Name</label>
+                <label>Full Name <span class="required">*</span></label>
                 <input type="text" id="fullName" required placeholder="Enter your full name">
             </div>
             
             <div class="form-group">
-                <label>Email Address</label>
+                <label>Email Address <span class="required">*</span></label>
                 <input type="email" id="email" required placeholder="your@email.com">
             </div>
             
@@ -163,16 +233,39 @@
             </div>
             
             <div class="form-group">
-                <label>Password (minimum 6 characters)</label>
+                <label>Password (minimum 6 characters) <span class="required">*</span></label>
                 <input type="password" id="password" required placeholder="Create a password" minlength="6">
             </div>
             
             <div class="form-group">
-                <label>Confirm Password</label>
+                <label>Confirm Password <span class="required">*</span></label>
                 <input type="password" id="confirmPassword" required placeholder="Confirm your password">
             </div>
             
-            <button type="submit" class="btn-signup"><i class="fas fa-paper-plane"></i> Sign Up</button>
+            <!-- Role Selection -->
+            <div class="form-group">
+                <label>I am a... <span class="required">*</span></label>
+                <div class="radio-group" id="roleGroup">
+                    <label class="selected" data-role="student">
+                        <i class="fas fa-user-graduate" style="color: #3498db;"></i> Student
+                        <input type="radio" name="role" value="student" checked>
+                    </label>
+                    <label data-role="parent">
+                        <i class="fas fa-user-friends" style="color: #27ae60;"></i> Parent
+                        <input type="radio" name="role" value="parent">
+                    </label>
+                </div>
+                <div class="role-description" id="roleDescription">Access resources, ATPs, and past papers</div>
+            </div>
+            
+            <div class="form-group">
+                <label style="display: flex; align-items: flex-start; gap: 10px; font-weight: normal; cursor: pointer;">
+                    <input type="checkbox" id="termsCheck" required style="width: auto; margin-top: 4px;">
+                    <span>I have read and agree to the <a href="terms.html" target="_blank" style="color: #3498db;">Terms & Conditions</a> and <a href="terms.html#refund" target="_blank" style="color: #3498db;">Refund & Cancellation Policy</a>.</span>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn-signup" id="signupBtn"><i class="fas fa-paper-plane"></i> Sign Up</button>
         </form>
         
         <div class="login-link">
@@ -180,51 +273,112 @@
         </div>
     </div>
     
-    <script src="js/auth.js"></script>
-    
     <script>
+        // ============================================================
+        // ROLE SELECTION UI
+        // ============================================================
+        const roleLabels = document.querySelectorAll('.radio-group label');
+        const roleDescription = document.getElementById('roleDescription');
+        
+        const roleDescriptions = {
+            'student': 'Access resources, ATPs, and past papers for FREE',
+            'parent': 'Request tutors, manage student accounts, and book sessions'
+        };
+        
+        roleLabels.forEach(function(label) {
+            label.addEventListener('click', function() {
+                roleLabels.forEach(function(l) { l.classList.remove('selected'); });
+                this.classList.add('selected');
+                const role = this.dataset.role;
+                roleDescription.textContent = roleDescriptions[role] || '';
+            });
+        });
+        
+        // ============================================================
+        // FORM SUBMISSION
+        // ============================================================
         const form = document.getElementById('signupForm');
         const errorDiv = document.getElementById('errorMessage');
         const successDiv = document.getElementById('successMessage');
+        const signupBtn = document.getElementById('signupBtn');
         
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             errorDiv.style.display = 'none';
             successDiv.style.display = 'none';
+            signupBtn.disabled = true;
+            signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
             
             const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+            const termsChecked = document.getElementById('termsCheck').checked;
             
             // Validate
             if (password !== confirmPassword) {
                 errorDiv.textContent = 'Passwords do not match.';
                 errorDiv.style.display = 'block';
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Sign Up';
                 return;
             }
             
             if (password.length < 6) {
                 errorDiv.textContent = 'Password must be at least 6 characters.';
                 errorDiv.style.display = 'block';
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Sign Up';
                 return;
             }
             
-            // Register
-            const result = await registerUser(email, password, fullName, phone);
+            if (!termsChecked) {
+                errorDiv.textContent = 'Please agree to the Terms & Conditions.';
+                errorDiv.style.display = 'block';
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Sign Up';
+                return;
+            }
             
-            if (result.success) {
+            try {
+                // Create user in Firebase Auth
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Save user data to Firestore
+                await firebase.firestore().collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    fullName: fullName,
+                    email: email,
+                    phone: phone || '',
+                    role: role,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+                
+                // Success
                 successDiv.textContent = '✅ Account created successfully! Redirecting...';
                 successDiv.style.display = 'block';
                 
-                setTimeout(() => {
-                    window.location.href = 'member-dashboard.html';
+                setTimeout(function() {
+                    if (role === 'student') {
+                        window.location.href = 'member-dashboard.html';
+                    } else if (role === 'parent') {
+                        window.location.href = 'parent-dashboard.html';
+                    } else {
+                        window.location.href = 'member-dashboard.html';
+                    }
                 }, 1500);
-            } else {
-                errorDiv.textContent = '❌ ' + result.error;
+                
+            } catch (error) {
+                console.error('Signup error:', error);
+                errorDiv.textContent = '❌ ' + error.message;
                 errorDiv.style.display = 'block';
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Sign Up';
             }
         });
     </script>
