@@ -185,7 +185,18 @@
                 errorDiv.textContent = '❌ ' + result.error;
                 errorDiv.style.display = 'block';
             }
-        });
+            });
+            // After sign in, check if user is admin
+            firebase.auth().onAuthStateChanged(async function(user) {
+                if (user) {
+                    const doc = await firebase.firestore().collection('admins').doc('admin').get();
+                    if (doc.exists && doc.data().email === user.email) {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'member-dashboard.html';
+                    }
+                }
+            });
     </script>
 </body>
 </html>
