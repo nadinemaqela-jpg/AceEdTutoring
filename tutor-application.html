@@ -1599,6 +1599,7 @@
                 // 3. Save to Firestore
                 await firebase.firestore().collection('tutor_applications').doc(user.uid).set({
                     uid: user.uid,
+                    role: pending_tutor,
                     fullName: fullName,
                     email: email,
                     phone: phone,
@@ -1619,6 +1620,18 @@
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 });
+
+                    // 3b. ALSO save to users collection with role "pending_tutor"
+                    await firebase.firestore().collection('users').doc(user.uid).set({
+                        uid: user.uid,
+                        fullName: fullName,
+                        email: email,
+                        phone: phone,
+                        role: 'pending_tutor',   // 👈 This is what you're adding
+                        status: 'pending',       // 👈 This matches the application status
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    });
 
                 // 4. Show success
                 document.getElementById('applicationForm').style.display = 'none';
