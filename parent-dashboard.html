@@ -1091,7 +1091,7 @@
             }
             document.body.style.overflow = 'hidden';
         }
-    
+
         function closeSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.remove('open');
@@ -1102,35 +1102,34 @@
             }
             document.body.style.overflow = 'auto';
         }
-    
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
                 closeSidebar('dot');
             }
         });
-    
+
         // ============================================================
         // AUTH - CHECK USER ROLE
         // ============================================================
         let parentUid = '';
         let childrenData = [];
         let allRequests = [];
-    
+
         firebase.auth().onAuthStateChanged(async function(user) {
             if (!user) {
                 window.location.href = 'signin.html?redirect=parent-dashboard.html';
                 return;
             }
-        
+
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = doc.data();
                 const role = userData.role;
                 
                 if (role === 'parent') {
-                    parentUid = user.uid;  // ✅ Make sure this is set
-                    console.log('✅ Parent UID set:', parentUid);
+                    parentUid = user.uid;
                     document.getElementById('parentContent').style.display = 'block';
                     document.getElementById('parentName').textContent = userData.fullName || user.email || 'Parent';
                     loadParentData(user.uid);
@@ -1142,6 +1141,7 @@
                 document.getElementById('accessDenied').style.display = 'block';
             }
         });
+
         // ============================================================
         // LOGOUT
         // ============================================================
@@ -1150,41 +1150,37 @@
                 window.location.href = 'index.html';
             });
         }
-    
+
         // ============================================================
         // MODAL CONTROLS
         // ============================================================
         function openAddChildModal() {
             document.getElementById('addChildModal').classList.add('show');
         }
-    
+
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('show');
         }
-    
+
         document.getElementById('addChildModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal('addChildModal');
             }
         });
-    
+
         // ============================================================
         // LOAD PARENT DATA
         // ============================================================
         function loadParentData(uid) {
             const db = firebase.firestore();
             
-            console.log('🔍 Loading children for parent:', uid);
-            
             db.collection('children')
                 .where('parentUid', '==', uid)
                 .orderBy('createdAt', 'desc')
                 .get()
                 .then(function(snapshot) {
-                    console.log('✅ Children found:', snapshot.size);
                     childrenData = [];
                     snapshot.forEach(function(doc) {
-                        console.log('📄 Child:', doc.id, doc.data());
                         childrenData.push({ id: doc.id, ...doc.data() });
                     });
                     renderChildren();
@@ -1193,11 +1189,11 @@
                     updateStats();
                 })
                 .catch(function(error) {
-                    console.error('❌ Error loading children:', error);
+                    console.error('Error loading children:', error);
                     alert('Error loading children: ' + error.message);
                 });
         }
-    
+
         // ============================================================
         // POPULATE CHILD DROPDOWN
         // ============================================================
@@ -1212,9 +1208,8 @@
                 option.textContent = child.fullName + ' (Grade ' + child.grade + ')';
                 select.appendChild(option);
             });
-            console.log('✅ Dropdown populated with', childrenData.length, 'children');
         }
-    
+
         // ============================================================
         // RENDER CHILDREN
         // ============================================================
@@ -1230,7 +1225,7 @@
                 `;
                 return;
             }
-        
+
             let html = '';
             childrenData.forEach(function(child) {
                 const subjects = child.subjects ? child.subjects.join(', ') : 'Not specified';
@@ -1260,7 +1255,7 @@
             });
             container.innerHTML = html;
         }
-    
+
         // ============================================================
         // LOAD REQUESTS
         // ============================================================
@@ -1281,7 +1276,7 @@
                     console.error('Error loading requests:', error);
                 });
         }
-    
+
         // ============================================================
         // RENDER REQUESTS
         // ============================================================
@@ -1297,13 +1292,13 @@
                 `;
                 return;
             }
-    
+
             let html = '';
             allRequests.slice(0, 5).forEach(function(req) {
                 const statusClass = req.status || 'pending';
                 const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
                 const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-    
+
                 html += `
                     <div class="request-card">
                         <div class="request-header">
@@ -1319,7 +1314,7 @@
             });
             container.innerHTML = html;
         }
-    
+
         // ============================================================
         // UPDATE STATS
         // ============================================================
@@ -1352,86 +1347,82 @@
                     console.error('Error counting active bookings:', error);
                 });
         }
-    
+
         // ============================================================
         // SUBMIT TUTOR REQUEST (From Dropdown)
         // ============================================================
-            function submitTutorRequest() {
-                const select = document.getElementById('requestChildSelect');
-                const childId = select.value;
-                
-                if (!childId) {
-                    alert('Please select a child first.');
-                    return;
-                }
-                
-                submitTutorRequestForChild(childId);
+        function submitTutorRequest() {
+            const select = document.getElementById('requestChildSelect');
+            const childId = select.value;
+            
+            if (!childId) {
+                alert('Please select a child first.');
+                return;
             }
-        
-            // ============================================================
-            // SUBMIT TUTOR REQUEST (For a specific child)
-            // ============================================================
-    function submitTutorRequestForChild(childId) {
-        const child = childrenData.find(c => c.id === childId);
-        if (!child) {
-            alert('Child not found.');
-            return;
+            
+            submitTutorRequestForChild(childId);
         }
-        
-        // Check if child already has a pending request
-        const db = firebase.firestore();
-        db.collection('tutor_requests')
-            .where('childId', '==', childId)
-            .where('status', 'in', ['pending', 'matched'])
-            .get()
-            .then(function(snapshot) {
-                if (!snapshot.empty) {
-                    alert('This child already has a pending or matched tutor request.');
-                    return;
-                }
-                
-                // Create the request
-                return db.collection('tutor_requests').add({
-                    parentUid: parentUid,
-                    childId: childId,
-                    childName: child.fullName,
-                    grade: child.grade,
-                    subjects: child.subjects || [],
-                    status: 'pending',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
+
+        // ============================================================
+        // SUBMIT TUTOR REQUEST (For a specific child)
+        // ============================================================
+        function submitTutorRequestForChild(childId) {
+            const child = childrenData.find(c => c.id === childId);
+            if (!child) {
+                alert('Child not found.');
+                return;
+            }
+            
+            const db = firebase.firestore();
+            
+            db.collection('tutor_requests')
+                .where('childId', '==', childId)
+                .where('status', 'in', ['pending', 'matched'])
+                .get()
+                .then(function(snapshot) {
+                    if (!snapshot.empty) {
+                        alert('This child already has a pending or matched tutor request.');
+                        return;
+                    }
+                    
+                    return db.collection('tutor_requests').add({
+                        parentUid: parentUid,
+                        childId: childId,
+                        childName: child.fullName,
+                        grade: child.grade,
+                        subjects: child.subjects || [],
+                        status: 'pending',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    });
+                })
+                .then(function(docRef) {
+                    if (docRef) {
+                        alert('✅ Tutor request sent successfully! A tutor will be matched with your child shortly.');
+                        loadParentData(parentUid);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error submitting request:', error);
+                    alert('Error: ' + error.message);
                 });
-            })
-            .then(function(docRef) {
-                if (docRef) {
-                    alert('✅ Tutor request sent successfully! A tutor will be matched with your child shortly.');
-                    loadParentData(parentUid);
-                }
-            })
-            .catch(function(error) {
-                console.error('Error submitting request:', error);
-                alert('Error: ' + error.message);
-            });
-    }
-    
+        }
+
         // ============================================================
         // REMOVE CHILD
         // ============================================================
         function removeChildFromDashboard(childId) {
-            if (!confirm('Are you sure you want to remove this child? This will also remove all tutor requests for this child.')) return;
-        
+            if (!confirm('Are you sure you want to remove this child?')) return;
+
             const db = firebase.firestore();
             
-            // First, delete the child
             db.collection('children').doc(childId).delete()
                 .then(function() {
-                    // Then, delete all tutor requests for this child
                     return db.collection('tutor_requests')
                         .where('childId', '==', childId)
                         .get();
                 })
                 .then(function(snapshot) {
-                    // Delete all requests for this child
                     var batch = db.batch();
                     snapshot.forEach(function(doc) {
                         batch.delete(doc.ref);
@@ -1447,14 +1438,14 @@
                     alert('Error: ' + error.message);
                 });
         }
-    
+
         // ============================================================
         // VIEW CHILD PROGRESS (Placeholder)
         // ============================================================
         function viewChildProgress(childId) {
             alert('Child progress feature coming soon!');
         }
-    
+
         // ============================================================
         // ADD CHILD FORM
         // ============================================================
@@ -1465,12 +1456,12 @@
             const grade = document.getElementById('childGrade').value;
             const subjectSelect = document.getElementById('childSubject');
             const subjects = Array.from(subjectSelect.selectedOptions).map(opt => opt.value);
-    
+
             if (!fullName || !grade) {
                 alert('Please fill in all required fields.');
                 return;
             }
-    
+
             try {
                 const db = firebase.firestore();
                 const docRef = await db.collection('children').add({
@@ -1481,21 +1472,16 @@
                     createdAt: new Date().toISOString()
                 });
                 
-                console.log('✅ Child added with ID:', docRef.id);
-                
                 closeModal('addChildModal');
                 document.getElementById('addChildForm').reset();
-                
-                // Force reload data
                 loadParentData(parentUid);
-                
                 alert('Child added successfully!');
             } catch (error) {
                 console.error('Error adding child:', error);
                 alert('Error adding child: ' + error.message);
             }
         });
-    
+
         // ============================================================
         // CART BADGE
         // ============================================================
@@ -1512,15 +1498,15 @@
                 }
             }
         }
-    
+
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
         });
-    
+
         document.addEventListener('cartUpdated', function() {
             updateCartBadge();
         });
-    
+
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
