@@ -52,6 +52,10 @@ function updateQuantity(itemId, quantity) {
     updateCartCount();
 }
 
+function updateCartCount() {
+    updateCartBadge();
+}
+
 // Clear cart
 function clearCart() {
     localStorage.removeItem('aceed_cart');
