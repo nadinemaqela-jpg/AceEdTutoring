@@ -1570,10 +1570,19 @@
                 }
             }
 
-            try {
-                // 1. Create user account
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, 'TempPass123!');
-                const user = userCredential.user;
+                // Generate a random secure password
+                function generateRandomPassword() {
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+                    let password = '';
+                    for (let i = 0; i < 12; i++) {
+                        password += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    return password;
+                }
+                
+                // Use it
+                const randomPassword = generateRandomPassword();
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, randomPassword);
 
                 // 2. Upload all documents
                 const uploadPromises = [];
