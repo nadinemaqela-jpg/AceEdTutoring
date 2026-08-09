@@ -1122,17 +1122,15 @@
                 window.location.href = 'signin.html?redirect=parent-dashboard.html';
                 return;
             }
-    
+        
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = doc.data();
                 const role = userData.role;
                 
-                console.log('🔍 User role:', role);
-                console.log('🔍 User UID:', user.uid);
-    
                 if (role === 'parent') {
-                    parentUid = user.uid;
+                    parentUid = user.uid;  // ✅ Make sure this is set
+                    console.log('✅ Parent UID set:', parentUid);
                     document.getElementById('parentContent').style.display = 'block';
                     document.getElementById('parentName').textContent = userData.fullName || user.email || 'Parent';
                     loadParentData(user.uid);
@@ -1144,7 +1142,6 @@
                 document.getElementById('accessDenied').style.display = 'block';
             }
         });
-    
         // ============================================================
         // LOGOUT
         // ============================================================
@@ -1359,62 +1356,63 @@
         // ============================================================
         // SUBMIT TUTOR REQUEST (From Dropdown)
         // ============================================================
-        function submitTutorRequest() {
-            const select = document.getElementById('requestChildSelect');
-            const childId = select.value;
-            
-            if (!childId) {
-                alert('Please select a child first.');
-                return;
+            function submitTutorRequest() {
+                const select = document.getElementById('requestChildSelect');
+                const childId = select.value;
+                
+                if (!childId) {
+                    alert('Please select a child first.');
+                    return;
+                }
+                
+                submitTutorRequestForChild(childId);
             }
-            
-            submitTutorRequestForChild(childId);
+        
+            // ============================================================
+            // SUBMIT TUTOR REQUEST (For a specific child)
+            // ============================================================
+    function submitTutorRequestForChild(childId) {
+        const child = childrenData.find(c => c.id === childId);
+        if (!child) {
+            alert('Child not found.');
+            return;
         }
-    
-        // ============================================================
-        // SUBMIT TUTOR REQUEST (For a specific child)
-        // ============================================================
-        function submitTutorRequestForChild(childId) {
-            const child = childrenData.find(c => c.id === childId);
-            if (!child) {
-                alert('Child not found.');
-                return;
-            }
-            
-            const db = firebase.firestore();
-            
-            db.collection('tutor_requests')
-                .where('childId', '==', childId)
-                .where('status', 'in', ['pending', 'matched'])
-                .get()
-                .then(function(snapshot) {
-                    if (!snapshot.empty) {
-                        alert('This child already has a pending or matched tutor request.');
-                        return;
-                    }
-                    
-                    return db.collection('tutor_requests').add({
-                        parentUid: parentUid,
-                        childId: childId,
-                        childName: child.fullName,
-                        grade: child.grade,
-                        subjects: child.subjects || [],
-                        status: 'pending',
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    });
-                })
-                .then(function(docRef) {
-                    if (docRef) {
-                        alert('✅ Tutor request sent successfully! A tutor will be matched with your child shortly.');
-                        loadParentData(parentUid);
-                    }
-                })
-                .catch(function(error) {
-                    console.error('Error submitting request:', error);
-                    alert('Error: ' + error.message);
+        
+        // Check if child already has a pending request
+        const db = firebase.firestore();
+        db.collection('tutor_requests')
+            .where('childId', '==', childId)
+            .where('status', 'in', ['pending', 'matched'])
+            .get()
+            .then(function(snapshot) {
+                if (!snapshot.empty) {
+                    alert('This child already has a pending or matched tutor request.');
+                    return;
+                }
+                
+                // Create the request
+                return db.collection('tutor_requests').add({
+                    parentUid: parentUid,
+                    childId: childId,
+                    childName: child.fullName,
+                    grade: child.grade,
+                    subjects: child.subjects || [],
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
                 });
-        }
+            })
+            .then(function(docRef) {
+                if (docRef) {
+                    alert('✅ Tutor request sent successfully! A tutor will be matched with your child shortly.');
+                    loadParentData(parentUid);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error submitting request:', error);
+                alert('Error: ' + error.message);
+            });
+    }
     
         // ============================================================
         // REMOVE CHILD
