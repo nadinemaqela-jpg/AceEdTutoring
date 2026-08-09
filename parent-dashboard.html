@@ -20,6 +20,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -86,7 +94,6 @@
             font-weight: 500;
         }
         
-        /* NAVIGATION */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -190,7 +197,6 @@
             display: none !important;
         }
         
-        /* SIDEBARS */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -272,7 +278,6 @@
             color: #f39c12;
         }
         
-        /* Dashboard Styles */
         .dashboard-hero {
             background: linear-gradient(135deg, #2c3e50, #1e2a3a);
             color: white;
@@ -323,7 +328,6 @@
             text-decoration: underline;
         }
         
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -356,7 +360,6 @@
             margin-bottom: 10px;
         }
         
-        /* Children Section */
         .children-section {
             background: white;
             border-radius: 20px;
@@ -463,18 +466,6 @@
             background: #c0392b;
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-        }
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-        
-        /* Requests Section */
         .requests-section {
             background: white;
             border-radius: 20px;
@@ -553,37 +544,95 @@
             color: #3498db;
             width: 20px;
         }
-        .request-card .request-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
         }
-        .request-card .request-actions .btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-        .request-card .request-actions .btn.view {
-            background: #3498db;
-            color: white;
-        }
-        .request-card .request-actions .btn.view:hover {
-            background: #2471a3;
-        }
-        .request-card .request-actions .btn.cancel {
-            background: #e74c3c;
-            color: white;
-        }
-        .request-card .request-actions .btn.cancel:hover {
-            background: #c0392b;
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ddd;
         }
         
-        /* Footer */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+        .modal-content .form-group {
+            margin-bottom: 15px;
+        }
+        .modal-content .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        .modal-content .form-group input, 
+        .modal-content .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .modal-content .form-group input:focus,
+        .modal-content .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .modal-content .btn-submit {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .modal-content .btn-submit:hover {
+            background: #1e8449;
+        }
+        
         .footer-modern {
             background: #0f1720;
             color: #e2e8f0;
@@ -703,84 +752,6 @@
         }
         .footer-bottom a:hover {
             color: #e74c3c;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .modal-close:hover {
-            color: #e74c3c;
-        }
-        .modal-content h2 {
-            margin-bottom: 20px;
-        }
-        .modal-content .form-group {
-            margin-bottom: 15px;
-        }
-        .modal-content .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-        .modal-content .form-group input, 
-        .modal-content .form-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-        .modal-content .form-group input:focus,
-        .modal-content .form-group select:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-        .modal-content .btn-submit {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        .modal-content .btn-submit:hover {
-            background: #1e8449;
         }
         
         @media (max-width: 768px) {
@@ -951,6 +922,29 @@
             </div>
         </div>
 
+        <!-- Request a Tutor -->
+        <div class="requests-section">
+            <h2>
+                <span><i class="fas fa-handshake"></i> Request a Tutor</span>
+            </h2>
+            <div class="request-card" style="background: #f8fafd;">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="color: #555;">
+                        <i class="fas fa-info-circle" style="color: #3498db;"></i>
+                        Select a child to request a tutor for. The system will match you with an available tutor based on the subject and grade.
+                    </p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <select id="requestChildSelect" style="flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; min-width: 200px;">
+                            <option value="">Select a child...</option>
+                        </select>
+                        <button class="btn" style="background: #f39c12; color: white; padding: 10px 25px; border: none; border-radius: 30px; cursor: pointer; font-weight: 600;" onclick="submitTutorRequest()">
+                            <i class="fas fa-paper-plane"></i> Request Tutor
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Recent Requests -->
         <div class="requests-section">
             <h2>
@@ -1027,13 +1021,61 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-    <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
+    <!-- FOOTER -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>AceEd Tutoring</h4>
+                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring.</p>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tutors.html">Our Tutors</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="tutor-application.html">Become a Tutor</a></li>
+                        <li><a href="register.html">Register Now</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects We Cover</h4>
+                    <ul>
+                        <li>Mathematics & Maths Lit</li>
+                        <li>Physical Sciences & Life Science</li>
+                        <li>Accounting & Economics</li>
+                        <li>Geography & Business Studies</li>
+                        <li>History & Tourism</li>
+                        <li>CAT</li>
+                        <li>Afrikaans & English</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
+                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
+                    <div style="margin-top: 12px;">
+                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
+                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
+                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // ============================================================
@@ -1115,7 +1157,6 @@
             document.getElementById(modalId).classList.remove('show');
         }
 
-        // Close modal on overlay click
         document.getElementById('addChildModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal('addChildModal');
@@ -1123,11 +1164,15 @@
         });
 
         // ============================================================
-        // LOAD PARENT DATA
+        // VARIABLES
         // ============================================================
         let childrenData = [];
         let parentUid = '';
+        let allRequests = [];
 
+        // ============================================================
+        // LOAD PARENT DATA
+        // ============================================================
         function loadParentData(uid) {
             parentUid = uid;
             const db = firebase.firestore();
@@ -1142,11 +1187,29 @@
                         childrenData.push({ id: doc.id, ...doc.data() });
                     });
                     renderChildren();
+                    populateChildDropdown();
+                    loadRequests();
                     updateStats();
                 })
                 .catch(function(error) {
                     console.error('Error loading children:', error);
                 });
+        }
+
+        // ============================================================
+        // POPULATE CHILD DROPDOWN
+        // ============================================================
+        function populateChildDropdown() {
+            const select = document.getElementById('requestChildSelect');
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">Select a child...</option>';
+            childrenData.forEach(function(child) {
+                const option = document.createElement('option');
+                option.value = child.id;
+                option.textContent = child.fullName + ' (Grade ' + child.grade + ')';
+                select.appendChild(option);
+            });
         }
 
         // ============================================================
@@ -1179,7 +1242,7 @@
                             <div><i class="fas fa-calendar-plus"></i> Added: ${child.createdAt ? new Date(child.createdAt).toLocaleDateString() : 'N/A'}</div>
                         </div>
                         <div class="child-actions">
-                            <button class="btn request" onclick="requestTutor('${child.id}')">
+                            <button class="btn request" onclick="submitTutorRequestForChild('${child.id}')">
                                 <i class="fas fa-handshake"></i> Request Tutor
                             </button>
                             <button class="btn view" onclick="viewChildProgress('${child.id}')">
@@ -1196,18 +1259,188 @@
         }
 
         // ============================================================
-        // UPDATE STATS
+        // LOAD REQUESTS
         // ============================================================
-        function updateStats() {
-            document.getElementById('childrenCount').textContent = childrenData.length;
-            // Pending requests and active bookings will be updated later
-            document.getElementById('pendingRequestsCount').textContent = '0';
-            document.getElementById('activeBookingsCount').textContent = '0';
-            document.getElementById('requestsBadge').textContent = '0';
+        function loadRequests() {
+            const db = firebase.firestore();
+            db.collection('tutor_requests')
+                .where('parentUid', '==', parentUid)
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then(function(snapshot) {
+                    allRequests = [];
+                    snapshot.forEach(function(doc) {
+                        allRequests.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderRequests();
+                })
+                .catch(function(error) {
+                    console.error('Error loading requests:', error);
+                });
         }
 
         // ============================================================
-        // ADD CHILD
+        // RENDER REQUESTS
+        // ============================================================
+        function renderRequests() {
+            const container = document.getElementById('recentRequests');
+            
+            if (allRequests.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No recent requests.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            allRequests.slice(0, 5).forEach(function(req) {
+                const statusClass = req.status || 'pending';
+                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
+                const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
+
+                html += `
+                    <div class="request-card">
+                        <div class="request-header">
+                            <h3>${req.childName} - ${req.grade}</h3>
+                            <span class="status ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="request-details">
+                            <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
+                            <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // UPDATE STATS
+        // ============================================================
+        function updateStats() {
+            const db = firebase.firestore();
+            
+            // Update children count
+            document.getElementById('childrenCount').textContent = childrenData.length;
+            
+            // Count pending requests
+            db.collection('tutor_requests')
+                .where('parentUid', '==', parentUid)
+                .where('status', '==', 'pending')
+                .get()
+                .then(function(snapshot) {
+                    const pendingCount = snapshot.size;
+                    document.getElementById('pendingRequestsCount').textContent = pendingCount;
+                    document.getElementById('requestsBadge').textContent = pendingCount;
+                })
+                .catch(function(error) {
+                    console.error('Error counting pending requests:', error);
+                });
+            
+            // Count matched/booked requests
+            db.collection('tutor_requests')
+                .where('parentUid', '==', parentUid)
+                .where('status', 'in', ['matched', 'booked'])
+                .get()
+                .then(function(snapshot) {
+                    document.getElementById('activeBookingsCount').textContent = snapshot.size;
+                })
+                .catch(function(error) {
+                    console.error('Error counting active bookings:', error);
+                });
+        }
+
+        // ============================================================
+        // SUBMIT TUTOR REQUEST (From Dropdown)
+        // ============================================================
+        function submitTutorRequest() {
+            const select = document.getElementById('requestChildSelect');
+            const childId = select.value;
+            
+            if (!childId) {
+                alert('Please select a child first.');
+                return;
+            }
+            
+            submitTutorRequestForChild(childId);
+        }
+
+        // ============================================================
+        // SUBMIT TUTOR REQUEST (For a specific child)
+        // ============================================================
+        function submitTutorRequestForChild(childId) {
+            const child = childrenData.find(c => c.id === childId);
+            if (!child) {
+                alert('Child not found.');
+                return;
+            }
+            
+            const db = firebase.firestore();
+            
+            // Check if child already has a pending request
+            db.collection('tutor_requests')
+                .where('childId', '==', childId)
+                .where('status', 'in', ['pending', 'matched'])
+                .get()
+                .then(function(snapshot) {
+                    if (!snapshot.empty) {
+                        alert('This child already has a pending or matched tutor request.');
+                        return;
+                    }
+                    
+                    // Create the request
+                    return db.collection('tutor_requests').add({
+                        parentUid: parentUid,
+                        childId: childId,
+                        childName: child.fullName,
+                        grade: child.grade,
+                        subjects: child.subjects || [],
+                        status: 'pending',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    });
+                })
+                .then(function(docRef) {
+                    if (docRef) {
+                        alert('✅ Tutor request sent successfully! A tutor will be matched with your child shortly.');
+                        loadParentData(parentUid);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error submitting request:', error);
+                    alert('Error: ' + error.message);
+                });
+        }
+
+        // ============================================================
+        // REMOVE CHILD
+        // ============================================================
+        function removeChild(childId) {
+            if (!confirm('Are you sure you want to remove this child?')) return;
+
+            const db = firebase.firestore();
+            db.collection('children').doc(childId).delete()
+                .then(function() {
+                    alert('Child removed successfully.');
+                    loadParentData(parentUid);
+                })
+                .catch(function(error) {
+                    alert('Error: ' + error.message);
+                });
+        }
+
+        // ============================================================
+        // VIEW CHILD PROGRESS (Placeholder)
+        // ============================================================
+        function viewChildProgress(childId) {
+            alert('Child progress feature coming soon!');
+        }
+
+        // ============================================================
+        // ADD CHILD FORM
         // ============================================================
         document.getElementById('addChildForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1241,37 +1474,6 @@
                 alert('Error adding child: ' + error.message);
             }
         });
-
-        // ============================================================
-        // REMOVE CHILD
-        // ============================================================
-        function removeChild(childId) {
-            if (!confirm('Are you sure you want to remove this child?')) return;
-
-            const db = firebase.firestore();
-            db.collection('children').doc(childId).delete()
-                .then(function() {
-                    alert('Child removed successfully.');
-                    loadParentData(parentUid);
-                })
-                .catch(function(error) {
-                    alert('Error: ' + error.message);
-                });
-        }
-
-        // ============================================================
-        // REQUEST TUTOR (Placeholder - Future Feature)
-        // ============================================================
-        function requestTutor(childId) {
-            alert('Tutor request feature coming soon!');
-        }
-
-        // ============================================================
-        // VIEW CHILD PROGRESS (Placeholder - Future Feature)
-        // ============================================================
-        function viewChildProgress(childId) {
-            alert('Child progress feature coming soon!');
-        }
 
         // ============================================================
         // CART BADGE
