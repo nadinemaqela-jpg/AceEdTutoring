@@ -1091,7 +1091,7 @@
             }
             document.body.style.overflow = 'hidden';
         }
-
+    
         function closeSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.remove('open');
@@ -1102,29 +1102,37 @@
             }
             document.body.style.overflow = 'auto';
         }
-
+    
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
                 closeSidebar('dot');
             }
         });
-
+    
         // ============================================================
         // AUTH - CHECK USER ROLE
         // ============================================================
+        let parentUid = '';
+        let childrenData = [];
+        let allRequests = [];
+    
         firebase.auth().onAuthStateChanged(async function(user) {
             if (!user) {
                 window.location.href = 'signin.html?redirect=parent-dashboard.html';
                 return;
             }
-
+    
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = doc.data();
                 const role = userData.role;
-
+                
+                console.log('🔍 User role:', role);
+                console.log('🔍 User UID:', user.uid);
+    
                 if (role === 'parent') {
+                    parentUid = user.uid;
                     document.getElementById('parentContent').style.display = 'block';
                     document.getElementById('parentName').textContent = userData.fullName || user.email || 'Parent';
                     loadParentData(user.uid);
@@ -1136,7 +1144,7 @@
                 document.getElementById('accessDenied').style.display = 'block';
             }
         });
-
+    
         // ============================================================
         // LOGOUT
         // ============================================================
@@ -1145,45 +1153,41 @@
                 window.location.href = 'index.html';
             });
         }
-
+    
         // ============================================================
         // MODAL CONTROLS
         // ============================================================
         function openAddChildModal() {
             document.getElementById('addChildModal').classList.add('show');
         }
-
+    
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('show');
         }
-
+    
         document.getElementById('addChildModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal('addChildModal');
             }
         });
-
-        // ============================================================
-        // VARIABLES
-        // ============================================================
-        let childrenData = [];
-        let parentUid = '';
-        let allRequests = [];
-
+    
         // ============================================================
         // LOAD PARENT DATA
         // ============================================================
         function loadParentData(uid) {
-            parentUid = uid;
             const db = firebase.firestore();
+            
+            console.log('🔍 Loading children for parent:', uid);
             
             db.collection('children')
                 .where('parentUid', '==', uid)
                 .orderBy('createdAt', 'desc')
                 .get()
                 .then(function(snapshot) {
+                    console.log('✅ Children found:', snapshot.size);
                     childrenData = [];
                     snapshot.forEach(function(doc) {
+                        console.log('📄 Child:', doc.id, doc.data());
                         childrenData.push({ id: doc.id, ...doc.data() });
                     });
                     renderChildren();
@@ -1192,10 +1196,11 @@
                     updateStats();
                 })
                 .catch(function(error) {
-                    console.error('Error loading children:', error);
+                    console.error('❌ Error loading children:', error);
+                    alert('Error loading children: ' + error.message);
                 });
         }
-
+    
         // ============================================================
         // POPULATE CHILD DROPDOWN
         // ============================================================
@@ -1210,8 +1215,9 @@
                 option.textContent = child.fullName + ' (Grade ' + child.grade + ')';
                 select.appendChild(option);
             });
+            console.log('✅ Dropdown populated with', childrenData.length, 'children');
         }
-
+    
         // ============================================================
         // RENDER CHILDREN
         // ============================================================
@@ -1227,7 +1233,7 @@
                 `;
                 return;
             }
-
+    
             let html = '';
             childrenData.forEach(function(child) {
                 const subjects = child.subjects ? child.subjects.join(', ') : 'Not specified';
@@ -1257,7 +1263,7 @@
             });
             container.innerHTML = html;
         }
-
+    
         // ============================================================
         // LOAD REQUESTS
         // ============================================================
@@ -1278,7 +1284,7 @@
                     console.error('Error loading requests:', error);
                 });
         }
-
+    
         // ============================================================
         // RENDER REQUESTS
         // ============================================================
@@ -1294,13 +1300,13 @@
                 `;
                 return;
             }
-
+    
             let html = '';
             allRequests.slice(0, 5).forEach(function(req) {
                 const statusClass = req.status || 'pending';
                 const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
                 const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-
+    
                 html += `
                     <div class="request-card">
                         <div class="request-header">
@@ -1316,17 +1322,15 @@
             });
             container.innerHTML = html;
         }
-
+    
         // ============================================================
         // UPDATE STATS
         // ============================================================
         function updateStats() {
             const db = firebase.firestore();
             
-            // Update children count
             document.getElementById('childrenCount').textContent = childrenData.length;
             
-            // Count pending requests
             db.collection('tutor_requests')
                 .where('parentUid', '==', parentUid)
                 .where('status', '==', 'pending')
@@ -1340,7 +1344,6 @@
                     console.error('Error counting pending requests:', error);
                 });
             
-            // Count matched/booked requests
             db.collection('tutor_requests')
                 .where('parentUid', '==', parentUid)
                 .where('status', 'in', ['matched', 'booked'])
@@ -1352,7 +1355,7 @@
                     console.error('Error counting active bookings:', error);
                 });
         }
-
+    
         // ============================================================
         // SUBMIT TUTOR REQUEST (From Dropdown)
         // ============================================================
@@ -1367,7 +1370,7 @@
             
             submitTutorRequestForChild(childId);
         }
-
+    
         // ============================================================
         // SUBMIT TUTOR REQUEST (For a specific child)
         // ============================================================
@@ -1380,7 +1383,6 @@
             
             const db = firebase.firestore();
             
-            // Check if child already has a pending request
             db.collection('tutor_requests')
                 .where('childId', '==', childId)
                 .where('status', 'in', ['pending', 'matched'])
@@ -1391,7 +1393,6 @@
                         return;
                     }
                     
-                    // Create the request
                     return db.collection('tutor_requests').add({
                         parentUid: parentUid,
                         childId: childId,
@@ -1414,13 +1415,13 @@
                     alert('Error: ' + error.message);
                 });
         }
-
+    
         // ============================================================
         // REMOVE CHILD
         // ============================================================
         function removeChild(childId) {
             if (!confirm('Are you sure you want to remove this child?')) return;
-
+    
             const db = firebase.firestore();
             db.collection('children').doc(childId).delete()
                 .then(function() {
@@ -1431,14 +1432,14 @@
                     alert('Error: ' + error.message);
                 });
         }
-
+    
         // ============================================================
         // VIEW CHILD PROGRESS (Placeholder)
         // ============================================================
         function viewChildProgress(childId) {
             alert('Child progress feature coming soon!');
         }
-
+    
         // ============================================================
         // ADD CHILD FORM
         // ============================================================
@@ -1449,32 +1450,37 @@
             const grade = document.getElementById('childGrade').value;
             const subjectSelect = document.getElementById('childSubject');
             const subjects = Array.from(subjectSelect.selectedOptions).map(opt => opt.value);
-
+    
             if (!fullName || !grade) {
                 alert('Please fill in all required fields.');
                 return;
             }
-
+    
             try {
                 const db = firebase.firestore();
-                await db.collection('children').add({
+                const docRef = await db.collection('children').add({
                     parentUid: parentUid,
                     fullName: fullName,
                     grade: grade,
                     subjects: subjects,
                     createdAt: new Date().toISOString()
                 });
-
+                
+                console.log('✅ Child added with ID:', docRef.id);
+                
                 closeModal('addChildModal');
                 document.getElementById('addChildForm').reset();
+                
+                // Force reload data
                 loadParentData(parentUid);
+                
                 alert('Child added successfully!');
             } catch (error) {
                 console.error('Error adding child:', error);
                 alert('Error adding child: ' + error.message);
             }
         });
-
+    
         // ============================================================
         // CART BADGE
         // ============================================================
@@ -1491,15 +1497,15 @@
                 }
             }
         }
-
+    
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
         });
-
+    
         document.addEventListener('cartUpdated', function() {
             updateCartBadge();
         });
-
+    
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
