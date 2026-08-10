@@ -524,6 +524,10 @@
             background: #cce5ff;
             color: #004085;
         }
+        .request-card .request-header .status.accepted {
+            background: #d4edda;
+            color: #155724;
+        }
         .request-card .request-header .status.booked {
             background: #d4edda;
             color: #155724;
@@ -556,7 +560,6 @@
             color: #ddd;
         }
         
-        /* Pricing Cards */
         .pricing-card {
             border: 1px solid #e0e0e0;
             border-radius: 16px;
@@ -581,6 +584,36 @@
         }
         .btn-add-cart:hover {
             background: #e67e22;
+            transform: translateY(-2px);
+        }
+        
+        .btn-pay {
+            padding: 8px 15px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-pay:hover {
+            background: #1e8449;
+            transform: translateY(-2px);
+        }
+        
+        .btn-whatsapp {
+            padding: 8px 15px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-whatsapp:hover {
+            background: #128C7E;
             transform: translateY(-2px);
         }
         
@@ -1290,7 +1323,6 @@
                     populateChildDropdown();
                     populateChildDropdowns();
                     loadRequests();
-                    updateStats();
                 })
                 .catch(function(error) {
                     console.error('Error loading children:', error);
@@ -1391,10 +1423,16 @@
                 .get()
                 .then(function(snapshot) {
                     allRequests = [];
+                    let activeBookings = 0;
                     snapshot.forEach(function(doc) {
-                        allRequests.push({ id: doc.id, ...doc.data() });
+                        const req = doc.data();
+                        allRequests.push({ id: doc.id, ...req });
+                        if (req.status === 'accepted' || req.status === 'booked' || req.status === 'completed') {
+                            activeBookings++;
+                        }
                     });
                     renderRequests();
+                    updateStats(activeBookings);
                 })
                 .catch(function(error) {
                     console.error('Error loading requests:', error);
@@ -1423,17 +1461,51 @@
                 const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
                 const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
                 
-                let whatsappButton = '';
-                if (req.status === 'accepted' && req.tutorUid) {
-                    whatsappButton = `
+                let actionButtons = '';
+                
+                if (req.status === 'pending') {
+                    actionButtons = `
+                        <span style="color: #f39c12; font-weight: 500;">
+                            <i class="fas fa-clock"></i> Waiting for matching...
+                        </span>
+                    `;
+                } else if (req.status === 'matched' || req.status === 'assigned') {
+                    actionButtons = `
+                        <span style="color: #3498db; font-weight: 500;">
+                            <i class="fas fa-user-check"></i> Matched with ${req.tutorName || 'a tutor'}!
+                        </span>
+                    `;
+                } else if (req.status === 'accepted' || req.status === 'booked') {
+                    actionButtons = `
                         <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                             <span style="color: #27ae60; font-weight: 500;">
                                 <i class="fas fa-check-circle"></i> Matched with ${req.tutorName || 'Tutor'}!
                             </span>
-                            <button class="btn" style="background: #25D366; color: white; padding: 8px 20px; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;" onclick="openWhatsApp('${req.tutorUid}')">
+                            <button onclick="payForService('Tutoring Session', 100, 'Hourly')" 
+                                    style="background: #27ae60; color: white; padding: 8px 20px; 
+                                           border: none; border-radius: 30px; cursor: pointer; 
+                                           font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
+                                <i class="fas fa-credit-card"></i> Pay Now
+                            </button>
+                            <button onclick="openWhatsApp('${req.tutorUid}')" 
+                                    style="background: #25D366; color: white; padding: 8px 20px; 
+                                           border: none; border-radius: 30px; cursor: pointer; 
+                                           font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
                                 <i class="fab fa-whatsapp"></i> Chat Now
                             </button>
                         </div>
+                    `;
+                } else if (req.status === 'declined') {
+                    actionButtons = `
+                        <span style="color: #e74c3c; font-weight: 500;">
+                            <i class="fas fa-times-circle"></i> Tutor declined
+                        </span>
+                    `;
+                } else if (req.status === 'completed') {
+                    actionButtons = `
+                        <span style="color: #27ae60; font-weight: 500;">
+                            <i class="fas fa-check-double"></i> Completed
+                        </span>
                     `;
                 }
 
@@ -1447,7 +1519,7 @@
                             <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
                             <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
                         </div>
-                        ${whatsappButton}
+                        ${actionButtons}
                     </div>
                 `;
             });
@@ -1457,7 +1529,7 @@
         // ============================================================
         // UPDATE STATS
         // ============================================================
-        function updateStats() {
+        function updateStats(activeBookings) {
             const db = firebase.firestore();
             
             document.getElementById('childrenCount').textContent = childrenData.length;
@@ -1475,16 +1547,8 @@
                     console.error('Error counting pending requests:', error);
                 });
             
-            db.collection('tutor_requests')
-                .where('parentUid', '==', parentUid)
-                .where('status', 'in', ['matched', 'booked'])
-                .get()
-                .then(function(snapshot) {
-                    document.getElementById('activeBookingsCount').textContent = snapshot.size;
-                })
-                .catch(function(error) {
-                    console.error('Error counting active bookings:', error);
-                });
+            // ✅ Update Active Bookings count
+            document.getElementById('activeBookingsCount').textContent = activeBookings || 0;
         }
 
         // ============================================================
@@ -1516,7 +1580,7 @@
             
             db.collection('tutor_requests')
                 .where('childId', '==', childId)
-                .where('status', 'in', ['pending', 'matched'])
+                .where('status', 'in', ['pending', 'matched', 'assigned'])
                 .get()
                 .then(function(snapshot) {
                     if (!snapshot.empty) {
@@ -1595,6 +1659,51 @@
             }, 2000);
             
             updateCartBadge();
+        }
+
+        // ============================================================
+        // PAY FOR SERVICE
+        // ============================================================
+        function payForService(serviceName, amount, serviceType) {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                alert('Please log in again.');
+                return;
+            }
+            
+            const db = firebase.firestore();
+            db.collection('users').doc(user.uid).get()
+                .then(function(doc) {
+                    const userData = doc.data();
+                    const parentName = userData.fullName || 'Parent';
+                    
+                    const orderId = 'ACE' + Date.now();
+                    
+                    return db.collection('payments').add({
+                        parentUid: user.uid,
+                        service: serviceName,
+                        amount: amount,
+                        type: serviceType,
+                        status: 'pending',
+                        orderId: orderId,
+                        createdAt: new Date().toISOString()
+                    });
+                })
+                .then(function() {
+                    const paymentData = {
+                        service: serviceName,
+                        amount: amount,
+                        type: serviceType,
+                        orderId: 'ACE' + Date.now()
+                    };
+                    localStorage.setItem('parent_payment', JSON.stringify(paymentData));
+                    
+                    window.location.href = 'checkout.html?from=parent_dashboard';
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    alert('Error processing payment: ' + error.message);
+                });
         }
 
         // ============================================================
