@@ -961,6 +961,100 @@
 
     </div>
 
+    <!-- Price List & Payments Section -->
+    <div class="requests-section">
+        <h2>
+            <span><i class="fas fa-credit-card"></i> Services & Payments</span>
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 15px;">
+            
+            <!-- 1-on-1 Tutoring -->
+            <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="color: #1e2a3a; font-size: 1.1rem;">
+                        <i class="fas fa-user" style="color: #3498db;"></i> 1-on-1 Tutoring
+                    </h3>
+                    <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R100 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/hour</small></span>
+                </div>
+                <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">Personalized attention, 1-on-1 sessions</p>
+                <button onclick="payForService('1-on-1 Tutoring', 100, 'Hourly')" class="btn-pay" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+            
+            <!-- Monthly Subscription -->
+            <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="color: #1e2a3a; font-size: 1.1rem;">
+                        <i class="fas fa-calendar-alt" style="color: #f39c12;"></i> Monthly Subscription
+                    </h3>
+                    <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R600 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/month</small></span>
+                </div>
+                <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">2 sessions/week • Save 25%</p>
+                <button onclick="payForService('Monthly Subscription', 600, 'Monthly')" class="btn-pay" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+            
+            <!-- Group Sessions -->
+            <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="color: #1e2a3a; font-size: 1.1rem;">
+                        <i class="fas fa-users" style="color: #8e44ad;"></i> Group Sessions
+                    </h3>
+                    <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R300 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/month</small></span>
+                </div>
+                <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">2 sessions/week • Save 50%</p>
+                <button onclick="payForService('Group Sessions', 300, 'Monthly')" class="btn-pay" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+            
+            <!-- Exam Prep Bootcamp -->
+            <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="color: #1e2a3a; font-size: 1.1rem;">
+                        <i class="fas fa-bolt" style="color: #e67e22;"></i> Exam Prep Bootcamp
+                    </h3>
+                    <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R100 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/week</small></span>
+                </div>
+                <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">3 hours intensive revision</p>
+                <button onclick="payForService('Exam Prep Bootcamp', 100, 'Weekly')" class="btn-pay" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+            
+            <!-- WhatsApp Support -->
+            <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="color: #1e2a3a; font-size: 1.1rem;">
+                        <i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp Support
+                    </h3>
+                    <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R50 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/month</small></span>
+                </div>
+                <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">Quick questions, homework help</p>
+                <button onclick="payForService('WhatsApp Support', 50, 'Monthly')" class="btn-pay" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+            
+            <!-- Application Services -->
+            <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="color: #1e2a3a; font-size: 1.1rem;">
+                        <i class="fas fa-university" style="color: #3498db;"></i> Application Help
+                    </h3>
+                    <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R80 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/app</small></span>
+                </div>
+                <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">University application form assistance</p>
+                <button onclick="payForService('Application Help', 80, 'Application')" class="btn-pay" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <!-- ACCESS DENIED -->
     <div class="container" id="accessDenied" style="display:none;">
         <div style="background: #f8d7da; border-left: 4px solid #e74c3c; padding: 40px; border-radius: 20px; text-align: center; margin: 30px 0;">
