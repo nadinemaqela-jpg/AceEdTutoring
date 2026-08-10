@@ -1417,23 +1417,21 @@
                         <td><span class="status ${statusClass}">${statusLabel}</span></td>
                         <td>${date}</td>
                         <td>
-                            ${req.status === 'pending' ? `
-                                <button class="btn-sm assign" onclick="openAssignModal('${req.id}')">
-                                    <i class="fas fa-user-plus"></i> Assign
-                                </button>
-                            ` : ''}
-                            ${req.status === 'assigned' ? `
-                                <span style="font-size:0.7rem; color:#3498db;">
-                                    <i class="fas fa-spinner fa-spin"></i> Waiting
-                                </span>
-                            ` : ''}
-                            ${req.status === 'accepted' ? `
-                                <span style="font-size:0.7rem; color:#27ae60;">
-                                    <i class="fas fa-check"></i> Accepted
-                                </span>
-                            ` : ''}
-                            <button class="btn-sm delete" onclick="deleteRequest('${req.id}')">
-                                <i class="fas fa-trash"></i>
+                            ${req.status === 'pending' || req.status === 'declined' ? `
+                            <button class="btn-sm assign" onclick="openAssignModal('${req.id}')">
+                                <i class="fas fa-user-plus"></i> ${req.status === 'declined' ? 'Reassign' : 'Assign'}
+                            </button>
+                        ` : ''}
+                        ${req.status === 'assigned' ? `
+                            <span style="font-size:0.7rem; color:#3498db;">
+                                <i class="fas fa-spinner fa-spin"></i> Waiting
+                            </span>
+                        ` : ''}
+                        ${req.status === 'accepted' ? `
+                            <span style="font-size:0.7rem; color:#27ae60;">
+                                <i class="fas fa-check"></i> Accepted
+                            </span>
+                        ` : ''}
                             </button>
                         </td>
                     </tr>
