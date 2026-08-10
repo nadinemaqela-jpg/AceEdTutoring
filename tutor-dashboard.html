@@ -997,16 +997,15 @@
             });
         }
 
-        // ============================================================
-        // LOAD ASSIGNED REQUESTS - FIXED (NO INDEX REQUIRED)
-        // ============================================================
+                // ============================================================
+                // LOAD ASSIGNED REQUESTS - FIXED (NO INDEX REQUIRED)
+                // ============================================================
         function loadAssignedRequests() {
             const db = firebase.firestore();
             const tutorUid = firebase.auth().currentUser.uid;
             
             console.log('🔍 Loading requests for tutor:', tutorUid);
             
-            // Get ALL requests where tutorUid matches (no status filter to avoid composite index)
             db.collection('tutor_requests')
                 .where('tutorUid', '==', tutorUid)
                 .get()
@@ -1034,7 +1033,7 @@
                     let acceptedCount = 0;
                     let totalRequests = 0;
                     
-                    // Sort manually by createdAt (since we can't use orderBy without index)
+                    // Sort manually by createdAt
                     const requests = [];
                     snapshot.forEach(function(doc) {
                         requests.push({ id: doc.id, ...doc.data() });
@@ -1051,8 +1050,27 @@
                         const statusClass = req.status || 'assigned';
                         const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
                         const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-                        
                         const isPending = req.status === 'assigned';
+                        
+                        // ============================================================
+                        // WHATSAPP BUTTON CODE - PUT RIGHT HERE
+                        // ============================================================
+                        let whatsappButton = '';
+                        if (req.status === 'accepted') {
+                            whatsappButton = `
+                                <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <span style="color: #27ae60; font-weight: 500;">
+                                        <i class="fas fa-check-circle"></i> You accepted this request from <strong>${req.parentName || 'Parent'}</strong>!
+                                    </span>
+                                    <button onclick="openWhatsAppParent('${req.parentUid}')" 
+                                            style="background: #25D366; color: white; padding: 8px 20px; 
+                                                   border: none; border-radius: 30px; cursor: pointer; 
+                                                   font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
+                                        <i class="fab fa-whatsapp"></i> Chat with Parent
+                                    </button>
+                                </div>
+                            `;
+                        }
                         
                         html += `
                             <div class="request-card">
@@ -1080,6 +1098,7 @@
                                         <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>
                                     ` : ''}
                                 </div>
+                                ${whatsappButton}
                             </div>
                         `;
                     });
@@ -1101,7 +1120,6 @@
                     `;
                 });
         }
-
         // ============================================================
         // ACCEPT REQUEST
         // ============================================================
