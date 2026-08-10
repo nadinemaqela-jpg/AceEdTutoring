@@ -929,6 +929,12 @@
         // AUTH - CHECK USER ROLE
         // ============================================================
         firebase.auth().onAuthStateChanged(async function(user) {
+            if (role === 'tutor') {
+                document.getElementById('tutorContent').style.display = 'block';
+                document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
+            loadAssignedRequests();  // ← Add this line
+            }
+            
             if (!user) {
                 window.location.href = 'signin.html?redirect=tutor-dashboard.html';
                 return;
