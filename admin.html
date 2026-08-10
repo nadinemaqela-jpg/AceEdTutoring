@@ -12,7 +12,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - AceEd Tutoring</title>
+    <title>Become a Tutor - AceEd Tutoring</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Favicon -->
@@ -24,9 +24,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     
     <style>
         * {
@@ -37,16 +35,11 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9edf2 100%);
+            color: #333;
+            line-height: 1.6;
             position: relative;
-            z-index: 2;
+            min-height: 100vh;
         }
         
         .bg-logo {
@@ -66,6 +59,14 @@
             height: 100%;
             object-fit: cover;
             opacity: 0.06;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
         }
         
         header {
@@ -94,7 +95,6 @@
             font-weight: 500;
         }
         
-        /* NAVIGATION */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -198,7 +198,6 @@
             display: none !important;
         }
         
-        /* SIDEBARS */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -280,316 +279,270 @@
             color: #f39c12;
         }
         
-        /* Admin Dashboard Styles */
-        .admin-header {
-            background: linear-gradient(135deg, #8e44ad, #6c3483);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 20px 0 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .admin-header h1 {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.8rem;
-        }
-        .admin-header h1 i {
-            color: #f1c40f;
-        }
-        .admin-header .user-info {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .btn-logout {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-logout:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .back-link {
-            display: inline-block;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 10px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .stat-card {
+        .form-card {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
+            border-radius: 24px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .stat-card .label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        .stat-card .icon {
+        .form-card h1 {
             font-size: 2rem;
-            margin-bottom: 10px;
+            color: #1e2a3a;
+            margin-bottom: 5px;
         }
-        .stat-card.pending .icon { color: #f39c12; }
-        .stat-card.assigned .icon { color: #3498db; }
-        .stat-card.accepted .icon { color: #27ae60; }
-        .stat-card.total .icon { color: #8e44ad; }
-        
-        /* Requests Table */
-        .table-section {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        .form-card .subtitle {
+            color: #7f8c8d;
             margin-bottom: 30px;
         }
-        .table-section h2 {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+        
+        .notice-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
         }
-        .table-section h2 .filter-btns {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .notice-box h3 {
+            color: #856404;
+            margin-bottom: 5px;
         }
-        .table-section h2 .filter-btns button {
-            background: #ecf0f1;
-            border: none;
-            padding: 6px 15px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
+        .notice-box p {
+            color: #856404;
+            font-size: 0.95rem;
         }
-        .table-section h2 .filter-btns button:hover {
-            background: #3498db;
-            color: white;
+        .notice-box ul {
+            padding-left: 20px;
+            color: #856404;
+            font-size: 0.95rem;
         }
-        .table-section h2 .filter-btns button.active {
-            background: #3498db;
-            color: white;
+        .notice-box ul li {
+            margin-bottom: 5px;
         }
         
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .form-group {
+            margin-bottom: 22px;
         }
-        th {
-            text-align: left;
-            padding: 10px 12px;
-            background: #f8f9fa;
+        label {
+            display: block;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #2c3e50;
-            border-bottom: 2px solid #e0e0e0;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
         }
-        td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
-            font-size: 0.9rem;
-        }
-        td .status {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-        td .status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-        td .status.assigned {
-            background: #cce5ff;
-            color: #004085;
-        }
-        td .status.accepted {
-            background: #d4edda;
-            color: #155724;
-        }
-        td .status.declined {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .btn-sm {
-            padding: 5px 12px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin: 2px;
-        }
-        .btn-sm.assign {
-            background: #3498db;
-            color: white;
-        }
-        .btn-sm.assign:hover {
-            background: #2471a3;
-        }
-        .btn-sm.view {
-            background: #8e44ad;
-            color: white;
-        }
-        .btn-sm.view:hover {
-            background: #6c3483;
-        }
-        .btn-sm.delete {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-sm.delete:hover {
-            background: #c0392b;
-        }
-        .btn-sm.accept {
-            background: #27ae60;
-            color: white;
-        }
-        .btn-sm.accept:hover {
-            background: #1e8449;
-        }
-        .btn-sm.decline {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-sm.decline:hover {
-            background: #c0392b;
-        }
-        
-        /* Assign Tutor Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .modal-close:hover {
+        label .required {
             color: #e74c3c;
         }
-        .modal-content h2 {
-            margin-bottom: 20px;
-            color: #1e2a3a;
-        }
-        .modal-content .form-group {
-            margin-bottom: 15px;
-        }
-        .modal-content .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-        .modal-content .form-group select {
+        input, select, textarea {
             width: 100%;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        .modal-content .form-group select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #3498db;
         }
-        .modal-content .btn-submit {
-            background: #27ae60;
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .radio-group input[type="radio"] {
+            width: auto;
+            padding: 0;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+            background: #f8fafd;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        .checkbox-group label:hover {
+            background: #eef2fc;
+            border-color: #3498db;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            padding: 0;
+        }
+        
+        /* ============================================================
+           FILE UPLOAD - UPDATED
+           ============================================================ */
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-upload:hover {
+            border-color: #3498db;
+            background: #f8fcff;
+        }
+        .file-upload i {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 8px;
+        }
+        .file-upload p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .file-upload .file-name {
+            color: #e74c3c;
+            margin-top: 5px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .file-upload .file-name.uploaded {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        .file-upload input[type="file"] {
+            display: none;
+        }
+        .file-required {
+            color: #e74c3c;
+            font-size: 0.8rem;
+        }
+        
+        /* Availability Grid */
+        .availability-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        .availability-day {
+            background: #f8fafd;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        .availability-day .day-label {
+            font-weight: 600;
+            color: #1e2a3a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .availability-day .day-label input[type="checkbox"] {
+            width: auto;
+        }
+        .availability-day select,
+        .availability-day input {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+        .availability-day select:last-child,
+        .availability-day input:last-child {
+            margin-bottom: 0;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
+            padding: 16px 30px;
+            border-radius: 40px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s;
+            margin-top: 10px;
         }
-        .modal-content .btn-submit:hover {
-            background: #1e8449;
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
         }
-        .modal-content .request-details {
-            background: #f8fafd;
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+        .success-box i {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        .success-box h2 {
+            color: #155724;
+        }
+        .success-box p {
+            color: #155724;
+            margin-top: 10px;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-        .modal-content .request-details p {
-            margin: 5px 0;
+            display: none;
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
+        .section-title {
+            color: #1e2a3a;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
+        .section-title i {
+            color: #3498db;
+            width: 28px;
         }
         
         .footer-modern {
@@ -714,23 +667,29 @@
         }
         
         @media (max-width: 768px) {
-            .admin-header {
+            .form-card {
+                padding: 25px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .radio-group {
                 flex-direction: column;
-                text-align: center;
-                gap: 15px;
+                gap: 10px;
             }
-            .stats-grid {
+            .checkbox-group label {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            .availability-grid {
                 grid-template-columns: 1fr 1fr;
-            }
-            .table-section {
-                overflow-x: auto;
             }
             .footer-grid {
                 gap: 30px;
             }
         }
         @media (max-width: 480px) {
-            .stats-grid {
+            .availability-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -811,115 +770,477 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <div class="container" id="adminContent" style="display:none;">
+    <div class="container">
 
-        <!-- Admin Header -->
-        <div class="admin-header">
-            <div>
-                <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
-                <div class="user-info">
-                    <i class="fas fa-user"></i> Welcome, <span id="adminName">Admin</span>
+        <!-- SUCCESS MESSAGE -->
+        <div class="form-card" id="successBox" style="display:none;">
+            <div class="success-box" style="display:block;">
+                <i class="fas fa-check-circle"></i>
+                <h2>Application Received! 🎉</h2>
+                <p>Your application has been submitted and is currently under review.</p>
+                <p style="margin-top: 10px; font-weight: 500;">You will be notified via email once your application has been reviewed.</p>
+                <a href="index.html" class="btn-submit" style="display: inline-block; width: auto; padding: 12px 30px; margin-top: 20px; text-decoration: none; background: #3498db;">
+                    <i class="fas fa-home"></i> Return to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- APPLICATION FORM -->
+        <div id="applicationForm">
+            <div class="form-card">
+                <h1><i class="fas fa-user-graduate"></i> Become an AceEd Tutor</h1>
+                <p class="subtitle">Join our team of passionate tutors and help students succeed.</p>
+
+                <!-- Notice Box -->
+                <div class="notice-box">
+                    <h3><i class="fas fa-info-circle"></i> Before You Apply</h3>
+                    <ul>
+                        <li><strong>Minimum Matric Average:</strong> 75% (unless you are a Teaching/Education Graduate)</li>
+                        <li><strong>Required Documents:</strong> ID/Passport, Matric Results, Proof of Registration, Formal Picture, Academic Transcript, CV, Proof of Residence</li>
+                        <li><strong>All tutoring is conducted online</strong> — no in-person sessions</li>
+                        <li>Questions? Email us at <strong>tutors@aceed.co.za</strong></li>
+                    </ul>
                 </div>
+
+                <div id="formError" class="error-message"></div>
+
+                <form id="tutorApplicationForm">
+                    <!-- ====================
+                         PERSONAL INFORMATION
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-user"></i> Personal Information</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" required placeholder="e.g., Nkululeko Nongcawula">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" required placeholder="your@email.com">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" required placeholder="e.g., 0631158739">
+                        </div>
+                        <div class="form-group">
+                            <label>Location (City/Town) <span class="required">*</span></label>
+                            <input type="text" id="location" required placeholder="e.g., Bizana, Eastern Cape">
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         EMERGENCY CONTACT
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-phone-alt"></i> Emergency Contact</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Emergency Contact Name <span class="required">*</span></label>
+                            <input type="text" id="emergencyName" required placeholder="Full name of emergency contact">
+                        </div>
+                        <div class="form-group">
+                            <label>Emergency Contact Number <span class="required">*</span></label>
+                            <input type="tel" id="emergencyPhone" required placeholder="e.g., 0631158739">
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         ACADEMIC INFORMATION
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-university"></i> Academic Information</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>University/Institution <span class="required">*</span></label>
+                            <input type="text" id="university" required placeholder="e.g., University of Cape Town">
+                        </div>
+                        <div class="form-group">
+                            <label>Degree/Programme <span class="required">*</span></label>
+                            <input type="text" id="degree" required placeholder="e.g., BSc Mathematics">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Year of Study <span class="required">*</span></label>
+                            <select id="yearOfStudy" required>
+                                <option value="">Select Year</option>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                                <option value="5">5th Year+</option>
+                                <option value="Graduated">Graduated</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Matric Average (%) <span class="required" id="matricRequired">*</span></label>
+                            <input type="number" id="matricAverage" placeholder="e.g., 78" min="0" max="100" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Are you a Teaching/Education Graduate? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="isTeachingGraduate" value="yes"> Yes</label>
+                            <label><input type="radio" name="isTeachingGraduate" value="no" checked> No</label>
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         DOCUMENTS (7 Documents) - FIXED
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-file-upload"></i> Documents</h3>
+                    <p style="color: #7f8c8d; margin-bottom: 20px;">Please upload the following documents (PDF, PNG, or JPG format). All documents are required.</p>
+
+                    <!-- Document 1: ID/Passport -->
+                    <div class="form-group">
+                        <label>ID / Passport <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('idDoc').click()">
+                            <i class="fas fa-id-card"></i>
+                            <p>Click to upload your ID or Passport</p>
+                            <div class="file-name" id="idDocName">No file selected</div>
+                            <input type="file" id="idDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('idDoc', 'idDocName')">
+                        </div>
+                    </div>
+
+                    <!-- Document 2: Matric Results -->
+                    <div class="form-group">
+                        <label>Matric Results <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('matricDoc').click()">
+                            <i class="fas fa-file-alt"></i>
+                            <p>Click to upload your Matric Results</p>
+                            <div class="file-name" id="matricDocName">No file selected</div>
+                            <input type="file" id="matricDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('matricDoc', 'matricDocName')">
+                        </div>
+                    </div>
+
+                    <!-- Document 3: Proof of Registration -->
+                    <div class="form-group">
+                        <label>Proof of Registration <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('registrationDoc').click()">
+                            <i class="fas fa-file-invoice"></i>
+                            <p>Click to upload your Proof of Registration (University enrollment letter)</p>
+                            <div class="file-name" id="registrationDocName">No file selected</div>
+                            <input type="file" id="registrationDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('registrationDoc', 'registrationDocName')">
+                        </div>
+                    </div>
+
+                    <!-- Document 4: Formal Picture -->
+                    <div class="form-group">
+                        <label>Formal Picture <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('photoDoc').click()">
+                            <i class="fas fa-camera"></i>
+                            <p>Click to upload a formal/headshot photo</p>
+                            <div class="file-name" id="photoDocName">No file selected</div>
+                            <input type="file" id="photoDoc" accept=".png,.jpg,.jpeg" onchange="updateFileName('photoDoc', 'photoDocName')">
+                        </div>
+                    </div>
+
+                    <!-- Document 5: Academic Transcript -->
+                    <div class="form-group">
+                        <label>Academic Transcript <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('transcriptDoc').click()">
+                            <i class="fas fa-file-pdf"></i>
+                            <p>Click to upload your Academic Transcript</p>
+                            <div class="file-name" id="transcriptDocName">No file selected</div>
+                            <input type="file" id="transcriptDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('transcriptDoc', 'transcriptDocName')">
+                        </div>
+                    </div>
+
+                    <!-- Document 6: CV -->
+                    <div class="form-group">
+                        <label>CV / Resume <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('cvDoc').click()">
+                            <i class="fas fa-file-word"></i>
+                            <p>Click to upload your CV or Resume</p>
+                            <div class="file-name" id="cvDocName">No file selected</div>
+                            <input type="file" id="cvDoc" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" onchange="updateFileName('cvDoc', 'cvDocName')">
+                        </div>
+                    </div>
+
+                    <!-- Document 7: Proof of Residence -->
+                    <div class="form-group">
+                        <label>Proof of Residence <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('residenceDoc').click()">
+                            <i class="fas fa-home"></i>
+                            <p>Click to upload your Proof of Residence (e.g., utility bill, bank statement)</p>
+                            <div class="file-name" id="residenceDocName">No file selected</div>
+                            <input type="file" id="residenceDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('residenceDoc', 'residenceDocName')">
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         TUTORING INFORMATION
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-chalkboard-teacher"></i> Tutoring Information</h3>
+
+                    <div class="form-group">
+                        <label>Subjects You Can Tutor <span class="required">*</span></label>
+                        <div class="checkbox-group" id="subjectsGroup">
+                            <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%;">Grade 8 &amp; 9</label>
+                            <label><input type="checkbox" value="Mathematics (Gr 8-9)"> Mathematics <span style="font-size:0.7rem; color:#999;">Gr 8-9</span></label>
+                            <label><input type="checkbox" value="Natural Sciences (Gr 8-9)"> Natural Sciences <span style="font-size:0.7rem; color:#999;">Gr 8-9</span></label>
+
+                            <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%; margin-top:10px;">Grade 10, 11 &amp; 12</label>
+                            <label><input type="checkbox" value="Mathematics (Gr 10-12)"> Mathematics <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Mathematical Literacy (Gr 10-12)"> Mathematical Literacy <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Physical Sciences (Gr 10-12)"> Physical Sciences <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Life Sciences (Gr 10-12)"> Life Sciences <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Accounting (Gr 10-12)"> Accounting <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Economics (Gr 10-12)"> Economics <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Business Studies (Gr 10-12)"> Business Studies <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Geography (Gr 10-12)"> Geography <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="History (Gr 10-12)"> History <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Tourism (Gr 10-12)"> Tourism <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="CAT (Gr 10-12)"> CAT <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="Afrikaans EAT (Gr 10-12)"> Afrikaans (EAT) <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                            <label><input type="checkbox" value="English HL (Gr 10-12)"> English HL <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Grades You Can Tutor <span class="required">*</span></label>
+                        <div class="checkbox-group" id="gradesGroup">
+                            <label><input type="checkbox" value="8"> Gr 8</label>
+                            <label><input type="checkbox" value="9"> Gr 9</label>
+                            <label><input type="checkbox" value="10"> Gr 10</label>
+                            <label><input type="checkbox" value="11"> Gr 11</label>
+                            <label><input type="checkbox" value="12"> Gr 12</label>
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         AVAILABILITY (Clean Data)
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-clock"></i> Availability</h3>
+                    <p style="color: #7f8c8d; margin-bottom: 15px;">Select which days you are available and indicate your start time and how many hours you can tutor.</p>
+
+                    <div class="availability-grid" id="availabilityGrid">
+                        <!-- Monday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="monAvailable" checked>
+                                <label for="monAvailable">Monday</label>
+                            </div>
+                            <select id="monStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="monHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+
+                        <!-- Tuesday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="tueAvailable" checked>
+                                <label for="tueAvailable">Tuesday</label>
+                            </div>
+                            <select id="tueStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="tueHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+
+                        <!-- Wednesday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="wedAvailable" checked>
+                                <label for="wedAvailable">Wednesday</label>
+                            </div>
+                            <select id="wedStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="wedHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+
+                        <!-- Thursday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="thuAvailable" checked>
+                                <label for="thuAvailable">Thursday</label>
+                            </div>
+                            <select id="thuStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="thuHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+
+                        <!-- Friday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="friAvailable" checked>
+                                <label for="friAvailable">Friday</label>
+                            </div>
+                            <select id="friStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="friHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+
+                        <!-- Saturday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="satAvailable" checked>
+                                <label for="satAvailable">Saturday</label>
+                            </div>
+                            <select id="satStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="satHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+
+                        <!-- Sunday -->
+                        <div class="availability-day">
+                            <div class="day-label">
+                                <input type="checkbox" id="sunAvailable" checked>
+                                <label for="sunAvailable">Sunday</label>
+                            </div>
+                            <select id="sunStart">
+                                <option value="">Start Time</option>
+                                <option value="06:00">06:00</option><option value="06:30">06:30</option>
+                                <option value="07:00">07:00</option><option value="07:30">07:30</option>
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option><option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option><option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option><option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option><option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                            <input type="number" id="sunHours" placeholder="Hours" min="0.5" max="12" step="0.5" value="2">
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         WEBSITE PROFILE
+                         ==================== -->
+                    <h3 class="section-title"><i class="fas fa-globe"></i> Website Profile</h3>
+
+                    <div class="form-group">
+                        <label>Would you like your tutor profile to be displayed on the AceEd website?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="showProfile" value="yes" checked> Yes</label>
+                            <label><input type="radio" name="showProfile" value="no"> No</label>
+                        </div>
+                    </div>
+
+                    <!-- ====================
+                         SUBMIT BUTTON
+                         ==================== -->
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Create Account & Submit Application
+                    </button>
+                </form>
             </div>
-            <button class="btn-logout" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
         </div>
 
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-
-        <!-- Stats -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card total">
-                <div class="icon"><i class="fas fa-clipboard-list"></i></div>
-                <div class="number" id="totalRequests">0</div>
-                <div class="label">Total Requests</div>
-            </div>
-            <div class="stat-card pending">
-                <div class="icon"><i class="fas fa-clock"></i></div>
-                <div class="number" id="pendingRequests">0</div>
-                <div class="label">Pending</div>
-            </div>
-            <div class="stat-card assigned">
-                <div class="icon"><i class="fas fa-user-check"></i></div>
-                <div class="number" id="assignedRequests">0</div>
-                <div class="label">Assigned to Tutors</div>
-            </div>
-            <div class="stat-card accepted">
-                <div class="icon"><i class="fas fa-check-circle"></i></div>
-                <div class="number" id="acceptedRequests">0</div>
-                <div class="label">Accepted</div>
-            </div>
-        </div>
-
-        <!-- Requests Table -->
-        <div class="table-section">
-            <h2>
-                <span><i class="fas fa-file-alt"></i> Tutor Requests</span>
-                <div class="filter-btns">
-                    <button class="active" data-filter="all" onclick="filterRequests('all')">All</button>
-                    <button data-filter="pending" onclick="filterRequests('pending')">Pending</button>
-                    <button data-filter="assigned" onclick="filterRequests('assigned')">Assigned</button>
-                    <button data-filter="accepted" onclick="filterRequests('accepted')">Accepted</button>
-                </div>
-            </h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Child</th>
-                            <th>Grade</th>
-                            <th>Subjects</th>
-                            <th>Parent</th>
-                            <th>Status</th>
-                            <th>Requested</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="requestsBody">
-                        <tr><td colspan="7" style="text-align:center; padding:30px; color:#7f8c8d;">Loading requests...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- ACCESS DENIED -->
-    <div class="container" id="accessDenied" style="display:none;">
-        <div style="background: #f8d7da; border-left: 4px solid #e74c3c; padding: 40px; border-radius: 20px; text-align: center; margin: 30px 0;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px;"></i>
-            <h2 style="color: #721c24;">Access Denied</h2>
-            <p style="color: #721c24; font-size: 1.1rem;">
-                You do not have permission to view this page.<br>
-                Please contact AceEd Tutoring for assistance.
-            </p>
-            <a href="index.html" class="btn" style="display: inline-block; background: #3498db; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; margin-top: 20px;">
-                <i class="fas fa-home"></i> Back to Home
-            </a>
-        </div>
-    </div>
-
-    <!-- ASSIGN TUTOR MODAL -->
-    <div class="modal" id="assignModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('assignModal')">&times;</button>
-            <h2><i class="fas fa-user-plus"></i> Assign a Tutor</h2>
-            <div class="request-details" id="assignRequestDetails">
-                <p><strong>Child:</strong> <span id="assignChildName">-</span></p>
-                <p><strong>Grade:</strong> <span id="assignGrade">-</span></p>
-                <p><strong>Subjects:</strong> <span id="assignSubjects">-</span></p>
-            </div>
-            <form id="assignForm">
-                <div class="form-group">
-                    <label>Select Tutor <span class="required">*</span></label>
-                    <select id="tutorSelect" required>
-                        <option value="">Loading tutors...</option>
-                    </select>
-                </div>
-                <input type="hidden" id="assignRequestId">
-                <button type="submit" class="btn-submit"><i class="fas fa-check"></i> Assign Tutor</button>
-            </form>
-        </div>
     </div>
 
     <!-- FOOTER -->
@@ -1012,294 +1333,34 @@
         });
 
         // ============================================================
-        // AUTH - CHECK ADMIN
+        // AUTH - UPDATE UI
         // ============================================================
-        let adminUid = '';
-        let allRequests = [];
-        let allTutors = [];
-        let currentFilter = 'all';
-
-        firebase.auth().onAuthStateChanged(async function(user) {
-            if (!user) {
-                window.location.href = 'signin.html?redirect=admin.html';
-                return;
+        function updateAuthUI(user) {
+            const loggedIn = document.getElementById('profileLoggedIn');
+            const loggedOut = document.getElementById('profileLoggedOut');
+            if (user) {
+                loggedIn.style.display = 'block';
+                loggedOut.style.display = 'none';
+            } else {
+                loggedIn.style.display = 'none';
+                loggedOut.style.display = 'block';
             }
+        }
 
-            try {
-                const doc = await firebase.firestore().collection('admins').doc('admin').get();
-                const isAdmin = doc.exists && doc.data().email === user.email;
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().onAuthStateChanged(function(user) {
+                updateAuthUI(user);
+            });
+        }
 
-                if (isAdmin) {
-                    adminUid = user.uid;
-                    document.getElementById('adminContent').style.display = 'block';
-                    document.getElementById('adminName').textContent = user.displayName || user.email || 'Admin';
-                    loadTutors();
-                    loadRequests();
-                } else {
-                    document.getElementById('accessDenied').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Admin check error:', error);
-                document.getElementById('accessDenied').style.display = 'block';
-            }
-        });
-
-        // ============================================================
-        // LOGOUT
-        // ============================================================
         function handleLogout() {
-            firebase.auth().signOut().then(function() {
-                window.location.href = 'index.html';
-            });
-        }
-
-        // ============================================================
-        // LOAD TUTORS
-        // ============================================================
-        function loadTutors() {
-            const db = firebase.firestore();
-            db.collection('users')
-                .where('role', '==', 'tutor')
-                .get()
-                .then(function(snapshot) {
-                    allTutors = [];
-                    snapshot.forEach(function(doc) {
-                        allTutors.push({ id: doc.id, ...doc.data() });
-                    });
-                    populateTutorDropdown();
-                })
-                .catch(function(error) {
-                    console.error('Error loading tutors:', error);
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                firebase.auth().signOut().then(function() {
+                    window.location.href = 'index.html';
+                }).catch(function(error) {
+                    console.error('Logout error:', error);
                 });
-        }
-
-        // ============================================================
-        // POPULATE TUTOR DROPDOWN
-        // ============================================================
-        function populateTutorDropdown() {
-            const select = document.getElementById('tutorSelect');
-            if (!select) return;
-            
-            if (allTutors.length === 0) {
-                select.innerHTML = '<option value="">No tutors available</option>';
-                return;
             }
-            
-            select.innerHTML = '<option value="">Select a tutor...</option>';
-            allTutors.forEach(function(tutor) {
-                const option = document.createElement('option');
-                option.value = tutor.id;
-                const subjects = tutor.subjects ? tutor.subjects.join(', ') : 'All subjects';
-                option.textContent = tutor.fullName + ' (' + subjects + ')';
-                select.appendChild(option);
-            });
-        }
-
-        // ============================================================
-        // LOAD REQUESTS
-        // ============================================================
-        function loadRequests() {
-            const db = firebase.firestore();
-            db.collection('tutor_requests')
-                .orderBy('createdAt', 'desc')
-                .get()
-                .then(function(snapshot) {
-                    allRequests = [];
-                    snapshot.forEach(function(doc) {
-                        allRequests.push({ id: doc.id, ...doc.data() });
-                    });
-                    updateStats();
-                    renderTable(currentFilter);
-                })
-                .catch(function(error) {
-                    console.error('Error loading requests:', error);
-                    document.getElementById('requestsBody').innerHTML = `
-                        <tr><td colspan="7" style="text-align:center; padding:30px; color:#e74c3c;">Error loading requests</td></tr>
-                    `;
-                });
-        }
-
-        // ============================================================
-        // UPDATE STATS
-        // ============================================================
-        function updateStats() {
-            const total = allRequests.length;
-            const pending = allRequests.filter(r => r.status === 'pending').length;
-            const assigned = allRequests.filter(r => r.status === 'assigned').length;
-            const accepted = allRequests.filter(r => r.status === 'accepted').length;
-
-            document.getElementById('totalRequests').textContent = total;
-            document.getElementById('pendingRequests').textContent = pending;
-            document.getElementById('assignedRequests').textContent = assigned;
-            document.getElementById('acceptedRequests').textContent = accepted;
-        }
-
-        // ============================================================
-        // RENDER TABLE
-        // ============================================================
-        function renderTable(filter) {
-            currentFilter = filter;
-            const filtered = filter === 'all' ? allRequests : allRequests.filter(r => r.status === filter);
-            const tbody = document.getElementById('requestsBody');
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `
-                    <tr><td colspan="7" style="text-align:center; padding:30px; color:#7f8c8d;">
-                        <i class="fas fa-inbox"></i> No ${filter !== 'all' ? filter : ''} requests found
-                    </td></tr>
-                `;
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(function(req) {
-                const statusClass = req.status || 'pending';
-                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
-                const subjects = req.subjects ? req.subjects.join(', ') : 'N/A';
-                const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-
-                html += `
-                    <tr>
-                        <td><strong>${req.childName || 'N/A'}</strong></td>
-                        <td>${req.grade || 'N/A'}</td>
-                        <td>${subjects}</td>
-                        <td>${req.parentName || 'N/A'}</td>
-                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
-                        <td>${date}</td>
-                        <td>
-                            ${req.status === 'pending' ? `
-                                <button class="btn-sm assign" onclick="openAssignModal('${req.id}')">
-                                    <i class="fas fa-user-plus"></i> Assign
-                                </button>
-                            ` : ''}
-                            ${req.status === 'assigned' ? `
-                                <span style="font-size:0.7rem; color:#3498db;">
-                                    <i class="fas fa-spinner fa-spin"></i> Waiting for tutor
-                                </span>
-                            ` : ''}
-                            ${req.status === 'accepted' ? `
-                                <span style="font-size:0.7rem; color:#27ae60;">
-                                    <i class="fas fa-check"></i> Accepted
-                                </span>
-                            ` : ''}
-                            <button class="btn-sm view" onclick="viewRequest('${req.id}')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn-sm delete" onclick="deleteRequest('${req.id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            tbody.innerHTML = html;
-        }
-
-        // ============================================================
-        // FILTER REQUESTS
-        // ============================================================
-        function filterRequests(filter) {
-            document.querySelectorAll('.filter-btns button').forEach(function(btn) {
-                btn.classList.toggle('active', btn.dataset.filter === filter);
-            });
-            renderTable(filter);
-        }
-
-        // ============================================================
-        // OPEN ASSIGN MODAL
-        // ============================================================
-        function openAssignModal(requestId) {
-            const req = allRequests.find(r => r.id === requestId);
-            if (!req) return;
-
-            document.getElementById('assignRequestId').value = requestId;
-            document.getElementById('assignChildName').textContent = req.childName || 'N/A';
-            document.getElementById('assignGrade').textContent = req.grade || 'N/A';
-            document.getElementById('assignSubjects').textContent = req.subjects ? req.subjects.join(', ') : 'N/A';
-
-            populateTutorDropdown();
-            document.getElementById('assignModal').classList.add('show');
-        }
-
-        // ============================================================
-        // CLOSE MODAL
-        // ============================================================
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        // ============================================================
-        // ASSIGN TUTOR
-        // ============================================================
-        document.getElementById('assignForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const requestId = document.getElementById('assignRequestId').value;
-            const tutorId = document.getElementById('tutorSelect').value;
-            
-            if (!tutorId) {
-                alert('Please select a tutor.');
-                return;
-            }
-
-            const tutor = allTutors.find(t => t.id === tutorId);
-            if (!tutor) {
-                alert('Tutor not found.');
-                return;
-            }
-
-            try {
-                const db = firebase.firestore();
-                await db.collection('tutor_requests').doc(requestId).update({
-                    tutorUid: tutorId,
-                    tutorName: tutor.fullName || 'Tutor',
-                    status: 'assigned',
-                    updatedAt: new Date().toISOString()
-                });
-
-                closeModal('assignModal');
-                alert('✅ Tutor assigned successfully!');
-                loadRequests();
-            } catch (error) {
-                console.error('Error assigning tutor:', error);
-                alert('Error: ' + error.message);
-            }
-        });
-
-        // ============================================================
-        // VIEW REQUEST
-        // ============================================================
-        function viewRequest(requestId) {
-            const req = allRequests.find(r => r.id === requestId);
-            if (!req) return;
-
-            alert(
-                '📋 Request Details\n\n' +
-                'Child: ' + (req.childName || 'N/A') + '\n' +
-                'Grade: ' + (req.grade || 'N/A') + '\n' +
-                'Subjects: ' + (req.subjects ? req.subjects.join(', ') : 'N/A') + '\n' +
-                'Status: ' + (req.status || 'pending') + '\n' +
-                'Tutor: ' + (req.tutorName || 'Not assigned yet') + '\n' +
-                'Requested: ' + (req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A')
-            );
-        }
-
-        // ============================================================
-        // DELETE REQUEST
-        // ============================================================
-        function deleteRequest(requestId) {
-            if (!confirm('Are you sure you want to delete this request?')) return;
-
-            const db = firebase.firestore();
-            db.collection('tutor_requests').doc(requestId).delete()
-                .then(function() {
-                    alert('Request deleted successfully.');
-                    loadRequests();
-                })
-                .catch(function(error) {
-                    alert('Error: ' + error.message);
-                });
         }
 
         // ============================================================
@@ -1330,6 +1391,299 @@
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
+
+        // ============================================================
+        // FILE UPLOAD - UPDATE FILE NAMES (FIXED)
+        // ============================================================
+        function updateFileName(inputId, displayId) {
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            if (input && display) {
+                const fileName = input.files[0] ? input.files[0].name : 'No file selected';
+                display.textContent = fileName;
+                if (input.files[0]) {
+                    display.className = 'file-name uploaded';
+                } else {
+                    display.className = 'file-name';
+                    display.style.color = '#e74c3c';
+                    display.style.fontWeight = '500';
+                }
+            }
+        }
+
+        // Also handle file inputs without onchange (for compatibility)
+        document.querySelectorAll('input[type="file"]').forEach(function(input) {
+            // Skip if it already has an onchange (we don't want to override)
+            if (!input.hasAttribute('onchange')) {
+                input.addEventListener('change', function() {
+                    const fileName = this.files[0] ? this.files[0].name : 'No file selected';
+                    const displayId = this.id + 'Name';
+                    const display = document.getElementById(displayId);
+                    if (display) {
+                        display.textContent = fileName;
+                        if (this.files[0]) {
+                            display.className = 'file-name uploaded';
+                        } else {
+                            display.className = 'file-name';
+                        }
+                    }
+                });
+            }
+        });
+
+        // ============================================================
+        // TUTOR APPLICATION FORM
+        // ============================================================
+        const form = document.getElementById('tutorApplicationForm');
+        const errorDiv = document.getElementById('formError');
+
+        // Show/hide qualification document based on Teaching Graduate selection
+        document.querySelectorAll('input[name="isTeachingGraduate"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
+                const qualDocGroup = document.getElementById('qualificationDocGroup');
+                const matricRequired = document.getElementById('matricRequired');
+
+                if (isTeachingGraduate && isTeachingGraduate.value === 'yes') {
+                    if (qualDocGroup) qualDocGroup.style.display = 'block';
+                    if (matricRequired) matricRequired.textContent = '(Optional for Teaching Graduates)';
+                } else {
+                    if (qualDocGroup) qualDocGroup.style.display = 'none';
+                    if (matricRequired) matricRequired.textContent = '*';
+                }
+            });
+        });
+
+        // Availability: Show/hide time/hours when checkbox is toggled
+        document.querySelectorAll('.availability-day input[type="checkbox"]').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                const dayDiv = this.closest('.availability-day');
+                const selects = dayDiv.querySelectorAll('select, input[type="number"]');
+                selects.forEach(function(el) {
+                    el.style.opacity = this.checked ? '1' : '0.4';
+                    el.style.pointerEvents = this.checked ? 'auto' : 'none';
+                }.bind(this));
+                if (!this.checked) {
+                    selects.forEach(function(el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; });
+                } else {
+                    selects.forEach(function(el) { el.style.opacity = '1'; el.style.pointerEvents = 'auto'; });
+                }
+            });
+        });
+
+        // Trigger initial state
+        document.querySelectorAll('.availability-day input[type="checkbox"]').forEach(function(cb) {
+            cb.dispatchEvent(new Event('change'));
+        });
+
+        // ============================================================
+        // SUBMIT APPLICATION
+        // ============================================================
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            errorDiv.style.display = 'none';
+
+            // Get form values
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const location = document.getElementById('location').value.trim();
+            const emergencyName = document.getElementById('emergencyName').value.trim();
+            const emergencyPhone = document.getElementById('emergencyPhone').value.trim();
+            const university = document.getElementById('university').value.trim();
+            const degree = document.getElementById('degree').value.trim();
+            const yearOfStudy = document.getElementById('yearOfStudy').value;
+            const matricAverage = document.getElementById('matricAverage').value;
+            const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
+            const showProfile = document.querySelector('input[name="showProfile"]:checked');
+
+            // Get selected subjects
+            const subjects = [];
+            document.querySelectorAll('#subjectsGroup input[type="checkbox"]:checked').forEach(function(cb) {
+                subjects.push(cb.value);
+            });
+
+            // Get selected grades
+            const grades = [];
+            document.querySelectorAll('#gradesGroup input[type="checkbox"]:checked').forEach(function(cb) {
+                grades.push(cb.value);
+            });
+
+            // Get availability
+            const availability = {
+                monday: {
+                    available: document.getElementById('monAvailable').checked,
+                    startTime: document.getElementById('monStart').value || null,
+                    hours: parseFloat(document.getElementById('monHours').value) || 0
+                },
+                tuesday: {
+                    available: document.getElementById('tueAvailable').checked,
+                    startTime: document.getElementById('tueStart').value || null,
+                    hours: parseFloat(document.getElementById('tueHours').value) || 0
+                },
+                wednesday: {
+                    available: document.getElementById('wedAvailable').checked,
+                    startTime: document.getElementById('wedStart').value || null,
+                    hours: parseFloat(document.getElementById('wedHours').value) || 0
+                },
+                thursday: {
+                    available: document.getElementById('thuAvailable').checked,
+                    startTime: document.getElementById('thuStart').value || null,
+                    hours: parseFloat(document.getElementById('thuHours').value) || 0
+                },
+                friday: {
+                    available: document.getElementById('friAvailable').checked,
+                    startTime: document.getElementById('friStart').value || null,
+                    hours: parseFloat(document.getElementById('friHours').value) || 0
+                },
+                saturday: {
+                    available: document.getElementById('satAvailable').checked,
+                    startTime: document.getElementById('satStart').value || null,
+                    hours: parseFloat(document.getElementById('satHours').value) || 0
+                },
+                sunday: {
+                    available: document.getElementById('sunAvailable').checked,
+                    startTime: document.getElementById('sunStart').value || null,
+                    hours: parseFloat(document.getElementById('sunHours').value) || 0
+                }
+            };
+
+            // Validate required fields
+            if (!fullName || !email || !phone || !location || !emergencyName || !emergencyPhone ||
+                !university || !degree || !yearOfStudy || !isTeachingGraduate || subjects.length === 0 ||
+                grades.length === 0) {
+                errorDiv.textContent = 'Please fill in all required fields.';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+                return;
+            }
+
+            // Validate matric average
+            if (isTeachingGraduate.value === 'no' && (!matricAverage || parseFloat(matricAverage) < 75)) {
+                errorDiv.textContent = 'Matric average must be at least 75% (or select Teaching Graduate).';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+                return;
+            }
+
+            // Validate at least one availability day
+            const hasAvailability = Object.values(availability).some(function(day) {
+                return day.available === true && day.hours > 0 && day.startTime;
+            });
+
+            if (!hasAvailability) {
+                errorDiv.textContent = 'Please select at least one day with a start time and hours.';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+                return;
+            }
+
+            // Validate documents
+            const docFiles = {
+                idDoc: document.getElementById('idDoc').files[0],
+                matricDoc: document.getElementById('matricDoc').files[0],
+                registrationDoc: document.getElementById('registrationDoc').files[0],
+                photoDoc: document.getElementById('photoDoc').files[0],
+                transcriptDoc: document.getElementById('transcriptDoc').files[0],
+                cvDoc: document.getElementById('cvDoc').files[0],
+                residenceDoc: document.getElementById('residenceDoc').files[0]
+            };
+
+            for (var key in docFiles) {
+                if (!docFiles[key]) {
+                    errorDiv.textContent = 'Please upload all required documents.';
+                    errorDiv.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+                    return;
+                }
+            }
+
+            // Generate random password
+            function generateRandomPassword() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+                let password = '';
+                for (let i = 0; i < 12; i++) {
+                    password += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return password;
+            }
+            const randomPassword = generateRandomPassword();
+
+            try {
+                // 1. Create user account
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, randomPassword);
+                const user = userCredential.user;
+
+                // 2. Upload all documents
+                const docUrls = {};
+
+                for (var docKey in docFiles) {
+                    const file = docFiles[docKey];
+                    const storageRef = firebase.storage().ref('tutor-applications/' + user.uid + '/' + docKey);
+                    const snapshot = await storageRef.put(file);
+                    const url = await snapshot.ref.getDownloadURL();
+                    docUrls[docKey] = url;
+                }
+
+                // 3. Save to tutor_applications
+                await firebase.firestore().collection('tutor_applications').doc(user.uid).set({
+                    uid: user.uid,
+                    fullName: fullName,
+                    email: email,
+                    phone: phone,
+                    location: location,
+                    emergencyName: emergencyName,
+                    emergencyPhone: emergencyPhone,
+                    university: university,
+                    degree: degree,
+                    yearOfStudy: yearOfStudy,
+                    matricAverage: matricAverage || null,
+                    isTeachingGraduate: isTeachingGraduate.value === 'yes',
+                    subjects: subjects,
+                    grades: grades,
+                    availability: availability,
+                    showProfile: showProfile ? showProfile.value === 'yes' : true,
+                    documents: docUrls,
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+
+                // 4. Save to users collection
+                await firebase.firestore().collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    fullName: fullName,
+                    email: email,
+                    phone: phone,
+                    role: 'pending_tutor',
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+
+                // 5. Show success
+                document.getElementById('applicationForm').style.display = 'none';
+                document.getElementById('successBox').style.display = 'block';
+
+                // Log the password for the admin (in a real scenario, you'd email it)
+                console.log('🔑 Temporary password for ' + email + ': ' + randomPassword);
+
+            } catch (error) {
+                console.error('Application error:', error);
+                errorDiv.textContent = 'Error: ' + error.message;
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+            }
+        });
     </script>
 </body>
 </html>
