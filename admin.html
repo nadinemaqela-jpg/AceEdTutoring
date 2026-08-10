@@ -1387,37 +1387,37 @@
         // ============================================================
         // RENDER REQUESTS
         // ============================================================
-        function renderRequests(filter) {
-            currentReqFilter = filter;
-            const filtered = filter === 'all' ? allRequests : allRequests.filter(r => r.status === filter);
-            const tbody = document.getElementById('requestsBody');
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `
-                    <tr><td colspan="7" style="text-align:center; padding:30px; color:#7f8c8d;">
-                        <i class="fas fa-inbox"></i> No ${filter !== 'all' ? filter : ''} requests found
-                    </td></tr>
-                `;
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(function(req) {
-                const statusClass = req.status || 'pending';
-                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
-                const subjects = req.subjects ? req.subjects.join(', ') : 'N/A';
-                const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-
-                html += `
-                    <tr>
-                        <td><strong>${req.childName || 'N/A'}</strong></td>
-                        <td>${req.grade || 'N/A'}</td>
-                        <td>${subjects}</td>
-                        <td>${req.parentName || 'N/A'}</td>
-                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
-                        <td>${date}</td>
-                        <td>
-                            ${req.status === 'pending' || req.status === 'declined' ? `
+    function renderRequests(filter) {
+        currentReqFilter = filter;
+        const filtered = filter === 'all' ? allRequests : allRequests.filter(r => r.status === filter);
+        const tbody = document.getElementById('requestsBody');
+    
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr><td colspan="7" style="text-align:center; padding:30px; color:#7f8c8d;">
+                    <i class="fas fa-inbox"></i> No ${filter !== 'all' ? filter : ''} requests found
+                </td></tr>
+            `;
+            return;
+        }
+    
+        let html = '';
+        filtered.forEach(function(req) {
+            const statusClass = req.status || 'pending';
+            const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
+            const subjects = req.subjects ? req.subjects.join(', ') : 'N/A';
+            const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
+    
+            html += `
+                <tr>
+                    <td><strong>${req.childName || 'N/A'}</strong></td>
+                    <td>${req.grade || 'N/A'}</td>
+                    <td>${subjects}</td>
+                    <td>${req.parentName || 'N/A'}</td>
+                    <td><span class="status ${statusClass}">${statusLabel}</span></td>
+                    <td>${date}</td>
+                    <td>
+                        ${req.status === 'pending' || req.status === 'declined' ? `
                             <button class="btn-sm assign" onclick="openAssignModal('${req.id}')">
                                 <i class="fas fa-user-plus"></i> ${req.status === 'declined' ? 'Reassign' : 'Assign'}
                             </button>
@@ -1432,14 +1432,16 @@
                                 <i class="fas fa-check"></i> Accepted
                             </span>
                         ` : ''}
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            tbody.innerHTML = html;
-        }
+                        <button class="btn-sm delete" onclick="deleteRequest('${req.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    
+        tbody.innerHTML = html;
+    }
 
         // ============================================================
         // FILTER REQUESTS
