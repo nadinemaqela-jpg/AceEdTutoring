@@ -20,6 +20,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -86,7 +94,6 @@
             font-weight: 500;
         }
         
-        /* NAVIGATION */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -190,7 +197,6 @@
             display: none !important;
         }
         
-        /* SIDEBARS */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -272,7 +278,9 @@
             color: #f39c12;
         }
         
-        /* Dashboard Styles */
+        /* ============================================================
+           TUTOR DASHBOARD STYLES
+           ============================================================ */
         .dashboard-hero {
             background: linear-gradient(135deg, #2c3e50, #1e2a3a);
             color: white;
@@ -296,6 +304,11 @@
         .dashboard-hero .user-info {
             font-size: 1rem;
             opacity: 0.9;
+            margin-top: 5px;
+        }
+        .dashboard-hero .user-info i {
+            color: #f39c12;
+            margin-right: 8px;
         }
         .dashboard-hero .status-badge {
             background: #27ae60;
@@ -331,7 +344,6 @@
             text-decoration: underline;
         }
         
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -364,7 +376,6 @@
             margin-bottom: 10px;
         }
         
-        /* Requests Section */
         .requests-section {
             background: white;
             border-radius: 20px;
@@ -415,9 +426,9 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-        .request-card .request-header .status.pending {
-            background: #fff3cd;
-            color: #856404;
+        .request-card .request-header .status.assigned {
+            background: #cce5ff;
+            color: #004085;
         }
         .request-card .request-header .status.accepted {
             background: #d4edda;
@@ -426,6 +437,10 @@
         .request-card .request-header .status.declined {
             background: #f8d7da;
             color: #721c24;
+        }
+        .request-card .request-header .status.completed {
+            background: #e8e8e8;
+            color: #555;
         }
         .request-card .request-details {
             display: grid;
@@ -468,13 +483,6 @@
         .request-card .request-actions .btn.decline:hover {
             background: #c0392b;
         }
-        .request-card .request-actions .btn.view {
-            background: #3498db;
-            color: white;
-        }
-        .request-card .request-actions .btn.view:hover {
-            background: #2471a3;
-        }
         
         .empty-state {
             text-align: center;
@@ -487,7 +495,6 @@
             color: #ddd;
         }
         
-        /* Footer */
         .footer-modern {
             background: #0f1720;
             color: #e2e8f0;
@@ -607,6 +614,68 @@
         }
         .footer-bottom a:hover {
             color: #e74c3c;
+        }
+        
+        .pending-message {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .pending-message i {
+            font-size: 3rem;
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+        .pending-message h2 {
+            color: #856404;
+        }
+        .pending-message p {
+            color: #856404;
+            font-size: 1.1rem;
+        }
+        .pending-message .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        
+        .access-denied {
+            background: #f8d7da;
+            border-left: 4px solid #e74c3c;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .access-denied i {
+            font-size: 3rem;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        .access-denied h2 {
+            color: #721c24;
+        }
+        .access-denied p {
+            color: #721c24;
+            font-size: 1.1rem;
+        }
+        .access-denied .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: 600;
         }
         
         @media (max-width: 768px) {
@@ -741,12 +810,12 @@
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-clock" style="color: #f39c12;"></i></div>
                 <div class="number" id="pendingCount">0</div>
-                <div class="label">Pending Requests</div>
+                <div class="label">Assigned Requests</div>
             </div>
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-check-circle" style="color: #27ae60;"></i></div>
                 <div class="number" id="acceptedCount">0</div>
-                <div class="label">Accepted Bookings</div>
+                <div class="label">Accepted</div>
             </div>
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-users" style="color: #3498db;"></i></div>
@@ -755,21 +824,21 @@
             </div>
         </div>
 
-        <!-- Pending Requests -->
+        <!-- Assigned Requests -->
         <div class="requests-section">
             <h2>
-                <span><i class="fas fa-bell"></i> Pending Requests</span>
-                <span class="badge" id="pendingBadge">0</span>
+                <span><i class="fas fa-bell"></i> My Assigned Requests</span>
+                <span class="badge" id="assignedBadge">0</span>
             </h2>
-            <div id="pendingRequests">
+            <div id="assignedRequests">
                 <div class="empty-state">
-                    <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                    <p>No pending requests. You're all caught up!</p>
+                    <i class="fas fa-inbox"></i>
+                    <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Upcoming Bookings -->
+        <!-- Upcoming Bookings (Placeholder) -->
         <div class="requests-section">
             <h2>
                 <span><i class="fas fa-calendar-alt"></i> Upcoming Bookings</span>
@@ -786,45 +855,21 @@
 
     <!-- PENDING TUTOR MESSAGE -->
     <div class="container" id="pendingTutorMessage" style="display:none;">
-        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 40px; border-radius: 20px; text-align: center; margin: 30px 0;">
-            <i class="fas fa-clock" style="font-size: 3rem; color: #f39c12; margin-bottom: 15px;"></i>
-            <h2 style="color: #856404;">Application Under Review</h2>
-            <p style="color: #856404; font-size: 1.1rem;">
-                Your application is currently being reviewed by the AceEd team.<br>
-                You will be notified once your application has been approved.
-            </p>
-            <a href="index.html" class="btn" style="display: inline-block; background: #3498db; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; margin-top: 20px;">
-                <i class="fas fa-home"></i> Back to Home
-            </a>
+        <div class="pending-message">
+            <i class="fas fa-clock"></i>
+            <h2>Application Under Review</h2>
+            <p>Your application is currently being reviewed by the AceEd team.<br>You will be notified once your application has been approved.</p>
+            <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
         </div>
     </div>
 
-    <!-- Assigned Requests -->
-    <div class="requests-section">
-        <h2>
-            <span><i class="fas fa-bell"></i> My Assigned Requests</span>
-            <span class="badge" id="assignedBadge">0</span>
-        </h2>
-        <div id="assignedRequests">
-            <div class="empty-state">
-                <i class="fas fa-inbox"></i>
-                <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
-            </div>
-        </div>
-    </div>
-    
     <!-- ACCESS DENIED -->
     <div class="container" id="accessDenied" style="display:none;">
-        <div style="background: #f8d7da; border-left: 4px solid #e74c3c; padding: 40px; border-radius: 20px; text-align: center; margin: 30px 0;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px;"></i>
-            <h2 style="color: #721c24;">Access Denied</h2>
-            <p style="color: #721c24; font-size: 1.1rem;">
-                You do not have permission to view this page.<br>
-                Please contact AceEd Tutoring for assistance.
-            </p>
-            <a href="index.html" class="btn" style="display: inline-block; background: #3498db; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; margin-top: 20px;">
-                <i class="fas fa-home"></i> Back to Home
-            </a>
+        <div class="access-denied">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Access Denied</h2>
+            <p>You do not have permission to view this page.<br>Please contact AceEd Tutoring for assistance.</p>
+            <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
         </div>
     </div>
 
@@ -884,14 +929,6 @@
         </div>
     </footer>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-    <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
-
     <script>
         // ============================================================
         // SIDEBAR CONTROLS
@@ -929,12 +966,6 @@
         // AUTH - CHECK USER ROLE
         // ============================================================
         firebase.auth().onAuthStateChanged(async function(user) {
-            if (role === 'tutor') {
-                document.getElementById('tutorContent').style.display = 'block';
-                document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
-            loadAssignedRequests();  // ← Add this line
-            }
-            
             if (!user) {
                 window.location.href = 'signin.html?redirect=tutor-dashboard.html';
                 return;
@@ -948,7 +979,7 @@
                 if (role === 'tutor') {
                     document.getElementById('tutorContent').style.display = 'block';
                     document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
-                    loadTutorData(user.uid);
+                    loadAssignedRequests();
                 } else if (role === 'pending_tutor') {
                     document.getElementById('pendingTutorMessage').style.display = 'block';
                 } else {
@@ -970,19 +1001,139 @@
         }
 
         // ============================================================
-        // LOAD TUTOR DATA
+        // LOAD ASSIGNED REQUESTS
         // ============================================================
-        function loadTutorData(tutorUid) {
-            // This will be expanded later when parent requests are implemented
-            // For now, show stats and pending requests
+        function loadAssignedRequests() {
             const db = firebase.firestore();
+            const tutorUid = firebase.auth().currentUser.uid;
             
-            // Count pending requests (future)
-            // For now, show placeholder data
-            document.getElementById('pendingCount').textContent = '0';
-            document.getElementById('acceptedCount').textContent = '0';
-            document.getElementById('studentsCount').textContent = '0';
-            document.getElementById('pendingBadge').textContent = '0';
+            db.collection('tutor_requests')
+                .where('tutorUid', '==', tutorUid)
+                .where('status', 'in', ['assigned', 'accepted', 'declined'])
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then(function(snapshot) {
+                    const container = document.getElementById('assignedRequests');
+                    const badge = document.getElementById('assignedBadge');
+                    
+                    // Count pending/assigned only for badge
+                    let pendingCount = 0;
+                    let acceptedCount = 0;
+                    let totalRequests = 0;
+                    
+                    if (snapshot.empty) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
+                            </div>
+                        `;
+                        if (badge) badge.textContent = '0';
+                        document.getElementById('pendingCount').textContent = '0';
+                        document.getElementById('acceptedCount').textContent = '0';
+                        document.getElementById('studentsCount').textContent = '0';
+                        return;
+                    }
+                    
+                    let html = '';
+                    snapshot.forEach(function(doc) {
+                        const req = doc.data();
+                        totalRequests++;
+                        if (req.status === 'assigned') pendingCount++;
+                        if (req.status === 'accepted') acceptedCount++;
+                        
+                        const statusClass = req.status || 'assigned';
+                        const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
+                        const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
+                        
+                        // Check if request is still pending (can accept/decline)
+                        const isPending = req.status === 'assigned';
+                        
+                        html += `
+                            <div class="request-card">
+                                <div class="request-header">
+                                    <h3>${req.childName || 'Student'} - ${req.grade || 'N/A'}</h3>
+                                    <span class="status ${statusClass}">${statusLabel}</span>
+                                </div>
+                                <div class="request-details">
+                                    <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
+                                    <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
+                                </div>
+                                <div class="request-actions">
+                                    ${isPending ? `
+                                        <button class="btn accept" onclick="acceptRequest('${doc.id}')">
+                                            <i class="fas fa-check"></i> Accept
+                                        </button>
+                                        <button class="btn decline" onclick="declineRequest('${doc.id}')">
+                                            <i class="fas fa-times"></i> Decline
+                                        </button>
+                                    ` : ''}
+                                    ${req.status === 'accepted' ? `
+                                        <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
+                                    ` : ''}
+                                    ${req.status === 'declined' ? `
+                                        <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = html;
+                    if (badge) badge.textContent = pendingCount;
+                    document.getElementById('pendingCount').textContent = pendingCount;
+                    document.getElementById('acceptedCount').textContent = acceptedCount;
+                    document.getElementById('studentsCount').textContent = totalRequests;
+                })
+                .catch(function(error) {
+                    console.error('Error loading assigned requests:', error);
+                    document.getElementById('assignedRequests').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
+                            <p>Error loading requests. Please refresh the page.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // ============================================================
+        // ACCEPT REQUEST
+        // ============================================================
+        function acceptRequest(requestId) {
+            if (!confirm('Do you want to accept this tutoring request?')) return;
+            
+            const db = firebase.firestore();
+            db.collection('tutor_requests').doc(requestId).update({
+                status: 'accepted',
+                updatedAt: new Date().toISOString()
+            })
+            .then(function() {
+                alert('✅ Request accepted! The parent will be notified.');
+                loadAssignedRequests();
+            })
+            .catch(function(error) {
+                alert('Error: ' + error.message);
+            });
+        }
+
+        // ============================================================
+        // DECLINE REQUEST
+        // ============================================================
+        function declineRequest(requestId) {
+            if (!confirm('Do you want to decline this tutoring request?')) return;
+            
+            const db = firebase.firestore();
+            db.collection('tutor_requests').doc(requestId).update({
+                status: 'declined',
+                updatedAt: new Date().toISOString()
+            })
+            .then(function() {
+                alert('❌ Request declined.');
+                loadAssignedRequests();
+            })
+            .catch(function(error) {
+                alert('Error: ' + error.message);
+            });
         }
 
         // ============================================================
@@ -1013,119 +1164,6 @@
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
-
-         // ============================================================
-        // LOAD ASSIGNED REQUESTS
-        // ============================================================
-        
-    function loadAssignedRequests() {
-    const db = firebase.firestore();
-    const tutorUid = firebase.auth().currentUser.uid;
-    
-    db.collection('tutor_requests')
-        .where('tutorUid', '==', tutorUid)
-        .where('status', 'in', ['assigned', 'accepted'])
-        .orderBy('createdAt', 'desc')
-        .get()
-        .then(function(snapshot) {
-            const container = document.getElementById('assignedRequests');
-            const badge = document.getElementById('assignedBadge');
-            
-            if (snapshot.empty) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
-                    </div>
-                `;
-                if (badge) badge.textContent = '0';
-                return;
-            }
-            
-            let html = '';
-            let count = 0;
-            snapshot.forEach(function(doc) {
-                const req = doc.data();
-                count++;
-                const statusClass = req.status || 'assigned';
-                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
-                const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-                
-                html += `
-                    <div class="request-card">
-                        <div class="request-header">
-                            <h3>${req.childName || 'Student'} - ${req.grade || 'N/A'}</h3>
-                            <span class="status ${statusClass}">${statusLabel}</span>
-                        </div>
-                        <div class="request-details">
-                            <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
-                            <div><i class="fas fa-user"></i> Parent: ${req.parentName || 'N/A'}</div>
-                            <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
-                        </div>
-                        <div class="request-actions">
-                            ${req.status === 'assigned' ? `
-                                <button class="btn accept" onclick="acceptRequest('${doc.id}')">
-                                    <i class="fas fa-check"></i> Accept
-                                </button>
-                                <button class="btn decline" onclick="declineRequest('${doc.id}')">
-                                    <i class="fas fa-times"></i> Decline
-                                </button>
-                            ` : ''}
-                            ${req.status === 'accepted' ? `
-                                <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            if (badge) badge.textContent = count;
-        })
-        .catch(function(error) {
-            console.error('Error loading assigned requests:', error);
-        });
-        }
-
-         // ============================================================
-        // Decline or accept request
-        // ============================================================
-        
-        function acceptRequest(requestId) {
-            if (!confirm('Do you want to accept this tutoring request?')) return;
-            
-            const db = firebase.firestore();
-            db.collection('tutor_requests').doc(requestId).update({
-                status: 'accepted',
-                updatedAt: new Date().toISOString()
-            })
-            .then(function() {
-                alert('✅ Request accepted! The parent will be notified.');
-                loadAssignedRequests();
-            })
-            .catch(function(error) {
-                alert('Error: ' + error.message);
-            });
-        }
-        
-        function declineRequest(requestId) {
-            if (!confirm('Do you want to decline this tutoring request?')) return;
-            
-            const db = firebase.firestore();
-            db.collection('tutor_requests').doc(requestId).update({
-                status: 'declined',
-                updatedAt: new Date().toISOString()
-            })
-            .then(function() {
-                alert('Request declined.');
-                loadAssignedRequests();
-            })
-            .catch(function(error) {
-                alert('Error: ' + error.message);
-            });
-        }
-        
-        
     </script>
 </body>
 </html>
