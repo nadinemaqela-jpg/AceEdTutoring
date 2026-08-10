@@ -278,9 +278,6 @@
             color: #f39c12;
         }
         
-        /* ============================================================
-           TUTOR DASHBOARD STYLES
-           ============================================================ */
         .dashboard-hero {
             background: linear-gradient(135deg, #2c3e50, #1e2a3a);
             color: white;
@@ -1001,7 +998,7 @@
         }
 
         // ============================================================
-        // LOAD ASSIGNED REQUESTS
+        // LOAD ASSIGNED REQUESTS - FIXED (NO INDEX REQUIRED)
         // ============================================================
         function loadAssignedRequests() {
             const db = firebase.firestore();
@@ -1009,10 +1006,9 @@
             
             console.log('🔍 Loading requests for tutor:', tutorUid);
             
-            // Try simpler query first - just filter by tutorUid
+            // Get ALL requests where tutorUid matches (no status filter to avoid composite index)
             db.collection('tutor_requests')
                 .where('tutorUid', '==', tutorUid)
-                .orderBy('createdAt', 'desc')
                 .get()
                 .then(function(snapshot) {
                     console.log('✅ Found', snapshot.size, 'requests');
@@ -1038,8 +1034,16 @@
                     let acceptedCount = 0;
                     let totalRequests = 0;
                     
+                    // Sort manually by createdAt (since we can't use orderBy without index)
+                    const requests = [];
                     snapshot.forEach(function(doc) {
-                        const req = doc.data();
+                        requests.push({ id: doc.id, ...doc.data() });
+                    });
+                    requests.sort(function(a, b) {
+                        return (b.createdAt || '').localeCompare(a.createdAt || '');
+                    });
+                    
+                    requests.forEach(function(req) {
                         totalRequests++;
                         if (req.status === 'assigned') pendingCount++;
                         if (req.status === 'accepted') acceptedCount++;
@@ -1062,10 +1066,10 @@
                                 </div>
                                 <div class="request-actions">
                                     ${isPending ? `
-                                        <button class="btn accept" onclick="acceptRequest('${doc.id}')">
+                                        <button class="btn accept" onclick="acceptRequest('${req.id}')">
                                             <i class="fas fa-check"></i> Accept
                                         </button>
-                                        <button class="btn decline" onclick="declineRequest('${doc.id}')">
+                                        <button class="btn decline" onclick="declineRequest('${req.id}')">
                                             <i class="fas fa-times"></i> Decline
                                         </button>
                                     ` : ''}
@@ -1097,6 +1101,7 @@
                     `;
                 });
         }
+
         // ============================================================
         // ACCEPT REQUEST
         // ============================================================
