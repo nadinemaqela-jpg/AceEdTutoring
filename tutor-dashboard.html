@@ -997,10 +997,10 @@
             });
         }
 
-                // ============================================================
-                // LOAD ASSIGNED REQUESTS - FIXED (NO INDEX REQUIRED)
-
-            function loadAssignedRequests() {
+        // ============================================================
+        // LOAD ASSIGNED REQUESTS - FIXED
+        // ============================================================
+        function loadAssignedRequests() {
             const db = firebase.firestore();
             const tutorUid = firebase.auth().currentUser.uid;
             
@@ -1121,80 +1121,7 @@
                     `;
                 });
         }
-                        // ============================================================
-                        // WHATSAPP BUTTON CODE - PUT RIGHT HERE
-                        // ============================================================
-                        let whatsappButton = '';
-                        if (req.status === 'accepted') {
-                            whatsappButton = `
-                                <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                    <span style="color: #27ae60; font-weight: 500;">
-                                        <i class="fas fa-check-circle"></i> You accepted this request from <strong>${req.parentName || 'Parent'}</strong>!
-                                    </span>
-                                    <button onclick="openWhatsAppParent('${req.parentUid}')" 
-                                            style="background: #25D366; color: white; padding: 8px 20px; 
-                                                   border: none; border-radius: 30px; cursor: pointer; 
-                                                   font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
-                                        <i class="fab fa-whatsapp"></i> Chat with Parent
-                                    </button>
-                                </div>
-                            `;
-                        }
-                        
-                        html += `
-                            <div class="request-card">
-                                <div class="request-header">
-                                    <h3>${req.childName || 'Student'} - ${req.grade || 'N/A'}</h3>
-                                    <span class="status ${statusClass}">${statusLabel}</span>
-                                </div>
-                                <div class="request-details">
-                                    <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
-                                    <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
-                                </div>
-                                <div class="request-actions">
-                                    ${isPending ? `
-                                        <button class="btn accept" onclick="acceptRequest('${req.id}')">
-                                            <i class="fas fa-check"></i> Accept
-                                        </button>
-                                        <button class="btn decline" onclick="declineRequest('${req.id}')">
-                                            <i class="fas fa-times"></i> Decline
-                                        </button>
-                                    ` : ''}
-                                    ${req.status === 'accepted' ? `
-                                        <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
-                                    ` : ''}
-                                    ${req.status === 'declined' ? `
-                                        <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>
-                                    ` : ''}
-                                </div>
-                                ${whatsappButton}
-                            </div>
-                        `;
-                    });
-                    
-                    container.innerHTML = html;
-                    if (badge) badge.textContent = pendingCount;
-                    document.getElementById('pendingCount').textContent = pendingCount;
-                    document.getElementById('acceptedCount').textContent = acceptedCount;
 
-                    // Only count ACCEPTED requests as "Students Helped"
-                    const helpedCount = requests.filter(function(r) {
-                        return r.status === 'accepted' || r.status === 'completed';
-                    }).length;
-                    document.getElementById('studentsCount').textContent = helpedCount;
-                    
-                })
-                .catch(function(error) {
-                    console.error('❌ Error loading assigned requests:', error);
-                    document.getElementById('assignedRequests').innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
-                            <p>Error loading requests: ${error.message}</p>
-                            <p style="font-size:0.8rem; margin-top:10px;">Please check the console for more details.</p>
-                        </div>
-                    `;
-                });
-        }
         // ============================================================
         // ACCEPT REQUEST
         // ============================================================
@@ -1236,6 +1163,36 @@
         }
 
         // ============================================================
+        // WHATSAPP - OPEN CHAT WITH PARENT
+        // ============================================================
+        function openWhatsAppParent(parentUid) {
+            const db = firebase.firestore();
+            db.collection('users').doc(parentUid).get()
+                .then(function(doc) {
+                    const parentData = doc.data();
+                    const phone = parentData.phone || '';
+                    
+                    if (!phone) {
+                        alert('Parent contact number not available.');
+                        return;
+                    }
+                    
+                    const cleanPhone = phone.replace(/\D/g, '');
+                    if (cleanPhone.length < 10) {
+                        alert('Invalid phone number format.');
+                        return;
+                    }
+                    
+                    const message = encodeURIComponent('Hello! I am a tutor matched with your child through AceEd Tutoring. I would like to discuss our tutoring sessions.');
+                    window.open('https://wa.me/' + cleanPhone + '?text=' + message, '_blank');
+                })
+                .catch(function(error) {
+                    console.error('Error fetching parent contact:', error);
+                    alert('Error: Could not fetch parent contact details.');
+                });
+        }
+
+        // ============================================================
         // CART BADGE
         // ============================================================
         function updateCartBadge() {
@@ -1263,37 +1220,6 @@
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
-        // ============================================================
-        // OPEN WHATSAPP CHAT WITH PARENT
-        // ============================================================
-        function openWhatsAppParent(parentUid) {
-            const db = firebase.firestore();
-            db.collection('users').doc(parentUid).get()
-                .then(function(doc) {
-                    const parentData = doc.data();
-                    const phone = parentData.phone || '';
-                    
-                    if (!phone) {
-                        alert('Parent contact number not available.');
-                        return;
-                    }
-                    
-                    const cleanPhone = phone.replace(/\D/g, '');
-                    
-                    if (cleanPhone.length < 10) {
-                        alert('Invalid phone number format.');
-                        return;
-                    }
-                    
-                    const message = encodeURIComponent('Hello! I am a tutor matched with your child through AceEd Tutoring. I would like to discuss our tutoring sessions.');
-                    window.open('https://wa.me/' + cleanPhone + '?text=' + message, '_blank');
-                })
-                .catch(function(error) {
-                    console.error('Error fetching parent contact:', error);
-                    alert('Error: Could not fetch parent contact details.');
-                });
-        }
-        
     </script>
 </body>
 </html>
