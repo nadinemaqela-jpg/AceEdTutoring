@@ -20,11 +20,37 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
-    <!-- Firebase SDKs -->
+    <!-- ============================================================ -->
+    <!-- 1️⃣ FIRST: Firebase SDKs -->
+    <!-- ============================================================ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- ============================================================ -->
+    <!-- 2️⃣ SECOND: Firebase Config & Initialize -->
+    <!-- ============================================================ -->
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
+            authDomain: "aceed-tutoring.firebaseapp.com",
+            projectId: "aceed-tutoring",
+            storageBucket: "aceed-tutoring.firebasestorage.app",
+            messagingSenderId: "225577605291",
+            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        
+        console.log('✅ Firebase initialized on tutor-application page');
+    </script>
+
     
     <style>
         * {
