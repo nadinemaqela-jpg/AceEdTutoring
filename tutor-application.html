@@ -20,6 +20,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -89,7 +95,6 @@
             font-weight: 500;
         }
         
-        /* NAVIGATION */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -193,7 +198,6 @@
             display: none !important;
         }
         
-        /* SIDEBARS */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -275,7 +279,6 @@
             color: #f39c12;
         }
         
-        /* FORM STYLES */
         .form-card {
             background: white;
             border-radius: 24px;
@@ -397,6 +400,9 @@
             padding: 0;
         }
         
+        /* ============================================================
+           FILE UPLOAD - UPDATED
+           ============================================================ */
         .file-upload {
             border: 2px dashed #e0e0e0;
             border-radius: 12px;
@@ -419,15 +425,19 @@
             font-size: 0.9rem;
         }
         .file-upload .file-name {
-            color: #27ae60;
-            font-weight: 600;
+            color: #e74c3c;
             margin-top: 5px;
             font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .file-upload .file-name.uploaded {
+            color: #27ae60;
+            font-weight: 600;
         }
         .file-upload input[type="file"] {
             display: none;
         }
-        .file-upload .file-required {
+        .file-required {
             color: #e74c3c;
             font-size: 0.8rem;
         }
@@ -882,7 +892,7 @@
                     </div>
 
                     <!-- ====================
-                         DOCUMENTS (7 Documents)
+                         DOCUMENTS (7 Documents) - FIXED
                          ==================== -->
                     <h3 class="section-title"><i class="fas fa-file-upload"></i> Documents</h3>
                     <p style="color: #7f8c8d; margin-bottom: 20px;">Please upload the following documents (PDF, PNG, or JPG format). All documents are required.</p>
@@ -894,7 +904,7 @@
                             <i class="fas fa-id-card"></i>
                             <p>Click to upload your ID or Passport</p>
                             <div class="file-name" id="idDocName">No file selected</div>
-                            <input type="file" id="idDoc" accept=".pdf,.png,.jpg,.jpeg">
+                            <input type="file" id="idDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('idDoc', 'idDocName')">
                         </div>
                     </div>
 
@@ -905,7 +915,7 @@
                             <i class="fas fa-file-alt"></i>
                             <p>Click to upload your Matric Results</p>
                             <div class="file-name" id="matricDocName">No file selected</div>
-                            <input type="file" id="matricDoc" accept=".pdf,.png,.jpg,.jpeg">
+                            <input type="file" id="matricDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('matricDoc', 'matricDocName')">
                         </div>
                     </div>
 
@@ -916,7 +926,7 @@
                             <i class="fas fa-file-invoice"></i>
                             <p>Click to upload your Proof of Registration (University enrollment letter)</p>
                             <div class="file-name" id="registrationDocName">No file selected</div>
-                            <input type="file" id="registrationDoc" accept=".pdf,.png,.jpg,.jpeg">
+                            <input type="file" id="registrationDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('registrationDoc', 'registrationDocName')">
                         </div>
                     </div>
 
@@ -927,7 +937,7 @@
                             <i class="fas fa-camera"></i>
                             <p>Click to upload a formal/headshot photo</p>
                             <div class="file-name" id="photoDocName">No file selected</div>
-                            <input type="file" id="photoDoc" accept=".png,.jpg,.jpeg">
+                            <input type="file" id="photoDoc" accept=".png,.jpg,.jpeg" onchange="updateFileName('photoDoc', 'photoDocName')">
                         </div>
                     </div>
 
@@ -938,7 +948,7 @@
                             <i class="fas fa-file-pdf"></i>
                             <p>Click to upload your Academic Transcript</p>
                             <div class="file-name" id="transcriptDocName">No file selected</div>
-                            <input type="file" id="transcriptDoc" accept=".pdf,.png,.jpg,.jpeg">
+                            <input type="file" id="transcriptDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('transcriptDoc', 'transcriptDocName')">
                         </div>
                     </div>
 
@@ -949,7 +959,7 @@
                             <i class="fas fa-file-word"></i>
                             <p>Click to upload your CV or Resume</p>
                             <div class="file-name" id="cvDocName">No file selected</div>
-                            <input type="file" id="cvDoc" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx">
+                            <input type="file" id="cvDoc" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" onchange="updateFileName('cvDoc', 'cvDocName')">
                         </div>
                     </div>
 
@@ -960,7 +970,7 @@
                             <i class="fas fa-home"></i>
                             <p>Click to upload your Proof of Residence (e.g., utility bill, bank statement)</p>
                             <div class="file-name" id="residenceDocName">No file selected</div>
-                            <input type="file" id="residenceDoc" accept=".pdf,.png,.jpg,.jpeg">
+                            <input type="file" id="residenceDoc" accept=".pdf,.png,.jpg,.jpeg" onchange="updateFileName('residenceDoc', 'residenceDocName')">
                         </div>
                     </div>
 
@@ -972,12 +982,10 @@
                     <div class="form-group">
                         <label>Subjects You Can Tutor <span class="required">*</span></label>
                         <div class="checkbox-group" id="subjectsGroup">
-                            <!-- Grade 8-9 -->
                             <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%;">Grade 8 &amp; 9</label>
                             <label><input type="checkbox" value="Mathematics (Gr 8-9)"> Mathematics <span style="font-size:0.7rem; color:#999;">Gr 8-9</span></label>
                             <label><input type="checkbox" value="Natural Sciences (Gr 8-9)"> Natural Sciences <span style="font-size:0.7rem; color:#999;">Gr 8-9</span></label>
 
-                            <!-- Grade 10-12 -->
                             <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%; margin-top:10px;">Grade 10, 11 &amp; 12</label>
                             <label><input type="checkbox" value="Mathematics (Gr 10-12)"> Mathematics <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
                             <label><input type="checkbox" value="Mathematical Literacy (Gr 10-12)"> Mathematical Literacy <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
@@ -1291,15 +1299,6 @@
         </div>
     </footer>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-
-    <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
-
     <script>
         // ============================================================
         // SIDEBAR CONTROLS
@@ -1394,26 +1393,64 @@
         }
 
         // ============================================================
+        // FILE UPLOAD - UPDATE FILE NAMES (FIXED)
+        // ============================================================
+        function updateFileName(inputId, displayId) {
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            if (input && display) {
+                const fileName = input.files[0] ? input.files[0].name : 'No file selected';
+                display.textContent = fileName;
+                if (input.files[0]) {
+                    display.className = 'file-name uploaded';
+                } else {
+                    display.className = 'file-name';
+                    display.style.color = '#e74c3c';
+                    display.style.fontWeight = '500';
+                }
+            }
+        }
+
+        // Also handle file inputs without onchange (for compatibility)
+        document.querySelectorAll('input[type="file"]').forEach(function(input) {
+            // Skip if it already has an onchange (we don't want to override)
+            if (!input.hasAttribute('onchange')) {
+                input.addEventListener('change', function() {
+                    const fileName = this.files[0] ? this.files[0].name : 'No file selected';
+                    const displayId = this.id + 'Name';
+                    const display = document.getElementById(displayId);
+                    if (display) {
+                        display.textContent = fileName;
+                        if (this.files[0]) {
+                            display.className = 'file-name uploaded';
+                        } else {
+                            display.className = 'file-name';
+                        }
+                    }
+                });
+            }
+        });
+
+        // ============================================================
         // TUTOR APPLICATION FORM
         // ============================================================
         const form = document.getElementById('tutorApplicationForm');
         const errorDiv = document.getElementById('formError');
 
-        // File upload display for all 7 documents
-        const docMap = {
-            idDoc: 'idDocName',
-            matricDoc: 'matricDocName',
-            registrationDoc: 'registrationDocName',
-            photoDoc: 'photoDocName',
-            transcriptDoc: 'transcriptDocName',
-            cvDoc: 'cvDocName',
-            residenceDoc: 'residenceDocName'
-        };
+        // Show/hide qualification document based on Teaching Graduate selection
+        document.querySelectorAll('input[name="isTeachingGraduate"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
+                const qualDocGroup = document.getElementById('qualificationDocGroup');
+                const matricRequired = document.getElementById('matricRequired');
 
-        Object.keys(docMap).forEach(function(inputId) {
-            document.getElementById(inputId).addEventListener('change', function(e) {
-                const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
-                document.getElementById(docMap[inputId]).textContent = fileName;
+                if (isTeachingGraduate && isTeachingGraduate.value === 'yes') {
+                    if (qualDocGroup) qualDocGroup.style.display = 'block';
+                    if (matricRequired) matricRequired.textContent = '(Optional for Teaching Graduates)';
+                } else {
+                    if (qualDocGroup) qualDocGroup.style.display = 'none';
+                    if (matricRequired) matricRequired.textContent = '*';
+                }
             });
         });
 
@@ -1426,7 +1463,6 @@
                     el.style.opacity = this.checked ? '1' : '0.4';
                     el.style.pointerEvents = this.checked ? 'auto' : 'none';
                 }.bind(this));
-                // Trigger change event to update opacity
                 if (!this.checked) {
                     selects.forEach(function(el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; });
                 } else {
@@ -1570,22 +1606,23 @@
                 }
             }
 
-                // Generate a random secure password
-                function generateRandomPassword() {
-                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-                    let password = '';
-                    for (let i = 0; i < 12; i++) {
-                        password += chars.charAt(Math.floor(Math.random() * chars.length));
-                    }
-                    return password;
+            // Generate random password
+            function generateRandomPassword() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+                let password = '';
+                for (let i = 0; i < 12; i++) {
+                    password += chars.charAt(Math.floor(Math.random() * chars.length));
                 }
-                
-                // Use it
-                const randomPassword = generateRandomPassword();
+                return password;
+            }
+            const randomPassword = generateRandomPassword();
+
+            try {
+                // 1. Create user account
                 const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, randomPassword);
+                const user = userCredential.user;
 
                 // 2. Upload all documents
-                const uploadPromises = [];
                 const docUrls = {};
 
                 for (var docKey in docFiles) {
@@ -1596,10 +1633,9 @@
                     docUrls[docKey] = url;
                 }
 
-                // 3. Save to Firestore
+                // 3. Save to tutor_applications
                 await firebase.firestore().collection('tutor_applications').doc(user.uid).set({
                     uid: user.uid,
-                    role: pending_tutor,
                     fullName: fullName,
                     email: email,
                     phone: phone,
@@ -1621,21 +1657,24 @@
                     updatedAt: new Date().toISOString()
                 });
 
-                    // 3b. ALSO save to users collection with role "pending_tutor"
-                    await firebase.firestore().collection('users').doc(user.uid).set({
-                        uid: user.uid,
-                        fullName: fullName,
-                        email: email,
-                        phone: phone,
-                        role: 'pending_tutor',   // 👈 This is what you're adding
-                        status: 'pending',       // 👈 This matches the application status
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    });
+                // 4. Save to users collection
+                await firebase.firestore().collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    fullName: fullName,
+                    email: email,
+                    phone: phone,
+                    role: 'pending_tutor',
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
 
-                // 4. Show success
+                // 5. Show success
                 document.getElementById('applicationForm').style.display = 'none';
                 document.getElementById('successBox').style.display = 'block';
+
+                // Log the password for the admin (in a real scenario, you'd email it)
+                console.log('🔑 Temporary password for ' + email + ': ' + randomPassword);
 
             } catch (error) {
                 console.error('Application error:', error);
