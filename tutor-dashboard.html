@@ -799,6 +799,20 @@
         </div>
     </div>
 
+    <!-- Assigned Requests -->
+    <div class="requests-section">
+        <h2>
+            <span><i class="fas fa-bell"></i> My Assigned Requests</span>
+            <span class="badge" id="assignedBadge">0</span>
+        </h2>
+        <div id="assignedRequests">
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
+            </div>
+        </div>
+    </div>
+    
     <!-- ACCESS DENIED -->
     <div class="container" id="accessDenied" style="display:none;">
         <div style="background: #f8d7da; border-left: 4px solid #e74c3c; padding: 40px; border-radius: 20px; text-align: center; margin: 30px 0;">
@@ -993,6 +1007,119 @@
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
+
+         // ============================================================
+        // LOAD ASSIGNED REQUESTS
+        // ============================================================
+        
+    function loadAssignedRequests() {
+    const db = firebase.firestore();
+    const tutorUid = firebase.auth().currentUser.uid;
+    
+    db.collection('tutor_requests')
+        .where('tutorUid', '==', tutorUid)
+        .where('status', 'in', ['assigned', 'accepted'])
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then(function(snapshot) {
+            const container = document.getElementById('assignedRequests');
+            const badge = document.getElementById('assignedBadge');
+            
+            if (snapshot.empty) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
+                    </div>
+                `;
+                if (badge) badge.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            let count = 0;
+            snapshot.forEach(function(doc) {
+                const req = doc.data();
+                count++;
+                const statusClass = req.status || 'assigned';
+                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
+                const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
+                
+                html += `
+                    <div class="request-card">
+                        <div class="request-header">
+                            <h3>${req.childName || 'Student'} - ${req.grade || 'N/A'}</h3>
+                            <span class="status ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="request-details">
+                            <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
+                            <div><i class="fas fa-user"></i> Parent: ${req.parentName || 'N/A'}</div>
+                            <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
+                        </div>
+                        <div class="request-actions">
+                            ${req.status === 'assigned' ? `
+                                <button class="btn accept" onclick="acceptRequest('${doc.id}')">
+                                    <i class="fas fa-check"></i> Accept
+                                </button>
+                                <button class="btn decline" onclick="declineRequest('${doc.id}')">
+                                    <i class="fas fa-times"></i> Decline
+                                </button>
+                            ` : ''}
+                            ${req.status === 'accepted' ? `
+                                <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            if (badge) badge.textContent = count;
+        })
+        .catch(function(error) {
+            console.error('Error loading assigned requests:', error);
+        });
+        }
+
+         // ============================================================
+        // Decline or accept request
+        // ============================================================
+        
+        function acceptRequest(requestId) {
+            if (!confirm('Do you want to accept this tutoring request?')) return;
+            
+            const db = firebase.firestore();
+            db.collection('tutor_requests').doc(requestId).update({
+                status: 'accepted',
+                updatedAt: new Date().toISOString()
+            })
+            .then(function() {
+                alert('✅ Request accepted! The parent will be notified.');
+                loadAssignedRequests();
+            })
+            .catch(function(error) {
+                alert('Error: ' + error.message);
+            });
+        }
+        
+        function declineRequest(requestId) {
+            if (!confirm('Do you want to decline this tutoring request?')) return;
+            
+            const db = firebase.firestore();
+            db.collection('tutor_requests').doc(requestId).update({
+                status: 'declined',
+                updatedAt: new Date().toISOString()
+            })
+            .then(function() {
+                alert('Request declined.');
+                loadAssignedRequests();
+            })
+            .catch(function(error) {
+                alert('Error: ' + error.message);
+            });
+        }
+        
+        
     </script>
 </body>
 </html>
