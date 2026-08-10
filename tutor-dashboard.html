@@ -1007,19 +1007,17 @@
             const db = firebase.firestore();
             const tutorUid = firebase.auth().currentUser.uid;
             
+            console.log('🔍 Loading requests for tutor:', tutorUid);
+            
+            // Try simpler query first - just filter by tutorUid
             db.collection('tutor_requests')
                 .where('tutorUid', '==', tutorUid)
-                .where('status', 'in', ['assigned', 'accepted', 'declined'])
                 .orderBy('createdAt', 'desc')
                 .get()
                 .then(function(snapshot) {
+                    console.log('✅ Found', snapshot.size, 'requests');
                     const container = document.getElementById('assignedRequests');
                     const badge = document.getElementById('assignedBadge');
-                    
-                    // Count pending/assigned only for badge
-                    let pendingCount = 0;
-                    let acceptedCount = 0;
-                    let totalRequests = 0;
                     
                     if (snapshot.empty) {
                         container.innerHTML = `
@@ -1036,6 +1034,10 @@
                     }
                     
                     let html = '';
+                    let pendingCount = 0;
+                    let acceptedCount = 0;
+                    let totalRequests = 0;
+                    
                     snapshot.forEach(function(doc) {
                         const req = doc.data();
                         totalRequests++;
@@ -1046,7 +1048,6 @@
                         const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
                         const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
                         
-                        // Check if request is still pending (can accept/decline)
                         const isPending = req.status === 'assigned';
                         
                         html += `
@@ -1086,16 +1087,16 @@
                     document.getElementById('studentsCount').textContent = totalRequests;
                 })
                 .catch(function(error) {
-                    console.error('Error loading assigned requests:', error);
+                    console.error('❌ Error loading assigned requests:', error);
                     document.getElementById('assignedRequests').innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
-                            <p>Error loading requests. Please refresh the page.</p>
+                            <p>Error loading requests: ${error.message}</p>
+                            <p style="font-size:0.8rem; margin-top:10px;">Please check the console for more details.</p>
                         </div>
                     `;
                 });
         }
-
         // ============================================================
         // ACCEPT REQUEST
         // ============================================================
