@@ -999,8 +999,8 @@
 
                 // ============================================================
                 // LOAD ASSIGNED REQUESTS - FIXED (NO INDEX REQUIRED)
-                // ============================================================
-        function loadAssignedRequests() {
+
+            function loadAssignedRequests() {
             const db = firebase.firestore();
             const tutorUid = firebase.auth().currentUser.uid;
             
@@ -1031,7 +1031,7 @@
                     let html = '';
                     let pendingCount = 0;
                     let acceptedCount = 0;
-                    let totalRequests = 0;
+                    let helpedCount = 0;
                     
                     // Sort manually by createdAt
                     const requests = [];
@@ -1043,15 +1043,84 @@
                     });
                     
                     requests.forEach(function(req) {
-                        totalRequests++;
+                        // ✅ Only count 'assigned' as pending
                         if (req.status === 'assigned') pendingCount++;
-                        if (req.status === 'accepted') acceptedCount++;
+                        // ✅ Only count 'accepted' or 'completed' as accepted
+                        if (req.status === 'accepted' || req.status === 'completed') acceptedCount++;
+                        // ✅ Only count 'accepted' or 'completed' as "Students Helped"
+                        if (req.status === 'accepted' || req.status === 'completed') helpedCount++;
                         
                         const statusClass = req.status || 'assigned';
                         const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
                         const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
                         const isPending = req.status === 'assigned';
                         
+                        let whatsappButton = '';
+                        if (req.status === 'accepted') {
+                            whatsappButton = `
+                                <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <span style="color: #27ae60; font-weight: 500;">
+                                        <i class="fas fa-check-circle"></i> You accepted this request from <strong>${req.parentName || 'Parent'}</strong>!
+                                    </span>
+                                    <button onclick="openWhatsAppParent('${req.parentUid}')" 
+                                            style="background: #25D366; color: white; padding: 8px 20px; 
+                                                   border: none; border-radius: 30px; cursor: pointer; 
+                                                   font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
+                                        <i class="fab fa-whatsapp"></i> Chat with Parent
+                                    </button>
+                                </div>
+                            `;
+                        }
+                        
+                        html += `
+                            <div class="request-card">
+                                <div class="request-header">
+                                    <h3>${req.childName || 'Student'} - ${req.grade || 'N/A'}</h3>
+                                    <span class="status ${statusClass}">${statusLabel}</span>
+                                </div>
+                                <div class="request-details">
+                                    <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
+                                    <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
+                                </div>
+                                <div class="request-actions">
+                                    ${isPending ? `
+                                        <button class="btn accept" onclick="acceptRequest('${req.id}')">
+                                            <i class="fas fa-check"></i> Accept
+                                        </button>
+                                        <button class="btn decline" onclick="declineRequest('${req.id}')">
+                                            <i class="fas fa-times"></i> Decline
+                                        </button>
+                                    ` : ''}
+                                    ${req.status === 'accepted' ? `
+                                        <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
+                                    ` : ''}
+                                    ${req.status === 'declined' ? `
+                                        <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>
+                                    ` : ''}
+                                </div>
+                                ${whatsappButton}
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = html;
+                    if (badge) badge.textContent = pendingCount;
+                    document.getElementById('pendingCount').textContent = pendingCount;
+                    document.getElementById('acceptedCount').textContent = acceptedCount;
+                    // ✅ Students Helped = only accepted/completed (not declined)
+                    document.getElementById('studentsCount').textContent = helpedCount;
+                })
+                .catch(function(error) {
+                    console.error('❌ Error loading assigned requests:', error);
+                    document.getElementById('assignedRequests').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
+                            <p>Error loading requests: ${error.message}</p>
+                            <p style="font-size:0.8rem; margin-top:10px;">Please check the console for more details.</p>
+                        </div>
+                    `;
+                });
+        }
                         // ============================================================
                         // WHATSAPP BUTTON CODE - PUT RIGHT HERE
                         // ============================================================
