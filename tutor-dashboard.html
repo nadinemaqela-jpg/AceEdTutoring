@@ -1107,7 +1107,13 @@
                     if (badge) badge.textContent = pendingCount;
                     document.getElementById('pendingCount').textContent = pendingCount;
                     document.getElementById('acceptedCount').textContent = acceptedCount;
-                    document.getElementById('studentsCount').textContent = totalRequests;
+
+                    // Only count ACCEPTED requests as "Students Helped"
+                    const helpedCount = requests.filter(function(r) {
+                        return r.status === 'accepted' || r.status === 'completed';
+                    }).length;
+                    document.getElementById('studentsCount').textContent = helpedCount;
+                    
                 })
                 .catch(function(error) {
                     console.error('❌ Error loading assigned requests:', error);
