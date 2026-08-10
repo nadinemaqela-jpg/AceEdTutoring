@@ -1038,6 +1038,19 @@
                     <i class="fas fa-lock"></i> Pay Now
                 </button>
             </div>
+
+            <!-- Payment History -->
+            <div class="requests-section">
+                <h2>
+                    <span><i class="fas fa-history"></i> Payment History</span>
+                </h2>
+                <div id="paymentHistory">
+                    <div class="empty-state">
+                        <i class="fas fa-receipt"></i>
+                        <p>No payment history yet.</p>
+                    </div>
+                </div>
+            </div>
             
             <!-- Application Services -->
             <div class="pricing-card" style="border: 1px solid #e0e0e0; border-radius: 16px; padding: 20px; background: #f8fafd;">
@@ -1691,6 +1704,61 @@
                     alert('Error: Could not fetch tutor contact details.');
                 });
         }
+
+        // ============================================================
+        // LOAD PAYMENT HISTORY
+        // ============================================================
+        function loadPaymentHistory() {
+            const db = firebase.firestore();
+            const user = firebase.auth().currentUser;
+            
+            if (!user) return;
+            
+            db.collection('payments')
+                .where('parentUid', '==', user.uid)
+                .orderBy('createdAt', 'desc')
+                .limit(10)
+                .get()
+                .then(function(snapshot) {
+                    const container = document.getElementById('paymentHistory');
+                    
+                    if (snapshot.empty) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-receipt"></i>
+                                <p>No payment history yet.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    let html = '';
+                    snapshot.forEach(function(doc) {
+                        const payment = doc.data();
+                        const statusColor = payment.status === 'completed' ? '#27ae60' : '#f39c12';
+                        const statusText = payment.status === 'completed' ? '✅ Paid' : '⏳ Pending';
+                        const date = payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : 'N/A';
+                        
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <div>
+                                    <strong>${payment.service}</strong>
+                                    <div style="font-size: 0.85rem; color: #7f8c8d;">${date}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: bold; color: #27ae60;">R${payment.amount.toFixed(2)}</div>
+                                    <div style="font-size: 0.8rem; color: ${statusColor};">${statusText}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(function(error) {
+                    console.error('Error loading payment history:', error);
+                });
+        }
+        
         
     </script>
 </body>
