@@ -93,93 +93,7 @@
             font-weight: 500;
         }
         
-        /* ============================================================
-           SIDEBAR STYLES
-           ============================================================ */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            width: 320px;
-            height: 100%;
-            background: #1e2a3a;
-            color: white;
-            z-index: 1001;
-            padding: 30px 20px;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-        }
-        .sidebar-left {
-            left: 0;
-            transform: translateX(-100%);
-        }
-        .sidebar-left.open {
-            transform: translateX(0);
-        }
-        .sidebar-right {
-            right: 0;
-            transform: translateX(100%);
-        }
-        .sidebar-right.open {
-            transform: translateX(0);
-        }
-        .sidebar-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            float: right;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-        }
-        .sidebar-close:hover {
-            transform: rotate(90deg);
-        }
-        .sidebar h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #f39c12;
-        }
-        .sidebar a {
-            display: block;
-            color: #cbd5e1;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none;
-            transition: all 0.2s;
-            font-size: 0.95rem;
-        }
-        .sidebar a:hover {
-            color: #fff;
-            padding-left: 5px;
-        }
-        .sidebar a i {
-            width: 25px;
-            color: #f39c12;
-        }
-        
-        /* ============================================================
-           NAVIGATION
-           ============================================================ */
+        /* Navigation */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -283,6 +197,88 @@
             display: none !important;
         }
         
+        /* Sidebars */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            width: 320px;
+            height: 100%;
+            background: #1e2a3a;
+            color: white;
+            z-index: 1001;
+            padding: 30px 20px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+        .sidebar-left {
+            left: 0;
+            transform: translateX(-100%);
+        }
+        .sidebar-left.open {
+            transform: translateX(0);
+        }
+        .sidebar-right {
+            right: 0;
+            transform: translateX(100%);
+        }
+        .sidebar-right.open {
+            transform: translateX(0);
+        }
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .sidebar-close:hover {
+            transform: rotate(90deg);
+        }
+        .sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #f39c12;
+        }
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .sidebar a:hover {
+            color: #fff;
+            padding-left: 5px;
+        }
+        .sidebar a i {
+            width: 25px;
+            color: #f39c12;
+        }
+        
         /* ============================================================
            PARTNERSHIPS PAGE STYLES
            ============================================================ */
@@ -309,6 +305,15 @@
             max-width: 700px;
             margin: 0 auto;
             opacity: 0.9;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #1e2a3a;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f39c12;
+            display: inline-block;
         }
         
         .benefits-grid {
@@ -342,15 +347,6 @@
         .benefit-card p {
             color: #7f8c8d;
             font-size: 0.95rem;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            color: #1e2a3a;
-            margin: 40px 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #f39c12;
-            display: inline-block;
         }
         
         .services-list {
@@ -415,18 +411,7 @@
             font-size: 1.2rem;
             margin: 0 auto 15px;
         }
-        .step-card h4 {
-            color: #1e2a3a;
-            margin-bottom: 8px;
-        }
-        .step-card p {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
         
-        /* ============================================================
-           PARTNERSHIP MODEL (5:2:1)
-           ============================================================ */
         .model-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -469,9 +454,6 @@
             color: white;
         }
         
-        /* ============================================================
-           PAY IT FORWARD
-           ============================================================ */
         .pay-forward-section {
             background: white;
             border-radius: 24px;
@@ -516,9 +498,6 @@
             font-size: 0.95rem;
         }
         
-        /* ============================================================
-           MENTORSHIP PROGRAM
-           ============================================================ */
         .mentorship-section {
             background: white;
             border-radius: 24px;
@@ -578,8 +557,93 @@
         }
         
         /* ============================================================
-           SUBJECTS SECTION
+           PRICING SECTION (UPDATED)
            ============================================================ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .pricing-card.featured {
+            border-color: #f39c12;
+            background: #fffdf5;
+        }
+        .pricing-card .plan-name {
+            font-size: 1.5rem;
+            color: #1e2a3a;
+            margin-bottom: 10px;
+        }
+        .pricing-card .plan-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 5px;
+        }
+        .pricing-card .plan-price small {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #7f8c8d;
+        }
+        .pricing-card .plan-desc {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin: 20px 0;
+        }
+        .pricing-card ul li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        .pricing-card ul li i {
+            color: #27ae60;
+            width: 20px;
+        }
+        .pricing-card .btn-enquire {
+            display: inline-block;
+            background: #f39c12;
+            color: #1e2a3a;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .pricing-card .btn-enquire:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        .pricing-card .btn-enquire.green {
+            background: #27ae60;
+            color: white;
+        }
+        .pricing-card .btn-enquire.green:hover {
+            background: #1e8449;
+        }
+        
+        /* Subjects Section */
         .subjects-section {
             background: white;
             border-radius: 24px;
@@ -644,7 +708,6 @@
         .subject-tag:hover .code {
             color: white;
         }
-        
         .total-count {
             text-align: center;
             padding: 15px;
@@ -660,63 +723,59 @@
             font-size: 1.5rem;
         }
         
-        /* ============================================================
-           CTA SECTION
-           ============================================================ */
-        .cta-box {
+        /* CTA Section */
+        .cta-section {
             background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             color: white;
-            padding: 40px;
+            padding: 50px;
             border-radius: 24px;
             text-align: center;
             margin: 30px 0;
         }
-        .cta-box h2 {
-            font-size: 1.8rem;
+        .cta-section h2 {
+            font-size: 2rem;
             margin-bottom: 15px;
         }
-        .cta-box p {
+        .cta-section p {
             opacity: 0.9;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
         }
-        .cta-box .btn {
+        .cta-section .btn-cta {
             display: inline-block;
             background: #f39c12;
             color: #1e2a3a;
-            padding: 14px 35px;
+            padding: 14px 40px;
             border-radius: 40px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.3s;
         }
-        .cta-box .btn:hover {
+        .cta-section .btn-cta:hover {
             background: #e67e22;
             transform: translateY(-2px);
         }
-        .contact-details {
+        .cta-section .contact-details {
             display: flex;
             justify-content: center;
             gap: 30px;
             flex-wrap: wrap;
             margin-top: 20px;
         }
-        .contact-details a {
+        .cta-section .contact-details a {
             color: white;
             text-decoration: none;
             font-size: 1rem;
             transition: color 0.3s;
         }
-        .contact-details a:hover {
+        .cta-section .contact-details a:hover {
             color: #f39c12;
         }
-        .contact-details i {
+        .cta-section .contact-details i {
             margin-right: 8px;
         }
         
-        /* ============================================================
-           FOOTER
-           ============================================================ */
         .footer-modern {
             background: #0f1720;
             color: #e2e8f0;
@@ -851,6 +910,9 @@
             .steps-grid {
                 grid-template-columns: 1fr;
             }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
             .model-grid {
                 grid-template-columns: 1fr;
             }
@@ -863,10 +925,10 @@
             .subject-tags {
                 justify-content: center;
             }
-            .cta-box {
-                padding: 25px;
+            .cta-section {
+                padding: 30px;
             }
-            .contact-details {
+            .cta-section .contact-details {
                 flex-direction: column;
                 align-items: center;
             }
@@ -884,9 +946,7 @@
         <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
     </div>
 
-    <!-- ============================================================ -->
-    <!-- PROFILE SIDEBAR (Left) -->
-    <!-- ============================================================ -->
+    <!-- PROFILE SIDEBAR -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
         <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
@@ -901,9 +961,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- DOT MENU SIDEBAR (Right) -->
-    <!-- ============================================================ -->
+    <!-- DOT MENU SIDEBAR -->
     <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
     <div class="sidebar sidebar-right" id="dotSidebar">
         <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
@@ -914,11 +972,10 @@
         <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
         <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
+        <a href="tutor-application.html"><i class="fas fa-user-graduate"></i> Become a Tutor</a>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header>
         <div class="container">
             <div class="logo-image">
@@ -958,15 +1015,13 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="container">
 
         <!-- Hero Section -->
         <div class="hero-section">
             <h1><i class="fas fa-handshake"></i> High School Partnerships</h1>
-            <p>Partner with AceEd Tutoring to provide your students with expert academic support in Grade 10–12 subjects.</p>
+            <p>Partner with AceEd Tutoring to provide your students with extra academic support in Grade 10–12 subjects.</p>
         </div>
 
         <!-- Benefits -->
@@ -975,22 +1030,22 @@
             <div class="benefit-card">
                 <i class="fas fa-chart-line"></i>
                 <h3>Boost Student Performance</h3>
-                <p>Help your students improve their marks in key subjects with expert CAPS-aligned tutoring.</p>
+                <p>Help your students improve their understanding in key subjects with CAPS-aligned tutoring support.</p>
             </div>
             <div class="benefit-card">
                 <i class="fas fa-wallet"></i>
-                <h3>Cost-Effective</h3>
-                <p>Affordable rates designed to make quality tutoring accessible for schools and students.</p>
+                <h3>Affordable</h3>
+                <p>We're students too, so we understand budget constraints. Our rates are designed to be accessible for schools and families.</p>
             </div>
             <div class="benefit-card">
-                <i class="fas fa-trophy"></i>
-                <h3>Proven Results</h3>
-                <p>Experienced tutors who understand the CAPS curriculum and what it takes to succeed.</p>
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Peer-to-Peer Learning</h3>
+                <p>We're university students who recently went through the CAPS curriculum. We understand what works and what doesn't.</p>
             </div>
             <div class="benefit-card">
                 <i class="fas fa-clock"></i>
                 <h3>Flexible Options</h3>
-                <p>In-person and online sessions to suit your school's schedule.</p>
+                <p>Online sessions to suit your school's schedule.</p>
             </div>
             <div class="benefit-card">
                 <i class="fas fa-shield-alt"></i>
@@ -1000,20 +1055,13 @@
             <div class="benefit-card">
                 <i class="fas fa-heart"></i>
                 <h3>Community Impact</h3>
-                <p>We believe in giving back — every group includes a free tutoring spot.</p>
+                <p>We believe in giving back — every group includes a free tutoring spot for a student in need.</p>
             </div>
         </div>
 
         <!-- What We Offer -->
         <h2 class="section-title"><i class="fas fa-list"></i> What We Offer Schools</h2>
         <div class="services-list">
-            <div class="service-item">
-                <i class="fas fa-school"></i>
-                <div>
-                    <h4>On-Site Tutoring</h4>
-                    <p>Tutors come to your school during or after school hours.</p>
-                </div>
-            </div>
             <div class="service-item">
                 <i class="fas fa-laptop"></i>
                 <div>
@@ -1024,8 +1072,15 @@
             <div class="service-item">
                 <i class="fas fa-bolt"></i>
                 <div>
-                    <h4>Exam Bootcamps</h4>
-                    <p>Intensive revision sessions before exams.</p>
+                    <h4>Exam Prep Sessions</h4>
+                    <p>Focused revision sessions before exams.</p>
+                </div>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-hand-holding-heart"></i>
+                <div>
+                    <h4>Pay-It-Forward Scholarships</h4>
+                    <p>Free tutoring spots for students in need.</p>
                 </div>
             </div>
             <div class="service-item">
@@ -1042,13 +1097,6 @@
                     <p>Workshops to help parents support their children.</p>
                 </div>
             </div>
-            <div class="service-item">
-                <i class="fas fa-hand-holding-heart"></i>
-                <div>
-                    <h4>Pay-It-Forward Scholarships</h4>
-                    <p>Free tutoring spots for students in need.</p>
-                </div>
-            </div>
         </div>
 
         <!-- How It Works -->
@@ -1057,7 +1105,7 @@
             <div class="step-card">
                 <div class="step-number">1</div>
                 <h4>School Partners With Us</h4>
-                <p>We partner with your school to provide tutoring support.</p>
+                <p>We discuss your school's tutoring needs.</p>
             </div>
             <div class="step-card">
                 <div class="step-number">2</div>
@@ -1076,15 +1124,13 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- PARTNERSHIP MODEL (5:2:1) -->
-        <!-- ============================================================ -->
+        <!-- Partnership Model -->
         <h2 class="section-title"><i class="fas fa-users"></i> Our Partnership Model</h2>
         <div class="model-grid">
             <div class="model-card">
                 <i class="fas fa-chalkboard-teacher" style="color: #3498db;"></i>
                 <h3>2 Tutors</h3>
-                <p>Qualified, experienced tutors leading each session.</p>
+                <p>University students currently studying their degrees, sharing what they've learned.</p>
             </div>
             <div class="model-card">
                 <i class="fas fa-user-graduate" style="color: #27ae60;"></i>
@@ -1103,9 +1149,7 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- PAY IT FORWARD -->
-        <!-- ============================================================ -->
+        <!-- Pay It Forward -->
         <div class="pay-forward-section">
             <h2><i class="fas fa-heart" style="color: #e74c3c;"></i> Pay It Forward</h2>
             <p class="subtitle">Students who receive free tutoring agree to give back to the community.</p>
@@ -1133,9 +1177,7 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- MENTORSHIP PROGRAM -->
-        <!-- ============================================================ -->
+        <!-- Mentorship Program -->
         <div class="mentorship-section">
             <h2><i class="fas fa-seedling" style="color: #27ae60;"></i> Mentorship Program</h2>
             <p class="subtitle">Students who complete our program can return as mentors to guide the next generation.</p>
@@ -1143,11 +1185,11 @@
                 <div class="mentor-card">
                     <i class="fas fa-user-graduate"></i>
                     <h4>First-Year Students</h4>
-                    <p>Receive mentorship from third-year or final-year students who have completed the program.</p>
+                    <p>Receive mentorship from students who have completed the program.</p>
                 </div>
                 <div class="mentor-card highlight">
                     <i class="fas fa-chalkboard-teacher"></i>
-                    <h4>Third-Year / Final-Year Mentors</h4>
+                    <h4>Returning Mentors</h4>
                     <p>Experienced students guide and support first-year participants.</p>
                 </div>
                 <div class="mentor-card highlight2">
@@ -1158,14 +1200,79 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- SUBJECTS WE COVER -->
-        <!-- ============================================================ -->
+        <!-- ============================================================
+             PRICING SECTION
+             ============================================================ -->
+        <h2 class="section-title"><i class="fas fa-tag"></i> Partnership Pricing</h2>
+        
+        <div class="pricing-grid">
+            <!-- Individual Lessons -->
+            <div class="pricing-card">
+                <div class="plan-name">Individual Lessons</div>
+                <div class="plan-price">R50 <small>/hour</small></div>
+                <div class="plan-desc">Pay-as-you-go sessions</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 1-on-1 tutoring</li>
+                    <li><i class="fas fa-check"></i> Flexible scheduling</li>
+                    <li><i class="fas fa-check"></i> Subject-specific help</li>
+                    <li><i class="fas fa-check"></i> Assignment support</li>
+                    <li><i class="fas fa-check"></i> No contracts</li>
+                </ul>
+                <a href="#contact" class="btn-enquire">Get Started</a>
+            </div>
+            
+            <!-- Monthly Package -->
+            <div class="pricing-card featured">
+                <div class="plan-name">Monthly Package</div>
+                <div class="plan-price">R300 <small>/month</small></div>
+                <div class="plan-desc">Best value — 2 sessions/week for a month</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 2 sessions/week</li>
+                    <li><i class="fas fa-check"></i> 8 hours total (R37.50/hour)</li>
+                    <li><i class="fas fa-check"></i> Group setting (5 students + 2 tutors)</li>
+                    <li><i class="fas fa-check"></i> WhatsApp support</li>
+                    <li><i class="fas fa-check"></i> Monthly progress report</li>
+                    <li><i class="fas fa-check"></i> 1 free student per group</li>
+                    <li><i class="fas fa-check"></i> SAVE 50% vs individual lessons</li>
+                </ul>
+                <a href="#contact" class="btn-enquire green">Best Value</a>
+            </div>
+            
+            <!-- Group Package -->
+            <div class="pricing-card">
+                <div class="plan-name">Custom Package</div>
+                <div class="plan-price">Custom</div>
+                <div class="plan-desc">For schools with specific needs</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Multiple subjects</li>
+                    <li><i class="fas fa-check"></i> Multiple groups</li>
+                    <li><i class="fas fa-check"></i> Flexible hours</li>
+                    <li><i class="fas fa-check"></i> Full school support</li>
+                    <li><i class="fas fa-check"></i> Teacher resources</li>
+                    <li><i class="fas fa-check"></i> Parent sessions</li>
+                </ul>
+                <a href="#contact" class="btn-enquire">Contact Us</a>
+            </div>
+        </div>
+        
+        <div style="text-align: center; background: #f8fafd; padding: 20px; border-radius: 16px; margin: 20px 0;">
+            <p style="color: #555; margin: 0;">
+                <i class="fas fa-info-circle" style="color: #3498db;"></i>
+                <strong>Custom packages available.</strong> Contact us for a tailored quote based on your school's specific needs.
+            </p>
+            <p style="color: #555; margin: 5px 0 0;">
+                Minimum 10 students per school. All prices in ZAR.
+            </p>
+            <p style="color: #27ae60; font-weight: 500; margin-top: 5px;">
+                <i class="fas fa-gift"></i> First session FREE for every new school partnership!
+            </p>
+        </div>
+
+        <!-- Subjects We Cover -->
         <div class="subjects-section">
             <h2><i class="fas fa-book-open"></i> Subjects We Cover</h2>
-            <p class="subtitle">From Grade 8 to 12, we offer expert tutoring across all major CAPS subjects.</p>
+            <p class="subtitle">From Grade 8 to 12, we offer tutoring across all major CAPS subjects.</p>
 
-            <!-- Grade 8 & 9 -->
             <div class="grade-group">
                 <h3>Grade 8 & 9 <span class="badge">Foundation Phase</span></h3>
                 <div class="subject-tags">
@@ -1174,7 +1281,6 @@
                 </div>
             </div>
 
-            <!-- Grade 10, 11 & 12 -->
             <div class="grade-group">
                 <h3>Grade 10, 11 & 12 <span class="badge badge-senior">Senior Phase</span></h3>
                 <div class="subject-tags">
@@ -1199,13 +1305,11 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- CALL TO ACTION -->
-        <!-- ============================================================ -->
-        <div class="cta-box">
+        <!-- Call to Action -->
+        <div class="cta-section" id="contact">
             <h2><i class="fas fa-handshake"></i> Ready to Partner with Us?</h2>
             <p>Contact us today to discuss how AceEd Tutoring can support your students.</p>
-            <a href="contact.html" class="btn"><i class="fas fa-envelope"></i> Get in Touch</a>
+            <a href="contact.html" class="btn-cta"><i class="fas fa-envelope"></i> Get in Touch</a>
             <div class="contact-details">
                 <a href="mailto:info@aceed.co.za"><i class="fas fa-envelope"></i> info@aceed.co.za</a>
                 <a href="https://wa.me/27698251610"><i class="fab fa-whatsapp"></i> +27 69 825 1610</a>
@@ -1214,9 +1318,7 @@
 
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="footer-modern">
         <div class="container">
             <div class="footer-grid">
@@ -1276,14 +1378,10 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
-    <!-- JAVASCRIPT -->
-    <!-- ============================================================ -->
     <script>
         // ============================================================
         // SIDEBAR CONTROLS
         // ============================================================
-
         function openSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.add('open');
@@ -1314,9 +1412,8 @@
         });
 
         // ============================================================
-        // AUTH - UPDATE UI BASED ON LOGIN STATE
+        // AUTH - UPDATE UI
         // ============================================================
-
         function updateAuthUI(user) {
             const loggedIn = document.getElementById('profileLoggedIn');
             const loggedOut = document.getElementById('profileLoggedOut');
@@ -1349,7 +1446,6 @@
         // ============================================================
         // CART BADGE
         // ============================================================
-
         function updateCartBadge() {
             if (typeof getCart === 'function') {
                 const cart = getCart();
