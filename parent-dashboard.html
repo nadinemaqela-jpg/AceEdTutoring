@@ -1606,6 +1606,59 @@
         }
 
         // ============================================================
+        // PAY FOR SERVICE - REDIRECT TO PAYFAST
+        // ============================================================
+        function payForService(serviceName, amount, serviceType) {
+            // Get the parent's email from the user data
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                alert('Please log in again.');
+                return;
+            }
+            
+            // Get parent's name
+            const db = firebase.firestore();
+            db.collection('users').doc(user.uid).get()
+                .then(function(doc) {
+                    const userData = doc.data();
+                    const parentName = userData.fullName || 'Parent';
+                    
+                    // Generate a unique order ID
+                    const orderId = 'ACE' + Date.now();
+                    
+                    // Save the payment intent to Firestore
+                    return db.collection('payments').add({
+                        parentUid: user.uid,
+                        service: serviceName,
+                        amount: amount,
+                        type: serviceType,
+                        status: 'pending',
+                        orderId: orderId,
+                        createdAt: new Date().toISOString()
+                    });
+                })
+                .then(function() {
+                    // Redirect to checkout with the service details
+                    // Store the service details in localStorage so checkout can read them
+                    const paymentData = {
+                        service: serviceName,
+                        amount: amount,
+                        type: serviceType,
+                        orderId: 'ACE' + Date.now()
+                    };
+                    localStorage.setItem('parent_payment', JSON.stringify(paymentData));
+                    
+                    // Redirect to checkout page
+                    window.location.href = 'checkout.html?from=parent_dashboard';
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    alert('Error processing payment: ' + error.message);
+                });
+        }
+        
+
+        // ============================================================
         // OPEN WHATSAPP CHAT WITH TUTOR
         // ============================================================
         function openWhatsApp(tutorUid) {
