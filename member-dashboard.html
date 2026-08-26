@@ -14,14 +14,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard - AceEd Tutoring</title>
     
-    <!-- Firebase SDKs (compat version for regular script tags) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Firebase Configuration - USING YOUR ACTUAL CONFIG -->
+    <!-- Firebase Configuration - YOUR ACTUAL CONFIG -->
     <script>
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD81MblPqlkFIY4DplSg8EpXoXjPa6h3Hc",
             authDomain: "aceed-tutoring.firebaseapp.com",
@@ -31,10 +30,10 @@
             appId: "1:225577605291:web:75327bc4e1f644cef47fee"
         };
         
-        // Initialize Firebase (compat version)
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        console.log('✅ Firebase initialized successfully!');
-        console.log('✅ Project ID:', firebaseConfig.projectId);
+        console.log('✅ Firebase initialized!');
+        console.log('📁 Project:', firebaseConfig.projectId);
     </script>
     
     <!-- Cart & Auth -->
@@ -655,7 +654,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 300px;
+            min-height: 400px;
             flex-direction: column;
             gap: 20px;
         }
@@ -672,6 +671,46 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        .btn-signin {
+            display: inline-block;
+            padding: 14px 40px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: #f39c12;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-signin:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+        
+        .btn-retry {
+            display: inline-block;
+            padding: 12px 35px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .btn-retry:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
         }
         
         @media (max-width: 768px) {
@@ -835,6 +874,27 @@
         <div id="loadingSpinner" class="loading-spinner">
             <div class="spinner"></div>
             <p>Loading your dashboard...</p>
+            <p style="font-size: 0.8rem; color: #95a5a6; margin-top: 5px;">If this takes too long, check the console (F12)</p>
+        </div>
+
+        <!-- Not Logged In Message -->
+        <div id="notLoggedIn" style="display: none; text-align: center; padding: 60px 20px;">
+            <i class="fas fa-sign-in-alt" style="font-size: 4rem; color: #f39c12; margin-bottom: 20px;"></i>
+            <h2 style="color: #1e2a3a; margin-bottom: 10px;">Welcome to AceEd Tutoring</h2>
+            <p style="color: #7f8c8d; font-size: 1.1rem; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                Please sign in to access your student dashboard and view your resources.
+            </p>
+            <a href="signin.html" class="btn-signin">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </a>
+            <div style="margin-top: 20px;">
+                <p style="color: #95a5a6; font-size: 0.9rem;">
+                    Don't have an account? <a href="signup.html" style="color: #3498db; text-decoration: none; font-weight: 600;">Sign Up</a>
+                </p>
+            </div>
+            <button onclick="location.reload()" class="btn-retry">
+                <i class="fas fa-redo"></i> Retry
+            </button>
         </div>
 
         <!-- Student Dashboard Content -->
@@ -978,107 +1038,104 @@
         });
 
         // ============================================================
-        // AUTH - CHECK USER ROLE
+        // AUTH - MAIN LOGIC
         // ============================================================
         
         // Get DOM elements
         const loadingSpinner = document.getElementById('loadingSpinner');
+        const notLoggedIn = document.getElementById('notLoggedIn');
         const studentContent = document.getElementById('studentContent');
         const accessDenied = document.getElementById('accessDenied');
 
-        console.log('🔥 Starting auth check...');
+        console.log('🔥 AceEd Dashboard - Starting...');
 
         // Listen for auth state changes
         firebase.auth().onAuthStateChanged(function(user) {
-            console.log('📡 Auth state changed:', user ? '✅ Logged in' : '❌ Not logged in');
+            console.log('📡 Auth State Changed:', user ? '✅ Logged In' : '❌ Not Logged In');
             
-            if (!user) {
-                // No user - show sign in prompt
-                loadingSpinner.innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <i class="fas fa-sign-in-alt" style="font-size: 4rem; color: #f39c12; margin-bottom: 20px;"></i>
-                        <h2 style="color: #1e2a3a; margin-bottom: 10px;">Please Sign In</h2>
-                        <p style="color: #7f8c8d; margin-bottom: 25px;">You need to be logged in to access your dashboard.</p>
-                        <a href="signin.html" class="btn btn-blue" style="display: inline-block; padding: 12px 35px; border-radius: 40px; text-decoration: none; background: #3498db; color: white; font-weight: 600;">
-                            <i class="fas fa-sign-in-alt"></i> Go to Sign In
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
-            console.log('👤 User UID:', user.uid);
-            console.log('📧 User Email:', user.email);
-
-            // User is logged in - fetch their data
-            const userRef = firebase.firestore().collection('users').doc(user.uid);
-            userRef.get()
-                .then(function(doc) {
-                    console.log('📄 Firestore document exists:', doc.exists);
-                    
-                    if (!doc.exists) {
-                        loadingSpinner.innerHTML = `
-                            <div style="text-align: center; padding: 40px;">
-                                <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;"></i>
-                                <h2 style="color: #e74c3c; margin-bottom: 10px;">Profile Not Found</h2>
-                                <p style="color: #7f8c8d;">Your user profile was not found in the database.</p>
-                                <p style="color: #95a5a6; font-size: 0.9rem; margin-top: 10px;">UID: ${user.uid}</p>
-                                <a href="index.html" class="btn btn-blue" style="display: inline-block; margin-top: 20px; padding: 12px 35px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">Go Home</a>
-                            </div>
-                        `;
-                        return;
-                    }
-                    
-                    const userData = doc.data();
-                    console.log('📋 User data:', userData);
-                    console.log('🎯 User role:', userData.role);
-                    
-                    const role = userData.role || 'student';
-                    
-                    // Hide loading spinner
-                    loadingSpinner.style.display = 'none';
-                    
-                    // Check role and redirect or show content
-                    if (role === 'student') {
-                        console.log('✅ Student role confirmed - showing dashboard');
-                        studentContent.style.display = 'block';
-                        const displayName = userData.fullName || userData.displayName || user.email || 'Student';
-                        document.getElementById('userName').textContent = displayName;
-                        console.log('👤 Displaying dashboard for:', displayName);
-                    } else if (role === 'parent') {
-                        console.log('👪 Parent role - redirecting to parent dashboard');
-                        window.location.href = 'parent-dashboard.html';
-                    } else if (role === 'tutor') {
-                        console.log('👨‍🏫 Tutor role - redirecting to tutor dashboard');
-                        window.location.href = 'tutor-dashboard.html';
-                    } else if (role === 'admin') {
-                        console.log('👑 Admin role - redirecting to admin dashboard');
-                        window.location.href = 'admin.html';
-                    } else {
-                        console.log('❓ Unknown role:', role);
+            if (user) {
+                console.log('👤 User UID:', user.uid);
+                console.log('📧 User Email:', user.email);
+                
+                // User is logged in - fetch their data
+                const userRef = firebase.firestore().collection('users').doc(user.uid);
+                userRef.get()
+                    .then(function(doc) {
+                        console.log('📄 Firestore Document Exists:', doc.exists);
+                        
+                        if (!doc.exists) {
+                            console.error('❌ User document not found!');
+                            loadingSpinner.style.display = 'none';
+                            notLoggedIn.style.display = 'none';
+                            accessDenied.style.display = 'block';
+                            document.querySelector('.access-denied p').textContent = 
+                                'Your user profile was not found. Please contact support.';
+                            return;
+                        }
+                        
+                        const userData = doc.data();
+                        console.log('📋 User Data:', userData);
+                        console.log('🎯 User Role:', userData.role);
+                        
+                        const role = userData.role || 'student';
+                        
+                        // Hide everything first
+                        loadingSpinner.style.display = 'none';
+                        notLoggedIn.style.display = 'none';
+                        accessDenied.style.display = 'none';
+                        
+                        if (role === 'student') {
+                            console.log('✅ Student role confirmed - Showing dashboard');
+                            studentContent.style.display = 'block';
+                            const displayName = userData.fullName || userData.displayName || user.email || 'Student';
+                            document.getElementById('userName').textContent = displayName;
+                            console.log('👤 Dashboard for:', displayName);
+                        } else if (role === 'parent') {
+                            console.log('👪 Parent role - Redirecting to parent dashboard');
+                            window.location.href = 'parent-dashboard.html';
+                        } else if (role === 'tutor') {
+                            console.log('👨‍🏫 Tutor role - Redirecting to tutor dashboard');
+                            window.location.href = 'tutor-dashboard.html';
+                        } else if (role === 'admin') {
+                            console.log('👑 Admin role - Redirecting to admin dashboard');
+                            window.location.href = 'admin.html';
+                        } else {
+                            console.log('❓ Unknown role:', role);
+                            accessDenied.style.display = 'block';
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('❌ Error fetching user data:', error);
+                        loadingSpinner.style.display = 'none';
+                        notLoggedIn.style.display = 'none';
                         accessDenied.style.display = 'block';
-                    }
-                })
-                .catch(function(error) {
-                    console.error('❌ Error fetching user data:', error);
-                    loadingSpinner.innerHTML = `
-                        <div style="text-align: center; padding: 40px;">
-                            <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;"></i>
-                            <h2 style="color: #e74c3c; margin-bottom: 10px;">Error Loading Profile</h2>
-                            <p style="color: #7f8c8d;">${error.message}</p>
-                            <a href="index.html" class="btn btn-blue" style="display: inline-block; margin-top: 20px; padding: 12px 35px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">Go Home</a>
-                        </div>
-                    `;
-                });
+                        document.querySelector('.access-denied p').textContent = 
+                            'Error loading your profile: ' + error.message;
+                    });
+            } else {
+                // No user - show sign in prompt
+                console.log('❌ No user logged in');
+                loadingSpinner.style.display = 'none';
+                notLoggedIn.style.display = 'block';
+                studentContent.style.display = 'none';
+                accessDenied.style.display = 'none';
+            }
+        }, function(error) {
+            console.error('❌ Auth listener error:', error);
+            loadingSpinner.style.display = 'none';
+            notLoggedIn.style.display = 'none';
+            accessDenied.style.display = 'block';
+            document.querySelector('.access-denied p').textContent = 
+                'Authentication error: ' + error.message;
         });
 
         // ============================================================
         // LOGOUT
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', function() {
-            console.log('🚪 Logout button clicked');
+            console.log('🚪 Logout clicked');
             firebase.auth().signOut().then(function() {
-                console.log('✅ Logged out successfully');
+                console.log('✅ Logged out');
                 window.location.href = 'index.html';
             }).catch(function(error) {
                 console.error('❌ Logout error:', error);
@@ -1131,6 +1188,8 @@
                 alert('Error logging out. Please try again.');
             });
         }
+
+        console.log('✅ Dashboard script ready!');
     </script>
 </body>
 </html>
