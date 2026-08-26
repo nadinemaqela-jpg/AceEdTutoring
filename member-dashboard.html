@@ -14,14 +14,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard - AceEd Tutoring</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Firebase Configuration - YOUR ACTUAL CONFIG -->
+    <!-- Firebase Configuration -->
     <script>
-        // Firebase config with your actual values
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD81MblPqlkFIY4DplSg8EpXoXjPa6h3Hc",
             authDomain: "aceed-tutoring.firebaseapp.com",
@@ -32,13 +37,8 @@
         };
         
         // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log('✅ Firebase initialized from member-dashboard!');
-        } else {
-            console.log('✅ Firebase already initialized');
-        }
-        console.log('📁 Project:', firebaseConfig.projectId);
+        firebase.initializeApp(firebaseConfig);
+        console.log('✅ Firebase initialized');
     </script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,8 +61,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
-            z-index: 2;
         }
         
         header {
@@ -72,8 +70,6 @@
             text-align: center;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 100;
         }
         
         .header-content {
@@ -146,7 +142,6 @@
         
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
         }
         
         .dropdown {
@@ -164,7 +159,6 @@
             top: 100%;
             left: 0;
             z-index: 10;
-            backdrop-filter: blur(2px);
             padding: 5px 0;
         }
         
@@ -179,7 +173,6 @@
             display: block;
             font-size: 0.85rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: background 0.2s;
         }
         
         .dropdown-content a:hover {
@@ -202,11 +195,6 @@
         
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        
-        .profile-btn {
-            font-size: 1.2rem;
         }
         
         .cart-link {
@@ -223,7 +211,6 @@
         
         .cart-link:hover {
             background-color: #e67e22 !important;
-            transform: translateY(-1px);
         }
         
         .cart-badge {
@@ -252,13 +239,10 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
         
         .sidebar-overlay.active {
             display: block;
-            opacity: 1;
         }
         
         .sidebar {
@@ -301,7 +285,6 @@
             cursor: pointer;
             float: right;
             margin-bottom: 20px;
-            transition: transform 0.2s;
         }
         
         .sidebar-close:hover {
@@ -450,8 +433,6 @@
         .btn-blue:hover { background: #2980b9; transform: translateY(-2px); }
         .btn-green { background: #27ae60; color: white; }
         .btn-green:hover { background: #1e8449; transform: translateY(-2px); }
-        .btn-orange { background: #e67e22; color: white; }
-        .btn-orange:hover { background: #d35400; transform: translateY(-2px); }
         
         .tip-box {
             background: #fff3cd;
@@ -855,7 +836,7 @@
                     </div>
                 </div>
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
+                <button class="icon-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
                     <i class="fas fa-user-circle"></i>
                 </button>
                 <a href="cart.html" class="nav-link cart-link">
@@ -870,21 +851,18 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <div class="container" id="mainContent">
+    <div class="container">
         <!-- Loading Spinner -->
         <div id="loadingSpinner" class="loading-spinner">
             <div class="spinner"></div>
             <p>Loading your dashboard...</p>
-            <p style="font-size: 0.8rem; color: #95a5a6; margin-top: 5px;">If this takes too long, check the console (F12)</p>
         </div>
 
         <!-- Not Logged In Message -->
         <div id="notLoggedIn" style="display: none; text-align: center; padding: 60px 20px;">
             <i class="fas fa-sign-in-alt" style="font-size: 4rem; color: #f39c12; margin-bottom: 20px;"></i>
             <h2 style="color: #1e2a3a; margin-bottom: 10px;">Welcome to AceEd Tutoring</h2>
-            <p style="color: #7f8c8d; font-size: 1.1rem; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                Please sign in to access your student dashboard and view your resources.
-            </p>
+            <p style="color: #7f8c8d; font-size: 1.1rem; margin-bottom: 30px;">Please sign in to access your student dashboard.</p>
             <a href="signin.html" class="btn-signin">
                 <i class="fas fa-sign-in-alt"></i> Sign In
             </a>
@@ -893,9 +871,6 @@
                     Don't have an account? <a href="signup.html" style="color: #3498db; text-decoration: none; font-weight: 600;">Sign Up</a>
                 </p>
             </div>
-            <button onclick="location.reload()" class="btn-retry">
-                <i class="fas fa-redo"></i> Retry
-            </button>
         </div>
 
         <!-- Student Dashboard Content -->
@@ -1039,7 +1014,7 @@
         });
 
         // ============================================================
-        // AUTH - MAIN LOGIC (NO auth.js)
+        // AUTH - MAIN LOGIC
         // ============================================================
         
         // Get DOM elements
@@ -1050,139 +1025,84 @@
 
         console.log('🔥 AceEd Dashboard - Starting...');
 
-        // Check if Firebase is initialized
-        try {
-            const app = firebase.app();
-            console.log('✅ Firebase app is initialized');
-            console.log('📁 Project:', app.options.projectId);
-        } catch (e) {
-            console.error('❌ Firebase not initialized:', e);
-            loadingSpinner.innerHTML = `
-                <div style="text-align: center; padding: 40px;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
-                    <h2 style="color: #e74c3c; margin-top: 20px;">Firebase Error</h2>
-                    <p style="color: #7f8c8d;">Firebase failed to initialize. Please check your configuration.</p>
-                    <p style="color: #95a5a6; font-size: 0.9rem; margin-top: 10px;">Error: ${e.message}</p>
-                </div>
-            `;
-            // Stop execution if Firebase fails
-            throw e;
-        }
-
         // Listen for auth state changes
         firebase.auth().onAuthStateChanged(function(user) {
-            console.log('📡 Auth State Changed:', user ? '✅ Logged In' : '❌ Not Logged In');
+            console.log('📡 Auth State:', user ? 'Logged In' : 'Not Logged In');
             
             if (user) {
-                console.log('👤 User UID:', user.uid);
-                console.log('📧 User Email:', user.email);
+                console.log('👤 User:', user.email);
                 
                 // User is logged in - fetch their data
-                const userRef = firebase.firestore().collection('users').doc(user.uid);
-                userRef.get()
+                firebase.firestore().collection('users').doc(user.uid).get()
                     .then(function(doc) {
-                        console.log('📄 Firestore Document Exists:', doc.exists);
-                        
                         if (!doc.exists) {
                             console.error('❌ User document not found!');
                             loadingSpinner.style.display = 'none';
-                            notLoggedIn.style.display = 'none';
                             accessDenied.style.display = 'block';
-                            document.querySelector('.access-denied p').textContent = 
-                                'Your user profile was not found. Please contact support.';
                             return;
                         }
                         
                         const userData = doc.data();
-                        console.log('📋 User Data:', userData);
-                        console.log('🎯 User Role:', userData.role);
+                        console.log('📋 User Role:', userData.role);
                         
                         const role = userData.role || 'student';
                         
-                        // Hide everything first
                         loadingSpinner.style.display = 'none';
-                        notLoggedIn.style.display = 'none';
-                        accessDenied.style.display = 'none';
                         
                         if (role === 'student') {
-                            console.log('✅ Student role confirmed - Showing dashboard');
+                            console.log('✅ Student - Showing dashboard');
                             studentContent.style.display = 'block';
-                            const displayName = userData.fullName || userData.displayName || user.email || 'Student';
-                            document.getElementById('userName').textContent = displayName;
-                            console.log('👤 Dashboard for:', displayName);
+                            document.getElementById('userName').textContent = 
+                                userData.fullName || userData.displayName || user.email || 'Student';
                         } else if (role === 'parent') {
-                            console.log('👪 Parent role - Redirecting to parent dashboard');
                             window.location.href = 'parent-dashboard.html';
                         } else if (role === 'tutor') {
-                            console.log('👨‍🏫 Tutor role - Redirecting to tutor dashboard');
                             window.location.href = 'tutor-dashboard.html';
                         } else if (role === 'admin') {
-                            console.log('👑 Admin role - Redirecting to admin dashboard');
                             window.location.href = 'admin.html';
                         } else {
-                            console.log('❓ Unknown role:', role);
                             accessDenied.style.display = 'block';
                         }
                     })
                     .catch(function(error) {
-                        console.error('❌ Error fetching user data:', error);
+                        console.error('❌ Error:', error);
                         loadingSpinner.style.display = 'none';
-                        notLoggedIn.style.display = 'none';
                         accessDenied.style.display = 'block';
-                        document.querySelector('.access-denied p').textContent = 
-                            'Error loading your profile: ' + error.message;
                     });
             } else {
                 // No user - show sign in prompt
                 console.log('❌ No user logged in');
                 loadingSpinner.style.display = 'none';
                 notLoggedIn.style.display = 'block';
-                studentContent.style.display = 'none';
-                accessDenied.style.display = 'none';
             }
-        }, function(error) {
-            console.error('❌ Auth listener error:', error);
-            loadingSpinner.style.display = 'none';
-            notLoggedIn.style.display = 'none';
-            accessDenied.style.display = 'block';
-            document.querySelector('.access-denied p').textContent = 
-                'Authentication error: ' + error.message;
         });
 
         // ============================================================
         // LOGOUT
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', function() {
-            console.log('🚪 Logout clicked');
             firebase.auth().signOut().then(function() {
-                console.log('✅ Logged out');
                 window.location.href = 'index.html';
             }).catch(function(error) {
-                console.error('❌ Logout error:', error);
+                console.error('Logout error:', error);
                 alert('Error logging out. Please try again.');
             });
         });
 
         // ============================================================
-        // CART BADGE (SIMPLIFIED)
+        // CART BADGE
         // ============================================================
 
         function updateCartBadge() {
             try {
-                // Check if cart functions exist
-                if (typeof getCart === 'function') {
-                    const cart = getCart();
-                    const count = cart.reduce(function(total, item) {
-                        return total + (item.quantity || 0);
-                    }, 0);
-                    const badge = document.getElementById('cartCount');
-                    if (badge) {
-                        badge.textContent = count;
-                        badge.classList.toggle('show', count > 0);
-                    }
+                const badge = document.getElementById('cartCount');
+                if (badge) {
+                    // Simple cart count - replace with your actual cart logic
+                    const count = 0;
+                    badge.textContent = count;
+                    badge.classList.toggle('show', count > 0);
                 }
             } catch (error) {
-                // Silently fail - cart might not be available
                 console.log('Cart not available');
             }
         }
@@ -1203,7 +1123,7 @@
             });
         }
 
-        console.log('✅ Dashboard script ready!');
+        console.log('✅ Dashboard ready!');
     </script>
 </body>
 </html>
