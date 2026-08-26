@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'AW-18209594553');
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard - AceEd Tutoring</title>
@@ -32,10 +23,6 @@
         firebase.initializeApp(firebaseConfig);
     </script>
     
-    <!-- Cart & Auth -->
-    <script src="js/cart.js"></script>
-    <script src="js/auth.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -56,8 +43,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
-            z-index: 2;
         }
         
         header {
@@ -67,14 +52,6 @@
             text-align: center;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 100;
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
         
         .logo-container {
@@ -82,17 +59,6 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
-        }
-        
-        .logo-image {
-            max-width: 250px;
-            margin: 0 auto;
-        }
-        
-        .logo-image img {
-            width: 100%;
-            max-height: 80px;
-            object-fit: contain;
         }
         
         .brand-text {
@@ -141,194 +107,23 @@
         
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
         }
         
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #2c3e50;
-            min-width: 180px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-            border-radius: 12px;
-            top: 100%;
-            left: 0;
-            z-index: 10;
-            backdrop-filter: blur(2px);
-            padding: 5px 0;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-content a {
-            color: white;
-            padding: 10px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: background 0.2s;
-        }
-        
-        .dropdown-content a:hover {
-            background-color: #3498db;
-        }
-        
-        .icon-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 30px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .icon-btn:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        
-        .profile-btn {
-            font-size: 1.2rem;
-        }
-        
-        .cart-link {
-            position: relative;
-            background-color: #f39c12;
-            border-radius: 40px;
-            padding: 6px 15px;
-            color: white !important;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .cart-link:hover {
-            background-color: #e67e22 !important;
-            transform: translateY(-1px);
-        }
-        
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
+        .btn-logout {
             background: #e74c3c;
             color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: none;
-        }
-        
-        .cart-badge.show {
-            display: inline-block;
-        }
-        
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-        
-        .sidebar {
-            position: fixed;
-            top: 0;
-            width: 320px;
-            height: 100%;
-            background: #1e2a3a;
-            color: white;
-            z-index: 1001;
-            padding: 30px 20px;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-        }
-        
-        .sidebar-left {
-            left: 0;
-            transform: translateX(-100%);
-        }
-        
-        .sidebar-left.open {
-            transform: translateX(0);
-        }
-        
-        .sidebar-right {
-            right: 0;
-            transform: translateX(100%);
-        }
-        
-        .sidebar-right.open {
-            transform: translateX(0);
-        }
-        
-        .sidebar-close {
-            background: none;
             border: none;
-            color: #fff;
-            font-size: 1.5rem;
+            padding: 10px 25px;
+            border-radius: 40px;
             cursor: pointer;
-            float: right;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
         }
         
-        .sidebar-close:hover {
-            transform: rotate(90deg);
-        }
-        
-        .sidebar h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #f39c12;
-        }
-        
-        .sidebar a {
-            display: block;
-            color: #cbd5e1;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none;
-            transition: all 0.2s;
-            font-size: 0.95rem;
-        }
-        
-        .sidebar a:hover {
-            color: #fff;
-            padding-left: 5px;
-        }
-        
-        .sidebar a i {
-            width: 25px;
-            color: #f39c12;
+        .btn-logout:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
         }
         
         .dashboard-hero {
@@ -355,43 +150,15 @@
             color: #f39c12;
         }
         
-        .dashboard-hero .user-info {
+        .user-info {
             font-size: 1rem;
             opacity: 0.9;
             margin-top: 5px;
         }
         
-        .dashboard-hero .user-info i {
+        .user-info i {
             margin-right: 8px;
             color: #f39c12;
-        }
-        
-        .btn-logout {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        
-        .btn-logout:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin: 20px 0;
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
         }
         
         .resource-grid {
@@ -431,7 +198,7 @@
             margin-bottom: 15px;
         }
         
-        .resource-card .btn {
+        .btn {
             display: inline-block;
             padding: 10px 25px;
             border-radius: 40px;
@@ -442,11 +209,9 @@
         }
         
         .btn-blue { background: #3498db; color: white; }
-        .btn-blue:hover { background: #2980b9; transform: translateY(-2px); }
+        .btn-blue:hover { background: #2980b9; }
         .btn-green { background: #27ae60; color: white; }
-        .btn-green:hover { background: #1e8449; transform: translateY(-2px); }
-        .btn-orange { background: #e67e22; color: white; }
-        .btn-orange:hover { background: #d35400; transform: translateY(-2px); }
+        .btn-green:hover { background: #1e8449; }
         
         .tip-box {
             background: #fff3cd;
@@ -461,197 +226,11 @@
             margin-right: 10px;
         }
         
-        .access-denied {
-            background: #f8d7da;
-            border-left: 4px solid #e74c3c;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .access-denied i {
-            font-size: 3rem;
-            color: #e74c3c;
-            margin-bottom: 15px;
-        }
-        
-        .access-denied h2 {
-            color: #721c24;
-        }
-        
-        .access-denied p {
-            color: #721c24;
-            font-size: 1.1rem;
-        }
-        
-        .access-denied .btn {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 40px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: 600;
-        }
-        
-        .footer-modern {
-            background: #0f1720;
-            color: #e2e8f0;
-            margin-top: 60px;
-            padding: 50px 0 25px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 35px;
-            margin-bottom: 35px;
-        }
-        
-        .footer-col h4 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 18px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .footer-col h4:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -6px;
-            width: 40px;
-            height: 3px;
-            background: #e74c3c;
-            border-radius: 3px;
-        }
-        
-        .footer-col p, .footer-col ul {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            opacity: 0.85;
-        }
-        
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-col ul li a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .footer-col ul li a:hover {
-            color: #e74c3c;
-            padding-left: 4px;
-        }
-        
-        .footer-register-btn {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 10px 28px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 700;
-            margin-top: 12px;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(231,76,60,0.3);
-        }
-        
-        .footer-register-btn:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .footer-dark-btn {
-            background: #2d3e50;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            display: inline-block;
-            margin-right: 10px;
-            margin-top: 8px;
-        }
-        
-        .footer-dark-btn:hover {
-            background: #1e2f40;
-            transform: translateY(-1px);
-        }
-        
-        .social-icons {
-            display: flex;
-            gap: 14px;
-            margin-top: 15px;
-        }
-        
-        .social-icons a {
-            background: #1e2a3a;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.1rem;
-            transition: all 0.2s;
-        }
-        
-        .social-icons a:hover {
-            background: #e74c3c;
-            transform: translateY(-3px);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        
-        .footer-bottom a {
-            color: #e2e8f0;
-            text-decoration: none;
-        }
-        
-        .footer-bottom a:hover {
-            color: #e74c3c;
-        }
-        
-        .section-title {
-            margin: 30px 0 20px;
-            color: #1e2a3a;
-            font-size: 1.5rem;
-        }
-        
-        .section-title i {
-            color: #f39c12;
-            margin-right: 10px;
-        }
-        
-        /* Loading spinner */
         .loading-spinner {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 300px;
+            min-height: 400px;
             flex-direction: column;
             gap: 20px;
         }
@@ -670,42 +249,41 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Responsive Design */
+        .error-box {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 50px 0;
+        }
+        
+        .error-box i {
+            font-size: 3rem;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .error-box h2 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .error-box p {
+            color: #721c24;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .error-box .btn {
+            background: #3498db;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
-            .header-content {
-                padding: 0 15px;
-            }
-            
-            .logo-image {
-                max-width: 180px;
-            }
-            
-            .brand-text {
-                font-size: 1.4rem;
-            }
-            
-            .affordable-tagline {
-                font-size: 0.85rem;
-            }
-            
-            .tagline {
-                font-size: 0.8rem;
-            }
-            
-            .nav-links {
-                gap: 8px;
-            }
-            
-            .nav-link {
-                font-size: 0.8rem;
-                padding: 4px 10px;
-            }
-            
             .dashboard-hero {
                 flex-direction: column;
                 text-align: center;
-                gap: 15px;
-                padding: 20px;
             }
             
             .dashboard-hero h1 {
@@ -716,78 +294,14 @@
             .resource-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .footer-grid {
-                gap: 30px;
-            }
-            
-            .sidebar {
-                width: 280px;
-            }
-            
-            .cart-link {
-                padding: 4px 12px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .logo-image {
-                max-width: 150px;
-            }
-            
-            .brand-text {
-                font-size: 1.2rem;
-            }
-            
-            .dashboard-hero h1 {
-                font-size: 1.2rem;
-            }
-            
-            .btn-logout {
-                padding: 8px 20px;
-                font-size: 0.8rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- PROFILE SIDEBAR -->
-    <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
-    <div class="sidebar sidebar-left" id="profileSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
-        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
-        <div id="profileLoggedIn" style="display: none;">
-            <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-        <div id="profileLoggedOut">
-            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
-        </div>
-    </div>
-
-    <!-- DOT MENU SIDEBAR -->
-    <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
-    <div class="sidebar sidebar-right" id="dotSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
-        <h3><i class="fas fa-bars"></i> Menu</h3>
-        <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
-        <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
-        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
-        <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
-        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
-        <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
-        <a href="tutor-application.html"><i class="fas fa-user-graduate"></i> Become a Tutor</a>
-    </div>
-
     <!-- HEADER -->
     <header>
-        <div class="header-content">
+        <div class="container">
             <div class="logo-container">
-                <div class="logo-image">
-                    <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.style.display='none'">
-                </div>
                 <div class="brand-text">AceEd <span>Tutoring</span></div>
                 <div class="affordable-tagline">✦ Affordable Services ✦</div>
                 <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
@@ -795,53 +309,27 @@
             
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">ATP ▼</a>
-                    <div class="dropdown-content">
-                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
-                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
-                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
-                    </div>
-                </div>
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
-                    <i class="fas fa-user-circle"></i>
-                </button>
-                <a href="cart.html" class="nav-link cart-link">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                    <span class="cart-badge" id="cartCount">0</span>
-                </a>
-                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
+                <a href="cart.html" class="nav-link">Cart</a>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <div class="container" id="mainContent">
+    <div class="container">
         <!-- Loading Spinner -->
         <div id="loadingSpinner" class="loading-spinner">
             <div class="spinner"></div>
             <p>Loading your dashboard...</p>
-            <p style="font-size: 0.8rem; color: #888;">If this takes too long, check the console (F12) for errors</p>
         </div>
 
-        <!-- Student Dashboard Content -->
-        <div id="studentContent" style="display: none;">
+        <!-- Dashboard Content -->
+        <div id="dashboardContent" style="display: none;">
             <div class="dashboard-hero">
                 <div>
                     <h1><i class="fas fa-user-graduate"></i> My Dashboard</h1>
                     <div class="user-info">
-                        <i class="fas fa-user"></i> <span id="userName">Loading...</span>
+                        <i class="fas fa-user"></i> <span id="userName">Student</span>
                     </div>
                 </div>
                 <button class="btn-logout" id="logoutBtn">
@@ -849,23 +337,23 @@
                 </button>
             </div>
 
-            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-
-            <h2 class="section-title"><i class="fas fa-folder-open"></i> My Resources</h2>
+            <h2 style="margin: 30px 0 20px; color: #1e2a3a;">
+                <i class="fas fa-folder-open"></i> My Resources
+            </h2>
 
             <div class="resource-grid">
                 <div class="resource-card">
                     <i class="fas fa-calendar-alt" style="color: #3498db;"></i>
                     <h3>ATPs (Annual Teaching Plans)</h3>
                     <p>Access all ATPs for Grade 10-12</p>
-                    <a href="atps/grade-10/index.html" class="btn btn-blue">View ATPs</a>
+                    <a href="#" class="btn btn-blue">View ATPs</a>
                 </div>
                 
                 <div class="resource-card">
                     <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
                     <h3>Past Papers</h3>
                     <p>Access past papers & memos for all subjects</p>
-                    <a href="grades/grade-12/index.html" class="btn btn-green">View Papers</a>
+                    <a href="#" class="btn btn-green">View Papers</a>
                 </div>
             </div>
 
@@ -875,239 +363,126 @@
             </div>
         </div>
 
-        <!-- Access Denied -->
-        <div id="accessDenied" style="display: none;">
-            <div class="access-denied">
+        <!-- Error Display -->
+        <div id="errorBox" style="display: none;">
+            <div class="error-box">
                 <i class="fas fa-exclamation-triangle"></i>
-                <h2>Access Denied</h2>
-                <p>You do not have permission to view this page. Please log in with the correct account type.</p>
-                <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+                <h2>Something Went Wrong</h2>
+                <p id="errorMessage">Unable to load your dashboard. Please try again.</p>
+                <a href="signin.html" class="btn">Go to Sign In</a>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="footer-modern">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring.</p>
-                    <div class="social-icons">
-                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="tutors.html">Our Tutors</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="register.html">Register Now</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Subjects We Cover</h4>
-                    <ul>
-                        <li>Mathematics & Maths Lit</li>
-                        <li>Physical Sciences & Life Science</li>
-                        <li>Accounting & Economics</li>
-                        <li>Geography & Business Studies</li>
-                        <li>History & Tourism</li>
-                        <li>CAT</li>
-                        <li>Afrikaans & English</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Get In Touch</h4>
-                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
-                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
-                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
-                    <div style="margin-top: 12px;">
-                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
-                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
-                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // ============================================================
-        // SIDEBAR CONTROLS
-        // ============================================================
-
-        function openSidebar(type) {
-            if (type === 'profile') {
-                document.getElementById('profileSidebar').classList.add('open');
-                document.getElementById('profileOverlay').classList.add('active');
-            } else if (type === 'dot') {
-                document.getElementById('dotSidebar').classList.add('open');
-                document.getElementById('dotOverlay').classList.add('active');
-            }
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeSidebar(type) {
-            if (type === 'profile') {
-                document.getElementById('profileSidebar').classList.remove('open');
-                document.getElementById('profileOverlay').classList.remove('active');
-            } else if (type === 'dot') {
-                document.getElementById('dotSidebar').classList.remove('open');
-                document.getElementById('dotOverlay').classList.remove('active');
-            }
-            document.body.style.overflow = 'auto';
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeSidebar('profile');
-                closeSidebar('dot');
-            }
-        });
-
-        // ============================================================
-        // FIXED: AUTH - CHECK USER ROLE WITH BETTER ERROR HANDLING
-        // ============================================================
+        console.log('=== MEMBER DASHBOARD PAGE LOADED ===');
         
         // Get DOM elements
         const loadingSpinner = document.getElementById('loadingSpinner');
-        const studentContent = document.getElementById('studentContent');
-        const accessDenied = document.getElementById('accessDenied');
+        const dashboardContent = document.getElementById('dashboardContent');
+        const errorBox = document.getElementById('errorBox');
+        const errorMessage = document.getElementById('errorMessage');
+        const userName = document.getElementById('userName');
+
+        // Check if Firebase is available
+        if (typeof firebase === 'undefined' || !firebase.auth) {
+            console.error('Firebase is not available!');
+            loadingSpinner.style.display = 'none';
+            errorBox.style.display = 'block';
+            errorMessage.textContent = 'Firebase is not loaded. Please check your internet connection.';
+            throw new Error('Firebase not loaded');
+        }
+
+        console.log('Firebase is available, checking auth state...');
 
         // Listen for auth state changes
         firebase.auth().onAuthStateChanged(function(user) {
-            console.log('Auth state changed:', user ? 'User logged in' : 'No user');
+            console.log('Auth state changed. User:', user ? 'Logged in (UID: ' + user.uid + ')' : 'Not logged in');
             
             if (!user) {
-                // No user logged in - redirect to sign in
-                console.log('No user, redirecting to signin');
+                console.log('No user found, redirecting to signin...');
                 window.location.href = 'signin.html?redirect=member-dashboard.html';
                 return;
             }
 
-            // User is logged in, get their data
-            console.log('User UID:', user.uid);
+            console.log('User is logged in. Fetching user data from Firestore...');
             
+            // Get user data from Firestore
             const userRef = firebase.firestore().collection('users').doc(user.uid);
             userRef.get()
                 .then(function(doc) {
-                    console.log('Firestore document exists:', doc.exists);
+                    console.log('Firestore document fetched. Exists:', doc.exists);
                     
                     if (!doc.exists) {
-                        console.error('User document does not exist in Firestore');
+                        console.error('User document does not exist in Firestore!');
                         loadingSpinner.style.display = 'none';
-                        accessDenied.style.display = 'block';
-                        document.querySelector('.access-denied p').textContent = 
-                            'Your account profile was not found. Please contact support.';
+                        errorBox.style.display = 'block';
+                        errorMessage.textContent = 'Your account profile was not found. Please contact support.';
                         return;
                     }
                     
                     const userData = doc.data();
-                    console.log('User data:', userData);
+                    console.log('User data retrieved:', userData);
                     console.log('User role:', userData.role);
-                    
-                    const role = userData.role;
                     
                     // Hide loading spinner
                     loadingSpinner.style.display = 'none';
-
-                    // Check role and redirect or show content
+                    
+                    // Check the role
+                    const role = userData.role || 'student'; // Default to student if role not set
+                    
                     if (role === 'student') {
-                        console.log('Student role detected - showing dashboard');
-                        // Student - show the dashboard
-                        studentContent.style.display = 'block';
-                        const displayName = userData.fullName || userData.displayName || user.email || 'Student';
-                        document.getElementById('userName').textContent = displayName;
+                        console.log('✅ Student role confirmed - showing dashboard');
+                        dashboardContent.style.display = 'block';
+                        // Display user name
+                        const name = userData.fullName || userData.displayName || user.email || 'Student';
+                        userName.textContent = name;
+                        console.log('Displaying dashboard for:', name);
                     } else if (role === 'parent') {
-                        console.log('Parent role detected - redirecting');
+                        console.log('Parent role detected - redirecting to parent dashboard');
                         window.location.href = 'parent-dashboard.html';
                     } else if (role === 'tutor') {
-                        console.log('Tutor role detected - redirecting');
+                        console.log('Tutor role detected - redirecting to tutor dashboard');
                         window.location.href = 'tutor-dashboard.html';
                     } else if (role === 'admin') {
-                        console.log('Admin role detected - redirecting');
+                        console.log('Admin role detected - redirecting to admin dashboard');
                         window.location.href = 'admin.html';
                     } else {
-                        console.log('Unknown role detected:', role);
-                        accessDenied.style.display = 'block';
+                        console.warn('Unknown role:', role);
+                        errorBox.style.display = 'block';
+                        errorMessage.textContent = 'Unknown account type. Please contact support.';
                     }
                 })
                 .catch(function(error) {
-                    console.error('Error fetching user data:', error);
+                    console.error('Error fetching Firestore data:', error);
+                    console.error('Error details:', error.message);
+                    console.error('Error stack:', error.stack);
                     loadingSpinner.style.display = 'none';
-                    accessDenied.style.display = 'block';
-                    document.querySelector('.access-denied p').textContent = 
-                        'Error loading your profile: ' + error.message;
+                    errorBox.style.display = 'block';
+                    errorMessage.textContent = 'Error loading your profile: ' + error.message;
+                });
+        }, function(error) {
+            console.error('Auth listener error:', error);
+            loadingSpinner.style.display = 'none';
+            errorBox.style.display = 'block';
+            errorMessage.textContent = 'Authentication error: ' + error.message;
+        });
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            console.log('Logout button clicked');
+            firebase.auth().signOut()
+                .then(function() {
+                    console.log('User signed out successfully');
+                    window.location.href = 'index.html';
+                })
+                .catch(function(error) {
+                    console.error('Logout error:', error);
+                    alert('Error logging out. Please try again.');
                 });
         });
 
-        // ============================================================
-        // LOGOUT
-        // ============================================================
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            firebase.auth().signOut().then(function() {
-                window.location.href = 'index.html';
-            }).catch(function(error) {
-                console.error('Logout error:', error);
-                alert('Error logging out. Please try again.');
-            });
-        });
-
-        // ============================================================
-        // CART BADGE
-        // ============================================================
-
-        function updateCartBadge() {
-            try {
-                if (typeof getCart === 'function') {
-                    const cart = getCart();
-                    const count = cart.reduce(function(total, item) {
-                        return total + item.quantity;
-                    }, 0);
-                    const badge = document.getElementById('cartCount');
-                    if (badge) {
-                        badge.textContent = count;
-                        badge.classList.toggle('show', count > 0);
-                    }
-                }
-            } catch (error) {
-                console.error('Cart badge error:', error);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartBadge();
-        });
-
-        document.addEventListener('cartUpdated', function() {
-            updateCartBadge();
-        });
-
-        if (typeof getCart === 'function') {
-            updateCartBadge();
-        }
-
-        // ============================================================
-        // HANDLE LOGOUT FROM SIDEBAR
-        // ============================================================
-        function handleLogout() {
-            firebase.auth().signOut().then(function() {
-                window.location.href = 'index.html';
-            }).catch(function(error) {
-                console.error('Logout error:', error);
-                alert('Error logging out. Please try again.');
-            });
-        }
+        console.log('=== MEMBER DASHBOARD SCRIPT COMPLETE ===');
     </script>
 </body>
 </html>
