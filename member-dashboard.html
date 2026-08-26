@@ -9,11 +9,6 @@
         gtag('js', new Date());
         gtag('config', 'AW-18209594553');
     </script>
-
-                <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,8 +19,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Firebase Config - ADD YOUR CONFIG HERE -->
+    <!-- Firebase Configuration - REPLACE WITH YOUR ACTUAL CONFIG -->
     <script>
+        // IMPORTANT: Replace these values with YOUR Firebase project settings
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -34,7 +30,14 @@
             messagingSenderId: "YOUR_SENDER_ID",
             appId: "YOUR_APP_ID"
         };
-        firebase.initializeApp(firebaseConfig);
+        
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log("Firebase initialized successfully");
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+        }
     </script>
     
     <!-- Cart & Auth -->
@@ -44,6 +47,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* All styles remain the same */
         * {
             margin: 0;
             padding: 0;
@@ -651,6 +655,30 @@
             margin-right: 10px;
         }
         
+        /* Loading spinner */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #f39c12;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -808,56 +836,61 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <div class="container" id="studentContent" style="display: none;">
+    <div class="container" id="mainContent">
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading your dashboard...</p>
+        </div>
 
-        <!-- Dashboard Hero -->
-        <div class="dashboard-hero">
-            <div>
-                <h1><i class="fas fa-user-graduate"></i> My Dashboard</h1>
-                <div class="user-info">
-                    <i class="fas fa-user"></i> <span id="userName">Loading...</span>
+        <!-- Student Dashboard Content -->
+        <div id="studentContent" style="display: none;">
+            <div class="dashboard-hero">
+                <div>
+                    <h1><i class="fas fa-user-graduate"></i> My Dashboard</h1>
+                    <div class="user-info">
+                        <i class="fas fa-user"></i> <span id="userName">Loading...</span>
+                    </div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+            <h2 class="section-title"><i class="fas fa-folder-open"></i> My Resources</h2>
+
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <i class="fas fa-calendar-alt" style="color: #3498db;"></i>
+                    <h3>ATPs (Annual Teaching Plans)</h3>
+                    <p>Access all ATPs for Grade 10-12</p>
+                    <a href="atps/grade-10/index.html" class="btn btn-blue">View ATPs</a>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
+                    <h3>Past Papers</h3>
+                    <p>Access past papers & memos for all subjects</p>
+                    <a href="grades/grade-12/index.html" class="btn btn-green">View Papers</a>
                 </div>
             </div>
-            <button class="btn-logout" id="logoutBtn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
 
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-
-        <h2 class="section-title"><i class="fas fa-folder-open"></i> My Resources</h2>
-
-        <div class="resource-grid">
-            <!-- ATPs -->
-            <div class="resource-card">
-                <i class="fas fa-calendar-alt" style="color: #3498db;"></i>
-                <h3>ATPs (Annual Teaching Plans)</h3>
-                <p>Access all ATPs for Grade 10-12</p>
-                <a href="atps/grade-10/index.html" class="btn btn-blue">View ATPs</a>
-            </div>
-            
-            <!-- Past Papers -->
-            <div class="resource-card">
-                <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
-                <h3>Past Papers</h3>
-                <p>Access past papers & memos for all subjects</p>
-                <a href="grades/grade-12/index.html" class="btn btn-green">View Papers</a>
+            <div class="tip-box">
+                <i class="fas fa-info-circle"></i> <strong>Tip:</strong> All resources are free for registered members. 
+                To request a tutor, please ask your parent/guardian to log in and submit a request on your behalf.
             </div>
         </div>
 
-        <div class="tip-box">
-            <i class="fas fa-info-circle"></i> <strong>Tip:</strong> All resources are free for registered members. 
-            To request a tutor, please ask your parent/guardian to log in and submit a request on your behalf.
-        </div>
-    </div>
-
-    <!-- ACCESS DENIED -->
-    <div class="container" id="accessDenied" style="display: none;">
-        <div class="access-denied">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h2>Access Denied</h2>
-            <p>You do not have permission to view this page. Please log in with the correct account type.</p>
-            <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+        <!-- Access Denied -->
+        <div id="accessDenied" style="display: none;">
+            <div class="access-denied">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>Access Denied</h2>
+                <p>You do not have permission to view this page. Please log in with the correct account type.</p>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+            </div>
         </div>
     </div>
 
@@ -951,52 +984,93 @@
         });
 
         // ============================================================
-        // AUTH - CHECK USER ROLE
+        // AUTH - CHECK USER ROLE WITH ERROR HANDLING
         // ============================================================
-        firebase.auth().onAuthStateChanged(async function(user) {
-            if (!user) {
-                window.location.href = 'signin.html?redirect=member-dashboard.html';
-                return;
-            }
+        
+        // Get DOM elements
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const studentContent = document.getElementById('studentContent');
+        const accessDenied = document.getElementById('accessDenied');
+        
+        // Check if Firebase is initialized
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase is not defined! Check your Firebase configuration.');
+            loadingSpinner.innerHTML = `
+                <div style="color: #e74c3c; text-align: center;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem;"></i>
+                    <p style="margin-top: 15px;">Firebase configuration error. Please check your settings.</p>
+                    <a href="index.html" class="btn" style="display: inline-block; margin-top: 15px; background: #3498db; color: white; padding: 10px 25px; border-radius: 40px; text-decoration: none;">Go Home</a>
+                </div>
+            `;
+        } else {
+            // Firebase is available, proceed with auth check
+            firebase.auth().onAuthStateChanged(async function(user) {
+                try {
+                    if (!user) {
+                        // No user logged in - redirect to sign in
+                        window.location.href = 'signin.html?redirect=member-dashboard.html';
+                        return;
+                    }
 
-            try {
-                const doc = await firebase.firestore().collection('users').doc(user.uid).get();
-                const userData = doc.data();
-                const role = userData.role;
+                    // User is logged in, check their role
+                    const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+                    
+                    if (!doc.exists) {
+                        console.error('User document does not exist');
+                        loadingSpinner.style.display = 'none';
+                        accessDenied.style.display = 'block';
+                        return;
+                    }
+                    
+                    const userData = doc.data();
+                    const role = userData.role;
 
-                // Redirect based on role
-                if (role === 'parent') {
-                    window.location.href = 'parent-dashboard.html';
-                    return;
-                } else if (role === 'tutor') {
-                    window.location.href = 'tutor-dashboard.html';
-                    return;
-                } else if (role === 'admin') {
-                    window.location.href = 'admin.html';
-                    return;
-                } else if (role === 'student') {
-                    // Student — show this page
-                    document.getElementById('studentContent').style.display = 'block';
-                    document.getElementById('userName').textContent = userData.fullName || user.email || 'Student';
-                } else {
-                    // Unknown role — show access denied
-                    document.getElementById('accessDenied').style.display = 'block';
+                    // Hide loading spinner
+                    loadingSpinner.style.display = 'none';
+
+                    // Redirect based on role
+                    if (role === 'parent') {
+                        window.location.href = 'parent-dashboard.html';
+                        return;
+                    } else if (role === 'tutor') {
+                        window.location.href = 'tutor-dashboard.html';
+                        return;
+                    } else if (role === 'admin') {
+                        window.location.href = 'admin.html';
+                        return;
+                    } else if (role === 'student') {
+                        // Student — show this page
+                        studentContent.style.display = 'block';
+                        document.getElementById('userName').textContent = userData.fullName || user.email || 'Student';
+                    } else {
+                        // Unknown role — show access denied
+                        accessDenied.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error checking role:', error);
+                    loadingSpinner.style.display = 'none';
+                    accessDenied.style.display = 'block';
+                    // Show error message
+                    document.querySelector('.access-denied p').textContent = 
+                        'Error loading your profile. Please try again later.';
                 }
-            } catch (error) {
-                console.error('Error checking role:', error);
-                document.getElementById('accessDenied').style.display = 'block';
-            }
-        });
+            });
+        }
 
         // ============================================================
         // LOGOUT
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', function() {
-            firebase.auth().signOut().then(function() {
+            if (typeof firebase !== 'undefined') {
+                firebase.auth().signOut().then(function() {
+                    window.location.href = 'index.html';
+                }).catch(function(error) {
+                    console.error('Logout error:', error);
+                    alert('Error logging out. Please try again.');
+                });
+            } else {
                 window.location.href = 'index.html';
-            }).catch(function(error) {
-                console.error('Logout error:', error);
-            });
+            }
         });
 
         // ============================================================
@@ -1005,14 +1079,18 @@
 
         function updateCartBadge() {
             if (typeof getCart === 'function') {
-                const cart = getCart();
-                const count = cart.reduce(function(total, item) {
-                    return total + item.quantity;
-                }, 0);
-                const badge = document.getElementById('cartCount');
-                if (badge) {
-                    badge.textContent = count;
-                    badge.classList.toggle('show', count > 0);
+                try {
+                    const cart = getCart();
+                    const count = cart.reduce(function(total, item) {
+                        return total + item.quantity;
+                    }, 0);
+                    const badge = document.getElementById('cartCount');
+                    if (badge) {
+                        badge.textContent = count;
+                        badge.classList.toggle('show', count > 0);
+                    }
+                } catch (error) {
+                    console.error('Error updating cart badge:', error);
                 }
             }
         }
@@ -1033,11 +1111,16 @@
         // HANDLE LOGOUT FROM SIDEBAR
         // ============================================================
         function handleLogout() {
-            firebase.auth().signOut().then(function() {
+            if (typeof firebase !== 'undefined') {
+                firebase.auth().signOut().then(function() {
+                    window.location.href = 'index.html';
+                }).catch(function(error) {
+                    console.error('Logout error:', error);
+                    alert('Error logging out. Please try again.');
+                });
+            } else {
                 window.location.href = 'index.html';
-            }).catch(function(error) {
-                console.error('Logout error:', error);
-            });
+            }
         }
     </script>
 </body>
