@@ -21,8 +21,8 @@
     
     <!-- Firebase Configuration - YOUR ACTUAL CONFIG -->
     <script>
-        // Using a different variable name to avoid conflict with auth.js
-        const fbConfig = {
+        // Firebase config with your actual values
+        const firebaseConfig = {
             apiKey: "AIzaSyD81MblPqlkFIY4DplSg8EpXoXjPa6h3Hc",
             authDomain: "aceed-tutoring.firebaseapp.com",
             projectId: "aceed-tutoring",
@@ -31,15 +31,15 @@
             appId: "1:225577605291:web:75327bc4e1f644cef47fee"
         };
         
-        // Initialize Firebase with the config
-        firebase.initializeApp(fbConfig);
-        console.log('✅ Firebase initialized!');
-        console.log('📁 Project:', fbConfig.projectId);
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log('✅ Firebase initialized from member-dashboard!');
+        } else {
+            console.log('✅ Firebase already initialized');
+        }
+        console.log('📁 Project:', firebaseConfig.projectId);
     </script>
-    
-    <!-- Cart & Auth -->
-    <script src="js/cart.js"></script>
-    <script src="js/auth.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -1039,7 +1039,7 @@
         });
 
         // ============================================================
-        // AUTH - MAIN LOGIC
+        // AUTH - MAIN LOGIC (NO auth.js)
         // ============================================================
         
         // Get DOM elements
@@ -1054,6 +1054,7 @@
         try {
             const app = firebase.app();
             console.log('✅ Firebase app is initialized');
+            console.log('📁 Project:', app.options.projectId);
         } catch (e) {
             console.error('❌ Firebase not initialized:', e);
             loadingSpinner.innerHTML = `
@@ -1061,8 +1062,11 @@
                     <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
                     <h2 style="color: #e74c3c; margin-top: 20px;">Firebase Error</h2>
                     <p style="color: #7f8c8d;">Firebase failed to initialize. Please check your configuration.</p>
+                    <p style="color: #95a5a6; font-size: 0.9rem; margin-top: 10px;">Error: ${e.message}</p>
                 </div>
             `;
+            // Stop execution if Firebase fails
+            throw e;
         }
 
         // Listen for auth state changes
@@ -1160,15 +1164,16 @@
         });
 
         // ============================================================
-        // CART BADGE
+        // CART BADGE (SIMPLIFIED)
         // ============================================================
 
         function updateCartBadge() {
             try {
+                // Check if cart functions exist
                 if (typeof getCart === 'function') {
                     const cart = getCart();
                     const count = cart.reduce(function(total, item) {
-                        return total + item.quantity;
+                        return total + (item.quantity || 0);
                     }, 0);
                     const badge = document.getElementById('cartCount');
                     if (badge) {
@@ -1177,21 +1182,14 @@
                     }
                 }
             } catch (error) {
-                console.error('Cart badge error:', error);
+                // Silently fail - cart might not be available
+                console.log('Cart not available');
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
         });
-
-        document.addEventListener('cartUpdated', function() {
-            updateCartBadge();
-        });
-
-        if (typeof getCart === 'function') {
-            updateCartBadge();
-        }
 
         // ============================================================
         // HANDLE LOGOUT FROM SIDEBAR
