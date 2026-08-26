@@ -42,6 +42,27 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
             color: #333;
             min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Background Logo - Fixed */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 600px;
+            height: auto;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            aspect-ratio: 1/1;
         }
         
         .container {
@@ -553,9 +574,6 @@
     </style>
 </head>
 <body>
-    <div class="bg-logo">
-        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
-    </div>
 
     <!-- PROFILE SIDEBAR -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
