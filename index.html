@@ -9,59 +9,43 @@
         gtag('js', new Date());
         gtag('config', 'AW-18209594553');
     </script>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard - AceEd Tutoring</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Firebase Configuration - YOUR ACTUAL CONFIG -->
-    <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyD81MblPqlkFIY4DplSg8EpXoXjPa6h3Hc",
-            authDomain: "aceed-tutoring.firebaseapp.com",
-            projectId: "aceed-tutoring",
-            storageBucket: "aceed-tutoring.firebasestorage.app",
-            messagingSenderId: "225577605291",
-            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
-        };
-        
-        // Initialize Firebase ONLY if it hasn't been initialized yet
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log('✅ Firebase initialized from member-dashboard!');
-        } else {
-            console.log('✅ Firebase already initialized elsewhere');
-        }
-        console.log('📁 Project ID:', firebaseConfig.projectId);
-    </script>
-    
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AceEd Tutoring - Grade 10 to 12 Tutoring | Expert CAPS Support</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Expert Grade 10 to 12 tutoring in Mathematics, Sciences, Accounting, Economics, and Geography. Affordable R50/hour tutoring in South Africa.">
+    <meta name="keywords" content="tutoring, grade 10, grade 11, grade 12, South Africa, CAPS curriculum, Bizana, Stellenbosch, Durban">
+    <meta name="author" content="AceEd Tutoring">
+
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+
     <style>
+        /* --- BASE STYLES --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            color: #333;
-            min-height: 100vh;
+        :focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
         }
-        
+        body {
+            background-color: #f8f9fa;
+            color: #1e2a3e;
+            line-height: 1.6;
+        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -69,96 +53,109 @@
             position: relative;
             z-index: 2;
         }
-        
+
+        /* --- FADED BACKGROUND LOGO --- */
+        .bg-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bg-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.06;
+        }
+
+        /* --- HEADER --- */
         header {
             background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             color: white;
-            padding: 20px 0;
+            padding: 20px;
             text-align: center;
             border-radius: 0 0 20px 20px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
             position: relative;
-            z-index: 100;
+            z-index: 3;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
         }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-        
         .logo-image {
             max-width: 250px;
             margin: 0 auto;
         }
-        
         .logo-image img {
             width: 100%;
             max-height: 80px;
             object-fit: contain;
         }
-        
-        .brand-text {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-        }
-        
-        .brand-text span {
-            color: #f39c12;
-        }
-        
-        .affordable-tagline {
-            font-size: 1rem;
-            color: #f39c12;
-            font-weight: 600;
-            margin: 2px 0 5px 0;
-            letter-spacing: 2px;
-        }
-        
         .tagline {
-            font-size: 0.95rem;
-            margin: 5px 0 10px 0;
-            font-weight: 400;
-            opacity: 0.9;
+            font-size: 1rem;
+            margin: 15px 0;
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
-        
+        .highlight {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 5px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* --- SESSION TYPES --- */
+        .session-types {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .session-type {
+            background-color: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* --- NAVIGATION --- */
         .nav-links {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
-            margin-top: 12px;
+            gap: 15px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
-        
         .nav-link {
             color: white;
             text-decoration: none;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 30px;
             font-size: 0.9rem;
             transition: all 0.2s ease;
         }
-        
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.15);
             transform: translateY(-1px);
         }
-        
+
+        /* Dropdowns */
         .dropdown {
             position: relative;
             display: inline-block;
         }
-        
         .dropdown-content {
             display: none;
             position: absolute;
@@ -170,13 +167,10 @@
             left: 0;
             z-index: 10;
             backdrop-filter: blur(2px);
-            padding: 5px 0;
         }
-        
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        
         .dropdown-content a {
             color: white;
             padding: 10px 16px;
@@ -186,11 +180,38 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             transition: background 0.2s;
         }
-        
         .dropdown-content a:hover {
             background-color: #3498db;
         }
-        
+
+        /* Cart Link & Badge */
+        .cart-link {
+            position: relative;
+            background-color: #f39c12;
+            border-radius: 40px;
+            padding: 6px 15px;
+            color: white !important;
+        }
+        .cart-link:hover {
+            background-color: #e67e22 !important;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: none;
+        }
+        .cart-badge.show {
+            display: inline-block;
+        }
+
+        /* Dot & Profile Icons */
         .icon-btn {
             background: none;
             border: none;
@@ -204,68 +225,31 @@
             align-items: center;
             justify-content: center;
         }
-        
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.15);
             transform: translateY(-1px);
         }
-        
         .profile-btn {
             font-size: 1.2rem;
         }
-        
-        .cart-link {
-            position: relative;
-            background-color: #f39c12;
-            border-radius: 40px;
-            padding: 6px 15px;
-            color: white !important;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .cart-link:hover {
-            background-color: #e67e22 !important;
-            transform: translateY(-1px);
-        }
-        
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: none;
-        }
-        
-        .cart-badge.show {
-            display: inline-block;
-        }
-        
+
+        /* --- SIDEBARS (Sliding Menus) --- */
         .sidebar-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
             display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        
         .sidebar-overlay.active {
             display: block;
             opacity: 1;
         }
-        
         .sidebar {
             position: fixed;
             top: 0;
@@ -279,25 +263,20 @@
             transition: transform 0.3s ease;
             box-shadow: 0 0 30px rgba(0,0,0,0.3);
         }
-        
         .sidebar-left {
             left: 0;
             transform: translateX(-100%);
         }
-        
         .sidebar-left.open {
             transform: translateX(0);
         }
-        
         .sidebar-right {
             right: 0;
             transform: translateX(100%);
         }
-        
         .sidebar-right.open {
             transform: translateX(0);
         }
-        
         .sidebar-close {
             background: none;
             border: none;
@@ -308,11 +287,9 @@
             margin-bottom: 20px;
             transition: transform 0.2s;
         }
-        
         .sidebar-close:hover {
             transform: rotate(90deg);
         }
-        
         .sidebar h3 {
             font-size: 1.2rem;
             margin-bottom: 20px;
@@ -320,7 +297,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             color: #f39c12;
         }
-        
         .sidebar a {
             display: block;
             color: #cbd5e1;
@@ -330,182 +306,251 @@
             transition: all 0.2s;
             font-size: 0.95rem;
         }
-        
         .sidebar a:hover {
             color: #fff;
             padding-left: 5px;
         }
-        
         .sidebar a i {
             width: 25px;
             color: #f39c12;
         }
-        
-        .dashboard-hero {
-            background: linear-gradient(135deg, #2c3e50, #1e2a3a);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 30px 0;
+
+        /* Hide auth buttons in main nav (moved to sidebar) */
+        .auth-buttons {
+            display: none !important;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 30px;
+            margin-top: 40px;
         }
-        
-        .dashboard-hero h1 {
-            font-size: 1.8rem;
+        .main-content {
+            flex: 3;
+            min-width: 300px;
+        }
+        .sidebar-content {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12);
+        }
+        .card h2 {
+            color: #1e2a3a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eef2f6;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            font-size: 1.3rem;
         }
-        
-        .dashboard-hero h1 i {
-            color: #f39c12;
-        }
-        
-        .dashboard-hero .user-info {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-        
-        .dashboard-hero .user-info i {
-            margin-right: 8px;
-            color: #f39c12;
-        }
-        
-        .btn-logout {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        
-        .btn-logout:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin: 20px 0;
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        .resource-grid {
+
+        /* Directors Grid */
+        .directors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
-            margin: 30px 0;
+            margin-top: 20px;
         }
-        
-        .resource-card {
+        .director-card {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            border-radius: 24px;
+            padding: 25px 18px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(52, 152, 219, 0.15);
+            transition: all 0.2s;
+        }
+        .tutor-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+            border: 3px solid #fff;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+            background-color: #eef2fa;
+        }
+        .director-card h3 {
+            font-size: 1.3rem;
+            margin: 10px 0 5px;
+        }
+        .director-role {
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .director-location {
+            background-color: #eef2fc;
+            color: #2c5a8c;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #2471a3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(52,152,219,0.3);
+        }
+        .btn-contact {
+            background-color: #e74c3c;
+            display: block;
             text-align: center;
         }
-        
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        .btn-contact:hover {
+            background-color: #c0392b;
+            box-shadow: 0 5px 12px rgba(231,76,60,0.3);
         }
-        
-        .resource-card i {
-            font-size: 3rem;
-            margin-bottom: 15px;
+
+        /* Sidebar extras */
+        .services-list {
+            list-style: none;
         }
-        
-        .resource-card h3 {
-            color: #1e2a3a;
+        .services-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+        .services-list li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .services-list li a:hover {
+            color: #3498db;
+        }
+        .check-icon {
+            color: #27ae60;
+            margin-right: 12px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .feature-item {
+            text-align: center;
+            padding: 14px;
+            background: #f8fcff;
+            border-radius: 18px;
+            transition: all 0.2s;
+        }
+        .feature-item i {
+            font-size: 2rem;
             margin-bottom: 10px;
         }
-        
-        .resource-card p {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-        
-        .resource-card .btn {
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        
-        .btn-blue { background: #3498db; color: white; }
-        .btn-blue:hover { background: #2980b9; transform: translateY(-2px); }
-        .btn-green { background: #27ae60; color: white; }
-        .btn-green:hover { background: #1e8449; transform: translateY(-2px); }
-        .btn-orange { background: #e67e22; color: white; }
-        .btn-orange:hover { background: #d35400; transform: translateY(-2px); }
-        
-        .tip-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+        .contact-info {
+            background-color: #f8fafd;
             padding: 20px;
-            border-radius: 12px;
-            margin: 30px 0;
+            border-radius: 18px;
+            border-left: 4px solid #3498db;
         }
-        
-        .tip-box i {
-            color: #ffc107;
-            margin-right: 10px;
+        .contact-person {
+            margin-bottom: 18px;
         }
-        
-        .access-denied {
-            background: #f8d7da;
-            border-left: 4px solid #e74c3c;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 30px 0;
+        .contact-person h4 {
+            color: #1e4668;
+            margin-bottom: 5px;
+            font-size: 1rem;
         }
-        
-        .access-denied i {
-            font-size: 3rem;
-            color: #e74c3c;
-            margin-bottom: 15px;
+        .contact-person p {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .access-denied h2 {
-            color: #721c24;
-        }
-        
-        .access-denied p {
-            color: #721c24;
-            font-size: 1.1rem;
-        }
-        
-        .access-denied .btn {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 40px;
+        .contact-person a {
+            color: #2c3e50;
             text-decoration: none;
-            margin-top: 20px;
+            font-weight: 500;
+        }
+        .contact-person a:hover {
+            color: #3498db;
+        }
+        .lead-tag {
+            background-color: #e74c3c;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            margin-left: 8px;
             font-weight: 600;
         }
-        
+        .offer-banner-small {
+            background: linear-gradient(135deg, #ff8f00, #e67e00);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .offer-banner-small p {
+            color: white;
+            font-weight: bold;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+        .pricing-section-sidebar {
+            margin-bottom: 15px;
+        }
+        .pricing-section-sidebar h3 {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            border-left: 3px solid #3498db;
+            padding-left: 10px;
+        }
+        .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+        .pricing-row:last-child {
+            border-bottom: none;
+        }
+        .pricing-price {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        /* --- FOOTER --- */
         .footer-modern {
             background: #0f1720;
             color: #e2e8f0;
@@ -513,14 +558,12 @@
             padding: 50px 0 25px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
-        
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 35px;
             margin-bottom: 35px;
         }
-        
         .footer-col h4 {
             color: white;
             font-size: 1.2rem;
@@ -528,7 +571,6 @@
             position: relative;
             display: inline-block;
         }
-        
         .footer-col h4:after {
             content: '';
             position: absolute;
@@ -539,33 +581,27 @@
             background: #e74c3c;
             border-radius: 3px;
         }
-        
         .footer-col p, .footer-col ul {
             font-size: 0.9rem;
             line-height: 1.7;
             opacity: 0.85;
         }
-        
         .footer-col ul {
             list-style: none;
             padding: 0;
         }
-        
         .footer-col ul li {
             margin-bottom: 10px;
         }
-        
         .footer-col ul li a {
             color: #cbd5e1;
             text-decoration: none;
             transition: color 0.2s;
         }
-        
         .footer-col ul li a:hover {
             color: #e74c3c;
             padding-left: 4px;
         }
-        
         .footer-register-btn {
             display: inline-block;
             background: #e74c3c;
@@ -579,12 +615,11 @@
             font-size: 0.9rem;
             box-shadow: 0 4px 10px rgba(231,76,60,0.3);
         }
-        
         .footer-register-btn:hover {
             background: #c0392b;
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231,76,60,0.4);
         }
-        
         .footer-dark-btn {
             background: #2d3e50;
             color: white;
@@ -598,18 +633,15 @@
             margin-right: 10px;
             margin-top: 8px;
         }
-        
         .footer-dark-btn:hover {
             background: #1e2f40;
             transform: translateY(-1px);
         }
-        
         .social-icons {
             display: flex;
             gap: 14px;
             margin-top: 15px;
         }
-        
         .social-icons a {
             background: #1e2a3a;
             width: 36px;
@@ -622,12 +654,10 @@
             font-size: 1.1rem;
             transition: all 0.2s;
         }
-        
         .social-icons a:hover {
             background: #e74c3c;
             transform: translateY(-3px);
         }
-        
         .footer-bottom {
             text-align: center;
             padding-top: 25px;
@@ -635,188 +665,69 @@
             font-size: 0.8rem;
             opacity: 0.7;
         }
-        
         .footer-bottom a {
             color: #e2e8f0;
             text-decoration: none;
         }
-        
         .footer-bottom a:hover {
             color: #e74c3c;
         }
-        
-        .section-title {
-            margin: 30px 0 20px;
-            color: #1e2a3a;
-            font-size: 1.5rem;
-        }
-        
-        .section-title i {
-            color: #f39c12;
-            margin-right: 10px;
-        }
-        
-        .loading-spinner {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 400px;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #f39c12;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .btn-signin {
-            display: inline-block;
-            padding: 14px 40px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            background: #f39c12;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn-signin:hover {
-            background: #e67e22;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
-        }
-        
-        .btn-retry {
-            display: inline-block;
-            padding: 12px 35px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-        
-        .btn-retry:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-        
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .header-content {
-                padding: 0 15px;
-            }
-            
-            .logo-image {
-                max-width: 180px;
-            }
-            
-            .brand-text {
-                font-size: 1.4rem;
-            }
-            
-            .affordable-tagline {
-                font-size: 0.85rem;
-            }
-            
-            .tagline {
-                font-size: 0.8rem;
-            }
-            
-            .nav-links {
-                gap: 8px;
-            }
-            
-            .nav-link {
-                font-size: 0.8rem;
-                padding: 4px 10px;
-            }
-            
-            .dashboard-hero {
+            .content {
                 flex-direction: column;
-                text-align: center;
-                gap: 15px;
-                padding: 20px;
             }
-            
-            .dashboard-hero h1 {
-                font-size: 1.4rem;
-                justify-content: center;
-            }
-            
-            .resource-grid {
+            .directors-grid {
                 grid-template-columns: 1fr;
             }
-            
+            .tutor-photo {
+                width: 100px;
+                height: 100px;
+            }
             .footer-grid {
                 gap: 30px;
             }
-            
             .sidebar {
                 width: 280px;
-            }
-            
-            .cart-link {
-                padding: 4px 12px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .logo-image {
-                max-width: 150px;
-            }
-            
-            .brand-text {
-                font-size: 1.2rem;
-            }
-            
-            .dashboard-hero h1 {
-                font-size: 1.2rem;
-            }
-            
-            .btn-logout {
-                padding: 8px 20px;
-                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- PROFILE SIDEBAR -->
+    <div class="bg-logo">
+        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- OVERLAYS & SIDEBARS -->
+    <!-- ============================================================ -->
+
+    <!-- Profile Sidebar Overlay -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
+
+    <!-- Profile Sidebar (Left) -->
     <div class="sidebar sidebar-left" id="profileSidebar">
         <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
         <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+
+        <!-- Logged In Content -->
         <div id="profileLoggedIn" style="display: none;">
             <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
+
+        <!-- Logged Out Content -->
         <div id="profileLoggedOut">
             <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
             <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
         </div>
     </div>
 
-    <!-- DOT MENU SIDEBAR -->
+    <!-- Dot Menu Sidebar Overlay -->
     <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
+
+    <!-- Dot Menu Sidebar (Right) -->
     <div class="sidebar sidebar-right" id="dotSidebar">
         <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
         <h3><i class="fas fa-bars"></i> Menu</h3>
@@ -825,24 +736,33 @@
         <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
         <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
-        <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
-        <a href="tutor-application.html"><i class="fas fa-user-graduate"></i> Become a Tutor</a>
     </div>
 
+    <!-- ============================================================ -->
     <!-- HEADER -->
+    <!-- ============================================================ -->
     <header>
-        <div class="header-content">
-            <div class="logo-container">
-                <div class="logo-image">
-                    <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.style.display='none'">
-                </div>
-                <div class="brand-text">AceEd <span>Tutoring</span></div>
-                <div class="affordable-tagline">✦ Affordable Services ✦</div>
-                <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
+        <div class="container">
+            <div class="logo-image">
+                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
             </div>
-            
+
+            <div class="tagline">Tutoring for Grade 10 to 12 Students</div>
+
+            <div class="session-types">
+                <div class="session-type">1-on-1 Sessions</div>
+                <div class="session-type">Group Sessions</div>
+                <div class="session-type">Online Tutoring</div>
+                <div class="session-type">Weekend Classes</div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- NAVIGATION -->
+            <!-- ============================================================ -->
             <div class="nav-links">
+                <!-- Main Links -->
                 <a href="index.html" class="nav-link">Home</a>
+
                 <div class="dropdown">
                     <a href="#" class="nav-link">Grades ▼</a>
                     <div class="dropdown-content">
@@ -851,6 +771,7 @@
                         <a href="grades/grade-12/index.html">Grade 12</a>
                     </div>
                 </div>
+
                 <div class="dropdown">
                     <a href="#" class="nav-link">ATP ▼</a>
                     <div class="dropdown-content">
@@ -859,14 +780,29 @@
                         <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
                     </div>
                 </div>
+
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
+                
+                <a href="tutor-application.html" class="nav-link" style="background-color: #8e44ad; border-radius: 40px;">
+                    <i class="fas fa-user-graduate"></i> Become a Tutor
+                </a>
+                
+                <a href="partnerships.html" class="nav-link" style="background-color: #8e44ad; border-radius: 40px;">
+                🏫 School Partnerships
+                </a>
+
+                <!-- Profile Button (Opens Left Sidebar) -->
                 <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
                     <i class="fas fa-user-circle"></i>
                 </button>
+
+                <!-- Cart (isolated) -->
                 <a href="cart.html" class="nav-link cart-link">
                     <i class="fas fa-shopping-cart"></i> Cart
                     <span class="cart-badge" id="cartCount">0</span>
                 </a>
+
+                <!-- Dot Menu Button (Opens Right Sidebar) -->
                 <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -874,98 +810,138 @@
         </div>
     </header>
 
+    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <div class="container" id="mainContent">
-        <!-- Loading Spinner -->
-        <div id="loadingSpinner" class="loading-spinner">
-            <div class="spinner"></div>
-            <p>Loading your dashboard...</p>
-            <p style="font-size: 0.8rem; color: #95a5a6; margin-top: 5px;">If this takes too long, check the console (F12)</p>
-        </div>
+    <!-- ============================================================ -->
+    <div class="container">
+        <div class="content">
+            <div class="main-content">
+                <div class="card">
+                    <h2><i class="fas fa-info-circle"></i> About AceEd Tutoring</h2>
+                    <p>Founded in 2026, AceEd Tutoring is all about helping Grade 10 to 12 students do better in school and feel more confident in their studies. We understand how challenging the CAPS curriculum can be, so we offer personalized support to help every student reach their full potential.</p>
+                    <p style="margin-top: 15px;">Our goal is simple: to make quality education accessible and affordable for students across South Africa. With dedicated tutors in Bizana, Stellenbosch, and Durban, plus flexible online lessons, we're here to support you every step of the way.</p>
+                </div>
 
-        <!-- Not Logged In Message -->
-        <div id="notLoggedIn" style="display: none; text-align: center; padding: 60px 20px;">
-            <i class="fas fa-sign-in-alt" style="font-size: 4rem; color: #f39c12; margin-bottom: 20px;"></i>
-            <h2 style="color: #1e2a3a; margin-bottom: 10px;">Welcome to AceEd Tutoring</h2>
-            <p style="color: #7f8c8d; font-size: 1.1rem; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                Please sign in to access your student dashboard and view your resources.
-            </p>
-            <a href="signin.html" class="btn-signin">
-                <i class="fas fa-sign-in-alt"></i> Sign In
-            </a>
-            <div style="margin-top: 20px;">
-                <p style="color: #95a5a6; font-size: 0.9rem;">
-                    Don't have an account? <a href="signup.html" style="color: #3498db; text-decoration: none; font-weight: 600;">Sign Up</a>
-                </p>
-            </div>
-            <button onclick="location.reload()" class="btn-retry">
-                <i class="fas fa-redo"></i> Retry
-            </button>
-        </div>
+                <div class="card">
+                    <h2><i class="fas fa-users"></i> Meet Our Lead Tutors</h2>
 
-        <!-- Student Dashboard Content -->
-        <div id="studentContent" style="display: none;">
-            <div class="dashboard-hero">
-                <div>
-                    <h1><i class="fas fa-user-graduate"></i> My Dashboard</h1>
-                    <div class="user-info">
-                        <i class="fas fa-user"></i> <span id="userName">Loading...</span>
+                    <div class="directors-grid">
+                        <!-- Nkululeko -->
+                        <div class="director-card">
+                            <img src="tutors/nkululeko.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=NK'">
+                            <h3>Nkululeko</h3>
+                            <div class="director-role">Lead Tutor - Bizana</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</div>
+                            <p>Mathematics | Physical Sciences | Life Sciences</p>
+                        </div>
+
+                        <!-- Mihlali -->
+                        <div class="director-card">
+                            <img src="tutors/mihlali.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=MH'">
+                            <h3>Mihlali</h3>
+                            <div class="director-role">Lead Tutor - Stellenbosch</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</div>
+                            <p>Mathematics | Physical Sciences | Life Sciences</p>
+                        </div>
+
+                        <!-- Sinobom -->
+                        <div class="director-card">
+                            <img src="tutors/sinobom.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=SB'">
+                            <h3>Sinobom</h3>
+                            <div class="director-role">Lead Tutor - Durban</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
+                            <p>Mathematics | Life Sciences</p>
+                        </div>
+
+                        <!-- Ntuthuko -->
+                        <div class="director-card">
+                            <img src="tutors/ntuthuko.png" class="tutor-photo" onerror="this.src='https://via.placeholder.com/120x120?text=NT'">
+                            <h3>Ntuthuko</h3>
+                            <div class="director-role">Lead Tutor - Durban</div>
+                            <div class="director-location"><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</div>
+                            <p>Mathematics | Physical Science | Life Science</p>
+                        </div>
                     </div>
                 </div>
-                <button class="btn-logout" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
             </div>
 
-            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <div class="sidebar-content">
+                <div class="card">
+                    <h2><i class="fas fa-book-open"></i> Quick Access</h2>
+                    <ul class="services-list">
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-12/index.html">Grade 12</a></li>
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-11/index.html">Grade 11</a></li>
+                        <li><i class="fas fa-chevron-right check-icon"></i> <a href="grades/grade-10/index.html">Grade 10</a></li>
+                    </ul>
 
-            <h2 class="section-title"><i class="fas fa-folder-open"></i> My Resources</h2>
-
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <i class="fas fa-calendar-alt" style="color: #3498db;"></i>
-                    <h3>ATPs (Annual Teaching Plans)</h3>
-                    <p>Access all ATPs for Grade 10-12</p>
-                    <a href="atps/grade-10/index.html" class="btn btn-blue">View ATPs</a>
+                    <a href="pricing.html" class="btn" style="background-color: #27ae60; width: 100%; text-align: center; margin-top: 10px;">View Full Pricing <i class="fas fa-arrow-right"></i></a>
                 </div>
-                
-                <div class="resource-card">
-                    <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
-                    <h3>Past Papers</h3>
-                    <p>Access past papers & memos for all subjects</p>
-                    <a href="grades/grade-12/index.html" class="btn btn-green">View Papers</a>
+
+                <div class="card">
+                    <h2><i class="fas fa-star"></i> Why Choose AceEd?</h2>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-graduation-cap" style="color: #3498db;"></i>
+                            <h3>Experienced Tutors</h3>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock" style="color: #27ae60;"></i>
+                            <h3>Flexible Hours</h3>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-wifi" style="color: #e74c3c;"></i>
+                            <h3>Online & In-Person</h3>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-file-pdf" style="color: #f39c12;"></i>
+                            <h3>Past Papers</h3>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="tip-box">
-                <i class="fas fa-info-circle"></i> <strong>Tip:</strong> All resources are free for registered members. 
-                To request a tutor, please ask your parent/guardian to log in and submit a request on your behalf.
-            </div>
-        </div>
-
-        <!-- Access Denied -->
-        <div id="accessDenied" style="display: none;">
-            <div class="access-denied">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h2>Access Denied</h2>
-                <p>You do not have permission to view this page. Please log in with the correct account type.</p>
-                <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+                <div class="card">
+                    <h2><i class="fas fa-phone-alt"></i> Contact Our Lead Tutors</h2>
+                    <div class="contact-info">
+                        <div class="contact-person">
+                            <h4>Nkululeko <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27631158739">+27 63 115 8739</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Bizana, Eastern Cape</p>
+                        </div>
+                        <div class="contact-person">
+                            <h4>Mihlali <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27655294232">+27 65 529 4232</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Stellenbosch, Western Cape</p>
+                        </div>
+                        <div class="contact-person">
+                            <h4>Sinobom <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27632790549">+27 63 279 0549</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</p>
+                        </div>
+                        <div class="contact-person">
+                            <h4>Ntuthuko <span class="lead-tag">Lead Tutor</span></h4>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+27656476472">+27 65 647 6472</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Durban, KwaZulu-Natal</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ============================================================ -->
     <!-- FOOTER -->
+    <!-- ============================================================ -->
     <footer class="footer-modern">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring.</p>
+                    <p>Empowering Grade 10–12 students across South Africa with CAPS-aligned tutoring. Affordable rates, passionate tutors, and proven results.</p>
                     <div class="social-icons">
-                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://web.facebook.com/profile.php?id=61587810847633" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/aceedtutoring/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/27698251610" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -974,26 +950,30 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="tutors.html">Our Tutors</a></li>
                         <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="grades/grade-10/index.html">Grade 10</a></li>
+                        <li><a href="grades/grade-11/index.html">Grade 11</a></li>
+                        <li><a href="grades/grade-12/index.html">Grade 12 (Matric)</a></li>
                         <li><a href="register.html">Register Now</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Subjects We Cover</h4>
                     <ul>
                         <li>Mathematics & Maths Lit</li>
+                        <li>Tourism & History</li>
                         <li>Physical Sciences & Life Science</li>
                         <li>Accounting & Economics</li>
                         <li>Geography & Business Studies</li>
-                        <li>History & Tourism</li>
-                        <li>CAT</li>
-                        <li>Afrikaans & English</li>
+                        <li>English & Afrikaans</li>
+            
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Get In Touch</h4>
                     <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
-                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739 (Bizana)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 529 4232 (Stellenbosch)</p>
+                    <p><i class="fas fa-phone-alt"></i> +27 65 647 6472 (Durban)</p>
                     <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
                     <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
                     <div style="margin-top: 12px;">
@@ -1003,17 +983,19 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
-                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="terms.html#refund">Refund & Cancellation Policy</a> | <i class="fas fa-heart" style="color: #e74c3c;"></i> Supporting South African students</p>
+                <p style="margin-top: 8px;"> Online Nationwide </p>
             </div>
         </div>
     </footer>
 
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
     <script>
-        // ============================================================
-        // SIDEBAR CONTROLS
-        // ============================================================
-
+        // ------------------------------------------------------------
+        // Sidebar Controls
+        // ------------------------------------------------------------
         function openSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.add('open');
@@ -1036,6 +1018,7 @@
             document.body.style.overflow = 'auto';
         }
 
+        // Close sidebars with Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
@@ -1043,190 +1026,72 @@
             }
         });
 
-        // ============================================================
-        // AUTH - MAIN LOGIC
-        // ============================================================
-        
-        // Get DOM elements
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const notLoggedIn = document.getElementById('notLoggedIn');
-        const studentContent = document.getElementById('studentContent');
-        const accessDenied = document.getElementById('accessDenied');
+        // ------------------------------------------------------------
+        // Auth - Update UI based on login state
+        // ------------------------------------------------------------
+        function updateAuthUI(user) {
+            const loggedIn = document.getElementById('profileLoggedIn');
+            const loggedOut = document.getElementById('profileLoggedOut');
 
-        console.log('🔥 AceEd Dashboard - Starting...');
-
-        // Check if Firebase is available
-        if (typeof firebase === 'undefined') {
-            console.error('❌ Firebase is not loaded!');
-            loadingSpinner.innerHTML = `
-                <div style="text-align: center; padding: 40px;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
-                    <h2 style="color: #e74c3c; margin-top: 20px;">Firebase Error</h2>
-                    <p style="color: #7f8c8d;">Firebase failed to load. Please check your internet connection.</p>
-                </div>
-            `;
-        } else {
-            try {
-                const app = firebase.app();
-                console.log('✅ Firebase app is initialized');
-                console.log('📁 Project:', app.options.projectId);
-            } catch (e) {
-                console.error('❌ Firebase not initialized:', e);
-                loadingSpinner.innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
-                        <h2 style="color: #e74c3c; margin-top: 20px;">Firebase Error</h2>
-                        <p style="color: #7f8c8d;">Firebase failed to initialize. Please check your configuration.</p>
-                        <p style="color: #95a5a6; font-size: 0.9rem; margin-top: 10px;">Error: ${e.message}</p>
-                    </div>
-                `;
+            if (user) {
+                loggedIn.style.display = 'block';
+                loggedOut.style.display = 'none';
+            } else {
+                loggedIn.style.display = 'none';
+                loggedOut.style.display = 'block';
             }
         }
 
-        // Listen for auth state changes
-        if (typeof firebase !== 'undefined' && firebase.auth) {
-            firebase.auth().onAuthStateChanged(function(user) {
-                console.log('📡 Auth State Changed:', user ? '✅ Logged In' : '❌ Not Logged In');
-                
-                if (user) {
-                    console.log('👤 User UID:', user.uid);
-                    console.log('📧 User Email:', user.email);
-                    
-                    // User is logged in - fetch their data
-                    const userRef = firebase.firestore().collection('users').doc(user.uid);
-                    userRef.get()
-                        .then(function(doc) {
-                            console.log('📄 Firestore Document Exists:', doc.exists);
-                            
-                            if (!doc.exists) {
-                                console.error('❌ User document not found!');
-                                loadingSpinner.style.display = 'none';
-                                notLoggedIn.style.display = 'none';
-                                accessDenied.style.display = 'block';
-                                document.querySelector('.access-denied p').textContent = 
-                                    'Your user profile was not found. Please contact support.';
-                                return;
-                            }
-                            
-                            const userData = doc.data();
-                            console.log('📋 User Data:', userData);
-                            console.log('🎯 User Role:', userData.role);
-                            
-                            const role = userData.role || 'student';
-                            
-                            // Hide everything first
-                            loadingSpinner.style.display = 'none';
-                            notLoggedIn.style.display = 'none';
-                            accessDenied.style.display = 'none';
-                            
-                            if (role === 'student') {
-                                console.log('✅ Student role confirmed - Showing dashboard');
-                                studentContent.style.display = 'block';
-                                const displayName = userData.fullName || userData.displayName || user.email || 'Student';
-                                document.getElementById('userName').textContent = displayName;
-                                console.log('👤 Dashboard for:', displayName);
-                            } else if (role === 'parent') {
-                                console.log('👪 Parent role - Redirecting to parent dashboard');
-                                window.location.href = 'parent-dashboard.html';
-                            } else if (role === 'tutor') {
-                                console.log('👨‍🏫 Tutor role - Redirecting to tutor dashboard');
-                                window.location.href = 'tutor-dashboard.html';
-                            } else if (role === 'admin') {
-                                console.log('👑 Admin role - Redirecting to admin dashboard');
-                                window.location.href = 'admin.html';
-                            } else {
-                                console.log('❓ Unknown role:', role);
-                                accessDenied.style.display = 'block';
-                            }
-                        })
-                        .catch(function(error) {
-                            console.error('❌ Error fetching user data:', error);
-                            loadingSpinner.style.display = 'none';
-                            notLoggedIn.style.display = 'none';
-                            accessDenied.style.display = 'block';
-                            document.querySelector('.access-denied p').textContent = 
-                                'Error loading your profile: ' + error.message;
-                        });
-                } else {
-                    // No user - show sign in prompt
-                    console.log('❌ No user logged in');
-                    loadingSpinner.style.display = 'none';
-                    notLoggedIn.style.display = 'block';
-                    studentContent.style.display = 'none';
-                    accessDenied.style.display = 'none';
-                }
-            }, function(error) {
-                console.error('❌ Auth listener error:', error);
-                loadingSpinner.style.display = 'none';
-                notLoggedIn.style.display = 'none';
-                accessDenied.style.display = 'block';
-                document.querySelector('.access-denied p').textContent = 
-                    'Authentication error: ' + error.message;
+        // Listen for auth changes
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
+        });
+
+        // Initial check
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
+        });
+
+        // Handle logout from sidebar
+        function handleLogout() {
+            firebase.auth().signOut().then(function() {
+                window.location.href = 'index.html';
+            }).catch(function(error) {
+                console.error('Logout error:', error);
             });
         }
 
-        // ============================================================
-        // LOGOUT
-        // ============================================================
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            console.log('🚪 Logout clicked');
-            if (typeof firebase !== 'undefined' && firebase.auth) {
-                firebase.auth().signOut().then(function() {
-                    console.log('✅ Logged out');
-                    window.location.href = 'index.html';
-                }).catch(function(error) {
-                    console.error('❌ Logout error:', error);
-                    alert('Error logging out. Please try again.');
-                });
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        // ============================================================
-        // CART BADGE (SIMPLIFIED)
-        // ============================================================
-
+        // ------------------------------------------------------------
+        // Update Cart Badge
+        // ------------------------------------------------------------
         function updateCartBadge() {
-            try {
-                if (typeof getCart === 'function') {
-                    const cart = getCart();
-                    const count = cart.reduce(function(total, item) {
-                        return total + (item.quantity || 0);
-                    }, 0);
-                    const badge = document.getElementById('cartCount');
-                    if (badge) {
-                        badge.textContent = count;
-                        badge.classList.toggle('show', count > 0);
-                    }
-                }
-            } catch (error) {
-                // Silently fail - cart might not be available
-                console.log('Cart not available');
+            const cart = getCart();
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.textContent = count;
+                badge.classList.toggle('show', count > 0);
             }
         }
 
+        // Update cart badge on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
         });
 
-        // ============================================================
-        // HANDLE LOGOUT FROM SIDEBAR
-        // ============================================================
-        function handleLogout() {
-            if (typeof firebase !== 'undefined' && firebase.auth) {
-                firebase.auth().signOut().then(function() {
-                    window.location.href = 'index.html';
-                }).catch(function(error) {
-                    console.error('Logout error:', error);
-                    alert('Error logging out. Please try again.');
-                });
-            } else {
-                window.location.href = 'index.html';
-            }
-        }
+        // Listen for cart updates (custom event)
+        document.addEventListener('cartUpdated', function() {
+            updateCartBadge();
+        });
 
-        console.log('✅ Dashboard script ready!');
+        // Override addToCart to dispatch event
+        const originalAddToCart = window.addToCart;
+        if (originalAddToCart) {
+            window.addToCart = function(item) {
+                originalAddToCart(item);
+                document.dispatchEvent(new Event('cartUpdated'));
+            };
+        }
     </script>
 </body>
 </html>
