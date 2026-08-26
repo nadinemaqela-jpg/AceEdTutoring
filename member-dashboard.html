@@ -21,7 +21,8 @@
     
     <!-- Firebase Configuration - YOUR ACTUAL CONFIG -->
     <script>
-        const firebaseConfig = {
+        // Using a different variable name to avoid conflict with auth.js
+        const fbConfig = {
             apiKey: "AIzaSyD81MblPqlkFIY4DplSg8EpXoXjPa6h3Hc",
             authDomain: "aceed-tutoring.firebaseapp.com",
             projectId: "aceed-tutoring",
@@ -30,10 +31,10 @@
             appId: "1:225577605291:web:75327bc4e1f644cef47fee"
         };
         
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase with the config
+        firebase.initializeApp(fbConfig);
         console.log('✅ Firebase initialized!');
-        console.log('📁 Project:', firebaseConfig.projectId);
+        console.log('📁 Project:', fbConfig.projectId);
     </script>
     
     <!-- Cart & Auth -->
@@ -1048,6 +1049,21 @@
         const accessDenied = document.getElementById('accessDenied');
 
         console.log('🔥 AceEd Dashboard - Starting...');
+
+        // Check if Firebase is initialized
+        try {
+            const app = firebase.app();
+            console.log('✅ Firebase app is initialized');
+        } catch (e) {
+            console.error('❌ Firebase not initialized:', e);
+            loadingSpinner.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
+                    <h2 style="color: #e74c3c; margin-top: 20px;">Firebase Error</h2>
+                    <p style="color: #7f8c8d;">Firebase failed to initialize. Please check your configuration.</p>
+                </div>
+            `;
+        }
 
         // Listen for auth state changes
         firebase.auth().onAuthStateChanged(function(user) {
