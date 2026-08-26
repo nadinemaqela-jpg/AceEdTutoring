@@ -19,6 +19,19 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
+    <!-- Firebase Config - ADD YOUR CONFIG HERE -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    
     <!-- Cart & Auth -->
     <script src="js/cart.js"></script>
     <script src="js/auth.js"></script>
@@ -50,7 +63,7 @@
         header {
             background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             color: white;
-            padding: 20px;
+            padding: 20px 0;
             text-align: center;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
@@ -58,37 +71,74 @@
             z-index: 100;
         }
         
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
         .logo-image {
             max-width: 250px;
             margin: 0 auto;
         }
+        
         .logo-image img {
             width: 100%;
             max-height: 80px;
             object-fit: contain;
         }
-        .tagline {
+        
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        
+        .brand-text span {
+            color: #f39c12;
+        }
+        
+        .affordable-tagline {
             font-size: 1rem;
-            margin: 15px 0;
-            font-weight: 500;
+            color: #f39c12;
+            font-weight: 600;
+            margin: 2px 0 5px 0;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            font-size: 0.95rem;
+            margin: 5px 0 10px 0;
+            font-weight: 400;
+            opacity: 0.9;
         }
         
         .nav-links {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
+        
         .nav-link {
             color: white;
             text-decoration: none;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 30px;
             font-size: 0.9rem;
             transition: all 0.2s ease;
         }
+        
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.15);
             transform: translateY(-1px);
@@ -98,6 +148,7 @@
             position: relative;
             display: inline-block;
         }
+        
         .dropdown-content {
             display: none;
             position: absolute;
@@ -109,10 +160,13 @@
             left: 0;
             z-index: 10;
             backdrop-filter: blur(2px);
+            padding: 5px 0;
         }
+        
         .dropdown:hover .dropdown-content {
             display: block;
         }
+        
         .dropdown-content a {
             color: white;
             padding: 10px 16px;
@@ -122,6 +176,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             transition: background 0.2s;
         }
+        
         .dropdown-content a:hover {
             background-color: #3498db;
         }
@@ -139,10 +194,12 @@
             align-items: center;
             justify-content: center;
         }
+        
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.15);
             transform: translateY(-1px);
         }
+        
         .profile-btn {
             font-size: 1.2rem;
         }
@@ -153,10 +210,17 @@
             border-radius: 40px;
             padding: 6px 15px;
             color: white !important;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
+        
         .cart-link:hover {
             background-color: #e67e22 !important;
+            transform: translateY(-1px);
         }
+        
         .cart-badge {
             position: absolute;
             top: -8px;
@@ -169,11 +233,9 @@
             font-weight: bold;
             display: none;
         }
+        
         .cart-badge.show {
             display: inline-block;
-        }
-        .auth-buttons {
-            display: none !important;
         }
         
         .sidebar-overlay {
@@ -188,10 +250,12 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+        
         .sidebar-overlay.active {
             display: block;
             opacity: 1;
         }
+        
         .sidebar {
             position: fixed;
             top: 0;
@@ -205,20 +269,25 @@
             transition: transform 0.3s ease;
             box-shadow: 0 0 30px rgba(0,0,0,0.3);
         }
+        
         .sidebar-left {
             left: 0;
             transform: translateX(-100%);
         }
+        
         .sidebar-left.open {
             transform: translateX(0);
         }
+        
         .sidebar-right {
             right: 0;
             transform: translateX(100%);
         }
+        
         .sidebar-right.open {
             transform: translateX(0);
         }
+        
         .sidebar-close {
             background: none;
             border: none;
@@ -229,9 +298,11 @@
             margin-bottom: 20px;
             transition: transform 0.2s;
         }
+        
         .sidebar-close:hover {
             transform: rotate(90deg);
         }
+        
         .sidebar h3 {
             font-size: 1.2rem;
             margin-bottom: 20px;
@@ -239,6 +310,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             color: #f39c12;
         }
+        
         .sidebar a {
             display: block;
             color: #cbd5e1;
@@ -248,10 +320,12 @@
             transition: all 0.2s;
             font-size: 0.95rem;
         }
+        
         .sidebar a:hover {
             color: #fff;
             padding-left: 5px;
         }
+        
         .sidebar a i {
             width: 25px;
             color: #f39c12;
@@ -267,25 +341,31 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
         }
+        
         .dashboard-hero h1 {
             font-size: 1.8rem;
             display: flex;
             align-items: center;
             gap: 15px;
         }
+        
         .dashboard-hero h1 i {
             color: #f39c12;
         }
+        
         .dashboard-hero .user-info {
             font-size: 1rem;
             opacity: 0.9;
             margin-top: 5px;
         }
+        
         .dashboard-hero .user-info i {
             margin-right: 8px;
             color: #f39c12;
         }
+        
         .btn-logout {
             background: #e74c3c;
             color: white;
@@ -297,6 +377,7 @@
             font-size: 0.9rem;
             transition: all 0.3s;
         }
+        
         .btn-logout:hover {
             background: #c0392b;
             transform: translateY(-2px);
@@ -308,16 +389,18 @@
             color: #3498db;
             text-decoration: none;
         }
+        
         .back-link:hover {
             text-decoration: underline;
         }
         
         .resource-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin: 30px 0;
         }
+        
         .resource-card {
             background: white;
             border-radius: 20px;
@@ -326,23 +409,28 @@
             transition: all 0.3s ease;
             text-align: center;
         }
+        
         .resource-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.12);
         }
+        
         .resource-card i {
             font-size: 3rem;
             margin-bottom: 15px;
         }
+        
         .resource-card h3 {
             color: #1e2a3a;
             margin-bottom: 10px;
         }
+        
         .resource-card p {
             color: #7f8c8d;
             font-size: 0.9rem;
             margin-bottom: 15px;
         }
+        
         .resource-card .btn {
             display: inline-block;
             padding: 10px 25px;
@@ -352,6 +440,7 @@
             font-size: 0.9rem;
             transition: all 0.3s;
         }
+        
         .btn-blue { background: #3498db; color: white; }
         .btn-blue:hover { background: #2980b9; transform: translateY(-2px); }
         .btn-green { background: #27ae60; color: white; }
@@ -366,6 +455,7 @@
             border-radius: 12px;
             margin: 30px 0;
         }
+        
         .tip-box i {
             color: #ffc107;
             margin-right: 10px;
@@ -379,18 +469,22 @@
             text-align: center;
             margin: 30px 0;
         }
+        
         .access-denied i {
             font-size: 3rem;
             color: #e74c3c;
             margin-bottom: 15px;
         }
+        
         .access-denied h2 {
             color: #721c24;
         }
+        
         .access-denied p {
             color: #721c24;
             font-size: 1.1rem;
         }
+        
         .access-denied .btn {
             display: inline-block;
             background: #3498db;
@@ -409,12 +503,14 @@
             padding: 50px 0 25px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
+        
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 35px;
             margin-bottom: 35px;
         }
+        
         .footer-col h4 {
             color: white;
             font-size: 1.2rem;
@@ -422,6 +518,7 @@
             position: relative;
             display: inline-block;
         }
+        
         .footer-col h4:after {
             content: '';
             position: absolute;
@@ -432,27 +529,33 @@
             background: #e74c3c;
             border-radius: 3px;
         }
+        
         .footer-col p, .footer-col ul {
             font-size: 0.9rem;
             line-height: 1.7;
             opacity: 0.85;
         }
+        
         .footer-col ul {
             list-style: none;
             padding: 0;
         }
+        
         .footer-col ul li {
             margin-bottom: 10px;
         }
+        
         .footer-col ul li a {
             color: #cbd5e1;
             text-decoration: none;
             transition: color 0.2s;
         }
+        
         .footer-col ul li a:hover {
             color: #e74c3c;
             padding-left: 4px;
         }
+        
         .footer-register-btn {
             display: inline-block;
             background: #e74c3c;
@@ -466,10 +569,12 @@
             font-size: 0.9rem;
             box-shadow: 0 4px 10px rgba(231,76,60,0.3);
         }
+        
         .footer-register-btn:hover {
             background: #c0392b;
             transform: translateY(-2px);
         }
+        
         .footer-dark-btn {
             background: #2d3e50;
             color: white;
@@ -483,15 +588,18 @@
             margin-right: 10px;
             margin-top: 8px;
         }
+        
         .footer-dark-btn:hover {
             background: #1e2f40;
             transform: translateY(-1px);
         }
+        
         .social-icons {
             display: flex;
             gap: 14px;
             margin-top: 15px;
         }
+        
         .social-icons a {
             background: #1e2a3a;
             width: 36px;
@@ -504,10 +612,12 @@
             font-size: 1.1rem;
             transition: all 0.2s;
         }
+        
         .social-icons a:hover {
             background: #e74c3c;
             transform: translateY(-3px);
         }
+        
         .footer-bottom {
             text-align: center;
             padding-top: 25px;
@@ -515,34 +625,109 @@
             font-size: 0.8rem;
             opacity: 0.7;
         }
+        
         .footer-bottom a {
             color: #e2e8f0;
             text-decoration: none;
         }
+        
         .footer-bottom a:hover {
             color: #e74c3c;
         }
         
+        .section-title {
+            margin: 30px 0 20px;
+            color: #1e2a3a;
+            font-size: 1.5rem;
+        }
+        
+        .section-title i {
+            color: #f39c12;
+            margin-right: 10px;
+        }
+        
+        /* Responsive Design */
         @media (max-width: 768px) {
+            .header-content {
+                padding: 0 15px;
+            }
+            
+            .logo-image {
+                max-width: 180px;
+            }
+            
+            .brand-text {
+                font-size: 1.4rem;
+            }
+            
+            .affordable-tagline {
+                font-size: 0.85rem;
+            }
+            
+            .tagline {
+                font-size: 0.8rem;
+            }
+            
+            .nav-links {
+                gap: 8px;
+            }
+            
+            .nav-link {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            
             .dashboard-hero {
                 flex-direction: column;
                 text-align: center;
                 gap: 15px;
+                padding: 20px;
             }
+            
+            .dashboard-hero h1 {
+                font-size: 1.4rem;
+                justify-content: center;
+            }
+            
             .resource-grid {
                 grid-template-columns: 1fr;
             }
+            
             .footer-grid {
                 gap: 30px;
+            }
+            
+            .sidebar {
+                width: 280px;
+            }
+            
+            .cart-link {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-image {
+                max-width: 150px;
+            }
+            
+            .brand-text {
+                font-size: 1.2rem;
+            }
+            
+            .dashboard-hero h1 {
+                font-size: 1.2rem;
+            }
+            
+            .btn-logout {
+                padding: 8px 20px;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg-logo">
-        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
-    </div>
-
     <!-- PROFILE SIDEBAR -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
@@ -574,11 +759,16 @@
 
     <!-- HEADER -->
     <header>
-        <div class="container">
-            <div class="logo-image">
-                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-image">
+                    <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.style.display='none'">
+                </div>
+                <div class="brand-text">AceEd <span>Tutoring</span></div>
+                <div class="affordable-tagline">✦ Affordable Services ✦</div>
+                <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
             </div>
-            <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
+            
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <div class="dropdown">
@@ -630,7 +820,7 @@
 
         <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-        <h2 style="margin: 30px 0 20px; color: #1e2a3a;"><i class="fas fa-folder-open"></i> My Resources</h2>
+        <h2 class="section-title"><i class="fas fa-folder-open"></i> My Resources</h2>
 
         <div class="resource-grid">
             <!-- ATPs -->
