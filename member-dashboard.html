@@ -14,22 +14,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard - AceEd Tutoring</title>
     
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (compat version for regular script tags) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Firebase Configuration -->
+    <!-- Firebase Configuration - USING YOUR ACTUAL CONFIG -->
     <script>
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyD81MblPqlkFIY4DplSg8EpXoXjPa6h3Hc",
+            authDomain: "aceed-tutoring.firebaseapp.com",
+            projectId: "aceed-tutoring",
+            storageBucket: "aceed-tutoring.firebasestorage.app",
+            messagingSenderId: "225577605291",
+            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
         };
+        
+        // Initialize Firebase (compat version)
         firebase.initializeApp(firebaseConfig);
+        console.log('✅ Firebase initialized successfully!');
+        console.log('✅ Project ID:', firebaseConfig.projectId);
     </script>
     
     <!-- Cart & Auth -->
@@ -973,7 +978,7 @@
         });
 
         // ============================================================
-        // FIXED: AUTH - SIMPLE AND RELIABLE
+        // AUTH - CHECK USER ROLE
         // ============================================================
         
         // Get DOM elements
@@ -981,18 +986,20 @@
         const studentContent = document.getElementById('studentContent');
         const accessDenied = document.getElementById('accessDenied');
 
-        // Check auth state - SIMPLE VERSION
+        console.log('🔥 Starting auth check...');
+
+        // Listen for auth state changes
         firebase.auth().onAuthStateChanged(function(user) {
-            console.log('Auth state changed:', user ? 'Logged in' : 'Not logged in');
+            console.log('📡 Auth state changed:', user ? '✅ Logged in' : '❌ Not logged in');
             
             if (!user) {
-                // No user - show a message and a button to sign in
+                // No user - show sign in prompt
                 loadingSpinner.innerHTML = `
-                    <div style="text-align: center;">
-                        <i class="fas fa-sign-in-alt" style="font-size: 3rem; color: #f39c12;"></i>
-                        <h3 style="margin: 20px 0;">Please Sign In</h3>
-                        <p style="color: #7f8c8d; margin-bottom: 20px;">You need to be logged in to access your dashboard.</p>
-                        <a href="signin.html" class="btn btn-blue" style="display: inline-block; padding: 12px 30px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-sign-in-alt" style="font-size: 4rem; color: #f39c12; margin-bottom: 20px;"></i>
+                        <h2 style="color: #1e2a3a; margin-bottom: 10px;">Please Sign In</h2>
+                        <p style="color: #7f8c8d; margin-bottom: 25px;">You need to be logged in to access your dashboard.</p>
+                        <a href="signin.html" class="btn btn-blue" style="display: inline-block; padding: 12px 35px; border-radius: 40px; text-decoration: none; background: #3498db; color: white; font-weight: 600;">
                             <i class="fas fa-sign-in-alt"></i> Go to Sign In
                         </a>
                     </div>
@@ -1000,52 +1007,66 @@
                 return;
             }
 
-            // User is logged in - check their role
+            console.log('👤 User UID:', user.uid);
+            console.log('📧 User Email:', user.email);
+
+            // User is logged in - fetch their data
             const userRef = firebase.firestore().collection('users').doc(user.uid);
             userRef.get()
                 .then(function(doc) {
+                    console.log('📄 Firestore document exists:', doc.exists);
+                    
                     if (!doc.exists) {
-                        // User document doesn't exist - show error
                         loadingSpinner.innerHTML = `
-                            <div style="text-align: center;">
-                                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
-                                <h3 style="margin: 20px 0; color: #e74c3c;">Profile Not Found</h3>
-                                <p>Your user profile was not found. Please contact support.</p>
-                                <a href="index.html" class="btn" style="display: inline-block; margin-top: 15px; padding: 12px 30px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">Go Home</a>
+                            <div style="text-align: center; padding: 40px;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;"></i>
+                                <h2 style="color: #e74c3c; margin-bottom: 10px;">Profile Not Found</h2>
+                                <p style="color: #7f8c8d;">Your user profile was not found in the database.</p>
+                                <p style="color: #95a5a6; font-size: 0.9rem; margin-top: 10px;">UID: ${user.uid}</p>
+                                <a href="index.html" class="btn btn-blue" style="display: inline-block; margin-top: 20px; padding: 12px 35px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">Go Home</a>
                             </div>
                         `;
                         return;
                     }
                     
                     const userData = doc.data();
+                    console.log('📋 User data:', userData);
+                    console.log('🎯 User role:', userData.role);
+                    
                     const role = userData.role || 'student';
                     
                     // Hide loading spinner
                     loadingSpinner.style.display = 'none';
                     
+                    // Check role and redirect or show content
                     if (role === 'student') {
-                        // Show student dashboard
+                        console.log('✅ Student role confirmed - showing dashboard');
                         studentContent.style.display = 'block';
                         const displayName = userData.fullName || userData.displayName || user.email || 'Student';
                         document.getElementById('userName').textContent = displayName;
+                        console.log('👤 Displaying dashboard for:', displayName);
                     } else if (role === 'parent') {
+                        console.log('👪 Parent role - redirecting to parent dashboard');
                         window.location.href = 'parent-dashboard.html';
                     } else if (role === 'tutor') {
+                        console.log('👨‍🏫 Tutor role - redirecting to tutor dashboard');
                         window.location.href = 'tutor-dashboard.html';
                     } else if (role === 'admin') {
+                        console.log('👑 Admin role - redirecting to admin dashboard');
                         window.location.href = 'admin.html';
                     } else {
+                        console.log('❓ Unknown role:', role);
                         accessDenied.style.display = 'block';
                     }
                 })
                 .catch(function(error) {
-                    console.error('Error fetching user data:', error);
+                    console.error('❌ Error fetching user data:', error);
                     loadingSpinner.innerHTML = `
-                        <div style="text-align: center;">
-                            <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: #e74c3c;"></i>
-                            <h3 style="margin: 20px 0; color: #e74c3c;">Error Loading Profile</h3>
+                        <div style="text-align: center; padding: 40px;">
+                            <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;"></i>
+                            <h2 style="color: #e74c3c; margin-bottom: 10px;">Error Loading Profile</h2>
                             <p style="color: #7f8c8d;">${error.message}</p>
-                            <a href="index.html" class="btn" style="display: inline-block; margin-top: 15px; padding: 12px 30px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">Go Home</a>
+                            <a href="index.html" class="btn btn-blue" style="display: inline-block; margin-top: 20px; padding: 12px 35px; border-radius: 40px; text-decoration: none; background: #3498db; color: white;">Go Home</a>
                         </div>
                     `;
                 });
@@ -1055,10 +1076,12 @@
         // LOGOUT
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', function() {
+            console.log('🚪 Logout button clicked');
             firebase.auth().signOut().then(function() {
+                console.log('✅ Logged out successfully');
                 window.location.href = 'index.html';
             }).catch(function(error) {
-                console.error('Logout error:', error);
+                console.error('❌ Logout error:', error);
                 alert('Error logging out. Please try again.');
             });
         });
