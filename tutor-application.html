@@ -1712,6 +1712,63 @@
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
             }
         });
+
+        async function submitTutorApplication(data) {
+            // 1. Save application to Firestore
+            const docRef = await firebase.firestore().collection("tutorApplications").add({
+                fullName: data.fullName,
+                email: data.email,
+                phone: data.phone,
+                subjects: data.subjects,
+                rate: data.rate,
+                availability: data.availability,
+                status: "pending",
+                appliedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        
+            // 2. Email to ADMIN
+            await firebase.firestore().collection("mail").add({
+                to: "admin@aceed.co.za",
+                message: {
+                    subject: `New Tutor Application: ${data.fullName}`,
+                    html: `
+                        <h2>New Tutor Application</h2>
+                        <p><strong>Name:</strong> ${data.fullName}</p>
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Phone:</strong> ${data.phone}</p>
+                        <p><strong>Subjects:</strong> ${data.subjects.join(", ")}</p>
+                        <p><strong>Rate:</strong> R${data.rate}/hour</p>
+                        <p><strong>Availability:</strong></p>
+                        <ul>
+                            ${Object.entries(data.availability)
+                                .filter(([day, slot]) => slot.enabled)
+                                .map(([day, slot]) => `<li>${day}: ${slot.from} - ${slot.to}</li>`)
+                                .join("")}
+                        </ul>
+                        <hr>
+                        <p><a href="https://aceed.co.za/admin.html">Review in Admin Dashboard</a></p>
+                    `
+                }
+            });
+        
+            // 3. Confirmation email to TUTOR
+            await firebase.firestore().collection("mail").add({
+                to: data.email,
+                message: {
+                    subject: "We received your application - AceEd Tutoring",
+                    html: `
+                        <h2>Thank you, ${data.fullName}!</h2>
+                        <p>We've received your tutor application. Our team will review it within 2-3 business days.</p>
+                        <p>If you have any questions, reply to this email or WhatsApp us at +27 65 529 4232.</p>
+                        <hr>
+                        <p>AceEd Tutoring<br>Affordable Services</p>
+                    `
+                }
+            });
+        
+            console.log("✅ Application submitted and emails sent");
+            return docRef.id;
+        }
     </script>
 </body>
 </html>
