@@ -24,9 +24,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Cart & Auth -->
-    <script src="js/cart.js"></script>
-    <script src="js/auth.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -634,10 +631,6 @@
                 <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
                     <i class="fas fa-user-circle"></i>
                 </button>
-                <a href="cart.html" class="nav-link cart-link">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                    <span class="cart-badge" id="cartCount">0</span>
-                </a>
                 <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -837,35 +830,6 @@
             });
         });
 
-        // ============================================================
-        // CART BADGE
-        // ============================================================
-
-        function updateCartBadge() {
-            if (typeof getCart === 'function') {
-                const cart = getCart();
-                const count = cart.reduce(function(total, item) {
-                    return total + item.quantity;
-                }, 0);
-                const badge = document.getElementById('cartCount');
-                if (badge) {
-                    badge.textContent = count;
-                    badge.classList.toggle('show', count > 0);
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartBadge();
-        });
-
-        document.addEventListener('cartUpdated', function() {
-            updateCartBadge();
-        });
-
-        if (typeof getCart === 'function') {
-            updateCartBadge();
-        }
 
         // ============================================================
         // HANDLE LOGOUT FROM SIDEBAR
