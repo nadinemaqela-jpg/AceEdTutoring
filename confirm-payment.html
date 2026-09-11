@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18209594553');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Payment - AceEd Tutoring</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
+            authDomain: "aceed-tutoring.firebaseapp.com",
+            projectId: "aceed-tutoring",
+            storageBucket: "aceed-tutoring.firebasestorage.app",
+            messagingSenderId: "225577605291",
+            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        h1 {
+            color: #1e2a3a;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+        }
+
+        p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .invoice-info {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .invoice-info .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .invoice-info .row:last-child {
+            border-bottom: none;
+        }
+
+        .invoice-info .label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .invoice-info .value {
+            color: #1e2a3a;
+            font-weight: 600;
+        }
+
+        .total-amount {
+            color: #27ae60 !important;
+            font-size: 1.2rem !important;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+
+        .btn-green {
+            background: #27ae60;
+        }
+
+        .btn-green:hover {
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .spinner {
+            font-size: 4rem;
+            color: #f39c12;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-success { color: #27ae60; }
+        .status-error { color: #e74c3c; }
+        .status-warning { color: #f39c12; }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="content">
+            <i class="fas fa-spinner spinner"></i>
+            <h1>Confirming your payment...</h1>
+            <p>Please wait a moment.</p>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const invoiceId = params.get('invoice');
+        const content = document.getElementById('content');
+
+        if (!invoiceId) {
+            showError('Invalid Link', 'No invoice was specified in the link. Please check the email you received.');
+        } else {
+            checkInvoice(invoiceId);
+        }
+
+        async function checkInvoice(id) {
+            try {
+                const db = firebase.firestore();
+                const invoiceDoc = await db.collection('invoices').doc(id).get();
+
+                if (!invoiceDoc.exists) {
+                    showError('Invoice Not Found', 'This invoice does not exist in our system. Please contact support at clients@aceed.co.za.');
+                    return;
+                }
+
+                const invoice = invoiceDoc.data();
+
+                // If already paid or claimed, show the right message
+                if (invoice.status === 'paid') {
+                    showAlreadyPaid(invoice);
+                    return;
+                }
+
+                if (invoice.status === 'payment_claimed') {
+                    showAlreadyClaimed(invoice);
+                    return;
+                }
+
+                // Show confirmation screen with invoice details
+                showConfirmation(invoice);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Something went wrong', error.message);
+            }
+        }
+
+        function showConfirmation(invoice) {
+            const itemsHtml = (invoice.items || []).map(item =>
+                `<div class="row">
+                    <span class="label">${item.name} × ${item.qty}</span>
+                    <span class="value">R${item.total.toFixed(2)}</span>
+                </div>`
+            ).join('');
+
+            content.innerHTML = `
+                <i class="fas fa-file-invoice state-icon" style="color: #3498db;"></i>
+                <h1>Confirm Payment</h1>
+                <p>Please confirm that you have completed the payment for this invoice.</p>
+
+                <div class="invoice-info">
+                    <div class="row">
+                        <span class="label">Invoice #</span>
+                        <span class="value">${invoice.invoiceNumber}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Reference</span>
+                        <span class="value">${invoice.paymentRef}</span>
+                    </div>
+                    ${itemsHtml}
+                    <div class="row" style="margin-top: 10px; padding-top: 10px; border-top: 2px solid #eee;">
+                        <span class="label" style="font-weight: 600;">Total</span>
+                        <span class="value total-amount">R${invoice.total.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button onclick="confirmPayment('${invoice.invoiceNumber}')" class="btn btn-green">
+                        <i class="fas fa-check"></i> Yes, I've Paid
+                    </button>
+                    <a href="parent-dashboard.html" class="btn" style="background: #95a5a6;">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            `;
+        }
+
+        async function confirmPayment(invoiceNumber) {
+            content.innerHTML = `
+                <i class="fas fa-spinner spinner"></i>
+                <h1>Confirming...</h1>
+                <p>Please wait a moment.</p>
+            `;
+
+            try {
+                const db = firebase.firestore();
+
+                // 1. Update invoice status
+                await db.collection('invoices').doc(invoiceId).update({
+                    status: 'payment_claimed',
+                    claimedAt: new Date().toISOString()
+                });
+
+                // 2. Get the invoice for email
+                const invoiceDoc = await db.collection('invoices').doc(invoiceId).get();
+                const invoice = invoiceDoc.data();
+
+                // 3. Notify Admin
+                await db.collection('mail').add({
+                    to: 'admin@aceed.co.za',
+                    message: {
+                        subject: '💳 Payment Claimed: ' + invoice.invoiceNumber,
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                                <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                                    <h1 style="margin: 0;">AceEd Tutoring</h1>
+                                    <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                                </div>
+                                <div style="padding: 25px; background: #f9f9f9;">
+                                    <h2>Payment Claimed ✅</h2>
+                                    <p>The following parent has confirmed they've made payment:</p>
+                                    <hr>
+                                    <p><strong>Invoice:</strong> ${invoice.invoiceNumber}</p>
+                                    <p><strong>Parent:</strong> ${invoice.parentName}</p>
+                                    <p><strong>Email:</strong> ${invoice.parentEmail}</p>
+                                    <p><strong>Phone:</strong> ${invoice.parentPhone || 'Not provided'}</p>
+                                    <p><strong>Amount:</strong> R${invoice.total.toFixed(2)}</p>
+                                    <p><strong>Reference:</strong> ${invoice.paymentRef}</p>
+                                    <hr>
+                                    <p>Please check your bank account and mark this invoice as paid once verified.</p>
+                                    <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Admin Dashboard</a></p>
+                                </div>
+                                <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                                    <p style="margin:0;">© 2026 AceEd Tutoring</p>
+                                </div>
+                            </div>
+                        `
+                    }
+                });
+
+                // 4. Success screen
+                showSuccess(invoice);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Could not confirm payment', error.message);
+            }
+        }
+
+        function showSuccess(invoice) {
+            content.innerHTML = `
+                <i class="fas fa-check-circle state-icon status-success"></i>
+                <h1 class="status-success">Payment Confirmed!</h1>
+                <p>Thank you for confirming your payment.</p>
+
+                <div class="invoice-info">
+                    <div class="row">
+                        <span class="label">Invoice #</span>
+                        <span class="value">${invoice.invoiceNumber}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Reference</span>
+                        <span class="value">${invoice.paymentRef}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Amount</span>
+                        <span class="value total-amount">R${invoice.total.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px;">Our team will verify your payment within 24 hours and activate your tutoring services.</p>
+                <p style="font-size: 0.85rem; color: #95a5a6;">A confirmation has been sent to our team.</p>
+
+                <a href="parent-dashboard.html" class="btn btn-green" style="margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> Go to Dashboard
+                </a>
+            `;
+        }
+
+        function showAlreadyPaid(invoice) {
+            content.innerHTML = `
+                <i class="fas fa-check-circle state-icon status-success"></i>
+                <h1 class="status-success">Already Paid</h1>
+                <p>This invoice (<strong>${invoice.invoiceNumber}</strong>) has already been marked as paid.</p>
+                <p>Thank you for your payment!</p>
+                <a href="parent-dashboard.html" class="btn btn-green" style="margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> Go to Dashboard
+                </a>
+            `;
+        }
+
+        function showAlreadyClaimed(invoice) {
+            content.innerHTML = `
+                <i class="fas fa-clock state-icon status-warning"></i>
+                <h1 class="status-warning">Already Confirmed</h1>
+                <p>You've already confirmed payment for this invoice (<strong>${invoice.invoiceNumber}</strong>).</p>
+                <p>Our team is verifying it now. You'll be notified once it's activated.</p>
+                <a href="parent-dashboard.html" class="btn" style="background: #f39c12; margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> Go to Dashboard
+                </a>
+            `;
+        }
+
+        function showError(title, message) {
+            content.innerHTML = `
+                <i class="fas fa-exclamation-triangle state-icon status-error"></i>
+                <h1 class="status-error">${title}</h1>
+                <p>${message}</p>
+                <p style="margin-top: 15px;">Need help? Email <strong>clients@aceed.co.za</strong> or WhatsApp <strong>+27 65 529 4232</strong>.</p>
+                <a href="index.html" class="btn" style="margin-top: 20px;">
+                    <i class="fas fa-home"></i> Go Home
+                </a>
+            `;
+        }
+    </script>
+</body>
+</html>
