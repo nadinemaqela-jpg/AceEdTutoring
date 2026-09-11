@@ -784,10 +784,6 @@
                 <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
                     <i class="fas fa-user-circle"></i>
                 </button>
-                <a href="cart.html" class="nav-link cart-link">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                    <span class="cart-badge" id="cartCount">0</span>
-                </a>
                 <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -1327,448 +1323,411 @@
         </div>
     </footer>
 
-    <script>
-        // ============================================================
-        // SIDEBAR CONTROLS
-        // ============================================================
-        function openSidebar(type) {
-            if (type === 'profile') {
-                document.getElementById('profileSidebar').classList.add('open');
-                document.getElementById('profileOverlay').classList.add('active');
-            } else if (type === 'dot') {
-                document.getElementById('dotSidebar').classList.add('open');
-                document.getElementById('dotOverlay').classList.add('active');
-            }
-            document.body.style.overflow = 'hidden';
+<script>
+    // ============================================================
+    // SIDEBAR CONTROLS
+    // ============================================================
+    function openSidebar(type) {
+        if (type === 'profile') {
+            document.getElementById('profileSidebar').classList.add('open');
+            document.getElementById('profileOverlay').classList.add('active');
+        } else if (type === 'dot') {
+            document.getElementById('dotSidebar').classList.add('open');
+            document.getElementById('dotOverlay').classList.add('active');
         }
+        document.body.style.overflow = 'hidden';
+    }
 
-        function closeSidebar(type) {
-            if (type === 'profile') {
-                document.getElementById('profileSidebar').classList.remove('open');
-                document.getElementById('profileOverlay').classList.remove('active');
-            } else if (type === 'dot') {
-                document.getElementById('dotSidebar').classList.remove('open');
-                document.getElementById('dotOverlay').classList.remove('active');
-            }
-            document.body.style.overflow = 'auto';
+    function closeSidebar(type) {
+        if (type === 'profile') {
+            document.getElementById('profileSidebar').classList.remove('open');
+            document.getElementById('profileOverlay').classList.remove('active');
+        } else if (type === 'dot') {
+            document.getElementById('dotSidebar').classList.remove('open');
+            document.getElementById('dotOverlay').classList.remove('active');
         }
+        document.body.style.overflow = 'auto';
+    }
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeSidebar('profile');
-                closeSidebar('dot');
-            }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeSidebar('profile');
+            closeSidebar('dot');
+        }
+    });
+
+    // ============================================================
+    // AUTH - UPDATE UI
+    // ============================================================
+    function updateAuthUI(user) {
+        const loggedIn = document.getElementById('profileLoggedIn');
+        const loggedOut = document.getElementById('profileLoggedOut');
+        if (user) {
+            loggedIn.style.display = 'block';
+            loggedOut.style.display = 'none';
+        } else {
+            loggedIn.style.display = 'none';
+            loggedOut.style.display = 'block';
+        }
+    }
+
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            updateAuthUI(user);
         });
+    }
 
-        // ============================================================
-        // AUTH - UPDATE UI
-        // ============================================================
-        function updateAuthUI(user) {
-            const loggedIn = document.getElementById('profileLoggedIn');
-            const loggedOut = document.getElementById('profileLoggedOut');
-            if (user) {
-                loggedIn.style.display = 'block';
-                loggedOut.style.display = 'none';
-            } else {
-                loggedIn.style.display = 'none';
-                loggedOut.style.display = 'block';
-            }
-        }
-
+    function handleLogout() {
         if (typeof firebase !== 'undefined' && firebase.auth) {
-            firebase.auth().onAuthStateChanged(function(user) {
-                updateAuthUI(user);
+            firebase.auth().signOut().then(function() {
+                window.location.href = 'index.html';
+            }).catch(function(error) {
+                console.error('Logout error:', error);
             });
         }
+    }
 
-        function handleLogout() {
-            if (typeof firebase !== 'undefined' && firebase.auth) {
-                firebase.auth().signOut().then(function() {
-                    window.location.href = 'index.html';
-                }).catch(function(error) {
-                    console.error('Logout error:', error);
-                });
+    // ============================================================
+    // FILE UPLOAD - UPDATE FILE NAMES
+    // ============================================================
+    function updateFileName(inputId, displayId) {
+        const input = document.getElementById(inputId);
+        const display = document.getElementById(displayId);
+        if (input && display) {
+            const fileName = input.files[0] ? input.files[0].name : 'No file selected';
+            display.textContent = fileName;
+            if (input.files[0]) {
+                display.className = 'file-name uploaded';
+            } else {
+                display.className = 'file-name';
+                display.style.color = '#e74c3c';
+                display.style.fontWeight = '500';
             }
         }
+    }
 
-        // ============================================================
-        // CART BADGE
-        // ============================================================
-        function updateCartBadge() {
-            if (typeof getCart === 'function') {
-                const cart = getCart();
-                const count = cart.reduce(function(total, item) {
-                    return total + item.quantity;
-                }, 0);
-                const badge = document.getElementById('cartCount');
-                if (badge) {
-                    badge.textContent = count;
-                    badge.classList.toggle('show', count > 0);
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartBadge();
-        });
-
-        document.addEventListener('cartUpdated', function() {
-            updateCartBadge();
-        });
-
-        if (typeof getCart === 'function') {
-            updateCartBadge();
-        }
-
-        // ============================================================
-        // FILE UPLOAD - UPDATE FILE NAMES (FIXED)
-        // ============================================================
-        function updateFileName(inputId, displayId) {
-            const input = document.getElementById(inputId);
-            const display = document.getElementById(displayId);
-            if (input && display) {
-                const fileName = input.files[0] ? input.files[0].name : 'No file selected';
-                display.textContent = fileName;
-                if (input.files[0]) {
-                    display.className = 'file-name uploaded';
-                } else {
-                    display.className = 'file-name';
-                    display.style.color = '#e74c3c';
-                    display.style.fontWeight = '500';
-                }
-            }
-        }
-
-        // Also handle file inputs without onchange (for compatibility)
-        document.querySelectorAll('input[type="file"]').forEach(function(input) {
-            // Skip if it already has an onchange (we don't want to override)
-            if (!input.hasAttribute('onchange')) {
-                input.addEventListener('change', function() {
-                    const fileName = this.files[0] ? this.files[0].name : 'No file selected';
-                    const displayId = this.id + 'Name';
-                    const display = document.getElementById(displayId);
-                    if (display) {
-                        display.textContent = fileName;
-                        if (this.files[0]) {
-                            display.className = 'file-name uploaded';
-                        } else {
-                            display.className = 'file-name';
-                        }
+    document.querySelectorAll('input[type="file"]').forEach(function(input) {
+        if (!input.hasAttribute('onchange')) {
+            input.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : 'No file selected';
+                const displayId = this.id + 'Name';
+                const display = document.getElementById(displayId);
+                if (display) {
+                    display.textContent = fileName;
+                    if (this.files[0]) {
+                        display.className = 'file-name uploaded';
+                    } else {
+                        display.className = 'file-name';
                     }
-                });
-            }
-        });
-
-        // ============================================================
-        // TUTOR APPLICATION FORM
-        // ============================================================
-        const form = document.getElementById('tutorApplicationForm');
-        const errorDiv = document.getElementById('formError');
-
-        // Show/hide qualification document based on Teaching Graduate selection
-        document.querySelectorAll('input[name="isTeachingGraduate"]').forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
-                const qualDocGroup = document.getElementById('qualificationDocGroup');
-                const matricRequired = document.getElementById('matricRequired');
-
-                if (isTeachingGraduate && isTeachingGraduate.value === 'yes') {
-                    if (qualDocGroup) qualDocGroup.style.display = 'block';
-                    if (matricRequired) matricRequired.textContent = '(Optional for Teaching Graduates)';
-                } else {
-                    if (qualDocGroup) qualDocGroup.style.display = 'none';
-                    if (matricRequired) matricRequired.textContent = '*';
                 }
             });
-        });
-
-        // Availability: Show/hide time/hours when checkbox is toggled
-        document.querySelectorAll('.availability-day input[type="checkbox"]').forEach(function(cb) {
-            cb.addEventListener('change', function() {
-                const dayDiv = this.closest('.availability-day');
-                const selects = dayDiv.querySelectorAll('select, input[type="number"]');
-                selects.forEach(function(el) {
-                    el.style.opacity = this.checked ? '1' : '0.4';
-                    el.style.pointerEvents = this.checked ? 'auto' : 'none';
-                }.bind(this));
-                if (!this.checked) {
-                    selects.forEach(function(el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; });
-                } else {
-                    selects.forEach(function(el) { el.style.opacity = '1'; el.style.pointerEvents = 'auto'; });
-                }
-            });
-        });
-
-        // Trigger initial state
-        document.querySelectorAll('.availability-day input[type="checkbox"]').forEach(function(cb) {
-            cb.dispatchEvent(new Event('change'));
-        });
-
-        // ============================================================
-        // SUBMIT APPLICATION
-        // ============================================================
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-            errorDiv.style.display = 'none';
-
-            // Get form values
-            const fullName = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const location = document.getElementById('location').value.trim();
-            const emergencyName = document.getElementById('emergencyName').value.trim();
-            const emergencyPhone = document.getElementById('emergencyPhone').value.trim();
-            const university = document.getElementById('university').value.trim();
-            const degree = document.getElementById('degree').value.trim();
-            const yearOfStudy = document.getElementById('yearOfStudy').value;
-            const matricAverage = document.getElementById('matricAverage').value;
-            const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
-            const showProfile = document.querySelector('input[name="showProfile"]:checked');
-
-            // Get selected subjects
-            const subjects = [];
-            document.querySelectorAll('#subjectsGroup input[type="checkbox"]:checked').forEach(function(cb) {
-                subjects.push(cb.value);
-            });
-
-            // Get selected grades
-            const grades = [];
-            document.querySelectorAll('#gradesGroup input[type="checkbox"]:checked').forEach(function(cb) {
-                grades.push(cb.value);
-            });
-
-            // Get availability
-            const availability = {
-                monday: {
-                    available: document.getElementById('monAvailable').checked,
-                    startTime: document.getElementById('monStart').value || null,
-                    hours: parseFloat(document.getElementById('monHours').value) || 0
-                },
-                tuesday: {
-                    available: document.getElementById('tueAvailable').checked,
-                    startTime: document.getElementById('tueStart').value || null,
-                    hours: parseFloat(document.getElementById('tueHours').value) || 0
-                },
-                wednesday: {
-                    available: document.getElementById('wedAvailable').checked,
-                    startTime: document.getElementById('wedStart').value || null,
-                    hours: parseFloat(document.getElementById('wedHours').value) || 0
-                },
-                thursday: {
-                    available: document.getElementById('thuAvailable').checked,
-                    startTime: document.getElementById('thuStart').value || null,
-                    hours: parseFloat(document.getElementById('thuHours').value) || 0
-                },
-                friday: {
-                    available: document.getElementById('friAvailable').checked,
-                    startTime: document.getElementById('friStart').value || null,
-                    hours: parseFloat(document.getElementById('friHours').value) || 0
-                },
-                saturday: {
-                    available: document.getElementById('satAvailable').checked,
-                    startTime: document.getElementById('satStart').value || null,
-                    hours: parseFloat(document.getElementById('satHours').value) || 0
-                },
-                sunday: {
-                    available: document.getElementById('sunAvailable').checked,
-                    startTime: document.getElementById('sunStart').value || null,
-                    hours: parseFloat(document.getElementById('sunHours').value) || 0
-                }
-            };
-
-            // Validate required fields
-            if (!fullName || !email || !phone || !location || !emergencyName || !emergencyPhone ||
-                !university || !degree || !yearOfStudy || !isTeachingGraduate || subjects.length === 0 ||
-                grades.length === 0) {
-                errorDiv.textContent = 'Please fill in all required fields.';
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
-                return;
-            }
-
-            // Validate matric average
-            if (isTeachingGraduate.value === 'no' && (!matricAverage || parseFloat(matricAverage) < 75)) {
-                errorDiv.textContent = 'Matric average must be at least 75% (or select Teaching Graduate).';
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
-                return;
-            }
-
-            // Validate at least one availability day
-            const hasAvailability = Object.values(availability).some(function(day) {
-                return day.available === true && day.hours > 0 && day.startTime;
-            });
-
-            if (!hasAvailability) {
-                errorDiv.textContent = 'Please select at least one day with a start time and hours.';
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
-                return;
-            }
-
-            // Validate documents
-            const docFiles = {
-                idDoc: document.getElementById('idDoc').files[0],
-                matricDoc: document.getElementById('matricDoc').files[0],
-                registrationDoc: document.getElementById('registrationDoc').files[0],
-                photoDoc: document.getElementById('photoDoc').files[0],
-                transcriptDoc: document.getElementById('transcriptDoc').files[0],
-                cvDoc: document.getElementById('cvDoc').files[0],
-                residenceDoc: document.getElementById('residenceDoc').files[0]
-            };
-
-            for (var key in docFiles) {
-                if (!docFiles[key]) {
-                    errorDiv.textContent = 'Please upload all required documents.';
-                    errorDiv.style.display = 'block';
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
-                    return;
-                }
-            }
-
-            // Generate random password
-            function generateRandomPassword() {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-                let password = '';
-                for (let i = 0; i < 12; i++) {
-                    password += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return password;
-            }
-            const randomPassword = generateRandomPassword();
-
-            try {
-                // 1. Create user account
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, randomPassword);
-                const user = userCredential.user;
-
-                // 2. Upload all documents
-                const docUrls = {};
-
-                for (var docKey in docFiles) {
-                    const file = docFiles[docKey];
-                    const storageRef = firebase.storage().ref('tutor-applications/' + user.uid + '/' + docKey);
-                    const snapshot = await storageRef.put(file);
-                    const url = await snapshot.ref.getDownloadURL();
-                    docUrls[docKey] = url;
-                }
-
-                // 3. Save to tutor_applications
-                await firebase.firestore().collection('tutor_applications').doc(user.uid).set({
-                    uid: user.uid,
-                    fullName: fullName,
-                    email: email,
-                    phone: phone,
-                    location: location,
-                    emergencyName: emergencyName,
-                    emergencyPhone: emergencyPhone,
-                    university: university,
-                    degree: degree,
-                    yearOfStudy: yearOfStudy,
-                    matricAverage: matricAverage || null,
-                    isTeachingGraduate: isTeachingGraduate.value === 'yes',
-                    subjects: subjects,
-                    grades: grades,
-                    availability: availability,
-                    showProfile: showProfile ? showProfile.value === 'yes' : true,
-                    documents: docUrls,
-                    status: 'pending',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                });
-
-                // 4. Save to users collection
-                await firebase.firestore().collection('users').doc(user.uid).set({
-                    uid: user.uid,
-                    fullName: fullName,
-                    email: email,
-                    phone: phone,
-                    role: 'pending_tutor',
-                    status: 'pending',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                });
-
-                // 5. Show success
-                document.getElementById('applicationForm').style.display = 'none';
-                document.getElementById('successBox').style.display = 'block';
-
-                // Log the password for the admin (in a real scenario, you'd email it)
-                console.log('🔑 Temporary password for ' + email + ': ' + randomPassword);
-
-            } catch (error) {
-                console.error('Application error:', error);
-                errorDiv.textContent = 'Error: ' + error.message;
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
-            }
-        });
-
-        async function submitTutorApplication(data) {
-            // 1. Save application to Firestore
-            const docRef = await firebase.firestore().collection("tutorApplications").add({
-                fullName: data.fullName,
-                email: data.email,
-                phone: data.phone,
-                subjects: data.subjects,
-                rate: data.rate,
-                availability: data.availability,
-                status: "pending",
-                appliedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        
-            // 2. Email to ADMIN
-            await firebase.firestore().collection("mail").add({
-                to: "admin@aceed.co.za",
-                message: {
-                    subject: `New Tutor Application: ${data.fullName}`,
-                    html: `
-                        <h2>New Tutor Application</h2>
-                        <p><strong>Name:</strong> ${data.fullName}</p>
-                        <p><strong>Email:</strong> ${data.email}</p>
-                        <p><strong>Phone:</strong> ${data.phone}</p>
-                        <p><strong>Subjects:</strong> ${data.subjects.join(", ")}</p>
-                        <p><strong>Rate:</strong> R${data.rate}/hour</p>
-                        <p><strong>Availability:</strong></p>
-                        <ul>
-                            ${Object.entries(data.availability)
-                                .filter(([day, slot]) => slot.enabled)
-                                .map(([day, slot]) => `<li>${day}: ${slot.from} - ${slot.to}</li>`)
-                                .join("")}
-                        </ul>
-                        <hr>
-                        <p><a href="https://aceed.co.za/admin.html">Review in Admin Dashboard</a></p>
-                    `
-                }
-            });
-        
-            // 3. Confirmation email to TUTOR
-            await firebase.firestore().collection("mail").add({
-                to: data.email,
-                message: {
-                    subject: "We received your application - AceEd Tutoring",
-                    html: `
-                        <h2>Thank you, ${data.fullName}!</h2>
-                        <p>We've received your tutor application. Our team will review it within 2-3 business days.</p>
-                        <p>If you have any questions, reply to this email or WhatsApp us at +27 65 529 4232.</p>
-                        <hr>
-                        <p>AceEd Tutoring<br>Affordable Services</p>
-                    `
-                }
-            });
-        
-            console.log("✅ Application submitted and emails sent");
-            return docRef.id;
         }
-    </script>
+    });
+
+    // ============================================================
+    // TUTOR APPLICATION FORM
+    // ============================================================
+    const form = document.getElementById('tutorApplicationForm');
+    const errorDiv = document.getElementById('formError');
+
+    document.querySelectorAll('input[name="isTeachingGraduate"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
+            const qualDocGroup = document.getElementById('qualificationDocGroup');
+            const matricRequired = document.getElementById('matricRequired');
+
+            if (isTeachingGraduate && isTeachingGraduate.value === 'yes') {
+                if (qualDocGroup) qualDocGroup.style.display = 'block';
+                if (matricRequired) matricRequired.textContent = '(Optional for Teaching Graduates)';
+            } else {
+                if (qualDocGroup) qualDocGroup.style.display = 'none';
+                if (matricRequired) matricRequired.textContent = '*';
+            }
+        });
+    });
+
+    document.querySelectorAll('.availability-day input[type="checkbox"]').forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            const dayDiv = this.closest('.availability-day');
+            const selects = dayDiv.querySelectorAll('select, input[type="number"]');
+            selects.forEach(function(el) {
+                el.style.opacity = this.checked ? '1' : '0.4';
+                el.style.pointerEvents = this.checked ? 'auto' : 'none';
+            }.bind(this));
+        });
+    });
+
+    document.querySelectorAll('.availability-day input[type="checkbox"]').forEach(function(cb) {
+        cb.dispatchEvent(new Event('change'));
+    });
+
+    // ============================================================
+    // SUBMIT APPLICATION
+    // ============================================================
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        errorDiv.style.display = 'none';
+
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const location = document.getElementById('location').value.trim();
+        const emergencyName = document.getElementById('emergencyName').value.trim();
+        const emergencyPhone = document.getElementById('emergencyPhone').value.trim();
+        const university = document.getElementById('university').value.trim();
+        const degree = document.getElementById('degree').value.trim();
+        const yearOfStudy = document.getElementById('yearOfStudy').value;
+        const matricAverage = document.getElementById('matricAverage').value;
+        const isTeachingGraduate = document.querySelector('input[name="isTeachingGraduate"]:checked');
+        const showProfile = document.querySelector('input[name="showProfile"]:checked');
+
+        const subjects = [];
+        document.querySelectorAll('#subjectsGroup input[type="checkbox"]:checked').forEach(function(cb) {
+            subjects.push(cb.value);
+        });
+
+        const grades = [];
+        document.querySelectorAll('#gradesGroup input[type="checkbox"]:checked').forEach(function(cb) {
+            grades.push(cb.value);
+        });
+
+        const availability = {
+            monday: {
+                available: document.getElementById('monAvailable').checked,
+                startTime: document.getElementById('monStart').value || null,
+                hours: parseFloat(document.getElementById('monHours').value) || 0
+            },
+            tuesday: {
+                available: document.getElementById('tueAvailable').checked,
+                startTime: document.getElementById('tueStart').value || null,
+                hours: parseFloat(document.getElementById('tueHours').value) || 0
+            },
+            wednesday: {
+                available: document.getElementById('wedAvailable').checked,
+                startTime: document.getElementById('wedStart').value || null,
+                hours: parseFloat(document.getElementById('wedHours').value) || 0
+            },
+            thursday: {
+                available: document.getElementById('thuAvailable').checked,
+                startTime: document.getElementById('thuStart').value || null,
+                hours: parseFloat(document.getElementById('thuHours').value) || 0
+            },
+            friday: {
+                available: document.getElementById('friAvailable').checked,
+                startTime: document.getElementById('friStart').value || null,
+                hours: parseFloat(document.getElementById('friHours').value) || 0
+            },
+            saturday: {
+                available: document.getElementById('satAvailable').checked,
+                startTime: document.getElementById('satStart').value || null,
+                hours: parseFloat(document.getElementById('satHours').value) || 0
+            },
+            sunday: {
+                available: document.getElementById('sunAvailable').checked,
+                startTime: document.getElementById('sunStart').value || null,
+                hours: parseFloat(document.getElementById('sunHours').value) || 0
+            }
+        };
+
+        if (!fullName || !email || !phone || !location || !emergencyName || !emergencyPhone ||
+            !university || !degree || !yearOfStudy || !isTeachingGraduate || subjects.length === 0 ||
+            grades.length === 0) {
+            errorDiv.textContent = 'Please fill in all required fields.';
+            errorDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+            return;
+        }
+
+        if (isTeachingGraduate.value === 'no' && (!matricAverage || parseFloat(matricAverage) < 75)) {
+            errorDiv.textContent = 'Matric average must be at least 75% (or select Teaching Graduate).';
+            errorDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+            return;
+        }
+
+        const hasAvailability = Object.values(availability).some(function(day) {
+            return day.available === true && day.hours > 0 && day.startTime;
+        });
+
+        if (!hasAvailability) {
+            errorDiv.textContent = 'Please select at least one day with a start time and hours.';
+            errorDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+            return;
+        }
+
+        const docFiles = {
+            idDoc: document.getElementById('idDoc').files[0],
+            matricDoc: document.getElementById('matricDoc').files[0],
+            registrationDoc: document.getElementById('registrationDoc').files[0],
+            photoDoc: document.getElementById('photoDoc').files[0],
+            transcriptDoc: document.getElementById('transcriptDoc').files[0],
+            cvDoc: document.getElementById('cvDoc').files[0],
+            residenceDoc: document.getElementById('residenceDoc').files[0]
+        };
+
+        for (var key in docFiles) {
+            if (!docFiles[key]) {
+                errorDiv.textContent = 'Please upload all required documents.';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+                return;
+            }
+        }
+
+        function generateRandomPassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+        const randomPassword = generateRandomPassword();
+
+        try {
+            // 1. Create user account
+            const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, randomPassword);
+            const user = userCredential.user;
+
+            // 2. Upload all documents
+            const docUrls = {};
+
+            for (var docKey in docFiles) {
+                const file = docFiles[docKey];
+                const storageRef = firebase.storage().ref('tutor-applications/' + user.uid + '/' + docKey);
+                const snapshot = await storageRef.put(file);
+                const url = await snapshot.ref.getDownloadURL();
+                docUrls[docKey] = url;
+            }
+
+            // 3. Save to tutor_applications
+            await firebase.firestore().collection('tutor_applications').doc(user.uid).set({
+                uid: user.uid,
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                location: location,
+                emergencyName: emergencyName,
+                emergencyPhone: emergencyPhone,
+                university: university,
+                degree: degree,
+                yearOfStudy: yearOfStudy,
+                matricAverage: matricAverage || null,
+                isTeachingGraduate: isTeachingGraduate.value === 'yes',
+                subjects: subjects,
+                grades: grades,
+                availability: availability,
+                showProfile: showProfile ? showProfile.value === 'yes' : true,
+                documents: docUrls,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+
+            // 4. Save to users collection
+            await firebase.firestore().collection('users').doc(user.uid).set({
+                uid: user.uid,
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                role: 'pending_tutor',
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+
+            // 5. Email to ADMIN
+            await firebase.firestore().collection('mail').add({
+                to: 'admin@aceed.co.za',
+                message: {
+                    subject: 'New Tutor Application: ' + fullName,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                            <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                                <h1 style="margin: 0;">AceEd Tutoring</h1>
+                                <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                            </div>
+                            <div style="padding: 25px; background: #f9f9f9;">
+                                <h2>New Tutor Application</h2>
+                                <p><strong>Name:</strong> ${fullName}</p>
+                                <p><strong>Email:</strong> ${email}</p>
+                                <p><strong>Phone:</strong> ${phone}</p>
+                                <p><strong>Location:</strong> ${location}</p>
+                                <p><strong>University:</strong> ${university}</p>
+                                <p><strong>Degree:</strong> ${degree}</p>
+                                <p><strong>Year:</strong> ${yearOfStudy}</p>
+                                <p><strong>Subjects:</strong> ${subjects.join(', ')}</p>
+                                <p><strong>Grades:</strong> ${grades.join(', ')}</p>
+                                <hr>
+                                <p><strong>Availability:</strong></p>
+                                <ul>
+                                    ${Object.entries(availability)
+                                        .filter(function(entry) { return entry[1].available && entry[1].startTime; })
+                                        .map(function(entry) { return '<li>' + entry[0] + ': ' + entry[1].startTime + ' (' + entry[1].hours + ' hours)</li>'; })
+                                        .join('')}
+                                </ul>
+                                <hr>
+                                <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 10px 25px; text-decoration: none; border-radius: 30px;">Review in Admin Dashboard</a></p>
+                            </div>
+                            <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                                <p>© 2026 AceEd Tutoring</p>
+                            </div>
+                        </div>
+                    `
+                }
+            });
+
+            // 6. Confirmation email to TUTOR
+            await firebase.firestore().collection('mail').add({
+                to: email,
+                message: {
+                    subject: 'We received your application - AceEd Tutoring',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                            <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                                <h1 style="margin: 0;">AceEd Tutoring</h1>
+                                <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                            </div>
+                            <div style="padding: 25px; background: #f9f9f9;">
+                                <h2>Thank you, ${fullName}!</h2>
+                                <p>We've received your tutor application. Our team will review it within 2-3 business days.</p>
+                                <p>If you have any questions, reply to this email or WhatsApp us at +27 65 529 4232.</p>
+                                <hr>
+                                <p><strong>Your temporary password:</strong> <code style="background: #eee; padding: 4px 8px; border-radius: 4px;">${randomPassword}</code></p>
+                                <p style="font-size: 12px; color: #666;">Please save this password. You'll need it to sign in once your application is approved.</p>
+                            </div>
+                            <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                                <p>© 2026 AceEd Tutoring</p>
+                            </div>
+                        </div>
+                    `
+                }
+            });
+
+            console.log('✅ Application submitted and emails queued');
+            console.log('🔑 Temporary password for ' + email + ': ' + randomPassword);
+
+            // 7. Show success
+            document.getElementById('applicationForm').style.display = 'none';
+            document.getElementById('successBox').style.display = 'block';
+
+        } catch (error) {
+            console.error('Application error:', error);
+            errorDiv.textContent = 'Error: ' + error.message;
+            errorDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Create Account & Submit Application';
+        }
+    });
+</script>
 </body>
 </html>
