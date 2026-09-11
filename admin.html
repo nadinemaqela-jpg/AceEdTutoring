@@ -1726,18 +1726,24 @@
                 btn.classList.remove('active');
             });
             
+            // Hide all tabs
+            document.getElementById('applicationsTab').style.display = 'none';
+            document.getElementById('requestsTab').style.display = 'none';
+            document.getElementById('invoicesTab').style.display = 'none';
+            
             if (tab === 'applications') {
-                document.querySelector('.admin-tabs button:first-child').classList.add('active');
+                document.querySelector('.admin-tabs button:nth-child(1)').classList.add('active');
                 document.getElementById('applicationsTab').style.display = 'block';
-                document.getElementById('requestsTab').style.display = 'none';
-            } else {
-                document.querySelector('.admin-tabs button:last-child').classList.add('active');
-                document.getElementById('applicationsTab').style.display = 'none';
+            } else if (tab === 'requests') {
+                document.querySelector('.admin-tabs button:nth-child(2)').classList.add('active');
                 document.getElementById('requestsTab').style.display = 'block';
                 loadRequests();
+            } else if (tab === 'invoices') {
+                document.querySelector('.admin-tabs button:nth-child(3)').classList.add('active');
+                document.getElementById('invoicesTab').style.display = 'block';
+                loadInvoices();
             }
-        }
-    
+        }    
         // ============================================================
         // CART BADGE
         // ============================================================
@@ -1766,6 +1772,214 @@
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
+
+        // ============================================================
+        // INVOICES
+        // ============================================================
+        let allInvoices = [];
+        let currentInvFilter = 'all';
+        
+        function loadInvoices() {
+            const db = firebase.firestore();
+            db.collection('invoices')
+                .orderBy('issuedAt', 'desc')
+                .get()
+                .then(function(snapshot) {
+                    allInvoices = [];
+                    let total = 0, pending = 0, claimed = 0, paid = 0;
+        
+                    snapshot.forEach(function(doc) {
+                        const inv = doc.data();
+                        allInvoices.push({ id: doc.id, ...inv });
+                        total++;
+                        if (inv.status === 'pending') pending++;
+                        if (inv.status === 'payment_claimed') claimed++;
+                        if (inv.status === 'paid') paid++;
+                    });
+        
+                    document.getElementById('totalInvoices').textContent = total;
+                    document.getElementById('pendingInvoices').textContent = pending;
+                    document.getElementById('claimedInvoices').textContent = claimed;
+                    document.getElementById('paidInvoices').textContent = paid;
+        
+                    renderInvoices(currentInvFilter);
+                })
+                .catch(function(error) {
+                    console.error('Error loading invoices:', error);
+                    document.getElementById('invoicesBody').innerHTML = `
+                        <tr><td colspan="7" style="text-align:center; padding:30px; color:#e74c3c;">Error: ${error.message}</td></tr>
+                    `;
+                });
+        }
+        
+        function renderInvoices(filter) {
+            currentInvFilter = filter;
+            const filtered = filter === 'all' ? allInvoices : allInvoices.filter(i => i.status === filter);
+            const tbody = document.getElementById('invoicesBody');
+        
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="7" style="text-align:center; padding:30px; color:#7f8c8d;">
+                        <i class="fas fa-inbox"></i> No invoices found
+                    </td></tr>
+                `;
+                return;
+            }
+        
+            let html = '';
+            filtered.forEach(function(inv) {
+                const statusClass = inv.status || 'pending';
+                let statusLabel = inv.status === 'payment_claimed' ? 'Claimed' :
+                                  inv.status ? inv.status.charAt(0).toUpperCase() + inv.status.slice(1) : 'Pending';
+                const date = inv.issuedAt ? new Date(inv.issuedAt).toLocaleDateString() : 'N/A';
+        
+                let actionButtons = '';
+                if (inv.status === 'payment_claimed') {
+                    actionButtons = `
+                        <button class="btn-sm approve" onclick="markInvoicePaid('${inv.id}')">
+                            <i class="fas fa-check"></i> Mark as Paid
+                        </button>
+                    `;
+                } else if (inv.status === 'pending') {
+                    actionButtons = `
+                        <span style="font-size:0.7rem; color:#f39c12;">
+                            <i class="fas fa-clock"></i> Awaiting payment
+                        </span>
+                    `;
+                } else if (inv.status === 'paid') {
+                    actionButtons = `
+                        <span style="font-size:0.7rem; color:#27ae60;">
+                            <i class="fas fa-check-circle"></i> Paid
+                        </span>
+                    `;
+                }
+        
+                html += `
+                    <tr>
+                        <td><strong>${inv.invoiceNumber}</strong></td>
+                        <td>${inv.parentName || 'N/A'}<br>
+                            <span style="font-size:0.75rem; color:#7f8c8d;">${inv.parentEmail || ''}</span>
+                        </td>
+                        <td><strong>R${(inv.total || 0).toFixed(2)}</strong></td>
+                        <td><code style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-size:0.8rem;">${inv.paymentRef || 'N/A'}</code></td>
+                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
+                        <td>${date}</td>
+                        <td>
+                            <button class="btn-sm view" onclick="viewInvoice('${inv.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${actionButtons}
+                        </td>
+                    </tr>
+                `;
+            });
+        
+            tbody.innerHTML = html;
+        }
+        
+        function filterInvoices(filter) {
+            document.querySelectorAll('#invoicesTab .filter-btns button').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+            renderInvoices(filter);
+        }
+        
+        function viewInvoice(id) {
+            const inv = allInvoices.find(i => i.id === id);
+            if (!inv) return;
+        
+            const itemsHtml = (inv.items || []).map(item =>
+                `<tr>
+                    <td>${item.name}</td>
+                    <td style="text-align:center;">${item.qty}</td>
+                    <td style="text-align:right;">R${item.rate.toFixed(2)}</td>
+                    <td style="text-align:right;">R${item.total.toFixed(2)}</td>
+                </tr>`
+            ).join('');
+        
+            const modal = document.getElementById('viewModal');
+            document.getElementById('viewModalTitle').textContent = 'Invoice ' + inv.invoiceNumber;
+            document.getElementById('viewModalBody').innerHTML = `
+                <div class="detail-row"><span class="label">Parent</span><span class="value">${inv.parentName || 'N/A'}</span></div>
+                <div class="detail-row"><span class="label">Email</span><span class="value">${inv.parentEmail || 'N/A'}</span></div>
+                <div class="detail-row"><span class="label">Phone</span><span class="value">${inv.parentPhone || 'N/A'}</span></div>
+                <div class="detail-row"><span class="label">Reference</span><span class="value"><code>${inv.paymentRef}</code></span></div>
+                <div class="detail-row"><span class="label">Issued</span><span class="value">${new Date(inv.issuedAt).toLocaleString()}</span></div>
+                <div class="detail-row"><span class="label">Due</span><span class="value">${new Date(inv.dueAt).toLocaleString()}</span></div>
+                <div class="detail-row"><span class="label">Status</span><span class="value"><span class="status ${inv.status}">${inv.status}</span></span></div>
+                ${inv.claimedAt ? `<div class="detail-row"><span class="label">Claimed</span><span class="value">${new Date(inv.claimedAt).toLocaleString()}</span></div>` : ''}
+                ${inv.paidAt ? `<div class="detail-row"><span class="label">Paid</span><span class="value">${new Date(inv.paidAt).toLocaleString()}</span></div>` : ''}
+                <hr style="margin:15px 0;">
+                <h4>Items</h4>
+                <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                    <thead>
+                        <tr style="background:#f0f0f0;">
+                            <th style="padding:8px; text-align:left;">Description</th>
+                            <th style="padding:8px; text-align:center;">Qty</th>
+                            <th style="padding:8px; text-align:right;">Rate</th>
+                            <th style="padding:8px; text-align:right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>${itemsHtml}</tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align:right; padding:10px; font-weight:bold;">TOTAL:</td>
+                            <td style="text-align:right; padding:10px; font-weight:bold; color:#27ae60;">R${inv.total.toFixed(2)}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            `;
+            modal.classList.add('show');
+        }
+        
+        async function markInvoicePaid(invoiceId) {
+            if (!confirm('Have you verified this payment in your bank account?')) return;
+        
+            try {
+                const db = firebase.firestore();
+                const invDoc = await db.collection('invoices').doc(invoiceId).get();
+                const inv = invDoc.data();
+        
+                await db.collection('invoices').doc(invoiceId).update({
+                    status: 'paid',
+                    paidAt: new Date().toISOString()
+                });
+        
+                // Email → Parent
+                await db.collection('mail').add({
+                    to: inv.parentEmail,
+                    message: {
+                        subject: 'Payment Received - Invoice ' + inv.invoiceNumber,
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                                <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                                    <h1 style="margin: 0;">AceEd Tutoring</h1>
+                                    <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                                </div>
+                                <div style="padding: 25px; background: #f9f9f9;">
+                                    <h2>Payment Confirmed ✅</h2>
+                                    <p>Hi ${inv.parentName},</p>
+                                    <p>We've verified your payment for invoice <strong>${inv.invoiceNumber}</strong>.</p>
+                                    <p><strong>Amount:</strong> R${inv.total.toFixed(2)}</p>
+                                    <p>Your tutoring services are now active. Your tutor will be in touch shortly.</p>
+                                </div>
+                                <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                                    <p style="margin:0;">© 2026 AceEd Tutoring</p>
+                                </div>
+                            </div>
+                        `
+                    }
+                });
+        
+                alert('✅ Invoice marked as paid. Parent has been notified.');
+                loadInvoices();
+        
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+        
     </script>
 
 </body>
