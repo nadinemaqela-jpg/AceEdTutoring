@@ -942,7 +942,7 @@
             }
             document.body.style.overflow = 'hidden';
         }
-
+    
         function closeSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.remove('open');
@@ -953,14 +953,35 @@
             }
             document.body.style.overflow = 'auto';
         }
-
+    
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
                 closeSidebar('dot');
             }
         });
-
+    
+        // ============================================================
+        // EMAIL HELPER - BRANDED TEMPLATE
+        // ============================================================
+        function buildEmailBody(innerHtml) {
+            return `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0;">AceEd Tutoring</h1>
+                        <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                    </div>
+                    <div style="padding: 25px; background: #f9f9f9;">
+                        ${innerHtml}
+                    </div>
+                    <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                        <p style="margin: 0;">© 2026 AceEd Tutoring</p>
+                        <p style="margin: 5px 0 0;">+27 65 529 4232 | clients@aceed.co.za</p>
+                    </div>
+                </div>
+            `;
+        }
+    
         // ============================================================
         // AUTH - CHECK USER ROLE
         // ============================================================
@@ -969,12 +990,12 @@
                 window.location.href = 'signin.html?redirect=tutor-dashboard.html';
                 return;
             }
-
+    
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = doc.data();
                 const role = userData.role;
-
+    
                 if (role === 'tutor') {
                     document.getElementById('tutorContent').style.display = 'block';
                     document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
@@ -989,7 +1010,7 @@
                 document.getElementById('accessDenied').style.display = 'block';
             }
         });
-
+    
         // ============================================================
         // LOGOUT
         // ============================================================
@@ -998,9 +1019,9 @@
                 window.location.href = 'index.html';
             });
         }
-
+    
         // ============================================================
-        // LOAD ASSIGNED REQUESTS - WITH ALL STATS
+        // LOAD ASSIGNED REQUESTS
         // ============================================================
         function loadAssignedRequests() {
             const db = firebase.firestore();
@@ -1037,7 +1058,6 @@
                     let helpedCount = 0;
                     let rejectedCount = 0;
                     
-                    // Sort manually by createdAt
                     const requests = [];
                     snapshot.forEach(function(doc) {
                         requests.push({ id: doc.id, ...doc.data() });
@@ -1047,21 +1067,24 @@
                     });
                     
                     requests.forEach(function(req) {
-                        // Count stats
-                        if (req.status === 'assigned') pendingCount++;
-                        if (req.status === 'accepted' || req.status === 'completed') {
+                        // Match the status values coming from the admin dashboard
+                        const isPending = req.status === 'matched' || req.status === 'assigned';
+                        const isAccepted = req.status === 'accepted';
+                        const isDeclined = req.status === 'declined';
+                        
+                        if (isPending) pendingCount++;
+                        if (isAccepted || req.status === 'completed') {
                             acceptedCount++;
                             helpedCount++;
                         }
-                        if (req.status === 'declined') rejectedCount++;
+                        if (isDeclined) rejectedCount++;
                         
                         const statusClass = req.status || 'assigned';
-                        const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned';
+                        const statusLabel = isPending ? 'Assigned' : (req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Assigned');
                         const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-                        const isPending = req.status === 'assigned';
                         
                         let whatsappButton = '';
-                        if (req.status === 'accepted') {
+                        if (isAccepted) {
                             whatsappButton = `
                                 <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                                     <span style="color: #27ae60; font-weight: 500;">
@@ -1096,10 +1119,10 @@
                                             <i class="fas fa-times"></i> Decline
                                         </button>
                                     ` : ''}
-                                    ${req.status === 'accepted' ? `
+                                    ${isAccepted ? `
                                         <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
                                     ` : ''}
-                                    ${req.status === 'declined' ? `
+                                    ${isDeclined ? `
                                         <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>
                                     ` : ''}
                                 </div>
@@ -1111,7 +1134,6 @@
                     container.innerHTML = html;
                     if (badge) badge.textContent = pendingCount;
                     
-                    // ✅ Update ALL stats
                     document.getElementById('pendingCount').textContent = pendingCount;
                     document.getElementById('acceptedCount').textContent = acceptedCount;
                     document.getElementById('studentsCount').textContent = helpedCount;
@@ -1128,47 +1150,122 @@
                     `;
                 });
         }
-
+    
         // ============================================================
-        // ACCEPT REQUEST
+        // ACCEPT REQUEST (WITH EMAILS)
         // ============================================================
-        function acceptRequest(requestId) {
+        async function acceptRequest(requestId) {
             if (!confirm('Do you want to accept this tutoring request?')) return;
             
             const db = firebase.firestore();
-            db.collection('tutor_requests').doc(requestId).update({
-                status: 'accepted',
-                updatedAt: new Date().toISOString()
-            })
-            .then(function() {
-                alert('✅ Request accepted! The parent will be notified.');
+            const user = firebase.auth().currentUser;
+    
+            try {
+                // 1. Get request + tutor data
+                const reqDoc = await db.collection('tutor_requests').doc(requestId).get();
+                const req = reqDoc.data();
+                const tutorDoc = await db.collection('users').doc(user.uid).get();
+                const tutor = tutorDoc.data();
+    
+                // 2. Update request
+                await db.collection('tutor_requests').doc(requestId).update({
+                    status: 'accepted',
+                    acceptedAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+    
+                // 3. Email → PARENT with tutor contact
+                await db.collection('mail').add({
+                    to: req.parentEmail,
+                    message: {
+                        subject: 'Your Tutor is Confirmed - ' + (tutor.fullName || 'AceEd Tutor'),
+                        html: buildEmailBody(`
+                            <h2>Your Tutor is Confirmed! 🎉</h2>
+                            <p>Hi ${req.parentName || 'Parent'},</p>
+                            <p>Great news! Your tutor for <strong>${req.childName}</strong> has been confirmed.</p>
+                            <hr>
+                            <p><strong>Tutor Details:</strong></p>
+                            <p><strong>Name:</strong> ${tutor.fullName || 'N/A'}<br>
+                               <strong>Email:</strong> ${tutor.email || 'N/A'}<br>
+                               <strong>Phone:</strong> ${tutor.phone || tutor.whatsapp || 'Not provided'}</p>
+                            <hr>
+                            <p>Please reach out to your tutor via WhatsApp to schedule your first session.</p>
+                        `)
+                    }
+                });
+    
+                // 4. Email → ADMIN
+                await db.collection('mail').add({
+                    to: 'admin@aceed.co.za',
+                    message: {
+                        subject: 'Tutor Accepted: ' + (tutor.fullName || 'Tutor'),
+                        html: buildEmailBody(`
+                            <h2>Tutor Accepted Match</h2>
+                            <p><strong>Tutor:</strong> ${tutor.fullName} (${tutor.email})</p>
+                            <p><strong>Student:</strong> ${req.childName} (Grade ${req.grade})</p>
+                            <p><strong>Parent:</strong> ${req.parentName} (${req.parentEmail})</p>
+                        `)
+                    }
+                });
+    
+                alert('✅ Request accepted! The parent has been notified with your contact info.');
                 loadAssignedRequests();
-            })
-            .catch(function(error) {
+    
+            } catch (error) {
+                console.error('Error accepting request:', error);
                 alert('Error: ' + error.message);
-            });
+            }
         }
-
+    
         // ============================================================
-        // DECLINE REQUEST
+        // DECLINE REQUEST (WITH EMAIL)
         // ============================================================
-        function declineRequest(requestId) {
+        async function declineRequest(requestId) {
             if (!confirm('Do you want to decline this tutoring request?')) return;
             
             const db = firebase.firestore();
-            db.collection('tutor_requests').doc(requestId).update({
-                status: 'declined',
-                updatedAt: new Date().toISOString()
-            })
-            .then(function() {
-                alert('❌ Request declined.');
+            const user = firebase.auth().currentUser;
+    
+            try {
+                // 1. Get request + tutor data
+                const reqDoc = await db.collection('tutor_requests').doc(requestId).get();
+                const req = reqDoc.data();
+                const tutorDoc = await db.collection('users').doc(user.uid).get();
+                const tutor = tutorDoc.data();
+    
+                // 2. Update request
+                await db.collection('tutor_requests').doc(requestId).update({
+                    status: 'declined',
+                    declinedAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+    
+                // 3. Email → ADMIN (needs to reassign)
+                await db.collection('mail').add({
+                    to: 'admin@aceed.co.za',
+                    message: {
+                        subject: 'Tutor Declined - Action Needed',
+                        html: buildEmailBody(`
+                            <h2>Tutor Declined Match</h2>
+                            <p><strong>Tutor:</strong> ${tutor.fullName} (${tutor.email})</p>
+                            <p><strong>Student:</strong> ${req.childName} (Grade ${req.grade})</p>
+                            <p><strong>Parent:</strong> ${req.parentName} (${req.parentEmail})</p>
+                            <hr>
+                            <p>Please reassign this request to another tutor from the admin dashboard.</p>
+                            <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Admin Dashboard</a></p>
+                        `)
+                    }
+                });
+    
+                alert('❌ Request declined. Admin has been notified.');
                 loadAssignedRequests();
-            })
-            .catch(function(error) {
+    
+            } catch (error) {
+                console.error('Error declining request:', error);
                 alert('Error: ' + error.message);
-            });
+            }
         }
-
+    
         // ============================================================
         // WHATSAPP - OPEN CHAT WITH PARENT
         // ============================================================
@@ -1199,5 +1296,6 @@
                 });
         }
     </script>
+    
 </body>
 </html>
