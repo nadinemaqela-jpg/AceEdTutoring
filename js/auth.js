@@ -128,17 +128,6 @@ function updateNavButtons() {
 }
 
 // ============================================================
-// 8. Check if Content Should Be Protected
-// ============================================================
-function protectPage() {
-    auth.onAuthStateChanged(user => {
-        if (!user) {
-            // Redirect to signin.html in the root folder
-            window.location.href = '/signin.html?redirect=' + encodeURIComponent(window.location.pathname);
-        }
-    });
-}
-// ============================================================
 // 9. Show/Hide Content Based on Auth
 // ============================================================
 function showContentIfLoggedIn(elementId) {
