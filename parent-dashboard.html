@@ -1212,7 +1212,6 @@
             </div>
         </div>
     </footer>
-
     <script>
         // ============================================================
         // SIDEBAR CONTROLS
@@ -1227,7 +1226,7 @@
             }
             document.body.style.overflow = 'hidden';
         }
-
+    
         function closeSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.remove('open');
@@ -1238,27 +1237,30 @@
             }
             document.body.style.overflow = 'auto';
         }
-
+    
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
                 closeSidebar('dot');
             }
         });
-
+    
         // ============================================================
         // AUTH - CHECK USER ROLE
         // ============================================================
         let parentUid = '';
+        let parentEmail = '';
+        let parentName = '';
+        let parentPhone = '';
         let childrenData = [];
         let allRequests = [];
-
+    
         firebase.auth().onAuthStateChanged(async function(user) {
             if (!user) {
                 window.location.href = 'signin.html?redirect=parent-dashboard.html';
                 return;
             }
-
+    
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = doc.data();
@@ -1266,8 +1268,12 @@
                 
                 if (role === 'parent') {
                     parentUid = user.uid;
+                    parentEmail = user.email;
+                    parentName = userData.fullName || user.email || 'Parent';
+                    parentPhone = userData.phone || '';
+    
                     document.getElementById('parentContent').style.display = 'block';
-                    document.getElementById('parentName').textContent = userData.fullName || user.email || 'Parent';
+                    document.getElementById('parentName').textContent = parentName;
                     loadParentData(user.uid);
                 } else {
                     document.getElementById('accessDenied').style.display = 'block';
@@ -1277,7 +1283,7 @@
                 document.getElementById('accessDenied').style.display = 'block';
             }
         });
-
+    
         // ============================================================
         // LOGOUT
         // ============================================================
@@ -1286,24 +1292,45 @@
                 window.location.href = 'index.html';
             });
         }
-
+    
         // ============================================================
         // MODAL CONTROLS
         // ============================================================
         function openAddChildModal() {
             document.getElementById('addChildModal').classList.add('show');
         }
-
+    
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('show');
         }
-
+    
         document.getElementById('addChildModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal('addChildModal');
             }
         });
-
+    
+        // ============================================================
+        // EMAIL HELPER - BRANDED TEMPLATE
+        // ============================================================
+        function buildEmailBody(innerHtml) {
+            return `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0;">AceEd Tutoring</h1>
+                        <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                    </div>
+                    <div style="padding: 25px; background: #f9f9f9;">
+                        ${innerHtml}
+                    </div>
+                    <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                        <p style="margin: 0;">© 2026 AceEd Tutoring</p>
+                        <p style="margin: 5px 0 0;">+27 65 529 4232 | clients@aceed.co.za</p>
+                    </div>
+                </div>
+            `;
+        }
+    
         // ============================================================
         // LOAD PARENT DATA
         // ============================================================
@@ -1329,7 +1356,7 @@
                     alert('Error loading children: ' + error.message);
                 });
         }
-
+    
         // ============================================================
         // POPULATE CHILD DROPDOWN (Main)
         // ============================================================
@@ -1345,7 +1372,7 @@
                 select.appendChild(option);
             });
         }
-
+    
         // ============================================================
         // POPULATE CHILD DROPDOWNS (For Services)
         // ============================================================
@@ -1365,7 +1392,7 @@
                 });
             });
         }
-
+    
         // ============================================================
         // RENDER CHILDREN
         // ============================================================
@@ -1381,7 +1408,7 @@
                 `;
                 return;
             }
-
+    
             let html = '';
             childrenData.forEach(function(child) {
                 const subjects = child.subjects ? child.subjects.join(', ') : 'Not specified';
@@ -1411,7 +1438,7 @@
             });
             container.innerHTML = html;
         }
-
+    
         // ============================================================
         // LOAD REQUESTS
         // ============================================================
@@ -1438,7 +1465,7 @@
                     console.error('Error loading requests:', error);
                 });
         }
-
+    
         // ============================================================
         // RENDER REQUESTS
         // ============================================================
@@ -1454,7 +1481,7 @@
                 `;
                 return;
             }
-
+    
             let html = '';
             allRequests.slice(0, 5).forEach(function(req) {
                 const statusClass = req.status || 'pending';
@@ -1472,25 +1499,19 @@
                 } else if (req.status === 'matched' || req.status === 'assigned') {
                     actionButtons = `
                         <span style="color: #3498db; font-weight: 500;">
-                            <i class="fas fa-user-check"></i> Matched with ${req.tutorName || 'a tutor'}!
+                            <i class="fas fa-user-check"></i> Matched with ${req.tutorName || 'a tutor'}! Awaiting their confirmation.
                         </span>
                     `;
                 } else if (req.status === 'accepted' || req.status === 'booked') {
                     actionButtons = `
                         <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                             <span style="color: #27ae60; font-weight: 500;">
-                                <i class="fas fa-check-circle"></i> Matched with ${req.tutorName || 'Tutor'}!
+                                <i class="fas fa-check-circle"></i> Confirmed with ${req.tutorName || 'Tutor'}!
                             </span>
-                            <button onclick="payForService('Tutoring Session', 100, 'Hourly')" 
-                                    style="background: #27ae60; color: white; padding: 8px 20px; 
-                                           border: none; border-radius: 30px; cursor: pointer; 
-                                           font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
-                                <i class="fas fa-credit-card"></i> Pay Now
-                            </button>
                             <button onclick="openWhatsApp('${req.tutorUid}')" 
                                     style="background: #25D366; color: white; padding: 8px 20px; 
                                            border: none; border-radius: 30px; cursor: pointer; 
-                                           font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
+                                           font-weight: 600; font-size: 0.85rem;">
                                 <i class="fab fa-whatsapp"></i> Chat Now
                             </button>
                         </div>
@@ -1498,7 +1519,7 @@
                 } else if (req.status === 'declined') {
                     actionButtons = `
                         <span style="color: #e74c3c; font-weight: 500;">
-                            <i class="fas fa-times-circle"></i> Tutor declined
+                            <i class="fas fa-times-circle"></i> Tutor declined. Admin is finding a replacement.
                         </span>
                     `;
                 } else if (req.status === 'completed') {
@@ -1508,7 +1529,7 @@
                         </span>
                     `;
                 }
-
+    
                 html += `
                     <div class="request-card">
                         <div class="request-header">
@@ -1525,7 +1546,7 @@
             });
             container.innerHTML = html;
         }
-
+    
         // ============================================================
         // UPDATE STATS
         // ============================================================
@@ -1547,10 +1568,9 @@
                     console.error('Error counting pending requests:', error);
                 });
             
-            // ✅ Update Active Bookings count
             document.getElementById('activeBookingsCount').textContent = activeBookings || 0;
         }
-
+    
         // ============================================================
         // SUBMIT TUTOR REQUEST (From Dropdown)
         // ============================================================
@@ -1565,11 +1585,11 @@
             
             submitTutorRequestForChild(childId);
         }
-
+    
         // ============================================================
         // SUBMIT TUTOR REQUEST (For a specific child)
         // ============================================================
-        function submitTutorRequestForChild(childId) {
+        async function submitTutorRequestForChild(childId) {
             const child = childrenData.find(c => c.id === childId);
             if (!child) {
                 alert('Child not found.');
@@ -1578,39 +1598,83 @@
             
             const db = firebase.firestore();
             
-            db.collection('tutor_requests')
-                .where('childId', '==', childId)
-                .where('status', 'in', ['pending', 'matched', 'assigned'])
-                .get()
-                .then(function(snapshot) {
-                    if (!snapshot.empty) {
-                        alert('This child already has a pending or matched tutor request.');
-                        return;
-                    }
-                    
-                    return db.collection('tutor_requests').add({
-                        parentUid: parentUid,
-                        childId: childId,
-                        childName: child.fullName,
-                        grade: child.grade,
-                        subjects: child.subjects || [],
-                        status: 'pending',
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    });
-                })
-                .then(function(docRef) {
-                    if (docRef) {
-                        alert('✅ Tutor request sent successfully! A tutor will be matched with your child shortly.');
-                        loadParentData(parentUid);
-                    }
-                })
-                .catch(function(error) {
-                    console.error('Error submitting request:', error);
-                    alert('Error: ' + error.message);
+            try {
+                // Check for existing pending/matched request
+                const existing = await db.collection('tutor_requests')
+                    .where('childId', '==', childId)
+                    .where('status', 'in', ['pending', 'matched', 'assigned'])
+                    .get();
+    
+                if (!existing.empty) {
+                    alert('This child already has a pending or matched tutor request.');
+                    return;
+                }
+    
+                // 1. Create the request
+                const docRef = await db.collection('tutor_requests').add({
+                    parentUid: parentUid,
+                    parentName: parentName,
+                    parentEmail: parentEmail,
+                    parentPhone: parentPhone,
+                    childId: childId,
+                    childName: child.fullName,
+                    grade: child.grade,
+                    subjects: child.subjects || [],
+                    status: 'pending',
+                    tutorUid: null,
+                    tutorName: null,
+                    tutorEmail: null,
+                    tutorPhone: null,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
                 });
+    
+                // 2. Email to ADMIN
+                await db.collection('mail').add({
+                    to: 'admin@aceed.co.za',
+                    message: {
+                        subject: 'New Tutor Request: ' + child.fullName + ' (Grade ' + child.grade + ')',
+                        html: buildEmailBody(`
+                            <h2>New Tutor Request</h2>
+                            <p><strong>Parent:</strong> ${parentName}</p>
+                            <p><strong>Email:</strong> ${parentEmail}</p>
+                            <p><strong>Phone:</strong> ${parentPhone || 'Not provided'}</p>
+                            <hr>
+                            <p><strong>Student:</strong> ${child.fullName}</p>
+                            <p><strong>Grade:</strong> ${child.grade}</p>
+                            <p><strong>Subjects:</strong> ${(child.subjects || []).join(', ')}</p>
+                            <hr>
+                            <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 10px 25px; text-decoration: none; border-radius: 30px;">Match a Tutor</a></p>
+                        `)
+                    }
+                });
+    
+                // 3. Email to PARENT
+                await db.collection('mail').add({
+                    to: parentEmail,
+                    message: {
+                        subject: 'We received your tutor request - AceEd Tutoring',
+                        html: buildEmailBody(`
+                            <h2>Request Received</h2>
+                            <p>Hi ${parentName},</p>
+                            <p>We've received your request for a tutor for <strong>${child.fullName}</strong> (Grade ${child.grade}).</p>
+                            <p><strong>Subjects:</strong> ${(child.subjects || []).join(', ')}</p>
+                            <p>Our team is finding the best match. You'll hear from us within 24-48 hours.</p>
+                            <p>Questions? Reply to this email or WhatsApp us at +27 65 529 4232.</p>
+                        `)
+                    }
+                });
+    
+                console.log('✅ Request created and emails queued');
+                alert('✅ Tutor request sent successfully! We\'ll notify you once matched.');
+                loadParentData(parentUid);
+    
+            } catch (error) {
+                console.error('Error submitting request:', error);
+                alert('Error: ' + error.message);
+            }
         }
-
+    
         // ============================================================
         // ADD SERVICE TO CART
         // ============================================================
@@ -1649,7 +1713,6 @@
             
             addToCart(item);
             
-            // Show feedback
             const originalText = button.innerHTML;
             button.innerHTML = '<i class="fas fa-check"></i> Added!';
             button.style.backgroundColor = '#27ae60';
@@ -1660,56 +1723,15 @@
             
             updateCartBadge();
         }
-
-        // ============================================================
-        // PAY FOR SERVICE
-        // ============================================================
-        function payForService(serviceName, amount, serviceType) {
-            const user = firebase.auth().currentUser;
-            if (!user) {
-                alert('Please log in again.');
-                return;
-            }
-            
-            const db = firebase.firestore();
-            db.collection('users').doc(user.uid).get()
-                .then(function(doc) {
-                    const userData = doc.data();
-                    const parentName = userData.fullName || 'Parent';
-                    
-                    const orderId = 'ACE' + Date.now();
-                    
-                    return db.collection('payments').add({
-                        parentUid: user.uid,
-                        service: serviceName,
-                        amount: amount,
-                        type: serviceType,
-                        status: 'pending',
-                        orderId: orderId,
-                        createdAt: new Date().toISOString()
-                    });
-                })
-                .then(function() {
-                    const paymentData = {
-                        service: serviceName,
-                        amount: amount,
-                        type: serviceType,
-                        orderId: 'ACE' + Date.now()
-                    };
-                    localStorage.setItem('parent_payment', JSON.stringify(paymentData));
-                    
-                    window.location.href = 'checkout.html?from=parent_dashboard';
-                })
-                .catch(function(error) {
-                    console.error('Error:', error);
-                    alert('Error processing payment: ' + error.message);
-                });
-        }
-
+    
         // ============================================================
         // WHATSAPP - OPEN CHAT WITH TUTOR
         // ============================================================
         function openWhatsApp(tutorUid) {
+            if (!tutorUid) {
+                alert('Tutor contact not yet available.');
+                return;
+            }
             const db = firebase.firestore();
             db.collection('users').doc(tutorUid).get()
                 .then(function(doc) {
@@ -1735,13 +1757,13 @@
                     alert('Error: Could not fetch contact details.');
                 });
         }
-
+    
         // ============================================================
         // REMOVE CHILD
         // ============================================================
         function removeChildFromDashboard(childId) {
             if (!confirm('Are you sure you want to remove this child?')) return;
-
+    
             const db = firebase.firestore();
             
             db.collection('children').doc(childId).delete()
@@ -1766,14 +1788,14 @@
                     alert('Error: ' + error.message);
                 });
         }
-
+    
         // ============================================================
         // VIEW CHILD PROGRESS (Placeholder)
         // ============================================================
         function viewChildProgress(childId) {
             alert('Child progress feature coming soon!');
         }
-
+    
         // ============================================================
         // ADD CHILD FORM
         // ============================================================
@@ -1784,32 +1806,57 @@
             const grade = document.getElementById('childGrade').value;
             const subjectSelect = document.getElementById('childSubject');
             const subjects = Array.from(subjectSelect.selectedOptions).map(opt => opt.value);
-
+    
             if (!fullName || !grade) {
                 alert('Please fill in all required fields.');
                 return;
             }
-
+    
+            if (subjects.length === 0) {
+                alert('Please select at least one subject.');
+                return;
+            }
+    
             try {
                 const db = firebase.firestore();
-                const docRef = await db.collection('children').add({
+    
+                // 1. Save child
+                await db.collection('children').add({
                     parentUid: parentUid,
                     fullName: fullName,
                     grade: grade,
                     subjects: subjects,
                     createdAt: new Date().toISOString()
                 });
-                
+    
+                // 2. Email → PARENT
+                await db.collection('mail').add({
+                    to: parentEmail,
+                    message: {
+                        subject: 'Child Added Successfully - AceEd Tutoring',
+                        html: buildEmailBody(`
+                            <h2>Child Added</h2>
+                            <p>Hi ${parentName},</p>
+                            <p>You've added <strong>${fullName}</strong> to your AceEd Tutoring profile.</p>
+                            <p><strong>Grade:</strong> ${grade}</p>
+                            <p><strong>Subjects:</strong> ${subjects.join(', ')}</p>
+                            <p>You can now request a tutor for them from your dashboard.</p>
+                        `)
+                    }
+                });
+    
                 closeModal('addChildModal');
                 document.getElementById('addChildForm').reset();
                 loadParentData(parentUid);
                 alert('Child added successfully!');
+                console.log('✅ Child added and email queued');
+    
             } catch (error) {
                 console.error('Error adding child:', error);
                 alert('Error adding child: ' + error.message);
             }
         });
-
+    
         // ============================================================
         // CART BADGE
         // ============================================================
@@ -1826,18 +1873,19 @@
                 }
             }
         }
-
+    
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
         });
-
+    
         document.addEventListener('cartUpdated', function() {
             updateCartBadge();
         });
-
+    
         if (typeof getCart === 'function') {
             updateCartBadge();
         }
     </script>
+    
 </body>
 </html>
