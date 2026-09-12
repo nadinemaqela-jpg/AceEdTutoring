@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18209594553');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Weekly Session - AceEd Tutoring</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
+            authDomain: "aceed-tutoring.firebaseapp.com",
+            projectId: "aceed-tutoring",
+            storageBucket: "aceed-tutoring.firebasestorage.app",
+            messagingSenderId: "225577605291",
+            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .page-header i {
+            font-size: 2rem;
+            color: #f39c12;
+        }
+
+        h1 {
+            color: #1e2a3a;
+            font-size: 1.6rem;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-section {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-section h3 {
+            color: #1e2a3a;
+            font-size: 1.05rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section h3 i {
+            color: #f39c12;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #1e2a3a;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Session Cards */
+        .session-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            position: relative;
+        }
+
+        .session-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .session-number {
+            font-weight: 700;
+            color: #3498db;
+            font-size: 0.9rem;
+        }
+
+        .remove-session {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .remove-session:hover {
+            background: #fee;
+        }
+
+        /* Add Session Button */
+        .add-session-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: white;
+            border: 2px dashed #3498db;
+            border-radius: 12px;
+            color: #3498db;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .add-session-btn:hover {
+            background: #f0f8ff;
+            border-style: solid;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #1e2a3a;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Messages */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .alert.show { display: block; }
+
+        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #27ae60; }
+        .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #e74c3c; }
+        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+        .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+
+        /* Loading */
+        .loading-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-screen .spinner {
+            font-size: 3rem;
+            color: #f39c12;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 25px 20px; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .actions { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loadingScreen" class="loading-screen">
+            <i class="fas fa-spinner spinner"></i>
+            <p style="margin-top: 15px; color: #7f8c8d;">Loading...</p>
+        </div>
+
+        <div id="mainContent" style="display: none;">
+            <div class="page-header">
+                <i class="fas fa-calendar-check"></i>
+                <h1>Log Weekly Session</h1>
+            </div>
+            <p class="subtitle">Log all sessions for a student this week. This will be sent to the parent.</p>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form id="logForm">
+                <!-- Student & Subject -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user-graduate"></i> Student & Subject</h3>
+
+                    <div class="form-group">
+                        <label>Student *</label>
+                        <select id="studentSelect" required>
+                            <option value="">Select a student...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject *</label>
+                        <input type="text" id="subject" placeholder="e.g. Economics" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Week Of *</label>
+                        <input type="date" id="weekOf" required>
+                    </div>
+                </div>
+
+                <!-- Sessions -->
+                <div class="form-section">
+                    <h3><i class="fas fa-clock"></i> Sessions This Week</h3>
+                    <div id="sessionsContainer"></div>
+                    <button type="button" class="add-session-btn" onclick="addSessionCard()">
+                        <i class="fas fa-plus"></i> Add Another Session
+                    </button>
+                </div>
+
+                <!-- Weekly Summary -->
+                <div class="form-section">
+                    <h3><i class="fas fa-star"></i> Weekly Summary</h3>
+
+                    <div class="form-group">
+                        <label>Tutor Assessment (%) *</label>
+                        <input type="number" id="tutorAssessment" min="0" max="100" placeholder="e.g. 65" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Weekly Notes *</label>
+                        <textarea id="weeklyNotes" placeholder="How did the student do this week? What needs more focus next week?" required></textarea>
+                    </div>
+                </div>
+
+                <!-- School Test -->
+                <div class="form-section">
+                    <h3><i class="fas fa-file-alt"></i> School Test (Optional)</h3>
+                    <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 15px;">Only fill this in if the student received a school test result this week.</p>
+
+                    <div class="form-group">
+                        <label>Test Name</label>
+                        <input type="text" id="testName" placeholder="e.g. September Exam">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mark</label>
+                            <input type="number" id="testMark" min="0" placeholder="e.g. 58">
+                        </div>
+                        <div class="form-group">
+                            <label>Total</label>
+                            <input type="number" id="testTotal" min="1" placeholder="e.g. 100">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Test Date</label>
+                        <input type="date" id="testDate">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <a href="tutor-dashboard.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Save Weekly Log
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // GLOBALS
+        // ============================================================
+        let currentTutorUid = '';
+        let currentTutorName = '';
+        let currentTutorEmail = '';
+        let acceptedStudents = [];      // from tutor_requests where status = accepted
+        let sessionCounter = 0;
+
+        // ============================================================
+        // AUTH CHECK
+        // ============================================================
+        firebase.auth().onAuthStateChanged(async function(user) {
+            if (!user) {
+                window.location.href = 'signin.html?redirect=log-session.html';
+                return;
+            }
+
+            try {
+                const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+                const userData = doc.data();
+
+                if (userData.role !== 'tutor') {
+                    document.getElementById('loadingScreen').innerHTML = `
+                        <i class="fas fa-lock" style="font-size: 3rem; color: #e74c3c;"></i>
+                        <h2 style="color: #e74c3c; margin-top: 15px;">Access Denied</h2>
+                        <p style="color: #7f8c8d;">Only tutors can access this page.</p>
+                        <a href="index.html" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: #3498db; color: white; text-decoration: none; border-radius: 30px;">Go Home</a>
+                    `;
+                    return;
+                }
+
+                currentTutorUid = user.uid;
+                currentTutorName = userData.fullName || 'Tutor';
+                currentTutorEmail = user.email;
+
+                await loadAcceptedStudents();
+                initForm();
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('error', 'Error loading profile: ' + error.message);
+            }
+        });
+
+        // ============================================================
+        // LOAD ACCEPTED STUDENTS
+        // ============================================================
+        async function loadAcceptedStudents() {
+            const db = firebase.firestore();
+            const snapshot = await db.collection('tutor_requests')
+                .where('tutorUid', '==', currentTutorUid)
+                .where('status', '==', 'accepted')
+                .get();
+
+            acceptedStudents = [];
+            snapshot.forEach(function(doc) {
+                const data = doc.data();
+                acceptedStudents.push({
+                    requestId: doc.id,
+                    studentUid: data.childId,
+                    studentName: data.childName,
+                    grade: data.grade,
+                    parentUid: data.parentUid,
+                    parentEmail: data.parentEmail,
+                    parentName: data.parentName,
+                    subjects: data.subjects || []
+                });
+            });
+
+            const select = document.getElementById('studentSelect');
+            select.innerHTML = '<option value="">Select a student...</option>';
+            acceptedStudents.forEach(function(s) {
+                const option = document.createElement('option');
+                option.value = s.requestId;
+                option.textContent = s.studentName + ' (Grade ' + s.grade + ')';
+                select.appendChild(option);
+            });
+        }
+
+        // ============================================================
+        // INIT FORM
+        // ============================================================
+        function initForm() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+
+            // Set default week start (Monday of current week)
+            const today = new Date();
+            const day = today.getDay();
+            const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(today.setDate(diff));
+            document.getElementById('weekOf').value = monday.toISOString().split('T')[0];
+
+            // Add one session card by default
+            addSessionCard();
+
+            // Pre-fill subject when student picked
+            document.getElementById('studentSelect').addEventListener('change', function() {
+                const requestId = this.value;
+                if (!requestId) return;
+                const student = acceptedStudents.find(s => s.requestId === requestId);
+                if (student && student.subjects.length > 0) {
+                    document.getElementById('subject').value = student.subjects[0];
+                }
+            });
+
+            // Form submit
+            document.getElementById('logForm').addEventListener('submit', handleSubmit);
+        }
+
+        // ============================================================
+        // SESSION CARDS
+        // ============================================================
+        function addSessionCard() {
+            sessionCounter++;
+            const container = document.getElementById('sessionsContainer');
+            const card = document.createElement('div');
+            card.className = 'session-card';
+            card.dataset.sessionId = sessionCounter;
+
+            card.innerHTML = `
+                <div class="session-card-header">
+                    <span class="session-number">Session ${sessionCounter}</span>
+                    <button type="button" class="remove-session" onclick="removeSessionCard(${sessionCounter})">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="session-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" class="session-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (hours)</label>
+                        <select class="session-duration" required>
+                            <option value="0.5">0.5 hr</option>
+                            <option value="1" selected>1 hr</option>
+                            <option value="1.5">1.5 hr</option>
+                            <option value="2">2 hr</option>
+                            <option value="2.5">2.5 hr</option>
+                            <option value="3">3 hr</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Topics Covered</label>
+                    <textarea class="session-topics" placeholder="What was covered in this session?" required></textarea>
+                </div>
+            `;
+
+            container.appendChild(card);
+        }
+
+        function removeSessionCard(id) {
+            const cards = document.querySelectorAll('.session-card');
+            if (cards.length <= 1) {
+                showAlert('warning', 'You must keep at least one session.');
+                return;
+            }
+            const card = document.querySelector(`.session-card[data-session-id="${id}"]`);
+            if (card) card.remove();
+        }
+
+        // ============================================================
+        // SUBMIT
+        // ============================================================
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                // Validate student
+                const requestId = document.getElementById('studentSelect').value;
+                if (!requestId) throw new Error('Please select a student.');
+
+                const student = acceptedStudents.find(s => s.requestId === requestId);
+                if (!student) throw new Error('Student not found.');
+
+                const subject = document.getElementById('subject').value.trim();
+                const weekOf = document.getElementById('weekOf').value;
+                const tutorAssessment = parseInt(document.getElementById('tutorAssessment').value);
+                const weeklyNotes = document.getElementById('weeklyNotes').value.trim();
+
+                if (!subject) throw new Error('Please enter a subject.');
+                if (!weekOf) throw new Error('Please pick the week.');
+                if (isNaN(tutorAssessment) || tutorAssessment < 0 || tutorAssessment > 100) throw new Error('Tutor assessment must be 0-100.');
+                if (!weeklyNotes) throw new Error('Please write weekly notes.');
+
+                // Gather sessions
+                const sessions = [];
+                let totalHours = 0;
+                document.querySelectorAll('.session-card').forEach(function(card) {
+                    const date = card.querySelector('.session-date').value;
+                    const time = card.querySelector('.session-time').value;
+                    const duration = parseFloat(card.querySelector('.session-duration').value);
+                    const topics = card.querySelector('.session-topics').value.trim();
+
+                    if (!date || !time || !topics) {
+                        throw new Error('Please complete all session fields.');
+                    }
+
+                    sessions.push({ date, time, duration, topics });
+                    totalHours += duration;
+                });
+
+                if (sessions.length === 0) throw new Error('Add at least one session.');
+
+                // School test (optional)
+                let schoolTest = null;
+                const testName = document.getElementById('testName').value.trim();
+                const testMark = document.getElementById('testMark').value;
+                const testTotal = document.getElementById('testTotal').value;
+                const testDate = document.getElementById('testDate').value;
+
+                if (testName || testMark || testTotal) {
+                    if (!testName || !testMark || !testTotal) {
+                        throw new Error('Please complete all school test fields (or leave them all empty).');
+                    }
+                    schoolTest = {
+                        name: testName,
+                        mark: parseInt(testMark),
+                        total: parseInt(testTotal),
+                        date: testDate || null
+                    };
+                }
+
+                const db = firebase.firestore();
+
+                // Check for existing log (same student + subject + week)
+                const existingSnapshot = await db.collection('weekly_logs')
+                    .where('tutorUid', '==', currentTutorUid)
+                    .where('studentUid', '==', student.studentUid)
+                    .where('subject', '==', subject)
+                    .where('weekOf', '==', weekOf)
+                    .get();
+
+                let isOverwrite = false;
+                if (!existingSnapshot.empty) {
+                    const confirmed = confirm(
+                        `You already logged ${student.studentName} for ${subject} this week.\n\nOverwrite the existing log?`
+                    );
+                    if (!confirmed) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Save Weekly Log';
+                        return;
+                    }
+                    isOverwrite = true;
+                }
+
+                // Data to save
+                const logData = {
+                    tutorUid: currentTutorUid,
+                    tutorName: currentTutorName,
+                    tutorEmail: currentTutorEmail,
+                    studentUid: student.studentUid,
+                    studentName: student.studentName,
+                    grade: student.grade,
+                    parentUid: student.parentUid,
+                    parentEmail: student.parentEmail,
+                    parentName: student.parentName,
+                    subject: subject,
+                    weekOf: weekOf,
+                    sessions: sessions,
+                    totalHours: totalHours,
+                    sessionCount: sessions.length,
+                    tutorAssessment: tutorAssessment,
+                    weeklyNotes: weeklyNotes,
+                    schoolTest: schoolTest,
+                    status: 'submitted',
+                    updatedAt: new Date().toISOString()
+                };
+
+                let docRef;
+                if (isOverwrite && !existingSnapshot.empty) {
+                    docRef = existingSnapshot.docs[0].ref;
+                    await docRef.update(logData);
+                } else {
+                    logData.createdAt = new Date().toISOString();
+                    logData.submittedAt = new Date().toISOString();
+                    docRef = await db.collection('weekly_logs').add(logData);
+                }
+
+                // Build session list HTML
+                const sessionRows = sessions.map(function(s) {
+                    const d = new Date(s.date + 'T' + s.time);
+                    const dateStr = d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+                    return `<li style="margin-bottom: 8px;">
+                        <strong>${dateStr} ${s.time}</strong> (${s.duration} hr)<br>
+                        <span style="color: #555;">${s.topics}</span>
+                    </li>`;
+                }).join('');
+
+                const testHtml = schoolTest
+                    ? `<hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                       <h3 style="color: #1e2a3a;">School Test Result</h3>
+                       <p><strong>${schoolTest.name}</strong>${schoolTest.date ? ' — ' + new Date(schoolTest.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) : ''}</p>
+                       <p style="font-size: 1.3rem; color: #27ae60; font-weight: 700;">${schoolTest.mark} / ${schoolTest.total} (${Math.round(schoolTest.mark / schoolTest.total * 100)}%)</p>`
+                    : '';
+
+                // Format week ending
+                const weekStartDate = new Date(weekOf);
+                const weekEndDate = new Date(weekStartDate);
+                weekEndDate.setDate(weekStartDate.getDate() + 6);
+                const weekLabel = weekStartDate.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) +
+                                  ' - ' + weekEndDate.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+
+                // Send email to parent
+                await db.collection('mail').add({
+                    to: student.parentEmail,
+                    message: {
+                        subject: 'Weekly Report: ' + student.studentName + ' (' + subject + ')',
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                                <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                                    <h1 style="margin: 0;">AceEd Tutoring</h1>
+                                    <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
+                                </div>
+                                <div style="padding: 25px; background: #f9f9f9;">
+                                    <h2 style="color: #1e2a3a;">Weekly Report</h2>
+                                    <p><strong>Student:</strong> ${student.studentName} (Grade ${student.grade})</p>
+                                    <p><strong>Subject:</strong> ${subject}</p>
+                                    <p><strong>Week of:</strong> ${weekLabel}</p>
+                                    <p><strong>Tutor:</strong> ${currentTutorName}</p>
+                                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                                    <h3 style="color: #1e2a3a;">Sessions (${sessions.length} sessions, ${totalHours} hours)</h3>
+                                    <ul style="padding-left: 20px;">
+                                        ${sessionRows}
+                                    </ul>
+                                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                                    <h3 style="color: #1e2a3a;">Tutor Assessment</h3>
+                                    <p style="font-size: 1.5rem; color: #f39c12; font-weight: 700; margin: 5px 0;">${tutorAssessment}%</p>
+                                    <p><strong>Notes:</strong><br>${weeklyNotes}</p>
+                                    ${testHtml}
+                                    <hr style="margin: 25px 0; border: none; border-top: 1px solid #ddd;">
+                                    <div style="text-align: center;">
+                                        <a href="https://aceed.co.za/parent-dashboard.html" style="background: #3498db; color: white; padding: 14px 35px; text-decoration: none; border-radius: 30px; font-weight: 600; display: inline-block;">
+                                            View Full Progress Report
+                                        </a>
+                                    </div>
+                                    <p style="font-size: 0.85rem; color: #666; margin-top: 20px;">Questions? Reply to this email or WhatsApp us at +27 65 529 4232.</p>
+                                </div>
+                                <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
+                                    <p style="margin:0;">© 2026 AceEd Tutoring</p>
+                                </div>
+                            </div>
+                        `
+                    }
+                });
+
+                showAlert('success', '✅ Weekly log saved and email sent to ' + student.parentEmail + '!');
+
+                // Reset after 3 seconds
+                setTimeout(function() {
+                    window.location.href = 'tutor-dashboard.html';
+                }, 2500);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('error', error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Save Weekly Log';
+            }
+        }
+
+        // ============================================================
+        // ALERTS
+        // ============================================================
+        function showAlert(type, message) {
+            const box = document.getElementById('alertBox');
+            box.className = 'alert alert-' + type + ' show';
+            box.textContent = message;
+            box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
