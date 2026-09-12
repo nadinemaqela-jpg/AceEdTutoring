@@ -830,6 +830,7 @@
                 <div class="icon"><i class="fas fa-check-circle"></i></div>
                 <div class="number" id="acceptedCount">0</div>
                 <div class="label">Accepted</div>
+                
             </div>
             <div class="stat-card helped">
                 <div class="icon"><i class="fas fa-users"></i></div>
@@ -1105,6 +1106,7 @@
                         
                         let whatsappButton = '';
                         if (isAccepted) {
+                            const subject = (req.subjects && req.subjects.length > 0) ? req.subjects[0] : '';
                             whatsappButton = `
                                 <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                                     <span style="color: #27ae60; font-weight: 500;">
@@ -1115,6 +1117,12 @@
                                                    border: none; border-radius: 30px; cursor: pointer; 
                                                    font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
                                         <i class="fab fa-whatsapp"></i> Chat with Parent
+                                    </button>
+                                    <button onclick="viewStudentProgress('${req.childId}', '${subject.replace(/'/g, "\\'")}')" 
+                                            style="background: #3498db; color: white; padding: 8px 20px; 
+                                                   border: none; border-radius: 30px; cursor: pointer; 
+                                                   font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
+                                        <i class="fas fa-chart-line"></i> View Progress
                                     </button>
                                 </div>
                             `;
@@ -1315,6 +1323,15 @@
                     alert('Error: Could not fetch parent contact details.');
                 });
         }
+
+        function viewStudentProgress(childId, subject) {
+            if (!subject) {
+                alert('No subject found for this student.');
+                return;
+            }
+            window.location.href = 'progress.html?student=' + encodeURIComponent(childId) + '&subject=' + encodeURIComponent(subject);
+        }
+        
     </script>
     
 </body>
