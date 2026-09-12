@@ -796,12 +796,6 @@
                     <i class="fas fa-user-circle"></i>
                 </button>
 
-                <!-- Cart (isolated) -->
-                <a href="cart.html" class="nav-link cart-link">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                    <span class="cart-badge" id="cartCount">0</span>
-                </a>
-
                 <!-- Dot Menu Button (Opens Right Sidebar) -->
                 <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
                     <i class="fas fa-ellipsis-v"></i>
@@ -1059,38 +1053,6 @@
             }).catch(function(error) {
                 console.error('Logout error:', error);
             });
-        }
-
-        // ------------------------------------------------------------
-        // Update Cart Badge
-        // ------------------------------------------------------------
-        function updateCartBadge() {
-            const cart = getCart();
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
-            const badge = document.getElementById('cartCount');
-            if (badge) {
-                badge.textContent = count;
-                badge.classList.toggle('show', count > 0);
-            }
-        }
-
-        // Update cart badge on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartBadge();
-        });
-
-        // Listen for cart updates (custom event)
-        document.addEventListener('cartUpdated', function() {
-            updateCartBadge();
-        });
-
-        // Override addToCart to dispatch event
-        const originalAddToCart = window.addToCart;
-        if (originalAddToCart) {
-            window.addToCart = function(item) {
-                originalAddToCart(item);
-                document.dispatchEvent(new Event('cartUpdated'));
-            };
         }
     </script>
 </body>
