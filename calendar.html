@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18209594553"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18209594553');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - AceEd Tutoring</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
+            authDomain: "aceed-tutoring.firebaseapp.com",
+            projectId: "aceed-tutoring",
+            storageBucket: "aceed-tutoring.firebasestorage.app",
+            messagingSenderId: "225577605291",
+            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <!-- FullCalendar -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .page-header h1 {
+            color: #1e2a3a;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i { color: #f39c12; }
+
+        .back-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        /* Calendar */
+        #calendar {
+            margin-top: 10px;
+        }
+
+        .fc {
+            font-family: inherit;
+        }
+
+        .fc .fc-button-primary {
+            background-color: #3498db !important;
+            border-color: #3498db !important;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .fc .fc-button-primary:hover {
+            background-color: #2980b9 !important;
+            border-color: #2980b9 !important;
+        }
+
+        .fc .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: #1e2a3a !important;
+            border-color: #1e2a3a !important;
+        }
+
+        .fc .fc-toolbar-title {
+            color: #1e2a3a;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .fc .fc-daygrid-day-number {
+            color: #1e2a3a;
+            font-weight: 600;
+        }
+
+        .fc .fc-daygrid-day.fc-day-today {
+            background-color: #fff3cd !important;
+        }
+
+        .fc .fc-event {
+            background: #3498db;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            cursor: pointer;
+        }
+
+        .fc .fc-event:hover {
+            background: #2980b9;
+        }
+
+        /* Session list panel */
+        .session-panel {
+            display: none;
+            margin-top: 25px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+        }
+
+        .session-panel.show { display: block; }
+
+        .session-panel h3 {
+            color: #1e2a3a;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .session-panel h3 .close-panel {
+            background: none;
+            border: none;
+            color: #95a5a6;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .session-panel h3 .close-panel:hover {
+            background: #ecf0f1;
+        }
+
+        .session-row {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid #3498db;
+        }
+
+        .session-row:hover {
+            background: #f0f8ff;
+            transform: translateX(3px);
+        }
+
+        .session-row .time {
+            font-weight: 700;
+            color: #3498db;
+            min-width: 60px;
+            font-size: 0.95rem;
+        }
+
+        .session-row .info {
+            flex: 1;
+        }
+
+        .session-row .student {
+            font-weight: 600;
+            color: #1e2a3a;
+            font-size: 0.95rem;
+        }
+
+        .session-row .meta {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+
+        .session-row .duration {
+            font-size: 0.85rem;
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        .session-row .arrow {
+            color: #95a5a6;
+            font-size: 1rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .modal-header h2 {
+            color: #1e2a3a;
+            font-size: 1.3rem;
+        }
+
+        .modal-header .week-label {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #95a5a6;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 8px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover { color: #e74c3c; }
+
+        .modal-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .modal-section h4 {
+            color: #7f8c8d;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .modal-section .value {
+            color: #1e2a3a;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .session-list-item {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid #3498db;
+        }
+
+        .session-list-item .s-date {
+            font-weight: 700;
+            color: #3498db;
+            font-size: 0.85rem;
+        }
+
+        .session-list-item .s-topics {
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .assessment-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .test-badge {
+            display: inline-block;
+            background: #d4edda;
+            color: #155724;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        /* Loading */
+        .loading-screen {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .loading-screen .spinner {
+            font-size: 3rem;
+            color: #f39c12;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            .page-header h1 { font-size: 1.3rem; }
+            .filter-group { min-width: 100%; }
+        }
+
+        /* Hide grid on mobile, show list */
+        @media (max-width: 600px) {
+            .fc .fc-daygrid-body { display: none; }
+            .fc .fc-col-header { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loadingScreen" class="loading-screen">
+            <i class="fas fa-spinner spinner"></i>
+            <p style="margin-top: 15px; color: #7f8c8d;">Loading calendar...</p>
+        </div>
+
+        <div id="mainContent" style="display: none;">
+            <div class="page-header">
+                <h1><i class="fas fa-calendar-alt"></i> Calendar</h1>
+                <a href="javascript:history.back()" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            <div class="filters" id="filters">
+                <div class="filter-group" id="tutorFilterGroup">
+                    <label>Tutor</label>
+                    <select id="tutorFilter"><option value="">All Tutors</option></select>
+                </div>
+                <div class="filter-group">
+                    <label>Student</label>
+                    <select id="studentFilter"><option value="">All Students</option></select>
+                </div>
+                <div class="filter-group">
+                    <label>Subject</label>
+                    <select id="subjectFilter"><option value="">All Subjects</option></select>
+                </div>
+            </div>
+
+            <div id="calendar"></div>
+
+            <!-- Session panel (opens below calendar) -->
+            <div class="session-panel" id="sessionPanel">
+                <h3>
+                    <span id="panelTitle">Sessions</span>
+                    <button class="close-panel" onclick="closeSessionPanel()"><i class="fas fa-times"></i></button>
+                </h3>
+                <div id="sessionPanelContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Log Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">Weekly Log</h2>
+                    <div class="week-label" id="modalWeekLabel"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // GLOBALS
+        // ============================================================
+        let currentUser = null;
+        let currentRole = '';
+        let currentUid = '';
+        let allLogs = [];           // raw weekly_logs for this user's scope
+        let allEvents = [];         // flattened session events
+        let filteredEvents = [];
+        let calendar = null;
+
+        // ============================================================
+        // AUTH CHECK + ROLE
+        // ============================================================
+        firebase.auth().onAuthStateChanged(async function(user) {
+            if (!user) {
+                window.location.href = 'signin.html?redirect=calendar.html';
+                return;
+            }
+
+            try {
+                const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+                const userData = doc.data();
+
+                currentUser = user;
+                currentUid = user.uid;
+                currentRole = userData.role || 'student';
+
+                // Admin check
+                if (currentRole === 'admin') {
+                    // Verify admin
+                    const adminDoc = await firebase.firestore().collection('admins').doc('admin').get();
+                    const isAdmin = adminDoc.exists && adminDoc.data().email === user.email;
+                    if (!isAdmin) currentRole = 'parent'; // fallback
+                }
+
+                await loadLogs();
+                initCalendar();
+                initFilters();
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingScreen').innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
+                    <h2 style="color: #e74c3c; margin-top: 15px;">Error</h2>
+                    <p style="color: #7f8c8d;">${error.message}</p>
+                    <a href="index.html" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: #3498db; color: white; text-decoration: none; border-radius: 30px;">Go Home</a>
+                `;
+            }
+        });
+
+        // ============================================================
+        // LOAD LOGS BASED ON ROLE
+        // ============================================================
+        async function loadLogs() {
+            const db = firebase.firestore();
+            let query;
+
+            if (currentRole === 'admin') {
+                // Admin sees everything
+                query = db.collection('weekly_logs');
+
+            } else if (currentRole === 'tutor') {
+                // Tutor sees only their own logs
+                query = db.collection('weekly_logs').where('tutorUid', '==', currentUid);
+
+            } else if (currentRole === 'parent') {
+                // Parent sees only their children's logs
+                query = db.collection('weekly_logs').where('parentUid', '==', currentUid);
+
+            } else {
+                // Student or unknown — try to find by email or parentUid
+                query = db.collection('weekly_logs').where('parentUid', '==', currentUid);
+            }
+
+            const snapshot = await query.get();
+            allLogs = [];
+            snapshot.forEach(function(doc) {
+                allLogs.push({ id: doc.id, ...doc.data() });
+            });
+
+            // Flatten sessions into events
+            allEvents = [];
+            allLogs.forEach(function(log) {
+                (log.sessions || []).forEach(function(s) {
+                    allEvents.push({
+                        logId: log.id,
+                        date: s.date,
+                        time: s.time,
+                        duration: s.duration,
+                        topics: s.topics,
+                        studentName: log.studentName,
+                        studentUid: log.studentUid,
+                        tutorName: log.tutorName,
+                        tutorUid: log.tutorUid,
+                        parentUid: log.parentUid,
+                        subject: log.subject,
+                        tutorAssessment: log.tutorAssessment,
+                        weeklyNotes: log.weeklyNotes,
+                        schoolTest: log.schoolTest,
+                        weekOf: log.weekOf
+                    });
+                });
+            });
+
+            filteredEvents = allEvents.slice();
+        }
+
+        // ============================================================
+        // INIT CALENDAR
+        // ============================================================
+        function initCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            const isMobile = window.innerWidth < 600;
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: isMobile ? 'listMonth' : 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: isMobile ? '' : 'dayGridMonth,listMonth'
+                },
+                height: 'auto',
+                events: filteredEvents.map(function(e) {
+                    return {
+                        title: e.time + ' — ' + e.studentName + ' (' + e.subject + ')',
+                        date: e.date,
+                        extendedProps: e
+                    };
+                }),
+                dateClick: function(info) {
+                    showSessionsForDay(info.dateStr);
+                },
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    showWeeklyLog(info.event.extendedProps.logId);
+                },
+                dayMaxEvents: 3,
+                moreLinkClick: function(info) {
+                    showSessionsForDay(info.date.toISOString().split('T')[0]);
+                    return 'popover';
+                }
+            });
+
+            calendar.render();
+
+            // Switch view on resize
+            let lastMobile = isMobile;
+            window.addEventListener('resize', function() {
+                const nowMobile = window.innerWidth < 600;
+                if (nowMobile !== lastMobile) {
+                    lastMobile = nowMobile;
+                    calendar.changeView(nowMobile ? 'listMonth' : 'dayGridMonth');
+                    calendar.setOption('headerToolbar', {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: nowMobile ? '' : 'dayGridMonth,listMonth'
+                    });
+                }
+            });
+        }
+
+        // ============================================================
+        // REFRESH CALENDAR WITH FILTERED EVENTS
+        // ============================================================
+        function refreshCalendar() {
+            if (!calendar) return;
+
+            const tutorFilter = document.getElementById('tutorFilter').value;
+            const studentFilter = document.getElementById('studentFilter').value;
+            const subjectFilter = document.getElementById('subjectFilter').value;
+
+            filteredEvents = allEvents.filter(function(e) {
+                if (tutorFilter && e.tutorUid !== tutorFilter) return false;
+                if (studentFilter && e.studentUid !== studentFilter) return false;
+                if (subjectFilter && e.subject !== subjectFilter) return false;
+                return true;
+            });
+
+            calendar.removeAllEvents();
+            filteredEvents.forEach(function(e) {
+                calendar.addEvent({
+                    title: e.time + ' — ' + e.studentName + ' (' + e.subject + ')',
+                    date: e.date,
+                    extendedProps: e
+                });
+            });
+        }
+
+        // ============================================================
+        // INIT FILTERS
+        // ============================================================
+        function initFilters() {
+            // Tutors
+            const tutorFilter = document.getElementById('tutorFilter');
+            const tutorGroup = document.getElementById('tutorFilterGroup');
+
+            if (currentRole === 'tutor') {
+                tutorGroup.style.display = 'none';
+            } else {
+                const tutors = {};
+                allEvents.forEach(function(e) {
+                    if (e.tutorUid) tutors[e.tutorUid] = e.tutorName;
+                });
+                Object.keys(tutors).forEach(function(uid) {
+                    const opt = document.createElement('option');
+                    opt.value = uid;
+                    opt.textContent = tutors[uid];
+                    tutorFilter.appendChild(opt);
+                });
+            }
+
+            // Students
+            const studentFilter = document.getElementById('studentFilter');
+            const students = {};
+            allEvents.forEach(function(e) {
+                if (e.studentUid) students[e.studentUid] = e.studentName;
+            });
+            Object.keys(students).forEach(function(uid) {
+                const opt = document.createElement('option');
+                opt.value = uid;
+                opt.textContent = students[uid];
+                studentFilter.appendChild(opt);
+            });
+
+            // Subjects
+            const subjectFilter = document.getElementById('subjectFilter');
+            const subjects = new Set();
+            allEvents.forEach(function(e) {
+                if (e.subject) subjects.add(e.subject);
+            });
+            subjects.forEach(function(sub) {
+                const opt = document.createElement('option');
+                opt.value = sub;
+                opt.textContent = sub;
+                subjectFilter.appendChild(opt);
+            });
+
+            // Attach change handlers
+            tutorFilter.addEventListener('change', refreshCalendar);
+            studentFilter.addEventListener('change', refreshCalendar);
+            subjectFilter.addEventListener('change', refreshCalendar);
+        }
+
+        // ============================================================
+        // SHOW SESSIONS FOR A DAY
+        // ============================================================
+        function showSessionsForDay(dateStr) {
+            const dayEvents = filteredEvents.filter(e => e.date === dateStr);
+
+            const panel = document.getElementById('sessionPanel');
+            const panelTitle = document.getElementById('panelTitle');
+            const panelContent = document.getElementById('sessionPanelContent');
+
+            const d = new Date(dateStr + 'T00:00:00');
+            const dateLabel = d.toLocaleDateString('en-ZA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+            if (dayEvents.length === 0) {
+                panelTitle.textContent = dateLabel + ' — No sessions';
+                panelContent.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #95a5a6;">
+                        <i class="fas fa-calendar-times" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                        No sessions on this day.
+                    </div>
+                `;
+            } else {
+                panelTitle.textContent = dateLabel + ' — ' + dayEvents.length + ' session' + (dayEvents.length > 1 ? 's' : '');
+
+                // Sort by time
+                dayEvents.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+                panelContent.innerHTML = dayEvents.map(function(e) {
+                    return `
+                        <div class="session-row" onclick="showWeeklyLog('${e.logId}')">
+                            <div class="time">${e.time}</div>
+                            <div class="info">
+                                <div class="student">${e.studentName}</div>
+                                <div class="meta">${e.subject} · ${e.tutorName}</div>
+                            </div>
+                            <div class="duration">${e.duration} hr</div>
+                            <div class="arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            panel.classList.add('show');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeSessionPanel() {
+            document.getElementById('sessionPanel').classList.remove('show');
+        }
+
+        // ============================================================
+        // SHOW WEEKLY LOG MODAL
+        // ============================================================
+        function showWeeklyLog(logId) {
+            const log = allLogs.find(l => l.id === logId);
+            if (!log) return;
+
+            const weekStart = new Date(log.weekOf + 'T00:00:00');
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+
+            const weekLabel = weekStart.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) +
+                              ' - ' + weekEnd.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            document.getElementById('modalTitle').textContent = log.studentName + ' — ' + log.subject;
+            document.getElementById('modalWeekLabel').textContent = 'Week of ' + weekLabel;
+
+            const sessionsHtml = (log.sessions || []).map(function(s) {
+                const d = new Date(s.date + 'T00:00:00');
+                const dateStr = d.toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short' });
+                return `
+                    <div class="session-list-item">
+                        <div class="s-date">${dateStr} — ${s.time} (${s.duration} hr)</div>
+                        <div class="s-topics">${s.topics}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const testHtml = log.schoolTest ? `
+                <div class="modal-section">
+                    <h4>School Test</h4>
+                    <p style="margin-bottom: 8px;"><strong>${log.schoolTest.name}</strong>${log.schoolTest.date ? ' — ' + new Date(log.schoolTest.date + 'T00:00:00').toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) : ''}</p>
+                    <span class="test-badge">${log.schoolTest.mark} / ${log.schoolTest.total} (${Math.round(log.schoolTest.mark / log.schoolTest.total * 100)}%)</span>
+                </div>
+            ` : '';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="modal-section">
+                    <h4>Student</h4>
+                    <div class="value"><strong>${log.studentName}</strong> (Grade ${log.grade})</div>
+                </div>
+
+                <div class="modal-section">
+                    <h4>Tutor</h4>
+                    <div class="value">${log.tutorName}</div>
+                </div>
+
+                <div class="modal-section">
+                    <h4>Sessions This Week (${log.sessionCount} sessions, ${log.totalHours} hours)</h4>
+                    ${sessionsHtml}
+                </div>
+
+                <div class="modal-section">
+                    <h4>Tutor Assessment</h4>
+                    <span class="assessment-badge">${log.tutorAssessment}%</span>
+                </div>
+
+                <div class="modal-section">
+                    <h4>Weekly Notes</h4>
+                    <div class="value">${log.weeklyNotes}</div>
+                </div>
+
+                ${testHtml}
+            `;
+
+            document.getElementById('modalOverlay').classList.add('show');
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeSessionPanel();
+            }
+        });
+    </script>
+</body>
+</html>
