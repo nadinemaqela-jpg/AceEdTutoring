@@ -1588,11 +1588,16 @@
                                     <i class="fas fa-spinner fa-spin"></i> Waiting
                                 </span>
                             ` : ''}
+
                             ${req.status === 'accepted' ? `
                                 <span style="font-size:0.7rem; color:#27ae60;">
                                     <i class="fas fa-check"></i> Accepted
                                 </span>
+                                <button class="btn-sm view" onclick="viewStudentProgress('${req.childId}', '${(req.subjects && req.subjects[0]) ? req.subjects[0].replace(/'/g, "\\'") : ''}')" title="View Progress" style="background:#3498db; color:white;">
+                                    <i class="fas fa-chart-line"></i>
+                                </button>
                             ` : ''}
+                            
                             <button class="btn-sm delete" onclick="deleteRequest('${req.id}')">
                                 <i class="fas fa-trash"></i>
                             </button>
