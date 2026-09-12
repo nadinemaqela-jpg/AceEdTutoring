@@ -1632,6 +1632,16 @@
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('show');
         }
+
+
+        function viewStudentProgress(childId, subject) {
+            console.log('viewStudentProgress:', childId, subject);
+            if (!childId || !subject) {
+                alert('Missing data — childId: ' + childId + ', subject: ' + subject);
+                return;
+            }
+            window.location.href = 'progress.html?student=' + encodeURIComponent(childId) + '&subject=' + encodeURIComponent(subject);
+        }
     
         // ============================================================
         // ASSIGN TUTOR (WITH EMAILS)
