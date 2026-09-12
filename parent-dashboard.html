@@ -1796,9 +1796,31 @@
         // ============================================================
         // VIEW CHILD PROGRESS (Placeholder)
         // ============================================================
+
         function viewChildProgress(childId) {
-            alert('Child progress feature coming soon!');
+            // Find the child's subjects
+            const child = childrenData.find(c => c.id === childId);
+            if (!child || !child.subjects || child.subjects.length === 0) {
+                alert('No subjects on this child yet.');
+                return;
+            }
+        
+            if (child.subjects.length === 1) {
+                // Only one subject — go directly
+                window.location.href = 'progress.html?student=' + childId + '&subject=' + encodeURIComponent(child.subjects[0]);
+            } else {
+                // Multiple subjects — ask which one
+                const options = child.subjects.join('\n');
+                const chosen = prompt('Which subject do you want to view?\n\n' + child.subjects.map((s, i) => (i+1) + '. ' + s).join('\n'));
+                if (chosen) {
+                    const idx = parseInt(chosen) - 1;
+                    if (idx >= 0 && idx < child.subjects.length) {
+                        window.location.href = 'progress.html?student=' + childId + '&subject=' + encodeURIComponent(child.subjects[idx]);
+                    }
+                }
+            }
         }
+        
     
         // ============================================================
         // ADD CHILD FORM
