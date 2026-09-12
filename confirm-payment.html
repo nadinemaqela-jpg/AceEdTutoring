@@ -23,6 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
     <!-- Firebase Configuration -->
     <script>
@@ -61,24 +62,11 @@
             text-align: center;
         }
 
-        .state-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
+        .state-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
 
-        h1 {
-            color: #1e2a3a;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
-        }
+        h1 { color: #1e2a3a; margin-bottom: 15px; font-size: 1.6rem; }
 
-        p {
-            color: #7f8c8d;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
+        p { color: #7f8c8d; font-size: 1rem; line-height: 1.6; margin-bottom: 10px; }
 
         .invoice-info {
             background: #f9f9f9;
@@ -95,25 +83,126 @@
             border-bottom: 1px solid #eee;
         }
 
-        .invoice-info .row:last-child {
-            border-bottom: none;
+        .invoice-info .row:last-child { border-bottom: none; }
+
+        .invoice-info .label { color: #7f8c8d; font-size: 0.9rem; }
+        .invoice-info .value { color: #1e2a3a; font-weight: 600; }
+        .total-amount { color: #27ae60 !important; font-size: 1.2rem !important; }
+
+        /* Payment Method Cards */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+            text-align: left;
         }
 
-        .invoice-info .label {
+        .method-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .method-card:hover { border-color: #3498db; }
+
+        .method-card.selected {
+            border-color: #27ae60;
+            background: #f0fdf4;
+            box-shadow: 0 4px 10px rgba(39,174,96,0.15);
+        }
+
+        .method-card .method-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .method-card .method-name {
+            font-weight: 700;
+            color: #1e2a3a;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .method-card .method-desc {
+            font-size: 0.75rem;
             color: #7f8c8d;
+            line-height: 1.3;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .upload-section.active { display: block; }
+
+        .upload-section label {
+            display: block;
+            font-weight: 600;
+            color: #1e2a3a;
+            margin-bottom: 8px;
             font-size: 0.9rem;
         }
 
-        .invoice-info .value {
-            color: #1e2a3a;
+        .upload-section small {
+            display: block;
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background: white;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            color: #3498db;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .file-input-btn:hover {
+            background: #f0f8ff;
+            border-style: solid;
+        }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #27ae60;
             font-weight: 600;
         }
 
-        .total-amount {
-            color: #27ae60 !important;
-            font-size: 1.2rem !important;
-        }
+        .file-name.error { color: #e74c3c; }
 
+        /* Buttons */
         .btn {
             display: inline-block;
             padding: 14px 35px;
@@ -129,17 +218,18 @@
             margin-top: 10px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(52,152,219,0.3); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .btn-green {
-            background: #27ae60;
-        }
+        .btn-green { background: #27ae60; }
+        .btn-green:hover { box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
 
-        .btn-green:hover {
-            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
 
         .spinner {
@@ -158,12 +248,9 @@
         .status-error { color: #e74c3c; }
         .status-warning { color: #f39c12; }
 
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
+        @media (max-width: 480px) {
+            .payment-methods { grid-template-columns: 1fr; }
+            .container { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -177,20 +264,20 @@
     </div>
 
     <script>
-
         const params = new URLSearchParams(window.location.search);
         const invoiceId = params.get('invoice');
         const content = document.getElementById('content');
-        
-        // Wait for auth to settle
+
+        let selectedMethod = null;
+        let uploadedFile = null;
+
         firebase.auth().onAuthStateChanged(function(user) {
             if (!invoiceId) {
                 showError('Invalid Link', 'No invoice was specified in the link. Please check the email you received.');
                 return;
             }
-        
+
             if (!user) {
-                // Save the current URL so we can return here after sign-in
                 const returnUrl = 'confirm-payment.html?invoice=' + invoiceId;
                 content.innerHTML = `
                     <i class="fas fa-user-lock state-icon" style="color: #f39c12;"></i>
@@ -202,10 +289,9 @@
                 `;
                 return;
             }
-        
-            // User is signed in — proceed
+
             checkInvoice(invoiceId);
-        });        
+        });
 
         async function checkInvoice(id) {
             try {
@@ -219,18 +305,9 @@
 
                 const invoice = invoiceDoc.data();
 
-                // If already paid or claimed, show the right message
-                if (invoice.status === 'paid') {
-                    showAlreadyPaid(invoice);
-                    return;
-                }
+                if (invoice.status === 'paid') { showAlreadyPaid(invoice); return; }
+                if (invoice.status === 'payment_claimed') { showAlreadyClaimed(invoice); return; }
 
-                if (invoice.status === 'payment_claimed') {
-                    showAlreadyClaimed(invoice);
-                    return;
-                }
-
-                // Show confirmation screen with invoice details
                 showConfirmation(invoice);
 
             } catch (error) {
@@ -250,7 +327,7 @@
             content.innerHTML = `
                 <i class="fas fa-file-invoice state-icon" style="color: #3498db;"></i>
                 <h1>Confirm Payment</h1>
-                <p>Please confirm that you have completed the payment for this invoice.</p>
+                <p>Tell us how you paid for invoice <strong>${invoice.invoiceNumber}</strong>.</p>
 
                 <div class="invoice-info">
                     <div class="row">
@@ -268,9 +345,37 @@
                     </div>
                 </div>
 
+                <h3 style="color: #1e2a3a; margin-top: 25px; margin-bottom: 5px; text-align: left;">How did you pay?</h3>
+                <p style="text-align: left; font-size: 0.85rem; color: #7f8c8d; margin-bottom: 0;">Select the method you used:</p>
+
+                <div class="payment-methods">
+                    <div class="method-card" id="method-payshap" onclick="selectMethod('payshap')">
+                        <i class="fas fa-bolt method-icon" style="color: #f39c12;"></i>
+                        <div class="method-name">PayShap / Instant EFT</div>
+                        <div class="method-desc">Payment reflects immediately</div>
+                    </div>
+                    <div class="method-card" id="method-eft" onclick="selectMethod('eft')">
+                        <i class="fas fa-university method-icon" style="color: #3498db;"></i>
+                        <div class="method-name">Bank Transfer (EFT)</div>
+                        <div class="method-desc">Upload proof of payment</div>
+                    </div>
+                </div>
+
+                <div id="uploadSection" class="upload-section">
+                    <label><i class="fas fa-paperclip"></i> Upload Proof of Payment</label>
+                    <small>PDF or screenshot from your bank app (max 5MB)</small>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="proofFile" accept=".pdf,.png,.jpg,.jpeg" onchange="handleFileSelect(event)">
+                        <label for="proofFile" class="file-input-btn">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose File
+                        </label>
+                    </div>
+                    <div id="fileName" class="file-name"></div>
+                </div>
+
                 <div class="btn-group">
-                    <button onclick="confirmPayment('${invoice.invoiceNumber}')" class="btn btn-green">
-                        <i class="fas fa-check"></i> Yes, I've Paid
+                    <button id="confirmBtn" onclick="confirmPayment('${invoice.invoiceNumber}')" class="btn btn-green" disabled>
+                        <i class="fas fa-check"></i> Confirm Payment
                     </button>
                     <a href="parent-dashboard.html" class="btn" style="background: #95a5a6;">
                         <i class="fas fa-arrow-left"></i> Back
@@ -279,27 +384,129 @@
             `;
         }
 
+        function selectMethod(method) {
+            selectedMethod = method;
+
+            document.getElementById('method-payshap').classList.remove('selected');
+            document.getElementById('method-eft').classList.remove('selected');
+            document.getElementById('method-' + method).classList.add('selected');
+
+            const uploadSection = document.getElementById('uploadSection');
+            if (method === 'eft') {
+                uploadSection.classList.add('active');
+            } else {
+                uploadSection.classList.remove('active');
+                uploadedFile = null;
+                document.getElementById('fileName').textContent = '';
+            }
+
+            updateConfirmButton();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const fileNameDiv = document.getElementById('fileName');
+
+            if (!file) {
+                uploadedFile = null;
+                fileNameDiv.textContent = '';
+                updateConfirmButton();
+                return;
+            }
+
+            // Validate size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                fileNameDiv.textContent = '❌ File too large (max 5MB)';
+                fileNameDiv.className = 'file-name error';
+                uploadedFile = null;
+                updateConfirmButton();
+                return;
+            }
+
+            uploadedFile = file;
+            fileNameDiv.textContent = '✓ ' + file.name;
+            fileNameDiv.className = 'file-name';
+            updateConfirmButton();
+        }
+
+        function updateConfirmButton() {
+            const btn = document.getElementById('confirmBtn');
+            if (!btn) return;
+
+            if (!selectedMethod) {
+                btn.disabled = true;
+                return;
+            }
+
+            if (selectedMethod === 'eft' && !uploadedFile) {
+                btn.disabled = true;
+                return;
+            }
+
+            btn.disabled = false;
+        }
+
         async function confirmPayment(invoiceNumber) {
+            if (!selectedMethod) {
+                alert('Please select a payment method.');
+                return;
+            }
+
+            if (selectedMethod === 'eft' && !uploadedFile) {
+                alert('Please upload your proof of payment.');
+                return;
+            }
+
             content.innerHTML = `
                 <i class="fas fa-spinner spinner"></i>
                 <h1>Confirming...</h1>
-                <p>Please wait a moment.</p>
+                <p>${selectedMethod === 'eft' ? 'Uploading proof and confirming...' : 'Please wait a moment.'}</p>
             `;
 
             try {
                 const db = firebase.firestore();
+                const user = firebase.auth().currentUser;
 
-                // 1. Update invoice status
-                await db.collection('invoices').doc(invoiceId).update({
+                let proofData = null;
+
+                // Upload proof if EFT
+                if (selectedMethod === 'eft' && uploadedFile) {
+                    const storageRef = firebase.storage()
+                        .ref('payment-proofs/' + invoiceId + '/' + Date.now() + '_' + uploadedFile.name);
+                    const snapshot = await storageRef.put(uploadedFile);
+                    const downloadURL = await snapshot.ref.getDownloadURL();
+
+                    proofData = {
+                        url: downloadURL,
+                        filename: uploadedFile.name,
+                        uploadedAt: new Date().toISOString(),
+                        uploadedBy: user.uid
+                    };
+                }
+
+                // Update invoice
+                const updateData = {
                     status: 'payment_claimed',
-                    claimedAt: new Date().toISOString()
-                });
+                    claimedAt: new Date().toISOString(),
+                    paymentMethod: selectedMethod
+                };
 
-                // 2. Get the invoice for email
+                if (proofData) {
+                    updateData.proofOfPayment = proofData;
+                }
+
+                await db.collection('invoices').doc(invoiceId).update(updateData);
+
+                // Get invoice for email
                 const invoiceDoc = await db.collection('invoices').doc(invoiceId).get();
                 const invoice = invoiceDoc.data();
 
-                // 3. Notify Admin
+                // Notify Admin
+                const methodLabel = selectedMethod === 'payshap' ? 'PayShap / Instant EFT' : 'Bank Transfer (EFT)';
+                const proofLine = proofData
+                    ? `<p><strong>Proof:</strong> <a href="${proofData.url}">${proofData.filename}</a></p>`
+                    : `<p><strong>Proof:</strong> Not required (instant payment)</p>`;
+
                 await db.collection('mail').add({
                     to: 'admin@aceed.co.za',
                     message: {
@@ -312,16 +519,16 @@
                                 </div>
                                 <div style="padding: 25px; background: #f9f9f9;">
                                     <h2>Payment Claimed ✅</h2>
-                                    <p>The following parent has confirmed they've made payment:</p>
-                                    <hr>
                                     <p><strong>Invoice:</strong> ${invoice.invoiceNumber}</p>
                                     <p><strong>Parent:</strong> ${invoice.parentName}</p>
                                     <p><strong>Email:</strong> ${invoice.parentEmail}</p>
                                     <p><strong>Phone:</strong> ${invoice.parentPhone || 'Not provided'}</p>
                                     <p><strong>Amount:</strong> R${invoice.total.toFixed(2)}</p>
                                     <p><strong>Reference:</strong> ${invoice.paymentRef}</p>
+                                    <p><strong>Method:</strong> ${methodLabel}</p>
+                                    ${proofLine}
                                     <hr>
-                                    <p>Please check your bank account and mark this invoice as paid once verified.</p>
+                                    <p>Please verify the payment and mark the invoice as paid.</p>
                                     <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Admin Dashboard</a></p>
                                 </div>
                                 <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
@@ -332,8 +539,7 @@
                     }
                 });
 
-                // 4. Success screen
-                showSuccess(invoice);
+                showSuccess(invoice, selectedMethod);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -341,7 +547,11 @@
             }
         }
 
-        function showSuccess(invoice) {
+        function showSuccess(invoice, method) {
+            const methodLabel = method === 'payshap'
+                ? 'PayShap / Instant EFT'
+                : 'Bank Transfer (EFT)';
+
             content.innerHTML = `
                 <i class="fas fa-check-circle state-icon status-success"></i>
                 <h1 class="status-success">Payment Confirmed!</h1>
@@ -360,10 +570,13 @@
                         <span class="label">Amount</span>
                         <span class="value total-amount">R${invoice.total.toFixed(2)}</span>
                     </div>
+                    <div class="row">
+                        <span class="label">Method</span>
+                        <span class="value">${methodLabel}</span>
+                    </div>
                 </div>
 
                 <p style="margin-top: 20px;">Our team will verify your payment within 24 hours and activate your tutoring services.</p>
-                <p style="font-size: 0.85rem; color: #95a5a6;">A confirmation has been sent to our team.</p>
 
                 <a href="parent-dashboard.html" class="btn btn-green" style="margin-top: 20px;">
                     <i class="fas fa-arrow-left"></i> Go to Dashboard
