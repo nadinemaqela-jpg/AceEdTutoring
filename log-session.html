@@ -23,6 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
     <!-- Firebase Configuration -->
     <script>
@@ -64,21 +65,9 @@
             margin-bottom: 10px;
         }
 
-        .page-header i {
-            font-size: 2rem;
-            color: #f39c12;
-        }
-
-        h1 {
-            color: #1e2a3a;
-            font-size: 1.6rem;
-        }
-
-        .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-        }
+        .page-header i { font-size: 2rem; color: #f39c12; }
+        h1 { color: #1e2a3a; font-size: 1.6rem; }
+        .subtitle { color: #7f8c8d; margin-bottom: 30px; font-size: 0.95rem; }
 
         .form-section {
             background: #f9f9f9;
@@ -96,13 +85,9 @@
             gap: 10px;
         }
 
-        .form-section h3 i {
-            color: #f39c12;
-        }
+        .form-section h3 i { color: #f39c12; }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+        .form-group { margin-bottom: 15px; }
 
         .form-group label {
             display: block;
@@ -132,22 +117,10 @@
             border-color: #3498db;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .form-row-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
         /* Session Cards */
         .session-card {
@@ -156,7 +129,6 @@
             padding: 20px;
             margin-bottom: 15px;
             border-left: 4px solid #3498db;
-            position: relative;
         }
 
         .session-card-header {
@@ -166,11 +138,7 @@
             margin-bottom: 15px;
         }
 
-        .session-number {
-            font-weight: 700;
-            color: #3498db;
-            font-size: 0.9rem;
-        }
+        .session-number { font-weight: 700; color: #3498db; font-size: 0.9rem; }
 
         .remove-session {
             background: none;
@@ -183,9 +151,7 @@
             transition: background 0.2s;
         }
 
-        .remove-session:hover {
-            background: #fee;
-        }
+        .remove-session:hover { background: #fee; }
 
         /* Add Session Button */
         .add-session-btn {
@@ -202,10 +168,60 @@
             font-size: 0.95rem;
         }
 
-        .add-session-btn:hover {
-            background: #f0f8ff;
-            border-style: solid;
+        .add-session-btn:hover { background: #f0f8ff; border-style: solid; }
+
+        /* File Upload */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: block;
         }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background: white;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            color: #3498db;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .file-input-btn:hover { background: #f0f8ff; border-style: solid; }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #27ae60;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-name.error { color: #e74c3c; }
+
+        .file-name .remove-file {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .file-name .remove-file:hover { background: #fee; }
 
         /* Actions */
         .actions {
@@ -230,32 +246,13 @@
             transition: all 0.3s;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #27ae60, #1e8449);
-            color: white;
-        }
+        .btn-primary { background: linear-gradient(135deg, #27ae60, #1e8449); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
+        .btn-secondary { background: #ecf0f1; color: #1e2a3a; }
+        .btn-secondary:hover { background: #d5dbdb; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
-        }
-
-        .btn-secondary {
-            background: #ecf0f1;
-            color: #1e2a3a;
-        }
-
-        .btn-secondary:hover {
-            background: #d5dbdb;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Messages */
+        /* Alerts */
         .alert {
             padding: 15px 20px;
             border-radius: 10px;
@@ -265,28 +262,14 @@
         }
 
         .alert.show { display: block; }
-
         .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #27ae60; }
         .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #e74c3c; }
         .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
-        .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
 
         /* Loading */
-        .loading-screen {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .loading-screen .spinner {
-            font-size: 3rem;
-            color: #f39c12;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .loading-screen { text-align: center; padding: 60px 20px; }
+        .loading-screen .spinner { font-size: 3rem; color: #f39c12; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         @media (max-width: 600px) {
             .container { padding: 25px 20px; }
@@ -362,7 +345,9 @@
                 <!-- School Test -->
                 <div class="form-section">
                     <h3><i class="fas fa-file-alt"></i> School Test (Optional)</h3>
-                    <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 15px;">Only fill this in if the student received a school test result this week.</p>
+                    <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 15px;">
+                        Fill in only if the student received a school test result this week. Paper and mark are both required if you fill any field.
+                    </p>
 
                     <div class="form-group">
                         <label>Test Name</label>
@@ -383,6 +368,17 @@
                     <div class="form-group">
                         <label>Test Date</label>
                         <input type="date" id="testDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Test Paper * (PDF or image, max 5MB)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="testPaperFile" accept=".pdf,.png,.jpg,.jpeg" onchange="handleTestPaperSelect(event)">
+                            <label for="testPaperFile" class="file-input-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> Choose File
+                            </label>
+                        </div>
+                        <div id="testPaperName" class="file-name"></div>
                     </div>
                 </div>
 
@@ -406,8 +402,9 @@
         let currentTutorUid = '';
         let currentTutorName = '';
         let currentTutorEmail = '';
-        let acceptedStudents = [];      // from tutor_requests where status = accepted
+        let acceptedStudents = [];
         let sessionCounter = 0;
+        let testPaperFile = null;
 
         // ============================================================
         // AUTH CHECK
@@ -487,17 +484,15 @@
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
 
-            // Set default week start (Monday of current week)
+            // Default week start (Monday of current week)
             const today = new Date();
             const day = today.getDay();
             const diff = today.getDate() - day + (day === 0 ? -6 : 1);
             const monday = new Date(today.setDate(diff));
             document.getElementById('weekOf').value = monday.toISOString().split('T')[0];
 
-            // Add one session card by default
             addSessionCard();
 
-            // Pre-fill subject when student picked
             document.getElementById('studentSelect').addEventListener('change', function() {
                 const requestId = this.value;
                 if (!requestId) return;
@@ -507,7 +502,6 @@
                 }
             });
 
-            // Form submit
             document.getElementById('logForm').addEventListener('submit', handleSubmit);
         }
 
@@ -569,6 +563,44 @@
         }
 
         // ============================================================
+        // TEST PAPER UPLOAD
+        // ============================================================
+        function handleTestPaperSelect(event) {
+            const file = event.target.files[0];
+            const nameDiv = document.getElementById('testPaperName');
+
+            if (!file) {
+                testPaperFile = null;
+                nameDiv.innerHTML = '';
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                nameDiv.innerHTML = '❌ File too large (max 5MB)';
+                nameDiv.className = 'file-name error';
+                testPaperFile = null;
+                event.target.value = '';
+                return;
+            }
+
+            testPaperFile = file;
+            nameDiv.className = 'file-name';
+            nameDiv.innerHTML = `
+                ✓ ${file.name}
+                <button type="button" class="remove-file" onclick="removeTestPaper()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        }
+
+        function removeTestPaper() {
+            testPaperFile = null;
+            document.getElementById('testPaperFile').value = '';
+            document.getElementById('testPaperName').innerHTML = '';
+            document.getElementById('testPaperName').className = 'file-name';
+        }
+
+        // ============================================================
         // SUBMIT
         // ============================================================
         async function handleSubmit(e) {
@@ -615,17 +647,23 @@
 
                 if (sessions.length === 0) throw new Error('Add at least one session.');
 
-                // School test (optional)
-                let schoolTest = null;
+                // School test validation
                 const testName = document.getElementById('testName').value.trim();
                 const testMark = document.getElementById('testMark').value;
                 const testTotal = document.getElementById('testTotal').value;
                 const testDate = document.getElementById('testDate').value;
 
-                if (testName || testMark || testTotal) {
+                const hasAnyTestField = testName || testMark || testTotal || testDate || testPaperFile;
+                let schoolTest = null;
+
+                if (hasAnyTestField) {
                     if (!testName || !testMark || !testTotal) {
-                        throw new Error('Please complete all school test fields (or leave them all empty).');
+                        throw new Error('School test requires: name, mark, and total.');
                     }
+                    if (!testPaperFile) {
+                        throw new Error('Please upload the test paper. Both mark and paper are required.');
+                    }
+
                     schoolTest = {
                         name: testName,
                         mark: parseInt(testMark),
@@ -636,7 +674,7 @@
 
                 const db = firebase.firestore();
 
-                // Check for existing log (same student + subject + week)
+                // Check for existing log
                 const existingSnapshot = await db.collection('weekly_logs')
                     .where('tutorUid', '==', currentTutorUid)
                     .where('studentUid', '==', student.studentUid)
@@ -657,7 +695,32 @@
                     isOverwrite = true;
                 }
 
-                // Data to save
+                // Upload test paper if present
+                let paperData = null;
+                if (testPaperFile) {
+                    const timestamp = Date.now();
+                    const safeName = testPaperFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                    const storagePath = 'test-papers/' + student.studentUid + '/' + timestamp + '_' + safeName;
+                    const storageRef = firebase.storage().ref(storagePath);
+
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading paper...';
+                    const snapshot = await storageRef.put(testPaperFile);
+                    const downloadURL = await snapshot.ref.getDownloadURL();
+
+                    paperData = {
+                        url: downloadURL,
+                        filename: testPaperFile.name,
+                        uploadedAt: new Date().toISOString(),
+                        uploadedBy: currentTutorUid
+                    };
+                }
+
+                // Add paper to school test
+                if (schoolTest && paperData) {
+                    schoolTest.paper = paperData;
+                }
+
+                // Log data
                 const logData = {
                     tutorUid: currentTutorUid,
                     tutorName: currentTutorName,
@@ -680,6 +743,8 @@
                     updatedAt: new Date().toISOString()
                 };
 
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving log...';
+
                 let docRef;
                 if (isOverwrite && !existingSnapshot.empty) {
                     docRef = existingSnapshot.docs[0].ref;
@@ -690,7 +755,7 @@
                     docRef = await db.collection('weekly_logs').add(logData);
                 }
 
-                // Build session list HTML
+                // Build email content
                 const sessionRows = sessions.map(function(s) {
                     const d = new Date(s.date + 'T' + s.time);
                     const dateStr = d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -700,21 +765,31 @@
                     </li>`;
                 }).join('');
 
-                const testHtml = schoolTest
-                    ? `<hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                let testHtml = '';
+                if (schoolTest) {
+                    testHtml = `<hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
                        <h3 style="color: #1e2a3a;">School Test Result</h3>
                        <p><strong>${schoolTest.name}</strong>${schoolTest.date ? ' — ' + new Date(schoolTest.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) : ''}</p>
-                       <p style="font-size: 1.3rem; color: #27ae60; font-weight: 700;">${schoolTest.mark} / ${schoolTest.total} (${Math.round(schoolTest.mark / schoolTest.total * 100)}%)</p>`
-                    : '';
+                       <p style="font-size: 1.3rem; color: #27ae60; font-weight: 700;">${schoolTest.mark} / ${schoolTest.total} (${Math.round(schoolTest.mark / schoolTest.total * 100)}%)</p>`;
 
-                // Format week ending
+                    if (schoolTest.paper) {
+                        testHtml += `<p style="margin-top: 10px;">
+                            <a href="${schoolTest.paper.url}" target="_blank" style="background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 0.9rem; display: inline-block;">
+                                📄 View Test Paper
+                            </a>
+                        </p>`;
+                    }
+                    testHtml += `</div>`;
+                }
+
+                // Format week label
                 const weekStartDate = new Date(weekOf);
                 const weekEndDate = new Date(weekStartDate);
                 weekEndDate.setDate(weekStartDate.getDate() + 6);
                 const weekLabel = weekStartDate.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) +
                                   ' - ' + weekEndDate.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
 
-                // Send email to parent
+                // Email to parent
                 await db.collection('mail').add({
                     to: student.parentEmail,
                     message: {
@@ -733,9 +808,7 @@
                                     <p><strong>Tutor:</strong> ${currentTutorName}</p>
                                     <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
                                     <h3 style="color: #1e2a3a;">Sessions (${sessions.length} sessions, ${totalHours} hours)</h3>
-                                    <ul style="padding-left: 20px;">
-                                        ${sessionRows}
-                                    </ul>
+                                    <ul style="padding-left: 20px;">${sessionRows}</ul>
                                     <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
                                     <h3 style="color: #1e2a3a;">Tutor Assessment</h3>
                                     <p style="font-size: 1.5rem; color: #f39c12; font-weight: 700; margin: 5px 0;">${tutorAssessment}%</p>
@@ -743,7 +816,7 @@
                                     ${testHtml}
                                     <hr style="margin: 25px 0; border: none; border-top: 1px solid #ddd;">
                                     <div style="text-align: center;">
-                                        <a href="https://aceed.co.za/parent-dashboard.html" style="background: #3498db; color: white; padding: 14px 35px; text-decoration: none; border-radius: 30px; font-weight: 600; display: inline-block;">
+                                        <a href="https://aceed.co.za/progress.html?student=${student.studentUid}&subject=${encodeURIComponent(subject)}" style="background: #3498db; color: white; padding: 14px 35px; text-decoration: none; border-radius: 30px; font-weight: 600; display: inline-block;">
                                             View Full Progress Report
                                         </a>
                                     </div>
@@ -759,7 +832,6 @@
 
                 showAlert('success', '✅ Weekly log saved and email sent to ' + student.parentEmail + '!');
 
-                // Reset after 3 seconds
                 setTimeout(function() {
                     window.location.href = 'tutor-dashboard.html';
                 }, 2500);
