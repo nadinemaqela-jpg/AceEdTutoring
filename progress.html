@@ -573,16 +573,18 @@
                         </div>
                     `;
                 }).join('');
-
+                
                 let testHtml = '';
                 if (log.schoolTest && log.schoolTest.name) {
                     const pct = log.schoolTest.total ? Math.round(log.schoolTest.mark / log.schoolTest.total * 100) : null;
                     testHtml = `
                         <div class="badge badge-test">
-                            📄 ${escapeHtml(log.schoolTest.name)}: ${log.schoolTest.mark}/${log.schoolTest.total}${pct != null ? ' (' + pct + '%)' : ''}
+                            🏫 School: ${escapeHtml(log.schoolTest.name)} — ${log.schoolTest.mark}/${log.schoolTest.total}${pct != null ? ' (' + pct + '%)' : ''}
                         </div>
                     `;
                 }
+                
+                
 
                 return `
                     <div class="log-entry" onclick="toggleLog(this)">
@@ -610,7 +612,7 @@
             }).join('');
         }
 
-        function buildTestDetails(log) {
+         function buildTestDetails(log) {
             let html = '';
         
             // ---- Tutor's own weekly test ----
