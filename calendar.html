@@ -836,13 +836,23 @@
                 `;
             }).join('');
 
+
             const testHtml = log.schoolTest ? `
                 <div class="modal-section">
                     <h4>School Test</h4>
                     <p style="margin-bottom: 8px;"><strong>${log.schoolTest.name}</strong>${log.schoolTest.date ? ' — ' + new Date(log.schoolTest.date + 'T00:00:00').toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) : ''}</p>
                     <span class="test-badge">${log.schoolTest.mark} / ${log.schoolTest.total} (${Math.round(log.schoolTest.mark / log.schoolTest.total * 100)}%)</span>
+                    ${log.schoolTest.paper ? `
+                        <div style="margin-top: 12px;">
+                            <a href="${log.schoolTest.paper.url}" target="_blank" rel="noopener"
+                               style="display: inline-flex; align-items: center; gap: 8px; background: #3498db; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
+                                <i class="fas fa-file-download"></i> View Test Paper
+                            </a>
+                        </div>
+                    ` : ''}
                 </div>
             ` : '';
+            
 
             document.getElementById('modalBody').innerHTML = `
                 <div class="modal-section">
