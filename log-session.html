@@ -14,18 +14,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log Weekly Session - AceEd Tutoring</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
-    <!-- Firebase Configuration -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
@@ -43,233 +40,85 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            min-height: 100vh;
-            padding: 30px 20px;
-        }
+        body { background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%); min-height: 100vh; padding: 30px 20px; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-        }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
 
-        .page-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
+        .page-header { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
         .page-header i { font-size: 2rem; color: #f39c12; }
         h1 { color: #1e2a3a; font-size: 1.6rem; }
         .subtitle { color: #7f8c8d; margin-bottom: 30px; font-size: 0.95rem; }
 
-        .form-section {
-            background: #f9f9f9;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .form-section h3 {
-            color: #1e2a3a;
-            font-size: 1.05rem;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .form-section { background: #f9f9f9; border-radius: 15px; padding: 25px; margin-bottom: 25px; }
+        .form-section h3 { color: #1e2a3a; font-size: 1.05rem; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
         .form-section h3 i { color: #f39c12; }
 
         .form-group { margin-bottom: 15px; }
-
-        .form-group label {
-            display: block;
-            color: #1e2a3a;
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
+        .form-group label { display: block; color: #1e2a3a; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px;
+            font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white;
         }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: border-color 0.2s;
-            background: white;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #3498db; }
         .form-group textarea { resize: vertical; min-height: 80px; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
-        /* Session Cards */
-        .session-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid #3498db;
-        }
-
-        .session-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
+        .session-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #3498db; }
+        .session-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .session-number { font-weight: 700; color: #3498db; font-size: 0.9rem; }
-
         .remove-session {
-            background: none;
-            border: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 5px 10px;
-            border-radius: 6px;
-            transition: background 0.2s;
+            background: none; border: none; color: #e74c3c; cursor: pointer;
+            font-size: 1rem; padding: 5px 10px; border-radius: 6px; transition: background 0.2s;
         }
-
         .remove-session:hover { background: #fee; }
 
-        /* Add Session Button */
         .add-session-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: white;
-            border: 2px dashed #3498db;
-            border-radius: 12px;
-            color: #3498db;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.95rem;
+            display: block; width: 100%; padding: 15px; background: white;
+            border: 2px dashed #3498db; border-radius: 12px; color: #3498db;
+            font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
         }
-
         .add-session-btn:hover { background: #f0f8ff; border-style: solid; }
 
-        /* File Upload */
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: block;
-        }
-
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-
+        .file-input-wrapper { position: relative; overflow: hidden; display: block; }
+        .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
         .file-input-btn {
-            display: block;
-            width: 100%;
-            padding: 12px 20px;
-            background: white;
-            border: 2px dashed #3498db;
-            border-radius: 10px;
-            color: #3498db;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            font-size: 0.9rem;
+            display: block; width: 100%; padding: 12px 20px; background: white;
+            border: 2px dashed #3498db; border-radius: 10px; color: #3498db;
+            font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; font-size: 0.9rem;
         }
-
         .file-input-btn:hover { background: #f0f8ff; border-style: solid; }
 
-        .file-name {
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: #27ae60;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .file-name { margin-top: 8px; font-size: 0.85rem; color: #27ae60; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .file-name.error { color: #e74c3c; }
-
-        .file-name .remove-file {
-            background: none;
-            border: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-size: 0.85rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
+        .file-name .remove-file { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; }
         .file-name .remove-file:hover { background: #fee; }
 
-        /* Actions */
-        .actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
+        .actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px; flex-wrap: wrap; }
 
         .btn {
-            padding: 14px 30px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
+            padding: 14px 30px; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; border: none; text-decoration: none; display: inline-flex;
+            align-items: center; gap: 8px; transition: all 0.3s;
         }
-
         .btn-primary { background: linear-gradient(135deg, #27ae60, #1e8449); color: white; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
         .btn-secondary { background: #ecf0f1; color: #1e2a3a; }
         .btn-secondary:hover { background: #d5dbdb; }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        /* Alerts */
-        .alert {
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-            font-size: 0.9rem;
-        }
-
+        .alert { padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: none; font-size: 0.9rem; }
         .alert.show { display: block; }
         .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #27ae60; }
         .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #e74c3c; }
         .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
 
-        /* Loading */
         .loading-screen { text-align: center; padding: 60px 20px; }
         .loading-screen .spinner { font-size: 3rem; color: #f39c12; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .helper-text { color: #7f8c8d; font-size: 0.8rem; margin-top: -8px; margin-bottom: 12px; }
 
         @media (max-width: 600px) {
             .container { padding: 25px 20px; }
@@ -332,8 +181,20 @@
                     <h3><i class="fas fa-star"></i> Weekly Summary</h3>
 
                     <div class="form-group">
-                        <label>Tutor Assessment (%) *</label>
+                        <label>Tutor Test Mark (%) *</label>
                         <input type="number" id="tutorAssessment" min="0" max="100" placeholder="e.g. 65" required>
+                        <div class="helper-text">The mark from the test you gave this week.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tutor Test Paper * (PDF or image, max 5MB)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="tutorTestFile" accept=".pdf,.png,.jpg,.jpeg" onchange="handleTutorTestSelect(event)">
+                            <label for="tutorTestFile" class="file-input-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> Choose File
+                            </label>
+                        </div>
+                        <div id="tutorTestName" class="file-name"></div>
                     </div>
 
                     <div class="form-group">
@@ -342,11 +203,11 @@
                     </div>
                 </div>
 
-                <!-- School Test -->
+                <!-- School Test (Optional) -->
                 <div class="form-section">
                     <h3><i class="fas fa-file-alt"></i> School Test (Optional)</h3>
                     <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 15px;">
-                        Fill in only if the student received a school test result this week. Paper and mark are both required if you fill any field.
+                        Only fill in if the parent has told you about a school test result. Leave empty if not.
                     </p>
 
                     <div class="form-group">
@@ -368,17 +229,6 @@
                     <div class="form-group">
                         <label>Test Date</label>
                         <input type="date" id="testDate">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Test Paper * (PDF or image, max 5MB)</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="testPaperFile" accept=".pdf,.png,.jpg,.jpeg" onchange="handleTestPaperSelect(event)">
-                            <label for="testPaperFile" class="file-input-btn">
-                                <i class="fas fa-cloud-upload-alt"></i> Choose File
-                            </label>
-                        </div>
-                        <div id="testPaperName" class="file-name"></div>
                     </div>
                 </div>
 
@@ -404,7 +254,7 @@
         let currentTutorEmail = '';
         let acceptedStudents = [];
         let sessionCounter = 0;
-        let testPaperFile = null;
+        let tutorTestFile = null;
 
         // ============================================================
         // AUTH CHECK
@@ -484,7 +334,6 @@
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
 
-            // Default week start (Monday of current week)
             const today = new Date();
             const day = today.getDay();
             const diff = today.getDate() - day + (day === 0 ? -6 : 1);
@@ -563,14 +412,14 @@
         }
 
         // ============================================================
-        // TEST PAPER UPLOAD
+        // TUTOR TEST PAPER UPLOAD
         // ============================================================
-        function handleTestPaperSelect(event) {
+        function handleTutorTestSelect(event) {
             const file = event.target.files[0];
-            const nameDiv = document.getElementById('testPaperName');
+            const nameDiv = document.getElementById('tutorTestName');
 
             if (!file) {
-                testPaperFile = null;
+                tutorTestFile = null;
                 nameDiv.innerHTML = '';
                 return;
             }
@@ -578,26 +427,26 @@
             if (file.size > 5 * 1024 * 1024) {
                 nameDiv.innerHTML = '❌ File too large (max 5MB)';
                 nameDiv.className = 'file-name error';
-                testPaperFile = null;
+                tutorTestFile = null;
                 event.target.value = '';
                 return;
             }
 
-            testPaperFile = file;
+            tutorTestFile = file;
             nameDiv.className = 'file-name';
             nameDiv.innerHTML = `
                 ✓ ${file.name}
-                <button type="button" class="remove-file" onclick="removeTestPaper()">
+                <button type="button" class="remove-file" onclick="removeTutorTest()">
                     <i class="fas fa-times"></i>
                 </button>
             `;
         }
 
-        function removeTestPaper() {
-            testPaperFile = null;
-            document.getElementById('testPaperFile').value = '';
-            document.getElementById('testPaperName').innerHTML = '';
-            document.getElementById('testPaperName').className = 'file-name';
+        function removeTutorTest() {
+            tutorTestFile = null;
+            document.getElementById('tutorTestFile').value = '';
+            document.getElementById('tutorTestName').innerHTML = '';
+            document.getElementById('tutorTestName').className = 'file-name';
         }
 
         // ============================================================
@@ -625,8 +474,9 @@
 
                 if (!subject) throw new Error('Please enter a subject.');
                 if (!weekOf) throw new Error('Please pick the week.');
-                if (isNaN(tutorAssessment) || tutorAssessment < 0 || tutorAssessment > 100) throw new Error('Tutor assessment must be 0-100.');
+                if (isNaN(tutorAssessment) || tutorAssessment < 0 || tutorAssessment > 100) throw new Error('Tutor test mark must be 0-100.');
                 if (!weeklyNotes) throw new Error('Please write weekly notes.');
+                if (!tutorTestFile) throw new Error('Please upload the tutor test paper. It is required every week.');
 
                 // Gather sessions
                 const sessions = [];
@@ -647,23 +497,19 @@
 
                 if (sessions.length === 0) throw new Error('Add at least one session.');
 
-                // School test validation
+                // School test (optional, no paper)
                 const testName = document.getElementById('testName').value.trim();
                 const testMark = document.getElementById('testMark').value;
                 const testTotal = document.getElementById('testTotal').value;
                 const testDate = document.getElementById('testDate').value;
 
-                const hasAnyTestField = testName || testMark || testTotal || testDate || testPaperFile;
+                const hasAnySchoolField = testName || testMark || testTotal;
                 let schoolTest = null;
 
-                if (hasAnyTestField) {
+                if (hasAnySchoolField) {
                     if (!testName || !testMark || !testTotal) {
-                        throw new Error('School test requires: name, mark, and total.');
+                        throw new Error('School test requires: name, mark, and total (or leave all blank).');
                     }
-                    if (!testPaperFile) {
-                        throw new Error('Please upload the test paper. Both mark and paper are required.');
-                    }
-
                     schoolTest = {
                         name: testName,
                         mark: parseInt(testMark),
@@ -674,7 +520,7 @@
 
                 const db = firebase.firestore();
 
-                // Check for existing log
+                // Check existing log
                 const existingSnapshot = await db.collection('weekly_logs')
                     .where('tutorUid', '==', currentTutorUid)
                     .where('studentUid', '==', student.studentUid)
@@ -695,30 +541,21 @@
                     isOverwrite = true;
                 }
 
-                // Upload test paper if present
-                let paperData = null;
-                if (testPaperFile) {
-                    const timestamp = Date.now();
-                    const safeName = testPaperFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-                    const storagePath = 'test-papers/' + student.studentUid + '/' + timestamp + '_' + safeName;
-                    const storageRef = firebase.storage().ref(storagePath);
+                // Upload tutor test paper
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading paper...';
+                const timestamp = Date.now();
+                const safeName = tutorTestFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const storagePath = 'tutor-test-papers/' + student.studentUid + '/' + timestamp + '_' + safeName;
+                const storageRef = firebase.storage().ref(storagePath);
+                const snapshot = await storageRef.put(tutorTestFile);
+                const downloadURL = await snapshot.ref.getDownloadURL();
 
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading paper...';
-                    const snapshot = await storageRef.put(testPaperFile);
-                    const downloadURL = await snapshot.ref.getDownloadURL();
-
-                    paperData = {
-                        url: downloadURL,
-                        filename: testPaperFile.name,
-                        uploadedAt: new Date().toISOString(),
-                        uploadedBy: currentTutorUid
-                    };
-                }
-
-                // Add paper to school test
-                if (schoolTest && paperData) {
-                    schoolTest.paper = paperData;
-                }
+                const tutorTest = {
+                    url: downloadURL,
+                    filename: tutorTestFile.name,
+                    uploadedAt: new Date().toISOString(),
+                    uploadedBy: currentTutorUid
+                };
 
                 // Log data
                 const logData = {
@@ -737,6 +574,7 @@
                     totalHours: totalHours,
                     sessionCount: sessions.length,
                     tutorAssessment: tutorAssessment,
+                    tutorTest: tutorTest,
                     weeklyNotes: weeklyNotes,
                     schoolTest: schoolTest,
                     status: 'submitted',
@@ -755,7 +593,7 @@
                     docRef = await db.collection('weekly_logs').add(logData);
                 }
 
-                // Build email content
+                // Build email
                 const sessionRows = sessions.map(function(s) {
                     const d = new Date(s.date + 'T' + s.time);
                     const dateStr = d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -765,24 +603,14 @@
                     </li>`;
                 }).join('');
 
-                let testHtml = '';
+                let schoolTestHtml = '';
                 if (schoolTest) {
-                    testHtml = `<hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-                       <h3 style="color: #1e2a3a;">School Test Result</h3>
+                    schoolTestHtml = `<hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                       <h3 style="color: #1e2a3a;">School Test</h3>
                        <p><strong>${schoolTest.name}</strong>${schoolTest.date ? ' — ' + new Date(schoolTest.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) : ''}</p>
-                       <p style="font-size: 1.3rem; color: #27ae60; font-weight: 700;">${schoolTest.mark} / ${schoolTest.total} (${Math.round(schoolTest.mark / schoolTest.total * 100)}%)</p>`;
-
-                    if (schoolTest.paper) {
-                        testHtml += `<p style="margin-top: 10px;">
-                            <a href="${schoolTest.paper.url}" target="_blank" style="background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 0.9rem; display: inline-block;">
-                                📄 View Test Paper
-                            </a>
-                        </p>`;
-                    }
-                    testHtml += `</div>`;
+                       <p style="font-size: 1.3rem; color: #3498db; font-weight: 700;">${schoolTest.mark} / ${schoolTest.total} (${Math.round(schoolTest.mark / schoolTest.total * 100)}%)</p>`;
                 }
 
-                // Format week label
                 const weekStartDate = new Date(weekOf);
                 const weekEndDate = new Date(weekStartDate);
                 weekEndDate.setDate(weekStartDate.getDate() + 6);
@@ -810,10 +638,11 @@
                                     <h3 style="color: #1e2a3a;">Sessions (${sessions.length} sessions, ${totalHours} hours)</h3>
                                     <ul style="padding-left: 20px;">${sessionRows}</ul>
                                     <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-                                    <h3 style="color: #1e2a3a;">Tutor Assessment</h3>
+                                    <h3 style="color: #1e2a3a;">Tutor Test</h3>
                                     <p style="font-size: 1.5rem; color: #f39c12; font-weight: 700; margin: 5px 0;">${tutorAssessment}%</p>
-                                    <p><strong>Notes:</strong><br>${weeklyNotes}</p>
-                                    ${testHtml}
+                                    <p><a href="${tutorTest.url}" target="_blank" style="background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 0.9rem; display: inline-block; margin-top: 8px;">📄 View Test Paper</a></p>
+                                    <p style="margin-top: 15px;"><strong>Weekly Notes:</strong><br>${weeklyNotes}</p>
+                                    ${schoolTestHtml}
                                     <hr style="margin: 25px 0; border: none; border-top: 1px solid #ddd;">
                                     <div style="text-align: center;">
                                         <a href="https://aceed.co.za/progress.html?student=${student.studentUid}&subject=${encodeURIComponent(subject)}" style="background: #3498db; color: white; padding: 14px 35px; text-decoration: none; border-radius: 30px; font-weight: 600; display: inline-block;">
