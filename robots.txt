@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Private pages - do not index
+Disallow: /admin.html
+Disallow: /parent-dashboard.html
+Disallow: /tutor-dashboard.html
+Disallow: /member-dashboard.html
+Disallow: /cart.html
+Disallow: /checkout.html
+Disallow: /log-session.html
+Disallow: /progress.html
+Disallow: /calendar.html
+Disallow: /signin.html
+Disallow: /signup.html
+Disallow: /confirm-payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /payment-notify.html
+
+Sitemap: https://aceed.co.za/sitemap.xml
