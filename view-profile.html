@@ -346,6 +346,22 @@
         }
 
         document.addEventListener('DOMContentLoaded', loadProfile);
+
+                function generateTimeSlots(availability) {
+            if (!availability || Object.keys(availability).length === 0) {
+                return `<div style="grid-column: 1/-1; padding: 20px; text-align: center; color: #64748b;">No availability set by tutor yet. Please check back later.</div>`;
+            }
+
+            let slotsHTML = '';
+            // Loop through the days the tutor is available
+            for (const [day, times] of Object.entries(availability)) {
+                if (times.start && times.end) {
+                    // We display it exactly how they entered it: "Monday 14:00 - 16:00"
+                    slotsHTML += `<div class="time-slot" data-day="${day}" data-start="${times.start}" data-end="${times.end}">${day} ${times.start} - ${times.end}</div>`;
+                }
+            }
+            return slotsHTML;
+        }
     </script>
 </body>
 </html>
