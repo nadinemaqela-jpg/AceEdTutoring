@@ -859,15 +859,18 @@
             </div>
         </div>
 
-        <!-- Upcoming Bookings (Placeholder) -->
-        <div class="requests-section">
+        <!-- NEW: PENDING BOOKING REQUESTS -->
+        <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #8b5cf6;">
             <h2>
-                <span><i class="fas fa-calendar-alt"></i> Upcoming Bookings</span>
+                <span><i class="fas fa-calendar-check" style="color: #8b5cf6;"></i> 1-on-1 Booking Requests</span>
+                <span class="badge" id="bookingBadge" style="background: #8b5cf6;">0</span>
             </h2>
-            <div id="upcomingBookings">
+            <p style="color: #64748b; margin-bottom: 15px; font-size: 0.9rem;">These are once-off session requests from parents. Please accept or decline within 24 hours.</p>
+            
+            <div id="bookingRequestsList">
                 <div class="empty-state">
-                    <i class="fas fa-calendar" style="color: #3498db;"></i>
-                    <p>No upcoming bookings yet.</p>
+                    <i class="fas fa-calendar" style="color: #8b5cf6;"></i>
+                    <p>No new booking requests at the moment.</p>
                 </div>
             </div>
         </div>
@@ -1022,6 +1025,8 @@
                     document.getElementById('tutorContent').style.display = 'block';
                     document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
                     loadAssignedRequests();
+                    loadBookingRequests(); 
+                    loadTutorAvailability();
                 } else if (role === 'pending_tutor') {
                     document.getElementById('pendingTutorMessage').style.display = 'block';
                 } else {
@@ -1332,7 +1337,159 @@
             }
             window.location.href = 'progress.html?student=' + encodeURIComponent(childId) + '&subject=' + encodeURIComponent(subject);
         }
-        
+
+                // ============================================================
+        // LOAD & MANAGE BOOKING REQUESTS (1-on-1)
+        // ============================================================
+        async function loadBookingRequests() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            const db = firebase.firestore();
+            const container = document.getElementById('bookingRequestsList');
+            const badge = document.getElementById('bookingBadge');
+
+            try {
+                // Get all bookings for this tutor that are pending confirmation
+                const snapshot = await db.collection('bookings')
+                    .where('tutorId', '==', user.uid)
+                    .where('status', '==', 'pending_tutor_confirmation')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar" style="color: #8b5cf6;"></i>
+                            <p>No new booking requests at the moment.</p>
+                        </div>
+                    `;
+                    if (badge) badge.textContent = '0';
+                    return;
+                }
+
+                let html = '';
+                let count = 0;
+
+                snapshot.forEach(doc => {
+                    count++;
+                    const req = doc.data();
+                    
+                    html += `
+                        <div class="request-card" style="border-left: 4px solid #8b5cf6;">
+                            <div class="request-header">
+                                <h3>${req.parentEmail.split('@')[0]}</h3>
+                                <span class="status assigned">Pending Confirmation</span>
+                            </div>
+                            <div class="request-details">
+                                <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
+                                <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
+                                <div><i class="fas fa-money-bill"></i> Payout: <strong>R${req.totalPrice || (req.duration * 180)}</strong></div>
+                            </div>
+                            <div class="request-actions">
+                                <button class="btn accept" onclick="confirmBooking('${doc.id}', 'accept')">
+                                    <i class="fas fa-check"></i> Accept & Confirm
+                                </button>
+                                <button class="btn decline" onclick="confirmBooking('${doc.id}', 'decline')">
+                                    <i class="fas fa-times"></i> Decline
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+                if (badge) badge.textContent = count;
+
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // ============================================================
+        // ACCEPT OR DECLINE BOOKING (WITH EMAILS)
+        // ============================================================
+        async function confirmBooking(bookingId, action) {
+            const isAccept = action === 'accept';
+            const confirmMsg = isAccept 
+                ? 'Accept this booking? The parent will be emailed and asked to pay.' 
+                : 'Decline this booking? The parent will be notified.';
+            
+            if (!confirm(confirmMsg)) return;
+
+            const db = firebase.firestore();
+            const user = firebase.auth().currentUser;
+
+            try {
+                // 1. Get the booking details
+                const bookingRef = db.collection('bookings').doc(bookingId);
+                const bookingDoc = await bookingRef.get();
+                const booking = bookingDoc.data();
+
+                // 2. Update the status
+                const newStatus = isAccept ? 'confirmed_pending_payment' : 'declined_by_tutor';
+                await bookingRef.update({
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                // 3. Send Email to Parent
+                const emailSubject = isAccept 
+                    ? '✅ Booking Confirmed: ' + booking.tutorName 
+                    : 'Update on your booking request';
+                
+                const emailHtml = isAccept 
+                    ? `
+                        <h2>Your Booking is Confirmed!</h2>
+                        <p>Great news! The tutor has accepted your request for:</p>
+                        <p style="background:#f0fdf4; padding: 15px; border-radius: 8px;">
+                            <strong>Time:</strong> ${booking.timeSlot}<br>
+                            <strong>Duration:</strong> ${booking.duration} Hour(s)<br>
+                            <strong>Tutor:</strong> ${booking.tutorName}
+                        </p>
+                        <p><strong>Next Step:</strong> Please click the link below to complete your payment. Your slot is not secured until payment is made.</p>
+                        <p><a href="https://aceed.co.za/checkout.html?bookingId=${bookingId}" style="background: #27ae60; color: white; padding: 12px 25px; text-decoration: none; border-radius: 30px; display: inline-block;">Pay Now</a></p>
+                    `
+                    : `
+                        <h2>Booking Request Declined</h2>
+                        <p>Unfortunately, the tutor is no longer available for the time you requested:</p>
+                        <p style="background:#f8d7da; padding: 15px; border-radius: 8px;">
+                            <strong>Time:</strong> ${booking.timeSlot}<br>
+                            <strong>Tutor:</strong> ${booking.tutorName}
+                        </p>
+                        <p>Our team has been notified and will help you find a new tutor or a new time slot.</p>
+                    `;
+
+                await db.collection('mail').add({
+                    to: booking.parentEmail,
+                    message: {
+                        subject: emailSubject,
+                        html: buildEmailBody(emailHtml) // Uses your existing email template function
+                    }
+                });
+
+                // 4. Send Email to Admin
+                await db.collection('mail').add({
+                    to: 'admin@aceed.co.za',
+                    message: {
+                        subject: `Tutor ${isAccept ? 'Accepted' : 'Declined'} Booking`,
+                        html: buildEmailBody(`
+                            <h2>Booking Update</h2>
+                            <p><strong>Tutor:</strong> ${booking.tutorName}</p>
+                            <p><strong>Parent:</strong> ${booking.parentEmail}</p>
+                            <p><strong>Time:</strong> ${booking.timeSlot}</p>
+                            <p><strong>Status:</strong> ${isAccept ? 'Accepted - Waiting for Payment' : 'Declined - Needs Reassignment'}</p>
+                        `)
+                    }
+                });
+
+                alert(isAccept ? '✅ Booking accepted! Parent notified.' : '❌ Booking declined.');
+                loadBookingRequests(); // Reload the list
+
+            } catch (error) {
+                console.error('Error updating booking:', error);
+                alert('Error: ' + error.message);
+            }
+        }
     </script>
     
 </body>
