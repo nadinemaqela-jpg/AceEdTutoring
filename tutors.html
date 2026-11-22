@@ -13,18 +13,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Tutors | AceEd Tutoring</title>
-    <meta name="description" content="Meet our team of university student tutors who help Grade 6-12 learners. Request a long-term tutor today.">
+    <meta name="description" content="Meet our expert tutors who help Grade 6-12 learners. Book a single, once-off session today.">
     
-    <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -38,7 +34,6 @@
         
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
 
-        /* HEADER & NAVIGATION */
         header { background: #ffffff; color: #1e2a3a; padding: 20px; border-bottom: 1px solid #e2e8f0; position: relative; z-index: 100; }
         .logo-image { max-width: 250px; margin: 0 auto; text-align: center; }
         .logo-image img { width: 100%; max-height: 60px; object-fit: contain; }
@@ -57,7 +52,6 @@
         .icon-btn { background: none; border: none; color: #1e2a3e; font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .icon-btn:hover { color: #2563eb; }
 
-        /* SIDEBARS */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease; }
         .sidebar-overlay.active { display: block; opacity: 1; }
         .sidebar { position: fixed; top: 0; width: 300px; height: 100%; background: #ffffff; color: #1e2a3e; z-index: 1001; padding: 30px 20px; overflow-y: auto; transition: transform 0.3s ease; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
@@ -71,27 +65,27 @@
         .sidebar a:hover { color: #2563eb; }
         .sidebar a i { width: 25px; color: #2563eb; }
 
-        /* PAGE HEADER & INFO BANNER */
         .page-header { margin: 40px 0 20px; }
         .page-header h1 { font-size: 2.2rem; color: #1e2a3e; margin-bottom: 5px; font-weight: 700; }
         .page-header p { color: #64748b; font-size: 1.1rem; }
 
-        /* TRUST BANNER */
+        /* TRUST BANNER & DISCLAIMER */
         .trust-banner { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; gap: 15px; align-items: center; }
         .trust-banner i { color: #166534; font-size: 2rem; }
         .trust-banner h4 { color: #166534; margin-bottom: 2px; font-size: 1rem; }
         .trust-banner p { color: #15803d; font-size: 0.9rem; }
+        
+        .disclaimer-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 15px 20px; margin-bottom: 30px; display: flex; gap: 15px; align-items: flex-start; }
+        .disclaimer-box i { color: #2563eb; font-size: 1.2rem; margin-top: 2px; }
+        .disclaimer-box p { color: #1e3a8a; font-size: 0.95rem; }
 
-        /* FILTERS */
         .filter-section { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap; }
         .filter-group { display: flex; flex-direction: column; gap: 8px; min-width: 220px; flex: 1; }
         .filter-group label { font-weight: 600; font-size: 0.85rem; color: #1e2a3e; }
         .filter-group select { padding: 10px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; background: #f8fafc; cursor: pointer; }
         .filter-group select:focus { border-color: #2563eb; }
 
-        /* TUTOR CARDS */
         .tutors-list { display: flex; flex-direction: column; gap: 20px; margin: 20px 0; }
-        
         .tutor-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; gap: 25px; align-items: flex-start; transition: transform 0.2s ease, box-shadow 0.2s ease; position: relative; }
         .tutor-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: #cbd5e1; }
 
@@ -101,27 +95,20 @@
         .tutor-info { flex-grow: 1; }
         .tutor-header { display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
         .tutor-name { font-size: 1.4rem; color: #1e2a3e; font-weight: 700; }
-        
         .verified-badge { background: #eff6ff; color: #2563eb; font-size: 0.75rem; padding: 3px 8px; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-
         .tutor-education { color: #2563eb; font-weight: 500; font-size: 0.9rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-
         .tutor-meta { color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .tutor-meta span { display: flex; align-items: center; gap: 5px; }
-        
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
         .tag { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; }
-        
         .bio { color: #64748b; font-size: 0.95rem; margin-bottom: 15px; }
 
         .tutor-action { flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; border-left: 1px solid #e2e8f0; padding-left: 25px; min-width: 200px; }
-        
         .btn-primary { display: block; width: 100%; text-align: center; background: #1e3a8a; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: background 0.2s; margin-bottom: 10px; }
         .btn-primary:hover { background: #172554; }
         .btn-secondary { display: block; width: 100%; text-align: center; background: white; color: #1e2a3e; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; border: 1px solid #cbd5e1; transition: all 0.2s; }
         .btn-secondary:hover { background: #f8fafc; border-color: #94a3b8; }
 
-        /* FOOTER */
         .footer-modern { background: white; color: #64748b; margin-top: 60px; padding: 40px 0 20px; border-top: 1px solid #e2e8f0; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px; }
         .footer-col h4 { color: #1e2a3e; font-size: 1.1rem; margin-bottom: 15px; }
@@ -131,7 +118,6 @@
         .footer-col ul li a:hover { color: #1e3a8a; }
         .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #f1f5f9; font-size: 0.85rem; }
 
-        /* RESPONSIVE */
         @media (max-width: 768px) {
             .tutor-card { flex-direction: column; align-items: center; text-align: center; }
             .tutor-image-wrapper { margin-bottom: 15px; }
@@ -141,12 +127,11 @@
             .tags { justify-content: center; }
             .tutor-action { border-left: none; border-top: 1px solid #e2e8f0; padding-left: 0; padding-top: 20px; width: 100%; }
             .filter-section { flex-direction: column; }
-            .trust-banner { flex-direction: column; text-align: center; }
+            .trust-banner, .disclaimer-box { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
-    <!-- SIDEBARS -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
         <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
@@ -170,13 +155,12 @@
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
     </div>
 
-    <!-- HEADER -->
     <header>
         <div class="container">
             <div class="logo-image">
                 <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x60?text=AceEd'">
             </div>
-            <div class="tagline">Expert Tutoring for Grade 6 to 12 Students</div>
+            <div class="tagline">Tutoring for Grade 6 to 12 Students</div>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <div class="dropdown">
@@ -191,7 +175,7 @@
                         <a href="grades/grade-12/index.html">Grade 12</a>
                     </div>
                 </div>
-                <a href="tutors.html" class="nav-link" style="color:#2563eb; font-weight:700;">Our Tutors</a>
+                <a href="tutors.html" class="nav-link" style="color:#2563eb; font-weight:700;">Tutors</a>
                 <button class="icon-btn" onclick="openSidebar('profile')"><i class="fas fa-user-circle"></i></button>
                 <button class="icon-btn" onclick="openSidebar('dot')"><i class="fas fa-ellipsis-v"></i></button>
             </div>
@@ -199,13 +183,11 @@
     </header>
     
     <div class="container">
-        <!-- PAGE HEADER -->
         <div class="page-header">
-            <h1>Meet Our Expert Tutors</h1>
+            <h1>Meet Our Tutors</h1>
             <p>Qualified university students ready to help you ace your exams.</p>
         </div>
 
-        <!-- TRUST BANNER -->
         <div class="trust-banner">
             <i class="fas fa-shield-check"></i>
             <div>
@@ -214,7 +196,12 @@
             </div>
         </div>
 
-        <!-- FILTER BAR -->
+        <!-- DISCLAIMER FOR ONCE-OFF SESSIONS -->
+        <div class="disclaimer-box">
+            <i class="fas fa-info-circle"></i>
+            <p><strong>Important:</strong> Booking through this page is for <strong>once-off, individual tutoring sessions</strong>. If you are looking for a consistent, long-term tutor, please submit a request through your Parent Dashboard.</p>
+        </div>
+
         <div class="filter-section">
             <div class="filter-group">
                 <label for="filterSubject">Filter by Subject</label>
@@ -247,7 +234,6 @@
             </div>
         </div>
         
-        <!-- TUTOR LIST -->
         <div class="tutors-list" id="tutorsList">
             <div style="text-align: center; padding: 40px;">
                 <i class="fas fa-spinner fa-spin fa-3x" style="color: #2563eb;"></i>
@@ -256,19 +242,18 @@
         </div>
     </div>
     
-    <!-- FOOTER -->
     <footer class="footer-modern">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 6–12 students across South Africa with expert CAPS-aligned tutoring.</p>
+                    <p>Empowering Grade 6–12 students across South Africa with CAPS-aligned tutoring.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="tutors.html">Our Tutors</a></li>
+                        <li><a href="tutors.html">Tutors</a></li>
                         <li><a href="parent-dashboard.html">Parent Dashboard</a></li>
                         <li><a href="pricing.html">Pricing</a></li>
                     </ul>
@@ -294,7 +279,6 @@
             messagingSenderId: "225577605291",
             appId: "1:225577605291:web:75327bc4e1f644cef47fee"
         };
-        
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
         function openSidebar(type) {
@@ -341,24 +325,32 @@
 
         let allTutors = [];
 
+        // UPDATED FALLBACK DATA
         const fallbackTutors = [
             {
                 id: "nkululeko", fullName: "Nkululeko", location: "Online Nationwide",
-                university: "University of Cape Town", degree: "BSc Applied Mathematics", hours: 120,
+                university: "UKZN", degree: "Mechanical Engineering", hours: "", // Blank as requested
                 subjects: ["Mathematics (Gr 10-12)", "Physical Sciences (Gr 10-12)", "Life Sciences (Gr 10-12)"],
                 bio: "I focus heavily on past papers and exam technique, helping Matrics jump from 50% to 70%+ in Maths and Physics.",
                 image: "tutors/nkululeko.png"
             },
             {
-                id: "mihlali", fullName: "Mihlali", location: "Online Nationwide",
-                university: "Stellenbosch University", degree: "BEng Civil Engineering", hours: 85,
+                id: "mihlali", fullName: "Mihlali Nadine", location: "Stellenbosch, WC",
+                university: "Stellenbosch University", degree: "Data Engineering", hours: "", 
                 subjects: ["Mathematics (Gr 10-12)", "Mathematical Literacy (Gr 10-12)", "Physical Sciences (Gr 10-12)"],
                 bio: "Engineering student with a proven track record of helping students break down complex equations step-by-step.",
                 image: "tutors/mihlali.png"
             },
             {
-                id: "cindy-lee", fullName: "Cindy-Lee", location: "Online Nationwide",
-                university: "University of KwaZulu-Natal", degree: "BCom Accounting", hours: 210,
+                id: "fortunate", fullName: "Fortunate", location: "Stellenbosch, WC",
+                university: "Stellenbosch University", degree: "Data Engineering", hours: "",
+                subjects: ["Mathematics (Gr 10-12)", "Physics (Gr 10-12)", "Life Sciences (Gr 10-12)", "Geography (Gr 10-12)"],
+                bio: "Committed to academic excellence and helping students reach their full potential.",
+                image: "tutors/fortunate.png"
+            },
+            {
+                id: "cindy-lee", fullName: "Cindy-Lee", location: "Stellenbosch, WC",
+                university: "Stellenbosch University", degree: "", hours: "", // Blank degree as requested
                 subjects: ["Mathematics (Gr 6-12)", "English HL (Gr 6-12)", "Afrikaans (Gr 6-12)", "Life Sciences (Gr 10-12)", "Accounting (Gr 10-12)"],
                 bio: "Versatile tutor specializing in Languages and Accounting. I guarantee a patient, structured approach to learning.",
                 image: "tutors/Cindy-Lee Langford_DYL.jpg"
@@ -382,8 +374,8 @@
                             fullName: data.fullName || 'Tutor',
                             location: "Online Nationwide",
                             university: data.university || "University Student",
-                            degree: data.degree || "Bachelor's Degree",
-                            hours: data.hoursTutored || 50, 
+                            degree: data.degree || "",
+                            hours: data.hoursTutored || "", 
                             subjects: data.subjects || ["General Tutoring"],
                             bio: data.bio || "Experienced tutor ready to help you succeed.",
                             image: `tutors/${data.fullName.split(' ')[0].toLowerCase()}.png`,
@@ -417,6 +409,9 @@
                 let subjectTags = tutor.subjects.map(sub => `<span class="tag">${sub}</span>`).join('');
                 const fallbackImage = `https://via.placeholder.com/140x140/f1f5f9/64748b?text=${tutor.fullName.charAt(0)}`;
 
+                // Only show hours if the string is not empty
+                const hoursText = tutor.hours ? `<span><i class="fas fa-history"></i> ${tutor.hours}+ hours tutored</span>` : '';
+
                 html += `
                     <div class="tutor-card" 
                          data-subjects="${tutor.subjects.join(' ').toLowerCase()}"
@@ -433,25 +428,25 @@
                             </div>
                             
                             <div class="tutor-education">
-                                <i class="fas fa-graduation-cap"></i> ${tutor.university} • ${tutor.degree}
+                                <i class="fas fa-graduation-cap"></i> ${tutor.university} ${tutor.degree ? '• ' + tutor.degree : ''}
                             </div>
 
                             <div class="tutor-meta">
                                 <span><i class="fas fa-globe"></i> ${tutor.location}</span>
                                 <span><i class="fas fa-laptop-house"></i> Online Only</span>
-                                <span><i class="fas fa-history"></i> ${tutor.hours}+ hours tutored</span>
+                                ${hoursText}
                             </div>
                             
                             <div class="tags">
                                 ${subjectTags}
                             </div>
                             
-                            <!-- STANDARD BIO -->
                             <p class="bio">${tutor.bio}</p>
                         </div>
 
                         <div class="tutor-action">
-                            <a href="parent-dashboard.html" class="btn-primary">Hire the Tutor</a>
+                            <!-- HIRE BUTTON GOES TO PROFILE WHERE THEY SELECT TIMES -->
+                            <a href="view-profile.html?tutorId=${tutor.id}" class="btn-primary">Hire the Tutor</a>
                             <a href="view-profile.html?tutorId=${tutor.id}" class="btn-secondary">View Profile</a>
                         </div>
                     </div>
