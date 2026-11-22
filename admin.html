@@ -1463,13 +1463,25 @@
                     status: newStatus,
                     updatedAt: new Date().toISOString()
                 });
-    
-                const newRole = newStatus === 'approved' ? 'tutor' : 'rejected_tutor';
-                await db.collection('users').doc(id).update({
+                    const newRole = newStatus === 'approved' ? 'tutor' : 'rejected_tutor';
+                
+                // Copy all the application data to their public user profile!
+                const userUpdateData = {
                     role: newRole,
                     status: newStatus,
-                    updatedAt: new Date().toISOString()
-                });
+                    updatedAt: new Date().toISOString(),
+                    fullName: app.fullName,
+                    email: app.email,
+                    subjects: app.subjects || [],
+                    grades: app.grades || [],
+                    showProfile: app.showProfile,
+                    university: app.university || "", 
+                    degree: app.degree || "",           
+                    hoursTutored: app.hoursTutored || 0,
+                    availability: app.availability || {} 
+                };
+
+                await db.collection('users').doc(id).set(userUpdateData, { merge: true });
     
                 // Email to applicant
                 if (newStatus === 'approved') {
