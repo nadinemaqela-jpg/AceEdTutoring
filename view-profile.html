@@ -95,6 +95,38 @@
 
         let currentTutor = null;
 
+        // BACKUP DATA FOR TESTING
+        const fallbackTutors = {
+            "nkululeko": {
+                id: "nkululeko", fullName: "Nkululeko", 
+                university: "UKZN", degree: "Mechanical Engineering",
+                subjects: ["Mathematics (Gr 10-12)", "Physical Sciences (Gr 10-12)", "Life Sciences (Gr 10-12)"],
+                bio: "I focus heavily on past papers and exam technique, helping Matrics jump from 50% to 70%+ in Maths and Physics.",
+                email: "nkululeko@test.com"
+            },
+            "mihlali": {
+                id: "mihlali", fullName: "Mihlali Nadine", 
+                university: "Stellenbosch University", degree: "Data Engineering",
+                subjects: ["Mathematics (Gr 10-12)", "Mathematical Literacy (Gr 10-12)", "Physical Sciences (Gr 10-12)"],
+                bio: "Engineering student with a proven track record of helping students break down complex equations step-by-step.",
+                email: "mihlali@test.com"
+            },
+            "cindy-lee": {
+                id: "cindy-lee", fullName: "Cindy-Lee", 
+                university: "Stellenbosch University", degree: "",
+                subjects: ["Mathematics (Gr 6-12)", "English HL (Gr 6-12)", "Afrikaans (Gr 6-12)", "Life Sciences (Gr 10-12)", "Accounting (Gr 10-12)"],
+                bio: "Versatile tutor specializing in Languages and Accounting. I guarantee a patient, structured approach to learning.",
+                email: "cindy@test.com"
+            },
+            "fortunate": {
+                id: "fortunate", fullName: "Fortunate", 
+                university: "Stellenbosch University", degree: "Data Engineering",
+                subjects: ["Mathematics (Gr 10-12)", "Physics (Gr 10-12)", "Life Sciences (Gr 10-12)", "Geography (Gr 10-12)"],
+                bio: "Committed to academic excellence and helping students reach their full potential.",
+                email: "fortunate@test.com"
+            }
+        };
+
         function buildEmailBody(innerHtml) {
             return `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -118,30 +150,31 @@
             try {
                 const doc = await db.collection('users').doc(tutorId).get();
                 
-                if (!doc.exists) {
-                    // Fallback logic if not in DB yet (like Cindy-Lee)
-                    const fallbackData = {
-                        id: tutorId,
-                        fullName: tutorId === 'cindy-lee' ? 'Cindy-Lee' : 'Tutor',
-                        university: "Stellenbosch University",
-                        degree: "",
-                        bio: "Versatile tutor specializing in Languages and Accounting.",
-                        subjects: ["Mathematics", "English HL", "Afrikaans", "Life Sciences", "Accounting"],
-                        email: "tutor@aceed.co.za"
-                    };
-                    if (tutorId === 'nkululeko') { fallbackData.fullName = "Nkululeko"; fallbackData.university = "UKZN"; fallbackData.degree = "Mechanical Engineering"; }
-                    if (tutorId === 'mihlali') { fallbackData.fullName = "Mihlali Nadine"; fallbackData.degree = "Data Engineering"; }
-                    
-                    currentTutor = fallbackData;
-                } else {
+                // If found in database
+                if (doc.exists) {
                     currentTutor = { id: doc.id, ...doc.data() };
+                } 
+                // If NOT found in database, use the fallback
+                else if (fallbackTutors[tutorId]) {
+                    currentTutor = fallbackTutors[tutorId];
+                } 
+                // If truly not found anywhere
+                else {
+                    document.getElementById('profileContainer').innerHTML = `<h2 style="grid-column:1/-1; text-align:center; padding:50px;">Tutor not found.</h2>`;
+                    return;
                 }
                 
                 renderProfile(currentTutor);
 
             } catch (error) {
-                console.error("Error loading profile:", error);
-                document.getElementById('profileContainer').innerHTML = `<h2 style="grid-column:1/-1; text-align:center; padding:50px;">Error loading profile.</h2>`;
+                console.error("Error loading profile from Firebase. Trying fallback...", error);
+                // Fallback on database error too
+                if (fallbackTutors[tutorId]) {
+                    currentTutor = fallbackTutors[tutorId];
+                    renderProfile(currentTutor);
+                } else {
+                    document.getElementById('profileContainer').innerHTML = `<h2 style="grid-column:1/-1; text-align:center; padding:50px;">Error loading profile.</h2>`;
+                }
             }
         }
 
@@ -257,7 +290,7 @@
                 await db.collection('bookings').add({
                     tutorId: currentTutor.id,
                     tutorName: currentTutor.fullName,
-                    tutorEmail: currentTutor.email || 'tutor@aceed.co.za', // Assuming tutor email exists
+                    tutorEmail: currentTutor.email || 'tutor@aceed.co.za',
                     parentEmail: parentEmail,
                     timeSlot: selectedTime.textContent,
                     duration: duration,
