@@ -1937,7 +1937,7 @@
             renderInvoices(filter);
         }
         
-        function viewInvoice(id) {
+                function viewInvoice(id) {
             const inv = allInvoices.find(i => i.id === id);
             if (!inv) return;
         
@@ -1945,8 +1945,8 @@
                 `<tr>
                     <td>${item.name}</td>
                     <td style="text-align:center;">${item.qty}</td>
-                    <td style="text-align:right;">R${item.rate.toFixed(2)}</td>
-                    <td style="text-align:right;">R${item.total.toFixed(2)}</td>
+                    <td style="text-align:right;">R${(item.rate || 0).toFixed(2)}</td>
+                    <td style="text-align:right;">R${(item.total || 0).toFixed(2)}</td>
                 </tr>`
             ).join('');
         
@@ -1961,7 +1961,7 @@
         
                 paymentSection += `
                     <hr style="margin:15px 0;">
-                    <h4>Payment Details</h4>
+                    <h4 style="margin-bottom: 10px;">Payment Details</h4>
                     <div class="detail-row"><span class="label">Method</span><span class="value">${methodLabel}</span></div>
                 `;
         
@@ -1971,51 +1971,49 @@
         
                 if (inv.proofOfPayment && inv.proofOfPayment.url) {
                     paymentSection += `
-                        <div class="detail-row">
-                            <span class="label">Proof of Payment</span>
+                        <div class="detail-row" style="align-items: flex-start;">
+                            <span class="label">Proof</span>
                             <span class="value">
                                 <a href="${inv.proofOfPayment.url}" target="_blank" 
                                    style="display: inline-block; background: #3498db; color: white; padding: 8px 18px; border-radius: 20px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
-                                    <i class="fas fa-file-download"></i> View Proof (${inv.proofOfPayment.filename})
+                                    <i class="fas fa-file-download"></i> View Proof
                                 </a>
-                                <div style="font-size: 0.75rem; color: #7f8c8d; margin-top: 5px;">
-                                    Uploaded: ${new Date(inv.proofOfPayment.uploadedAt).toLocaleString()}
-                                </div>
                             </span>
                         </div>
                     `;
                 } else if (inv.paymentMethod === 'payshap') {
                     paymentSection += `
-                        <div style="background: #f0fdf4; border-left: 4px solid #27ae60; padding: 12px; border-radius: 8px; margin-top: 10px;">
-                            <i class="fas fa-bolt" style="color: #f39c12;"></i>
-                            <strong>Instant Payment:</strong> No proof required. Check Standard Bank for reference <code>${inv.paymentRef}</code>.
+                        <div style="background: #f0fdf4; border-left: 4px solid #27ae60; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem;">
+                            <strong>Instant Payment:</strong> Check your bank account for reference <code>${inv.paymentRef}</code>.
                         </div>
                     `;
                 } else if (inv.paymentMethod === 'eft') {
                     paymentSection += `
-                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 10px;">
-                            <i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>
-                            <strong>No proof uploaded.</strong> Verify payment in bank account using reference <code>${inv.paymentRef}</code>.
+                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem;">
+                            <strong>No proof uploaded.</strong> Verify in bank using reference <code>${inv.paymentRef}</code>.
                         </div>
                     `;
-                }
-        
-                if (inv.paidAt) {
-                    paymentSection += `<div class="detail-row"><span class="label">Paid On</span><span class="value" style="color: #27ae60; font-weight: 700;">${new Date(inv.paidAt).toLocaleString()}</span></div>`;
                 }
             }
         
             const modal = document.getElementById('viewModal');
-            document.getElementById('viewModalTitle').textContent = 'Invoice ' + inv.invoiceNumber;
+            document.getElementById('viewModalTitle').textContent = 'Invoice ' + (inv.invoiceNumber || 'N/A');
+            
+            // Safely handle dates in case they are missing
+            const issuedDate = inv.issuedAt ? new Date(inv.issuedAt).toLocaleString() : 'N/A';
+            const dueDate = inv.dueAt ? new Date(inv.dueAt).toLocaleString() : 'N/A';
+            const statusLabel = inv.status ? inv.status.replace('_', ' ').toUpperCase() : 'PENDING';
+            
             document.getElementById('viewModalBody').innerHTML = `
                 <div class="detail-row"><span class="label">Parent</span><span class="value">${inv.parentName || 'N/A'}</span></div>
                 <div class="detail-row"><span class="label">Email</span><span class="value">${inv.parentEmail || 'N/A'}</span></div>
-                <div class="detail-row"><span class="label">Phone</span><span class="value">${inv.parentPhone || 'N/A'}</span></div>
-                <div class="detail-row"><span class="label">Reference</span><span class="value"><code>${inv.paymentRef}</code></span></div>
-                <div class="detail-row"><span class="label">Issued</span><span class="value">${new Date(inv.issuedAt).toLocaleString()}</span></div>
-                <div class="detail-row"><span class="label">Due</span><span class="value">${new Date(inv.dueAt).toLocaleString()}</span></div>
-                <div class="detail-row"><span class="label">Status</span><span class="value"><span class="status ${inv.status}">${inv.status.replace('_', ' ')}</span></span></div>
+                <div class="detail-row"><span class="label">Reference</span><span class="value"><code>${inv.paymentRef || 'N/A'}</code></span></div>
+                <div class="detail-row"><span class="label">Issued</span><span class="value">${issuedDate}</span></div>
+                <div class="detail-row"><span class="label">Due</span><span class="value">${dueDate}</span></div>
+                <div class="detail-row"><span class="label">Status</span><span class="value"><span class="status ${inv.status || 'pending'}">${statusLabel}</span></span></div>
+                
                 ${paymentSection}
+                
                 <hr style="margin:15px 0;">
                 <h4>Items</h4>
                 <table style="width:100%; border-collapse:collapse; margin-top:10px;">
@@ -2031,7 +2029,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" style="text-align:right; padding:10px; font-weight:bold;">TOTAL:</td>
-                            <td style="text-align:right; padding:10px; font-weight:bold; color:#27ae60;">R${inv.total.toFixed(2)}</td>
+                            <td style="text-align:right; padding:10px; font-weight:bold; color:#27ae60;">R${(inv.total || 0).toFixed(2)}</td>
                         </tr>
                     </tfoot>
                 </table>
