@@ -955,9 +955,12 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Subjects</th>
+                            <th>Show Profile?</th>
                             <th>Status</th>
                             <th>Applied</th>
                             <th>Actions</th>
+                             
+
                         </tr>
                     </thead>
                     <tbody id="applicationsBody">
@@ -1329,7 +1332,9 @@
             const pending = allApplications.filter(a => a.status === 'pending').length;
             const approved = allApplications.filter(a => a.status === 'approved').length;
             const rejected = allApplications.filter(a => a.status === 'rejected').length;
-    
+            const consented = allApplications.filter(a => a.showProfile === 'yes').length;
+            
+            document.getElementById('consentedApplications').textContent = consented;
             document.getElementById('totalApplications').textContent = total;
             document.getElementById('pendingApplications').textContent = pending;
             document.getElementById('approvedApplications').textContent = approved;
@@ -1362,6 +1367,14 @@
                         <td><strong>${app.fullName || 'N/A'}</strong></td>
                         <td>${app.email || 'N/A'}</td>
                         <td>${subjects}</td>
+                        
+                        const consent = app.showProfile === 'yes'
+                        ? '<span class="status approved">✅ Yes</span>'
+                        : (app.showProfile === 'no'
+                        ? '<span class="status rejected">❌ No</span>'
+                        : '<span class="status pending">—</span>');
+                        
+                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
                         <td><span class="status ${statusClass}">${statusLabel}</span></td>
                         <td>${date}</td>
                         <td>
@@ -1424,6 +1437,8 @@
                 <div class="detail-row"><span class="label">Status</span><span class="value"><span class="status ${app.status || 'pending'}">${app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : 'Pending'}</span></span></div>
                 <div class="detail-row"><span class="label">Documents</span><span class="value">${docLinks || 'No documents'}</span></div>
                 <div class="detail-row"><span class="label">Applied On</span><span class="value">${app.createdAt ? new Date(app.createdAt).toLocaleString() : 'N/A'}</span></div>
+                <div class="detail-row">
+                <span class="label">Show Profile</span><span class="value">${app.showProfile === 'yes' ? '✅ Yes — consented to display' : (app.showProfile === 'no' ? '❌ No — declined' : 'Not specified')}</span></div>
             `;
     
             modal.classList.add('show');
