@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -16,68 +15,53 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: #f7f9fc; color: #1e2a3e; line-height: 1.6; }
         
-        /* TOP NAV */
         .top-nav { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 1.2rem; font-weight: 700; color: #1e3a8a; text-decoration: none; }
         .nav-links a { margin-left: 20px; color: #64748b; text-decoration: none; font-size: 0.9rem; font-weight: 500; }
         
-        /* LAYOUT */
         .profile-container { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
         
-        /* LEFT COLUMN */
         .main-content { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        
         .header-info { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
-        .tutor-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+        .tutor-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
         .tutor-name { font-size: 1.8rem; font-weight: 700; color: #1e2a3e; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
         .tutor-name i { color: #2563eb; font-size: 1.2rem; }
-        .tutor-title { color: #64748b; font-size: 1rem; margin-bottom: 5px; }
+        .tutor-title { color: #2563eb; font-size: 1rem; margin-bottom: 5px; font-weight: 500; }
+        
+        .trust-badge { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 10px 15px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         
         .bio-text { color: #475569; font-size: 1rem; margin-bottom: 25px; }
-        
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
-        .tag { background: #1e2a3e; color: white; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
+        .tag { background: #f8fafc; border: 1px solid #e2e8f0; color: #1e2a3e; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
         
-        /* TABS */
         .tabs { display: flex; gap: 20px; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; }
-        .tab { padding: 10px 0; cursor: pointer; color: #64748b; font-weight: 500; font-size: 0.95rem; border-bottom: 2px solid transparent; }
-        .tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .tab { padding: 10px 0; cursor: pointer; color: #2563eb; font-weight: 600; font-size: 0.95rem; border-bottom: 2px solid #2563eb; }
         
-        /* SCHEDULE SECTION */
         .schedule-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .schedule-header h3 { font-size: 1.2rem; color: #1e2a3e; }
         
-        /* DURATION SELECTOR */
-        .duration-selector { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 8px 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .duration-selector label { font-size: 0.9rem; font-weight: 600; color: #1e2a3e; }
-        .duration-selector select { padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; outline: none; font-size: 0.9rem; cursor: pointer; }
-        
-        /* CALENDAR GRID */
         .calendar-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #1e2a3e; color: white; padding: 10px 15px; border-radius: 8px; }
-        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-        .time-slot { 
-            background: white; border: 1px solid #e2e8f0; padding: 10px 5px; 
-            border-radius: 6px; text-align: center; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
-        }
+        .calendar-days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .time-slot { background: white; border: 1px solid #e2e8f0; padding: 10px 5px; border-radius: 6px; text-align: center; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
         .time-slot:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
-        .time-slot.selected { background: #c4b5fd; border-color: #8b5cf6; color: #4c1d95; font-weight: 600; }
+        .time-slot.selected { background: #1e3a8a; border-color: #1e3a8a; color: white; font-weight: 600; }
         
-        /* RIGHT COLUMN */
-        .sidebar-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 20px; position: sticky; top: 90px; }
-        .sidebar-image { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
+        .sidebar-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: sticky; top: 90px; }
         .price-display { font-size: 1.5rem; font-weight: 700; color: #1e2a3e; margin-bottom: 20px; text-align: center; }
         .price-display span { font-size: 1rem; color: #64748b; font-weight: 400; }
         
-        .btn-book { display: block; width: 100%; background: #1e3a8a; color: white; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
-        .btn-book:hover { background: #172554; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #1e2a3e; margin-bottom: 5px; }
+        .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; }
         
-        .booking-info { margin-top: 20px; font-size: 0.85rem; color: #64748b; line-height: 2; }
-        .booking-info i { color: #94a3b8; margin-right: 8px; width: 15px; text-align: center; }
+        .btn-book { display: block; width: 100%; background: #27ae60; color: white; padding: 15px; border-radius: 8px; text-align: center; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .btn-book:hover { background: #1e8449; }
+        .btn-book:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        /* RESPONSIVE */
         @media (max-width: 900px) {
             .profile-container { grid-template-columns: 1fr; }
             .sidebar-card { position: static; }
+            .calendar-days { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
@@ -91,7 +75,6 @@
     </nav>
 
     <div class="profile-container" id="profileContainer">
-        <!-- Dynamic Content will load here -->
         <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
             <i class="fas fa-spinner fa-spin fa-3x" style="color: #2563eb;"></i>
             <p style="margin-top: 20px;">Loading tutor profile...</p>
@@ -99,9 +82,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // FIREBASE INITIALIZATION
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
             authDomain: "aceed-tutoring.firebaseapp.com",
@@ -114,33 +94,18 @@
         const db = firebase.firestore();
 
         let currentTutor = null;
-        let selectedDuration = 1;
-        const hourlyRate = 180; // Base rate
 
-        // ==========================================
-        // EMAIL HELPER - BRANDED TEMPLATE
-        // ==========================================
         function buildEmailBody(innerHtml) {
             return `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
                         <h1 style="margin: 0;">AceEd Tutoring</h1>
-                        <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
                     </div>
-                    <div style="padding: 25px; background: #f9f9f9;">
-                        ${innerHtml}
-                    </div>
-                    <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
-                        <p style="margin: 0;">© 2026 AceEd Tutoring</p>
-                        <p style="margin: 5px 0 0;">+27 65 529 4232 | clients@aceed.co.za</p>
-                    </div>
+                    <div style="padding: 25px; background: #f9f9f9;">${innerHtml}</div>
                 </div>
             `;
         }
 
-        // ==========================================
-        // LOAD TUTOR DATA FROM URL
-        // ==========================================
         async function loadProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const tutorId = urlParams.get('tutorId');
@@ -153,12 +118,25 @@
             try {
                 const doc = await db.collection('users').doc(tutorId).get();
                 
-                if (!doc.exists || doc.data().role !== 'tutor') {
-                    document.getElementById('profileContainer').innerHTML = `<h2 style="grid-column:1/-1; text-align:center; padding:50px;">Tutor not found or unauthorized.</h2>`;
-                    return;
+                if (!doc.exists) {
+                    // Fallback logic if not in DB yet (like Cindy-Lee)
+                    const fallbackData = {
+                        id: tutorId,
+                        fullName: tutorId === 'cindy-lee' ? 'Cindy-Lee' : 'Tutor',
+                        university: "Stellenbosch University",
+                        degree: "",
+                        bio: "Versatile tutor specializing in Languages and Accounting.",
+                        subjects: ["Mathematics", "English HL", "Afrikaans", "Life Sciences", "Accounting"],
+                        email: "tutor@aceed.co.za"
+                    };
+                    if (tutorId === 'nkululeko') { fallbackData.fullName = "Nkululeko"; fallbackData.university = "UKZN"; fallbackData.degree = "Mechanical Engineering"; }
+                    if (tutorId === 'mihlali') { fallbackData.fullName = "Mihlali Nadine"; fallbackData.degree = "Data Engineering"; }
+                    
+                    currentTutor = fallbackData;
+                } else {
+                    currentTutor = { id: doc.id, ...doc.data() };
                 }
-
-                currentTutor = { id: doc.id, ...doc.data() };
+                
                 renderProfile(currentTutor);
 
             } catch (error) {
@@ -167,90 +145,87 @@
             }
         }
 
-        // ==========================================
-        // RENDER THE PROFILE UI
-        // ==========================================
         function renderProfile(tutor) {
             const container = document.getElementById('profileContainer');
             const subjectTags = (tutor.subjects || []).map(s => `<span class="tag">${s}</span>`).join('');
             const fallbackImg = `https://ui-avatars.com/api/?name=${tutor.fullName.replace(' ', '+')}&background=random`;
 
             container.innerHTML = `
-                <!-- LEFT COLUMN -->
                 <div class="main-content">
                     <div class="header-info">
                         <img src="tutors/${tutor.fullName.split(' ')[0].toLowerCase()}.png" onerror="this.src='${fallbackImg}'" class="tutor-avatar" alt="${tutor.fullName}">
                         <div>
                             <h1 class="tutor-name">${tutor.fullName} <i class="fas fa-check-circle" title="Verified Tutor"></i></h1>
-                            <div class="tutor-title">Online Tutor • AceEd Certified</div>
+                            <div class="tutor-title"><i class="fas fa-graduation-cap"></i> ${tutor.university} ${tutor.degree ? '• ' + tutor.degree : ''}</div>
                         </div>
                     </div>
 
-                    <p class="bio-text">
-                        ${tutor.bio || "Hello! I am a dedicated tutor ready to help you succeed in your studies. I specialize in making complex topics easy to understand."}
-                    </p>
+                    <div class="trust-badge">
+                        <i class="fas fa-shield-check fa-lg"></i>
+                        <div><strong>100% Vetted & Verified</strong><br>ID, transcript, and competency interview passed.</div>
+                    </div>
 
+                    <p class="bio-text">${tutor.bio || "Hello! I am a dedicated tutor ready to help you succeed."}</p>
                     <div class="tags">${subjectTags}</div>
 
                     <div class="tabs">
-                        <div class="tab active">Schedule</div>
-                        <div class="tab">About Me</div>
+                        <div class="tab">Select Date & Time</div>
                     </div>
 
                     <div class="schedule-header">
-                        <h3>Select a Time</h3>
-                        <div class="duration-selector">
-                            <label for="sessionDuration">Lesson Duration:</label>
-                            <select id="sessionDuration" onchange="updatePrice()">
-                                <option value="1">1 Hour</option>
-                                <option value="2">2 Hours</option>
-                                <option value="3">3 Hours</option>
-                            </select>
-                        </div>
+                        <h3>Available Times (Next 7 Days)</h3>
                     </div>
                     
-                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">All times are displayed in your local timezone.</p>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">These are once-off, individual sessions.</p>
 
                     <div class="calendar-controls">
-                        <span>Available Slots (Next 7 Days)</span>
+                        <span>Select a time slot below</span>
                     </div>
 
                     <div class="calendar-days">
-                        <div class="time-slot">08:00</div>
-                        <div class="time-slot">09:00</div>
-                        <div class="time-slot">10:00</div>
-                        <div class="time-slot">11:00</div>
-                        <div class="time-slot">14:00</div>
-                        <div class="time-slot">15:00</div>
-                        <div class="time-slot">16:00</div>
-                        <div class="time-slot">17:00</div>
-                        <div class="time-slot">18:00</div>
-                        <div class="time-slot">19:00</div>
+                        <div class="time-slot">Mon 08:00</div>
+                        <div class="time-slot">Mon 10:00</div>
+                        <div class="time-slot">Mon 14:00</div>
+                        <div class="time-slot">Mon 16:00</div>
+                        <div class="time-slot">Tue 09:00</div>
+                        <div class="time-slot">Tue 13:00</div>
+                        <div class="time-slot">Tue 15:00</div>
+                        <div class="time-slot">Wed 08:00</div>
+                        <div class="time-slot">Wed 11:00</div>
+                        <div class="time-slot">Wed 14:00</div>
+                        <div class="time-slot">Thu 09:00</div>
+                        <div class="time-slot">Thu 16:00</div>
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN -->
                 <div class="sidebar-card">
-                    <img src="tutors/${tutor.fullName.split(' ')[0].toLowerCase()}.png" onerror="this.src='${fallbackImg}'" class="sidebar-image" alt="${tutor.fullName}">
-                    
                     <div class="price-display">
-                        <span id="priceAmount">R${hourlyRate}</span><span>/hr</span>
-                    </div>
-                    
-                    <div id="totalPrice" style="text-align: center; color: #2563eb; font-weight: 600; margin-bottom: 15px;">
-                        Total: R${hourlyRate}
+                        R180<span>/hr</span>
                     </div>
 
-                    <button class="btn-book" onclick="automateBooking()">Book 1-on-1 Lesson</button>
+                    <div class="form-group">
+                        <label>Lesson Duration</label>
+                        <select id="sessionDuration">
+                            <option value="1">1 Hour</option>
+                            <option value="2">2 Hours</option>
+                            <option value="3">3 Hours</option>
+                        </select>
+                    </div>
 
-                    <div class="booking-info">
-                        <div><i class="far fa-clock"></i> Automated Match System</div>
-                        <div><i class="fas fa-bolt"></i> Instant Confirmation</div>
+                    <div class="form-group">
+                        <label>Your Email (for confirmation)</label>
+                        <input type="email" id="parentEmail" placeholder="your@email.com" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none;">
+                    </div>
+
+                    <button class="btn-book" onclick="sendBookingRequest()">Request Session</button>
+
+                    <div style="margin-top: 20px; font-size: 0.85rem; color: #64748b; text-align: center;">
+                        <p><i class="fas fa-info-circle"></i> Booking is NOT confirmed yet.</p>
+                        <p style="margin-top: 5px;">The tutor will receive an email to confirm they are available. If not, they will suggest a new time.</p>
                     </div>
                 </div>
             `;
 
-            // Attach click events to time slots
             document.querySelectorAll('.time-slot').forEach(slot => {
                 slot.addEventListener('click', function() {
                     document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
@@ -259,107 +234,97 @@
             });
         }
 
-        // ==========================================
-        // UPDATE PRICE BASED ON DURATION
-        // ==========================================
-        function updatePrice() {
-            selectedDuration = parseInt(document.getElementById('sessionDuration').value);
-            const total = hourlyRate * selectedDuration;
-            document.getElementById('totalPrice').textContent = `Total: R${total} for ${selectedDuration} hour(s)`;
-        }
-
-        // ==========================================
-        // AUTOMATED BOOKING (NO FORMS)
-        // ==========================================
-        async function automateBooking() {
-            const user = firebase.auth().currentUser;
-            
-            if (!user) {
-                alert("Please sign in to book a lesson.");
-                window.location.href = 'signin.html?redirect=view-profile.html?tutorId=' + currentTutor.id;
-                return;
-            }
-
+        async function sendBookingRequest() {
             const selectedTime = document.querySelector('.time-slot.selected');
+            const parentEmail = document.getElementById('parentEmail').value;
+            const duration = document.getElementById('sessionDuration').value;
+            const btn = document.querySelector('.btn-book');
+
             if (!selectedTime) {
                 alert("Please select a time slot first.");
                 return;
             }
+            if (!parentEmail) {
+                alert("Please enter your email address so we can notify you.");
+                return;
+            }
 
-            const timeString = selectedTime.textContent;
-            const totalPrice = hourlyRate * selectedDuration;
-            const btn = document.querySelector('.btn-book');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             btn.disabled = true;
 
             try {
-                // 1. Create the booking in Firestore
-                const bookingRef = await db.collection('bookings').add({
+                // 1. Save request to database
+                await db.collection('bookings').add({
                     tutorId: currentTutor.id,
                     tutorName: currentTutor.fullName,
-                    parentUid: user.uid,
-                    parentEmail: user.email,
-                    date: new Date().toISOString().split('T')[0], // Today's date for this mockup
-                    time: timeString,
-                    duration: selectedDuration,
-                    totalPrice: totalPrice,
-                    status: 'pending_payment',
+                    tutorEmail: currentTutor.email || 'tutor@aceed.co.za', // Assuming tutor email exists
+                    parentEmail: parentEmail,
+                    timeSlot: selectedTime.textContent,
+                    duration: duration,
+                    status: 'pending_tutor_confirmation',
                     createdAt: new Date().toISOString()
                 });
 
-                // 2. Email to ADMIN
+                // 2. Email Parent
+                await db.collection('mail').add({
+                    to: parentEmail,
+                    message: {
+                        subject: 'Booking Request Received - AceEd Tutoring',
+                        html: buildEmailBody(`
+                            <h2>Request Received</h2>
+                            <p>We have sent your request to <strong>${currentTutor.fullName}</strong> for <strong>${selectedTime.textContent} (${duration} hours)</strong>.</p>
+                            <p><strong>Status:</strong> Pending Tutor Confirmation.</p>
+                            <p>If the tutor is available, you will receive a confirmation email shortly. If not, they will suggest a time that is close to your request.</p>
+                        `)
+                    }
+                });
+
+                // 3. Email Tutor
+                await db.collection('mail').add({
+                    to: currentTutor.email || 'tutor@aceed.co.za', 
+                    message: {
+                        subject: 'ACTION REQUIRED: New Booking Request',
+                        html: buildEmailBody(`
+                            <h2>New Booking Request</h2>
+                            <p>A parent has requested a <strong>${duration}-hour</strong> session at <strong>${selectedTime.textContent}</strong>.</p>
+                            <p>Please log into your Tutor Dashboard to confirm you are available, or suggest an alternative time.</p>
+                        `)
+                    }
+                });
+
+                // 4. Email Admin
                 await db.collection('mail').add({
                     to: 'admin@aceed.co.za',
                     message: {
-                        subject: 'New 1-on-1 Booking Request',
+                        subject: 'New Booking Request (Pending Tutor)',
                         html: buildEmailBody(`
-                            <h2>New Booking</h2>
-                            <p><strong>Parent:</strong> ${user.email}</p>
+                            <h2>New Booking Request</h2>
                             <p><strong>Tutor:</strong> ${currentTutor.fullName}</p>
-                            <p><strong>Time:</strong> ${timeString} (${selectedDuration} hours)</p>
-                            <p><strong>Total:</strong> R${totalPrice}</p>
-                            <p><a href="https://aceed.co.za/admin.html">View in Admin Dashboard</a></p>
+                            <p><strong>Parent:</strong> ${parentEmail}</p>
+                            <p><strong>Time:</strong> ${selectedTime.textContent} (${duration} hours)</p>
                         `)
                     }
                 });
 
-                // 3. Email to TUTOR
-                await db.collection('mail').add({
-                    to: currentTutor.email || 'tutor@aceed.co.za', // Fallback
-                    message: {
-                        subject: 'New Booking Request from AceEd',
-                        html: buildEmailBody(`
-                            <h2>You have a new booking!</h2>
-                            <p>A parent has requested a ${selectedDuration}-hour session at ${timeString}.</p>
-                            <p><a href="https://aceed.co.za/tutor-dashboard.html">Go to Dashboard</a></p>
-                        `)
-                    }
-                });
-
-                // 4. Success Message
-                containerSuccess();
+                // Success UI
+                document.getElementById('profileContainer').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; background: white; padding: 50px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <i class="fas fa-paper-plane" style="font-size: 4rem; color: #2563eb; margin-bottom: 20px;"></i>
+                        <h2>Request Sent!</h2>
+                        <p style="color: #64748b; margin-top: 10px;">We have emailed <strong>${currentTutor.fullName}</strong> to check their availability.</p>
+                        <p style="color: #64748b; margin-top: 5px;">You will receive a confirmation email at <strong>${parentEmail}</strong> as soon as they confirm. If they are unavailable, they will suggest a new time.</p>
+                        <a href="tutors.html" class="btn-book" style="max-width: 300px; margin: 30px auto 0; text-decoration: none;">Back to Tutors</a>
+                    </div>
+                `;
 
             } catch (error) {
                 console.error("Booking error:", error);
                 alert("Something went wrong. Please try again.");
-                btn.innerHTML = 'Book 1-on-1 Lesson';
+                btn.innerHTML = 'Request Session';
                 btn.disabled = false;
             }
         }
 
-        function containerSuccess() {
-            document.getElementById('profileContainer').innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; background: white; padding: 50px; border-radius: 12px; border: 1px solid #e2e8f0;">
-                    <i class="fas fa-check-circle" style="font-size: 4rem; color: #27ae60; margin-bottom: 20px;"></i>
-                    <h2>Booking Confirmed!</h2>
-                    <p style="color: #64748b; margin-top: 10px;">We have sent an email to you, the tutor, and the AceEd team.</p>
-                    <p style="color: #64748b;">Please check your email for the payment link.</p>
-                    <a href="parent-dashboard.html" class="btn-book" style="max-width: 300px; margin: 30px auto 0;">Go to Dashboard</a>
-                </div>
-            `;
-        }
-
-        // Initialize
         document.addEventListener('DOMContentLoaded', loadProfile);
     </script>
 </body>
