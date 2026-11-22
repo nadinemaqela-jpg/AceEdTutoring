@@ -1233,6 +1233,8 @@
         let allTutors = [];
         let currentAppFilter = 'all';
         let currentReqFilter = 'all';
+        let allInvoices = [];
+        let currentInvFilter = 'all';
     
         firebase.auth().onAuthStateChanged(async function(user) {
             if (!user) {
@@ -1755,9 +1757,7 @@
 
         // ============================================================
         // INVOICES
-        // ============================================================
-        let allInvoices = [];
-        let currentInvFilter = 'all';
+        // ===========================================================
         
         function loadInvoices() {
             const db = firebase.firestore();
