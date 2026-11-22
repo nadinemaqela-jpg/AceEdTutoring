@@ -1340,41 +1340,41 @@
             document.getElementById('approvedApplications').textContent = approved;
             document.getElementById('rejectedApplications').textContent = rejected;
         }
-    
+
         function renderApplications(filter) {
             currentAppFilter = filter;
             const filtered = filter === 'all' ? allApplications : allApplications.filter(a => a.status === filter);
             const tbody = document.getElementById('applicationsBody');
-    
+        
             if (filtered.length === 0) {
                 tbody.innerHTML = `
-                    <tr><td colspan="6" style="text-align:center; padding:30px; color:#7f8c8d;">
+                    <tr><td colspan="7" style="text-align:center; padding:30px; color:#7f8c8d;">
                         <i class="fas fa-inbox"></i> No ${filter !== 'all' ? filter : ''} applications found
                     </td></tr>
                 `;
                 return;
             }
-    
+        
             let html = '';
             filtered.forEach(function(app) {
                 const statusClass = app.status || 'pending';
                 const statusLabel = app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : 'Pending';
                 const subjects = app.subjects ? app.subjects.slice(0, 2).join(', ') + (app.subjects.length > 2 ? ' +' + (app.subjects.length - 2) : '') : 'N/A';
                 const date = app.createdAt ? new Date(app.createdAt).toLocaleDateString() : 'N/A';
-    
+                
+                // THE FIX IS HERE: Comparing to true/false instead of 'yes'/'no'
+                const consent = app.showProfile === true
+                    ? '<span class="status approved">✅ Yes</span>'
+                    : (app.showProfile === false
+                        ? '<span class="status rejected">❌ No</span>'
+                        : '<span class="status pending">—</span>');
+        
                 html += `
                     <tr>
                         <td><strong>${app.fullName || 'N/A'}</strong></td>
                         <td>${app.email || 'N/A'}</td>
                         <td>${subjects}</td>
-                        
-                        const consent = app.showProfile === 'yes'
-                        ? '<span class="status approved">✅ Yes</span>'
-                        : (app.showProfile === 'no'
-                        ? '<span class="status rejected">❌ No</span>'
-                        : '<span class="status pending">—</span>');
-                        
-                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
+                        <td>${consent}</td> <!-- NEW COLUMN ADDED HERE -->
                         <td><span class="status ${statusClass}">${statusLabel}</span></td>
                         <td>${date}</td>
                         <td>
@@ -1396,7 +1396,7 @@
                     </tr>
                 `;
             });
-    
+        
             tbody.innerHTML = html;
         }
     
@@ -1437,8 +1437,7 @@
                 <div class="detail-row"><span class="label">Status</span><span class="value"><span class="status ${app.status || 'pending'}">${app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : 'Pending'}</span></span></div>
                 <div class="detail-row"><span class="label">Documents</span><span class="value">${docLinks || 'No documents'}</span></div>
                 <div class="detail-row"><span class="label">Applied On</span><span class="value">${app.createdAt ? new Date(app.createdAt).toLocaleString() : 'N/A'}</span></div>
-                <div class="detail-row">
-                <span class="label">Show Profile</span><span class="value">${app.showProfile === 'yes' ? '✅ Yes — consented to display' : (app.showProfile === 'no' ? '❌ No — declined' : 'Not specified')}</span></div>
+                <div class="detail-row"><span class="label">Show Profile</span><span class="value">${app.showProfile === true ? '✅ Yes — consented to display' :app.showProfile === false ? '❌ No — declined' :'Not specified'}</span></div>
             `;
     
             modal.classList.add('show');
