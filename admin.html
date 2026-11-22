@@ -1449,11 +1449,84 @@
     
             modal.classList.add('show');
         }
-    
-        // ============================================================
+            // ============================================================
         // UPDATE APPLICATION STATUS (WITH EMAIL)
         // ============================================================
-        updateApplicationStatus
+        async function updateApplicationStatus(id, newStatus) {
+            if (!confirm(`Are you sure you want to ${newStatus} this application?`)) return;
+    
+            const db = firebase.firestore();
+            const app = allApplications.find(a => a.id === id);
+            if (!app) return;
+    
+            try {
+                await db.collection('tutor_applications').doc(id).update({
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+                
+                const newRole = newStatus === 'approved' ? 'tutor' : 'rejected_tutor';
+                
+                const userUpdateData = {
+                    role: newRole,
+                    status: newStatus,
+                    updatedAt: new Date().toISOString(),
+                    fullName: app.fullName,
+                    email: app.email,
+                    subjects: app.subjects || [],
+                    grades: app.grades || [],
+                    showProfile: app.showProfile,
+                    university: app.university || "", 
+                    degree: app.degree || "",           
+                    hoursTutored: app.hoursTutored || 0,
+                    availability: app.availability || {} 
+                };
+
+                await db.collection('users').doc(id).set(userUpdateData, { merge: true });
+    
+                if (newStatus === 'approved') {
+                    await db.collection('mail').add({
+                        to: app.email,
+                        message: {
+                            subject: 'Welcome to AceEd Tutoring - Application Approved!',
+                            html: buildEmailBody(`
+                                <h2>Congratulations, ${app.fullName}!</h2>
+                                <p>Your tutor application has been <strong>approved</strong>. Welcome to the AceEd Tutoring team!</p>
+                                <p>You can now sign in to your dashboard to manage your availability and see student requests.</p>
+                                <hr>
+                                <p><strong>Login Email:</strong> ${app.email}</p>
+                                <p><strong>Temporary Password:</strong> <code style="background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 1.1rem;">${app.tempPassword || 'Please use the password emailed to you during application'}</code></p>
+                                <p style="font-size: 0.85rem; color: #666;">We highly recommend changing this password after you log in for the first time.</p>
+                                <hr>
+                                <p><a href="https://aceed.co.za/signin.html" style="background: #27ae60; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px; display: inline-block;">Sign In to Your Dashboard</a></p>
+                                <p>If you have any questions, reply to this email or WhatsApp us at +27 698251610.</p>
+                            `)
+                        }
+                    });
+                } else {
+                    await db.collection('mail').add({
+                        to: app.email,
+                        message: {
+                            subject: 'Update on your AceEd Tutoring application',
+                            html: buildEmailBody(`
+                                <h2>Application Update</h2>
+                                <p>Hi ${app.fullName},</p>
+                                <p>Thank you for your interest in tutoring with AceEd. After careful review, we are unable to move forward with your application at this time.</p>
+                                <p>We encourage you to reapply in the future as our needs change.</p>
+                                <p>All the best with your studies.</p>
+                            `)
+                        }
+                    });
+                }
+    
+                alert('Application ' + newStatus + ' successfully! Email sent.');
+                loadApplications();
+    
+            } catch (error) {
+                console.error('Error updating application:', error);
+                alert('Error: ' + error.message);
+            }
+        }
     
         // ============================================================
         // DELETE APPLICATION
