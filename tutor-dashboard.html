@@ -1474,9 +1474,13 @@
                     updatedAt: new Date().toISOString()
                 });
 
-                if (isAccept) {
-                    // 3. CREATE THE INVOICE
+                                    // 3. CREATE THE INVOICE
                     const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                    
+                    // Calculate due date (7 days from now)
+                    const dueDate = new Date();
+                    dueDate.setDate(dueDate.getDate() + 7);
+                    
                     const invoiceRef = await db.collection('invoices').add({
                         invoiceNumber: invoiceNumber,
                         parentName: booking.parentEmail.split('@')[0], 
@@ -1491,10 +1495,10 @@
                             total: booking.totalPrice || (booking.duration * 100)
                         }],
                         status: 'pending',
-                        createdAt: new Date().toISOString()
+                        issuedAt: new Date().toISOString(), // <-- CHANGED from createdAt
+                        dueAt: dueDate.toISOString()        // <-- ADDED (Admin expects this)
                     });
-
-                    const newInvoiceId = invoiceRef.id;
+                
 
                     // 4. Send Email to Parent with the Invoice Link
                     await db.collection('mail').add({
