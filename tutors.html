@@ -77,10 +77,7 @@
         .page-header p { color: #64748b; font-size: 1.1rem; }
 
         /* TRUST BANNER */
-        .trust-banner {
-            background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px;
-            padding: 20px; margin-bottom: 30px; display: flex; gap: 15px; align-items: center;
-        }
+        .trust-banner { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; gap: 15px; align-items: center; }
         .trust-banner i { color: #166534; font-size: 2rem; }
         .trust-banner h4 { color: #166534; margin-bottom: 2px; font-size: 1rem; }
         .trust-banner p { color: #15803d; font-size: 0.9rem; }
@@ -115,7 +112,7 @@
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
         .tag { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; }
         
-        .bio { color: #475569; font-size: 0.95rem; margin-bottom: 15px; font-weight: 500; border-left: 3px solid #cbd5e1; padding-left: 10px; }
+        .bio { color: #64748b; font-size: 0.95rem; margin-bottom: 15px; }
 
         .tutor-action { flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; border-left: 1px solid #e2e8f0; padding-left: 25px; min-width: 200px; }
         
@@ -142,7 +139,6 @@
             .tutor-education { justify-content: center; }
             .tutor-meta { justify-content: center; }
             .tags { justify-content: center; }
-            .bio { border-left: none; padding-left: 0; font-style: italic; }
             .tutor-action { border-left: none; border-top: 1px solid #e2e8f0; padding-left: 0; padding-top: 20px; width: 100%; }
             .filter-section { flex-direction: column; }
             .trust-banner { flex-direction: column; text-align: center; }
@@ -290,9 +286,6 @@
     </footer>
 
     <script>
-        // ==========================================
-        // FIREBASE INITIALIZATION
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
             authDomain: "aceed-tutoring.firebaseapp.com",
@@ -304,9 +297,6 @@
         
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
-        // ==========================================
-        // SIDEBAR & UI CONTROLS
-        // ==========================================
         function openSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.add('open');
@@ -349,12 +339,8 @@
             }
         });
 
-        // ==========================================
-        // TUTOR DATA & RENDERING
-        // ==========================================
         let allTutors = [];
 
-        // Fallback Data (Updated with University, Degree, Hours)
         const fallbackTutors = [
             {
                 id: "nkululeko", fullName: "Nkululeko", location: "Online Nationwide",
@@ -390,15 +376,14 @@
                 
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    // ONLY SHOW IF THEY CONSENTED TO THEIR PROFILE BEING PUBLIC
                     if (data.showProfile === true) {
                         approvedTutors.push({
                             id: doc.id,
                             fullName: data.fullName || 'Tutor',
                             location: "Online Nationwide",
-                            university: data.university || "University Student", // Fallbacks if DB doesn't have it yet
+                            university: data.university || "University Student",
                             degree: data.degree || "Bachelor's Degree",
-                            hours: data.hoursTutored || 50, // Default mockup number
+                            hours: data.hoursTutored || 50, 
                             subjects: data.subjects || ["General Tutoring"],
                             bio: data.bio || "Experienced tutor ready to help you succeed.",
                             image: `tutors/${data.fullName.split(' ')[0].toLowerCase()}.png`,
@@ -447,12 +432,10 @@
                                 <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
                             </div>
                             
-                            <!-- UNIVERSITY & DEGREE -->
                             <div class="tutor-education">
                                 <i class="fas fa-graduation-cap"></i> ${tutor.university} • ${tutor.degree}
                             </div>
 
-                            <!-- LOCATION & HOURS TUTORED -->
                             <div class="tutor-meta">
                                 <span><i class="fas fa-globe"></i> ${tutor.location}</span>
                                 <span><i class="fas fa-laptop-house"></i> Online Only</span>
@@ -463,8 +446,8 @@
                                 ${subjectTags}
                             </div>
                             
-                            <!-- SUCCESS STORY / BIO -->
-                            <p class="bio">"${tutor.bio}"</p>
+                            <!-- STANDARD BIO -->
+                            <p class="bio">${tutor.bio}</p>
                         </div>
 
                         <div class="tutor-action">
