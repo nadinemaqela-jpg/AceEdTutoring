@@ -1448,12 +1448,12 @@
         }
 
         // ============================================================
-        // ACCEPT OR DECLINE BOOKING (WITH EMAILS)
+        // ACCEPT OR DECLINE BOOKING (WITH EMAILS & INVOICE)
         // ============================================================
         async function confirmBooking(bookingId, action) {
             const isAccept = action === 'accept';
             const confirmMsg = isAccept 
-                ? 'Accept this booking? The parent will be emailed and asked to pay.' 
+                ? 'Accept this booking? The parent will be emailed an invoice to pay.' 
                 : 'Decline this booking? The parent will be notified.';
             
             if (!confirm(confirmMsg)) return;
@@ -1467,119 +1467,145 @@
                 const bookingDoc = await bookingRef.get();
                 const booking = bookingDoc.data();
 
-                // 2. Update the status
+                // 2. Update the booking status
                 const newStatus = isAccept ? 'confirmed_pending_payment' : 'declined_by_tutor';
                 await bookingRef.update({
                     status: newStatus,
                     updatedAt: new Date().toISOString()
                 });
 
-                // 3. Send Email to Parent
-                const emailSubject = isAccept 
-                    ? '✅ Booking Confirmed: ' + booking.tutorName 
-                    : 'Update on your booking request';
-                                const emailHtml = isAccept 
-                    ? `
-                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
-                            <div style="background: #1e2a3a; color: white; padding: 30px 20px; text-align: center;">
-                                <h1 style="margin: 0; font-size: 24px;">AceEd Tutoring</h1>
-                                <p style="color: #f39c12; margin: 5px 0 0; font-size: 14px;">✦ Affordable Services ✦</p>
-                            </div>
-                            
-                            <div style="padding: 30px 20px;">
-                                <h2 style="color: #1e2a3a; margin-top: 0;">Invoice #ACE-${bookingId.slice(-6).toUpperCase()}</h2>
-                                <p style="color: #666; font-size: 14px;"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-                                
-                                <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                                
-                                <h3 style="color: #1e2a3a; font-size: 16px; margin-bottom: 5px;">Billed to:</h3>
-                                <p style="margin: 0; font-size: 14px;">${booking.parentEmail.split('@')[0]}</p>
-                                <p style="margin: 0; font-size: 14px;"><a href="mailto:${booking.parentEmail}">${booking.parentEmail}</a></p>
-                                
-                                <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                                
-                                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                                    <thead>
-                                        <tr style="background: #1e2a3a; color: white;">
-                                            <th style="padding: 10px; text-align: left;">Description</th>
-                                            <th style="padding: 10px; text-align: right;">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding: 15px 10px; border-bottom: 1px solid #eee;">
-                                                <strong>1-on-1 Tutoring (${booking.tutorName})</strong><br>
-                                                <span style="color: #666; font-size: 12px;">${booking.timeSlot} (${booking.duration} Hours)</span>
-                                            </td>
-                                            <td style="padding: 15px 10px; border-bottom: 1px solid #eee; text-align: right; vertical-align: bottom;">
-                                                R${booking.totalPrice || (booking.duration * 100)}.00
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                
-                                <div style="text-align: right; margin-top: 20px;">
-                                    <h3 style="color: #1e2a3a; margin: 0;">TOTAL DUE: <span style="color: #27ae60;">R${booking.totalPrice || (booking.duration * 100)}.00</span></h3>
+                if (isAccept) {
+                    // 3. CREATE THE INVOICE
+                    const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                    const invoiceRef = await db.collection('invoices').add({
+                        invoiceNumber: invoiceNumber,
+                        parentName: booking.parentEmail.split('@')[0], 
+                        parentEmail: booking.parentEmail,
+                        parentPhone: '',
+                        total: booking.totalPrice || (booking.duration * 100),
+                        paymentRef: `ACE-${bookingId.slice(-6).toUpperCase()}`,
+                        items: [{
+                            name: `1-on-1 Tutoring (${booking.tutorName})`,
+                            qty: booking.duration,
+                            rate: 100,
+                            total: booking.totalPrice || (booking.duration * 100)
+                        }],
+                        status: 'pending',
+                        createdAt: new Date().toISOString()
+                    });
+
+                    const newInvoiceId = invoiceRef.id;
+
+                    // 4. Send Email to Parent with the Invoice Link
+                    await db.collection('mail').add({
+                        to: booking.parentEmail,
+                        message: {
+                            subject: 'Invoice for your AceEd Booking: ' + invoiceNumber,
+                            html: `
+                                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                                    <div style="background: #1e2a3a; color: white; padding: 30px 20px; text-align: center;">
+                                        <h1 style="margin: 0; font-size: 24px;">AceEd Tutoring</h1>
+                                        <p style="color: #f39c12; margin: 5px 0 0; font-size: 14px;">✦ Affordable Services ✦</p>
+                                    </div>
+                                    
+                                    <div style="padding: 30px 20px;">
+                                        <h2 style="color: #1e2a3a; margin-top: 0;">Invoice ${invoiceNumber}</h2>
+                                        <p style="color: #666; font-size: 14px;"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                                        
+                                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                                        
+                                        <h3 style="color: #1e2a3a; font-size: 16px; margin-bottom: 5px;">Billed to:</h3>
+                                        <p style="margin: 0; font-size: 14px;"><a href="mailto:${booking.parentEmail}">${booking.parentEmail}</a></p>
+                                        
+                                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                                        
+                                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                                            <thead>
+                                                <tr style="background: #1e2a3a; color: white;">
+                                                    <th style="padding: 10px; text-align: left;">Description</th>
+                                                    <th style="padding: 10px; text-align: right;">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 15px 10px; border-bottom: 1px solid #eee;">
+                                                        <strong>1-on-1 Tutoring (${booking.tutorName})</strong><br>
+                                                        <span style="color: #666; font-size: 12px;">${booking.timeSlot} (${booking.duration} Hours)</span>
+                                                    </td>
+                                                    <td style="padding: 15px 10px; border-bottom: 1px solid #eee; text-align: right; vertical-align: bottom;">
+                                                        R${booking.totalPrice || (booking.duration * 100)}.00
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                        <div style="text-align: right; margin-top: 20px;">
+                                            <h3 style="color: #1e2a3a; margin: 0;">TOTAL DUE: <span style="color: #27ae60;">R${booking.totalPrice || (booking.duration * 100)}.00</span></h3>
+                                        </div>
+                                        
+                                        <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                                        
+                                        <h3 style="color: #1e2a3a; font-size: 16px; margin-bottom: 15px;">Payment Instructions</h3>
+                                        <p style="font-size: 14px; line-height: 1.8; margin: 0;">
+                                            <strong>Bank:</strong> Standard Bank<br>
+                                            <strong>Account Holder:</strong> AceEd Tutoring<br>
+                                            <strong>Account Number:</strong> 10271792580<br>
+                                            <strong>Branch Code:</strong> 000610<br>
+                                            <strong>PayShap ID:</strong> +27 65 529 4232<br>
+                                            <strong>Payment Reference:</strong> <span style="background: #fff3cd; padding: 2px 6px; border-radius: 4px;">ACE-${bookingId.slice(-6).toUpperCase()}</span>
+                                        </p>
+                                        
+                                        <div style="text-align: center; margin-top: 30px;">
+                                            <a href="https://aceed.co.za/confirm-payment.html?invoice=${newInvoiceId}" style="background: #27ae60; color: white; padding: 14px 30px; text-decoration: none; border-radius: 30px; display: inline-block; font-weight: bold; font-size: 16px;">
+                                                ✓ I've Made Payment
+                                            </a>
+                                        </div>
+                                        
+                                        <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                                            Questions? Reply to this email or WhatsApp us at <a href="https://wa.me/27655294232">+27 65 529 4232</a>.
+                                        </p>
+                                    </div>
                                 </div>
-                                
-                                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-                                
-                                <h3 style="color: #1e2a3a; font-size: 16px; margin-bottom: 15px;">Payment Instructions</h3>
-                                <p style="font-size: 14px; line-height: 1.8; margin: 0;">
-                                    <strong>Bank:</strong> Standard Bank<br>
-                                    <strong>Account Holder:</strong> AceEd Tutoring<br>
-                                    <strong>Account Number:</strong> 10271792580<br>
-                                    <strong>Branch Code:</strong> 000610<br>
-                                    <strong>PayShap ID:</strong> +27 65 529 4232<br>
-                                    <strong>Payment Reference:</strong> <span style="background: #fff3cd; padding: 2px 6px; border-radius: 4px;">ACE-${bookingId.slice(-6).toUpperCase()}</span>
-                                </p>
-                                
-                                <div style="text-align: center; margin-top: 30px;">
-                                    <a href="https://aceed.co.za/confirm-payment.html?bookingId=${bookingId}" style="background: #27ae60; color: white; padding: 14px 30px; text-decoration: none; border-radius: 30px; display: inline-block; font-weight: bold; font-size: 16px;">
-                                        ✓ I've Made Payment
-                                    </a>
+                            `
+                        }
+                    });
+
+                    // 5. Send Email to Admin
+                    await db.collection('mail').add({
+                        to: 'admin@aceed.co.za',
+                        message: {
+                            subject: `Tutor Accepted Booking - Invoice ${invoiceNumber}`,
+                            html: buildEmailBody(`
+                                <h2>Booking Accepted</h2>
+                                <p><strong>Tutor:</strong> ${booking.tutorName}</p>
+                                <p><strong>Parent:</strong> ${booking.parentEmail}</p>
+                                <p><strong>Time:</strong> ${booking.timeSlot}</p>
+                                <p><strong>Invoice:</strong> ${invoiceNumber}</p>
+                                <p><strong>Status:</strong> Waiting for Parent Payment.</p>
+                            `)
+                        }
+                    });
+
+                } else {
+                    // Decline Email to Parent
+                    await db.collection('mail').add({
+                        to: booking.parentEmail,
+                        message: {
+                            subject: 'Update on your booking request',
+                            html: buildEmailBody(`
+                                <h2>Booking Request Declined</h2>
+                                <p>Unfortunately, the tutor is no longer available for the time you requested:</p>
+                                <div style="background:#f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                                    <p style="margin: 0 0 5px 0;"><strong>Time:</strong> ${booking.timeSlot}</p>
+                                    <p style="margin: 0;"><strong>Tutor:</strong> ${booking.tutorName}</p>
                                 </div>
-                                
-                                <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
-                                    Questions? Reply to this email or WhatsApp us at <a href="https://wa.me/27655294232">+27 65 529 4232</a>.
-                                </p>
-                            </div>
-                        </div>
-                    `
-                    : `
-                        <h2>Booking Request Declined</h2>
-                        <p>Unfortunately, the tutor is no longer available for the time you requested:</p>
-                        <div style="background:#f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                            <p style="margin: 0 0 5px 0;"><strong>Time:</strong> ${booking.timeSlot}</p>
-                            <p style="margin: 0;"><strong>Tutor:</strong> ${booking.tutorName}</p>
-                        </div>
-                        <p>Our team has been notified and will help you find a new tutor or a new time slot.</p>
-                    `;
+                                <p>Our team has been notified and will help you find a new tutor or a new time slot.</p>
+                            `)
+                        }
+                    });
+                }
 
-                await db.collection('mail').add({
-                    to: booking.parentEmail,
-                    message: {
-                        subject: emailSubject,
-                        html: buildEmailBody(emailHtml) // Uses your existing email template function
-                    }
-                });
-
-                // 4. Send Email to Admin
-                await db.collection('mail').add({
-                    to: 'admin@aceed.co.za',
-                    message: {
-                        subject: `Tutor ${isAccept ? 'Accepted' : 'Declined'} Booking`,
-                        html: buildEmailBody(`
-                            <h2>Booking Update</h2>
-                            <p><strong>Tutor:</strong> ${booking.tutorName}</p>
-                            <p><strong>Parent:</strong> ${booking.parentEmail}</p>
-                            <p><strong>Time:</strong> ${booking.timeSlot}</p>
-                            <p><strong>Status:</strong> ${isAccept ? 'Accepted - Waiting for Payment' : 'Declined - Needs Reassignment'}</p>
-                        `)
-                    }
-                });
-
-                alert(isAccept ? '✅ Booking accepted! Parent notified.' : '❌ Booking declined.');
+                alert(isAccept ? '✅ Booking accepted! Invoice generated and parent notified.' : '❌ Booking declined.');
                 loadBookingRequests(); // Reload the list
 
             } catch (error) {
@@ -1587,7 +1613,6 @@
                 alert('Error: ' + error.message);
             }
         }
-
                 // ============================================================
         // MANAGE AVAILABILITY
         // ============================================================
