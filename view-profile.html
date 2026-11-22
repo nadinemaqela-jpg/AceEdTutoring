@@ -329,21 +329,20 @@
         }
 
         async function sendBookingRequest() {
-
+            // 1. Check if the parent confirmed they are not a student
             const confirmCheck = document.getElementById('parentConfirm');
             if (!confirmCheck || !confirmCheck.checked) {
-                alert("You must confirm that you are the parent or guardian to proceed.");
+                alert("You must confirm that you are the parent or legal guardian to proceed.");
                 return;
             }
 
-            const selectedTime = document.querySelector('.time-slot.selected');
-            const parentEmail = document.getElementById('parentEmail').value;
-            // ... rest of your code
+            // 2. Get the form values
             const selectedTime = document.querySelector('.time-slot.selected');
             const parentEmail = document.getElementById('parentEmail').value;
             const duration = document.getElementById('sessionDuration').value;
             const btn = document.querySelector('.btn-book');
 
+            // 3. Validation
             if (!selectedTime) {
                 alert("Please select a time slot first.");
                 return;
@@ -356,55 +355,60 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             btn.disabled = true;
 
+            // Calculate total price (Assuming R100 per hour based on your previous screenshot)
+            const totalPrice = parseInt(duration) * 100;
+
             try {
-                // 1. Save request to database
+                // 4. Save to database
                 await db.collection('bookings').add({
                     tutorId: currentTutor.id,
                     tutorName: currentTutor.fullName,
                     tutorEmail: currentTutor.email || 'tutor@aceed.co.za',
                     parentEmail: parentEmail,
-                    timeSlot: selectedTime.textContent,
+                    timeSlot: selectedTime.textContent.trim(), // .trim() removes extra spaces
                     duration: duration,
+                    totalPrice: totalPrice,
                     status: 'pending_tutor_confirmation',
                     createdAt: new Date().toISOString()
                 });
 
-                // 2. Email Parent
+                // 5. Queue Email to Parent
                 await db.collection('mail').add({
                     to: parentEmail,
                     message: {
                         subject: 'Booking Request Received - AceEd Tutoring',
                         html: buildEmailBody(`
                             <h2>Request Received</h2>
-                            <p>We have sent your request to <strong>${currentTutor.fullName}</strong> for <strong>${selectedTime.textContent} (${duration} hours)</strong>.</p>
+                            <p>We have sent your request to <strong>${currentTutor.fullName}</strong> for <strong>${selectedTime.textContent.trim()} (${duration} hours)</strong>.</p>
                             <p><strong>Status:</strong> Pending Tutor Confirmation.</p>
-                            <p>If the tutor is available, you will receive a confirmation email shortly. If not, they will suggest a time that is close to your request.</p>
+                            <p>If the tutor is available, you will receive a confirmation email shortly. If not, they will suggest a new time.</p>
                         `)
                     }
                 });
 
-                // 3. Email Admin (Informing them to contact the tutor)
+                // 6. Queue Email to Admin
                 await db.collection('mail').add({
-                    to: 'admin@aceed.co.za', 
+                    to: 'admin@aceed.co.za',
                     message: {
-                        subject: 'ACTION REQUIRED: New Booking Request for ' + currentTutor.fullName,
+                        subject: 'New Booking Request (Pending Tutor)',
                         html: buildEmailBody(`
                             <h2>New Booking Request</h2>
-                            <p>A parent has requested a <strong>${duration}-hour</strong> session with <strong>${currentTutor.fullName}</strong> at <strong>${selectedTime.textContent}</strong>.</p>
+                            <p><strong>Tutor:</strong> ${currentTutor.fullName}</p>
                             <p><strong>Parent Email:</strong> ${parentEmail}</p>
-                            <p>Please contact the tutor to confirm their availability, or forward this email to them.</p>
+                            <p><strong>Time:</strong> ${selectedTime.textContent.trim()} (${duration} hours)</p>
+                            <p><strong>Potential Value:</strong> R${totalPrice}</p>
                         `)
                     }
                 });
 
-                // Success UI
+                // 7. Success UI
                 document.getElementById('profileContainer').innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; background: white; padding: 50px; border-radius: 12px; border: 1px solid #e2e8f0;">
                         <i class="fas fa-paper-plane" style="font-size: 4rem; color: #2563eb; margin-bottom: 20px;"></i>
                         <h2>Request Sent!</h2>
                         <p style="color: #64748b; margin-top: 10px;">We have emailed <strong>${currentTutor.fullName}</strong> to check their availability.</p>
-                        <p style="color: #64748b; margin-top: 5px;">You will receive a confirmation email at <strong>${parentEmail}</strong> as soon as they confirm. If they are unavailable, they will suggest a new time.</p>
-                        <a href="tutors.html" class="btn-book" style="max-width: 300px; margin: 30px auto 0; text-decoration: none;">Back to Tutors</a>
+                        <p style="color: #64748b; margin-top: 5px;">You will receive a confirmation email at <strong>${parentEmail}</strong> as soon as they confirm.</p>
+                        <a href="tutors.html" class="btn-book" style="max-width: 300px; margin: 30px auto 0; text-decoration: none; display: inline-block;">Back to Tutors</a>
                     </div>
                 `;
 
@@ -418,7 +422,8 @@
 
         document.addEventListener('DOMContentLoaded', loadProfile);
 
-                function generateTimeSlots(availability) {
+
+            function generateTimeSlots(availability) {
             if (!availability || Object.keys(availability).length === 0) {
                 return `<div style="grid-column: 1/-1; padding: 20px; text-align: center; color: #64748b;">No availability set by tutor yet. Please check back later.</div>`;
             }
