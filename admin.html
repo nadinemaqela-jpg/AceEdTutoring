@@ -1483,8 +1483,7 @@
 
                 await db.collection('users').doc(id).set(userUpdateData, { merge: true });
     
-                // Email to applicant
-                if (newStatus === 'approved') {
+                // Email to applicant                if (newStatus === 'approved') {
                     await db.collection('mail').add({
                         to: app.email,
                         message: {
@@ -1492,13 +1491,19 @@
                             html: buildEmailBody(`
                                 <h2>Congratulations, ${app.fullName}!</h2>
                                 <p>Your tutor application has been <strong>approved</strong>. Welcome to the AceEd Tutoring team!</p>
-                                <p>You can now sign in to your dashboard to see student requests assigned to you.</p>
-                                <p><a href="https://aceed.co.za/signin.html" style="background: #27ae60; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Sign In to Your Dashboard</a></p>
-                                <p>If you have any questions, reply to this email or WhatsApp us at +27 65 529 4232.</p>
+                                <p>You can now sign in to your dashboard to manage your availability and see student requests.</p>
+                                <hr>
+                                <p><strong>Login Email:</strong> ${app.email}</p>
+                                <p><strong>Temporary Password:</strong> <code style="background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 1.1rem;">${app.tempPassword || 'Please use the password emailed to you during application'}</code></p>
+                                <p style="font-size: 0.85rem; color: #666;">We highly recommend changing this password after you log in for the first time.</p>
+                                <hr>
+                                <p><a href="https://aceed.co.za/signin.html" style="background: #27ae60; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px; display: inline-block;">Sign In to Your Dashboard</a></p>
+                                <p>If you have any questions, reply to this email or WhatsApp us at +27 698251610.</p>
                             `)
                         }
                     });
-                } else {
+                } 
+                else {
                     await db.collection('mail').add({
                         to: app.email,
                         message: {
