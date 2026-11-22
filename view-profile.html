@@ -358,11 +358,27 @@
             }
 
             let slotsHTML = '';
+            
             // Loop through the days the tutor is available
             for (const [day, times] of Object.entries(availability)) {
                 if (times.start && times.end) {
-                    // Display the block of time they set (e.g., "Monday 14:00 - 16:00")
-                    slotsHTML += `<div class="time-slot" data-day="${day}" data-start="${times.start}" data-end="${times.end}">${day}<br>${times.start} - ${times.end}</div>`;
+                    // Parse the start and end times (e.g., "14:00" and "18:00")
+                    let startHour = parseInt(times.start.split(':')[0]);
+                    let endHour = parseInt(times.end.split(':')[0]);
+                    
+                    // Create a separate 1-hour slot for every hour in the block
+                    for (let hour = startHour; hour < endHour; hour++) {
+                        const timeStr = hour.toString().padStart(2, '0') + ':00';
+                        const nextHourStr = (hour + 1).toString().padStart(2, '0') + ':00';
+                        
+                        // Added a line break so it looks like a neat card
+                        slotsHTML += `
+                            <div class="time-slot" data-day="${day}" data-start="${timeStr}" data-end="${nextHourStr}">
+                                ${day} <br> 
+                                <span style="font-size: 0.8rem; color: #64748b;">${timeStr} - ${nextHourStr}</span>
+                            </div>
+                        `;
+                    }
                 }
             }
             return slotsHTML;
