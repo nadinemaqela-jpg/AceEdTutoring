@@ -586,11 +586,17 @@
                 let docRef;
                 if (isOverwrite && !existingSnapshot.empty) {
                     docRef = existingSnapshot.docs[0].ref;
+                    // We don't increment the user total here because it's an overwrite
                     await docRef.update(logData);
                 } else {
                     logData.createdAt = new Date().toISOString();
                     logData.submittedAt = new Date().toISOString();
                     docRef = await db.collection('weekly_logs').add(logData);
+
+                    // NEW: Add these hours to the tutor's public profile
+                    await db.collection('users').doc(currentTutorUid).update({
+                        hoursTutored: firebase.firestore.FieldValue.increment(totalHours)
+                    });
                 }
 
                 // Build email
