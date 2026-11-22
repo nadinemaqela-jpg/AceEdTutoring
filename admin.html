@@ -1079,7 +1079,7 @@
     <div class="modal" id="viewModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('viewModal')">&times;</button>
-            <h2 id="viewModalTitle">Application Details</h2>
+            <h2 id="viewModalTitle">Details</h2>
             <div id="viewModalBody"></div>
         </div>
     </div>
@@ -1918,9 +1918,9 @@
                         <td><span class="status ${statusClass}">${statusLabel}</span></td>
                         <td>${date}</td>
                         <td>
-                            <button class="btn-sm view" onclick="viewInvoice('${inv.id}')">
+                        <button class="btn-sm view" onclick="window.viewInvoice('${inv.id}')">
                                 <i class="fas fa-eye"></i>
-                            </button>
+                        </button>
                             ${actionButtons}
                         </td>
                     </tr>
@@ -1937,7 +1937,7 @@
             renderInvoices(filter);
         }
         
-                function viewInvoice(id) {
+        function viewInvoice(id) {
             const inv = allInvoices.find(i => i.id === id);
             if (!inv) return;
         
@@ -2084,6 +2084,118 @@
                 alert('Error: ' + error.message);
             }
         }
+                // ============================================================
+        // VIEW INVOICE MODAL
+        // ============================================================
+        window.viewInvoice = function(id) {
+            const inv = allInvoices.find(i => i.id === id);
+            if (!inv) {
+                console.error("Invoice not found in array:", id);
+                alert("Could not find invoice data.");
+                return;
+            }
+        
+            const itemsHtml = (inv.items || []).map(item =>
+                `<tr>
+                    <td>${item.name}</td>
+                    <td style="text-align:center;">${item.qty}</td>
+                    <td style="text-align:right;">R${(item.rate || 0).toFixed(2)}</td>
+                    <td style="text-align:right;">R${(item.total || 0).toFixed(2)}</td>
+                </tr>`
+            ).join('');
+        
+            let paymentSection = '';
+            if (inv.status === 'payment_claimed' || inv.status === 'paid') {
+                const methodLabel = inv.paymentMethod === 'payshap'
+                    ? '⚡ PayShap / Instant EFT'
+                    : inv.paymentMethod === 'eft'
+                        ? '🏦 Bank Transfer (EFT)'
+                        : 'Not specified';
+        
+                paymentSection += `
+                    <hr style="margin:15px 0;">
+                    <h4 style="margin-bottom: 10px;">Payment Details</h4>
+                    <div class="detail-row"><span class="label">Method</span><span class="value">${methodLabel}</span></div>
+                `;
+        
+                if (inv.claimedAt) {
+                    paymentSection += `<div class="detail-row"><span class="label">Claimed</span><span class="value">${new Date(inv.claimedAt).toLocaleString()}</span></div>`;
+                }
+        
+                if (inv.proofOfPayment && inv.proofOfPayment.url) {
+                    paymentSection += `
+                        <div class="detail-row" style="align-items: flex-start;">
+                            <span class="label">Proof</span>
+                            <span class="value">
+                                <a href="${inv.proofOfPayment.url}" target="_blank" 
+                                   style="display: inline-block; background: #3498db; color: white; padding: 8px 18px; border-radius: 20px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                                    <i class="fas fa-file-download"></i> View Proof
+                                </a>
+                            </span>
+                        </div>
+                    `;
+                } else if (inv.paymentMethod === 'payshap') {
+                    paymentSection += `
+                        <div style="background: #f0fdf4; border-left: 4px solid #27ae60; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem;">
+                            <strong>Instant Payment:</strong> Check your bank account for reference <code>${inv.paymentRef}</code>.
+                        </div>
+                    `;
+                } else if (inv.paymentMethod === 'eft') {
+                    paymentSection += `
+                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem;">
+                            <strong>No proof uploaded.</strong> Verify in bank using reference <code>${inv.paymentRef}</code>.
+                        </div>
+                    `;
+                }
+            }
+        
+            const modal = document.getElementById('viewModal');
+            document.getElementById('viewModalTitle').textContent = 'Invoice ' + (inv.invoiceNumber || 'N/A');
+            
+            const issuedDate = inv.issuedAt ? new Date(inv.issuedAt).toLocaleString() : 'N/A';
+            const dueDate = inv.dueAt ? new Date(inv.dueAt).toLocaleString() : 'N/A';
+            const statusLabel = inv.status ? inv.status.replace('_', ' ').toUpperCase() : 'PENDING';
+            
+            document.getElementById('viewModalBody').innerHTML = `
+                <div class="detail-row"><span class="label">Parent</span><span class="value">${inv.parentName || 'N/A'}</span></div>
+                <div class="detail-row"><span class="label">Email</span><span class="value">${inv.parentEmail || 'N/A'}</span></div>
+                <div class="detail-row"><span class="label">Reference</span><span class="value"><code>${inv.paymentRef || 'N/A'}</code></span></div>
+                <div class="detail-row"><span class="label">Issued</span><span class="value">${issuedDate}</span></div>
+                <div class="detail-row"><span class="label">Due</span><span class="value">${dueDate}</span></div>
+                <div class="detail-row"><span class="label">Status</span><span class="value"><span class="status ${inv.status || 'pending'}">${statusLabel}</span></span></div>
+                
+                ${paymentSection}
+                
+                <hr style="margin:15px 0;">
+                <h4>Items</h4>
+                <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                    <thead>
+                        <tr style="background:#f0f0f0;">
+                            <th style="padding:8px; text-align:left;">Description</th>
+                            <th style="padding:8px; text-align:center;">Qty</th>
+                            <th style="padding:8px; text-align:right;">Rate</th>
+                            <th style="padding:8px; text-align:right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>${itemsHtml}</tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align:right; padding:10px; font-weight:bold;">TOTAL:</td>
+                            <td style="text-align:right; padding:10px; font-weight:bold; color:#27ae60;">R${(inv.total || 0).toFixed(2)}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                ${inv.status === 'payment_claimed' ? `
+                    <div style="margin-top: 20px; text-align: right;">
+                        <button class="btn-sm approve" onclick="markInvoicePaid('${inv.id}')" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-check"></i> Mark as Paid
+                        </button>
+                    </div>
+                ` : ''}
+            `;
+            modal.classList.add('show');
+        };
         
     </script>
 
