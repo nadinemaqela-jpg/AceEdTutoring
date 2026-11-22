@@ -1017,19 +1017,39 @@
             }
     
             try {
+                // Fetch the user document from Firestore
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+                
+                if (!doc.exists) {
+                    console.error("User document does not exist!");
+                    document.getElementById('accessDenied').style.display = 'block';
+                    return;
+                }
+
                 const userData = doc.data();
                 const role = userData.role;
+                
+                console.log("Current User Role:", role); // Check your browser console for this!
     
                 if (role === 'tutor') {
+                    // Hide other states just in case
+                    document.getElementById('accessDenied').style.display = 'none';
+                    document.getElementById('pendingTutorMessage').style.display = 'none';
+                    
+                    // Show Tutor Dashboard
                     document.getElementById('tutorContent').style.display = 'block';
                     document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
+                    
+                    // Load data
                     loadAssignedRequests();
                     loadBookingRequests(); 
-                    loadTutorAvailability();
+                    loadTutorAvailability(); // If you added the availability manager earlier
+                    
                 } else if (role === 'pending_tutor') {
                     document.getElementById('pendingTutorMessage').style.display = 'block';
                 } else {
+                    // If it's a parent or something else
+                    console.log("Access denied because role is:", role);
                     document.getElementById('accessDenied').style.display = 'block';
                 }
             } catch (error) {
@@ -1383,7 +1403,7 @@
                             <div class="request-details">
                                 <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
                                 <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
-                                <div><i class="fas fa-money-bill"></i> Payout: <strong>R${req.totalPrice || (req.duration * 180)}</strong></div>
+                                <div><i class="fas fa-money-bill"></i> Payout: <strong>R${(req.duration * 100) * 0.70}</strong></div>
                             </div>
                             <div class="request-actions">
                                 <button class="btn accept" onclick="confirmBooking('${doc.id}', 'accept')">
