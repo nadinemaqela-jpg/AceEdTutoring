@@ -226,12 +226,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Lesson Duration</label>
-                        <select id="sessionDuration">
-                            <option value="1">1 Hour</option>
-                            <option value="2">2 Hours</option>
-                            <option value="3">3 Hours</option>
-                        </select>
+                    <label>Lesson Duration</label><select id="sessionDuration" onchange="updateSelection()">
+                        <option value="1">1 Hour</option>
+                        <option value="2">2 Hours</option>
+                        <option value="3">3 Hours</option>
+                    </select>
                     </div>
 
                     <div class="form-group">
@@ -248,10 +247,45 @@
                 </div>
             `;
 
+            // Attach smart click events to time slots
             document.querySelectorAll('.time-slot').forEach(slot => {
                 slot.addEventListener('click', function() {
-                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                    // 1. Clear all previous selections
+                    document.querySelectorAll('.time-slot').forEach(s => {
+                        s.classList.remove('selected');
+                        s.style.opacity = '1';
+                    });
+
+                    // 2. Get the selected duration
+                    const duration = parseInt(document.getElementById('sessionDuration').value);
+
+                    // 3. Highlight the clicked slot
                     this.classList.add('selected');
+
+                    // 4. Find and highlight the next hours if duration > 1
+                    if (duration > 1) {
+                        const clickedDay = this.getAttribute('data-day');
+                        const startHour = parseInt(this.getAttribute('data-start').split(':')[0]);
+                        
+                        // Loop to find the next consecutive hours
+                        for (let i = 1; i < duration; i++) {
+                            const nextHourStr = (startHour + i).toString().padStart(2, '0') + ':00';
+                            
+                            // Find the slot with the same day and the next hour
+                            const nextSlot = Array.from(document.querySelectorAll('.time-slot')).find(s => 
+                                s.getAttribute('data-day') === clickedDay && 
+                                s.getAttribute('data-start') === nextHourStr
+                            );
+
+                            if (nextSlot) {
+                                nextSlot.classList.add('selected');
+                            } else {
+                                // If they don't have the next hour available, we can alert them
+                                // or just let the backend handle the mismatch.
+                                console.log("Warning: Tutor doesn't have consecutive hours available for this duration.");
+                            }
+                        }
+                    }
                 });
             });
         }
@@ -382,6 +416,15 @@
                 }
             }
             return slotsHTML;
+        }
+
+                function updateSelection() {
+            // Find the currently selected slot
+            const selectedSlot = document.querySelector('.time-slot.selected');
+            if (selectedSlot) {
+                // Trigger a click on it to re-run the logic with the new duration
+                selectedSlot.click();
+            }
         }
     </script>
 </body>
