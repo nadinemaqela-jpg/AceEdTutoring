@@ -895,6 +895,18 @@
                     <p>No new booking requests at the moment.</p>
                 </div>
             </div>
+            <!-- UPCOMING CONFIRMED SESSIONS -->
+            <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #27ae60;">
+                <h2>
+                    <span><i class="fas fa-calendar-check" style="color: #27ae60;"></i> Upcoming Confirmed Sessions</span>
+                </h2>
+                <div id="confirmedSessionsList">
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>No confirmed sessions yet.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -1726,6 +1738,54 @@
                 btn.disabled = false;
             }
         });
+                // ============================================================
+        // LOAD CONFIRMED SESSIONS
+        // ============================================================
+        async function loadConfirmedSessions() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            const db = firebase.firestore();
+            const container = document.getElementById('confirmedSessionsList');
+
+            try {
+                const snapshot = await db.collection('bookings')
+                    .where('tutorId', '==', user.uid)
+                    .where('status', '==', 'confirmed_paid')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p>No confirmed sessions yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const req = doc.data();
+                    html += `
+                        <div class="request-card" style="border-left: 4px solid #27ae60; background: #f0fdf4;">
+                            <div class="request-header">
+                                <h3>${req.parentEmail.split('@')[0]}</h3>
+                                <span class="status accepted">Paid & Confirmed</span>
+                            </div>
+                            <div class="request-details">
+                                <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
+                                <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+            }
+        }
         
     </script>
     
