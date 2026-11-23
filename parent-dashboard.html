@@ -1023,6 +1023,19 @@
                     <p>No recent requests.</p>
                 </div>
             </div>
+            
+              <!-- MY CONFIRMED BOOKINGS -->
+            <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #27ae60;">
+                <h2>
+                    <span><i class="fas fa-calendar-check" style="color: #27ae60;"></i> My Upcoming Sessions</span>
+                </h2>
+                <div id="parentBookingsList">
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>No upcoming sessions yet.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Services & Packages -->
@@ -1911,6 +1924,56 @@
     
         if (typeof getCart === 'function') {
             updateCartBadge();
+        }
+
+                // ============================================================
+        // LOAD PARENT BOOKINGS
+        // ============================================================
+        async function loadParentBookings() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            const db = firebase.firestore();
+            const container = document.getElementById('parentBookingsList');
+
+            try {
+                // Get bookings for this parent that are paid/confirmed
+                const snapshot = await db.collection('bookings')
+                    .where('parentEmail', '==', user.email)
+                    .where('status', '==', 'confirmed_paid')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p>No upcoming sessions yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const req = doc.data();
+                    html += `
+                        <div class="request-card" style="border-left: 4px solid #27ae60; background: #f0fdf4;">
+                            <div class="request-header">
+                                <h3>${req.tutorName}</h3>
+                                <span class="status accepted">Confirmed & Paid</span>
+                            </div>
+                            <div class="request-details">
+                                <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
+                                <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
         }
     </script>
     
