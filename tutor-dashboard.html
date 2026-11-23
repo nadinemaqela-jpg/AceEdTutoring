@@ -1428,7 +1428,7 @@
                                 <div><i class="fas fa-money-bill"></i> Payout: <strong>R${(req.duration * 100) * 0.70}</strong></div>
                             </div>
                             <div class="request-actions">
-                                <button class="btn accept" onclick="confirmBooking('${doc.id}', 'accept')">
+                                <button class="btn accept" onclick="ing('${doc.id}', 'accept')">
                                     <i class="fas fa-check"></i> Accept & Confirm
                                 </button>
                                 <button class="btn decline" onclick="confirmBooking('${doc.id}', 'decline')">
@@ -1447,7 +1447,7 @@
             }
         }
 
-        // ============================================================
+                // ============================================================
         // ACCEPT OR DECLINE BOOKING (WITH EMAILS & INVOICE)
         // ============================================================
         async function confirmBooking(bookingId, action) {
@@ -1474,31 +1474,35 @@
                     updatedAt: new Date().toISOString()
                 });
 
-                                    // 3. CREATE THE INVOICE
+                if (isAccept) {
+                    // 3. CREATE THE INVOICE
                     const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
                     
-                    // Calculate due date (7 days from now)
                     const dueDate = new Date();
                     dueDate.setDate(dueDate.getDate() + 7);
                     
+                    // Failsafe in case totalPrice was not saved by the booking page
+                    const finalTotal = booking.totalPrice || (Number(booking.duration) * 100);
+
                     const invoiceRef = await db.collection('invoices').add({
                         invoiceNumber: invoiceNumber,
                         parentName: booking.parentEmail.split('@')[0], 
                         parentEmail: booking.parentEmail,
                         parentPhone: '',
-                        total: booking.totalPrice || (booking.duration * 100),
+                        total: finalTotal,
                         paymentRef: `ACE-${bookingId.slice(-6).toUpperCase()}`,
                         items: [{
                             name: `1-on-1 Tutoring (${booking.tutorName})`,
-                            qty: booking.duration,
+                            qty: Number(booking.duration),
                             rate: 100,
-                            total: booking.totalPrice || (booking.duration * 100)
+                            total: finalTotal
                         }],
                         status: 'pending',
-                        issuedAt: new Date().toISOString(), // <-- CHANGED from createdAt
-                        dueAt: dueDate.toISOString()        // <-- ADDED (Admin expects this)
+                        issuedAt: new Date().toISOString(),
+                        dueAt: dueDate.toISOString()
                     });
-                
+
+                    const newInvoiceId = invoiceRef.id;
 
                     // 4. Send Email to Parent with the Invoice Link
                     await db.collection('mail').add({
@@ -1537,14 +1541,14 @@
                                                         <span style="color: #666; font-size: 12px;">${booking.timeSlot} (${booking.duration} Hours)</span>
                                                     </td>
                                                     <td style="padding: 15px 10px; border-bottom: 1px solid #eee; text-align: right; vertical-align: bottom;">
-                                                        R${booking.totalPrice || (booking.duration * 100)}.00
+                                                        R${finalTotal}.00
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                         
                                         <div style="text-align: right; margin-top: 20px;">
-                                            <h3 style="color: #1e2a3a; margin: 0;">TOTAL DUE: <span style="color: #27ae60;">R${booking.totalPrice || (booking.duration * 100)}.00</span></h3>
+                                            <h3 style="color: #1e2a3a; margin: 0;">TOTAL DUE: <span style="color: #27ae60;">R${finalTotal}.00</span></h3>
                                         </div>
                                         
                                         <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
@@ -1616,8 +1620,7 @@
                 console.error('Error updating booking:', error);
                 alert('Error: ' + error.message);
             }
-        }
-                // ============================================================
+        }        // ============================================================
         // MANAGE AVAILABILITY
         // ============================================================
         const daysOfWeek = [
