@@ -501,7 +501,7 @@
                 const invoiceDoc = await db.collection('invoices').doc(invoiceId).get();
                 const invoice = invoiceDoc.data();
 
-                // Notify Admin
+                                // Notify Admin
                 const methodLabel = selectedMethod === 'payshap' ? 'PayShap / Instant EFT' : 'Bank Transfer (EFT)';
                 const proofLine = proofData
                     ? `<p><strong>Proof:</strong> <a href="${proofData.url}">${proofData.filename}</a></p>`
@@ -515,30 +515,23 @@
                             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                                 <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
                                     <h1 style="margin: 0;">AceEd Tutoring</h1>
-                                    <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
                                 </div>
                                 <div style="padding: 25px; background: #f9f9f9;">
                                     <h2>Payment Claimed ✅</h2>
                                     <p><strong>Invoice:</strong> ${invoice.invoiceNumber}</p>
                                     <p><strong>Parent:</strong> ${invoice.parentName}</p>
                                     <p><strong>Email:</strong> ${invoice.parentEmail}</p>
-                                    <p><strong>Phone:</strong> ${invoice.parentPhone || 'Not provided'}</p>
                                     <p><strong>Amount:</strong> R${invoice.total.toFixed(2)}</p>
-                                    <p><strong>Reference:</strong> ${invoice.paymentRef}</p>
                                     <p><strong>Method:</strong> ${methodLabel}</p>
                                     ${proofLine}
                                     <hr>
-                                    <p>Please verify the payment and mark the invoice as paid.</p>
                                     <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Admin Dashboard</a></p>
-                                </div>
-                                <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
-                                    <p style="margin:0;">© 2026 AceEd Tutoring</p>
                                 </div>
                             </div>
                         `
                     }
                 });
-
+                
                 showSuccess(invoice, selectedMethod);
 
             } catch (error) {
