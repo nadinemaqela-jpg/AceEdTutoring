@@ -2037,7 +2037,7 @@
             modal.classList.add('show');
         }
         
-        async function markInvoicePaid(invoiceId) {
+                async function markInvoicePaid(invoiceId) {
             if (!confirm('Have you verified this payment in your bank account?')) return;
         
             try {
@@ -2045,38 +2045,68 @@
                 const invDoc = await db.collection('invoices').doc(invoiceId).get();
                 const inv = invDoc.data();
         
+                // 1. Mark Invoice as Paid
                 await db.collection('invoices').doc(invoiceId).update({
                     status: 'paid',
                     paidAt: new Date().toISOString()
                 });
-        
-                // Email → Parent
+
+                // 2. Find the Booking and update it to confirmed_paid
+                // We use the invoice's items to find the tutor, but we can also search by the paymentRef if we stored it.
+                // Assuming we saved the bookingId in the invoice, or we can search bookings by the invoice's paymentRef
+                let bookingId = null;
+                const bookingsSnapshot = await db.collection('bookings')
+                    .where('parentEmail', '==', inv.parentEmail)
+                    .where('status', '==', 'confirmed_pending_payment')
+                    .get();
+                
+                if (!bookingsSnapshot.empty) {
+                    // Get the most recent one
+                    const bookingDoc = bookingsSnapshot.docs[0];
+                    bookingId = bookingDoc.id;
+                    
+                    await db.collection('bookings').doc(bookingId).update({
+                        status: 'confirmed_paid',
+                        paidAt: new Date().toISOString()
+                    });
+                }
+
+                // 3. Email → Parent
                 await db.collection('mail').add({
                     to: inv.parentEmail,
                     message: {
-                        subject: 'Payment Received - Invoice ' + inv.invoiceNumber,
-                        html: `
-                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                                <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
-                                    <h1 style="margin: 0;">AceEd Tutoring</h1>
-                                    <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
-                                </div>
-                                <div style="padding: 25px; background: #f9f9f9;">
-                                    <h2>Payment Confirmed ✅</h2>
-                                    <p>Hi ${inv.parentName},</p>
-                                    <p>We've verified your payment for invoice <strong>${inv.invoiceNumber}</strong>.</p>
-                                    <p><strong>Amount:</strong> R${inv.total.toFixed(2)}</p>
-                                    <p>Your tutoring services are now active. Your tutor will be in touch shortly.</p>
-                                </div>
-                                <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
-                                    <p style="margin:0;">© 2026 AceEd Tutoring</p>
-                                </div>
-                            </div>
-                        `
+                        subject: 'Session Confirmed! - ' + inv.invoiceNumber,
+                        html: buildEmailBody(`
+                            <h2>Payment Verified & Session Confirmed! 🎉</h2>
+                            <p>Hi ${inv.parentName},</p>
+                            <p>We have verified your payment for invoice <strong>${inv.invoiceNumber}</strong> (R${inv.total.toFixed(2)}).</p>
+                            <p>Your session is now officially confirmed. You can view the details in your Parent Dashboard.</p>
+                            <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #27ae60; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Parent Dashboard</a></p>
+                        `)
                     }
                 });
+
+                // 4. Email → Tutor
+                // To email the tutor, we need their email. We can pull it from the booking.
+                if (bookingId) {
+                    const bookingData = (await db.collection('bookings').doc(bookingId).get()).data();
+                    await db.collection('mail').add({
+                        to: bookingData.tutorEmail, // Make sure this was saved when the booking was created!
+                        message: {
+                            subject: 'New Confirmed Session! 🎓',
+                            html: buildEmailBody(`
+                                <h2>You have a confirmed session!</h2>
+                                <p>A parent has paid for their booking with you. Here are the details:</p>
+                                <p><strong>Time:</strong> ${bookingData.timeSlot}</p>
+                                <p><strong>Duration:</strong> ${bookingData.duration} Hour(s)</p>
+                                <p>Log into your Tutor Dashboard to view your upcoming schedule.</p>
+                                <p><a href="https://aceed.co.za/tutor-dashboard.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">View Dashboard</a></p>
+                            `)
+                        }
+                    });
+                }
         
-                alert('✅ Invoice marked as paid. Parent has been notified.');
+                alert('✅ Invoice marked as paid. Parent and Tutor have been notified.');
                 loadInvoices();
         
             } catch (error) {
