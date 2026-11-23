@@ -1078,6 +1078,7 @@
                     loadAssignedRequests();
                     loadBookingRequests(); 
                     loadTutorAvailability(); // If you added the availability manager earlier
+                    loadConfirmedSessions();
                     
                 } else if (role === 'pending_tutor') {
                     document.getElementById('pendingTutorMessage').style.display = 'block';
