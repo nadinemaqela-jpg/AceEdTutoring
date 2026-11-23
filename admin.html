@@ -939,6 +939,7 @@
             <a href="calendar.html" style="background: #f39c12; color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: 600;">
                 <i class="fas fa-calendar-alt"></i> Calendar
             </a>
+            <button onclick="switchTab('billing')"><i class="fas fa-file-invoice-dollar"></i> Billing & Payroll</button>
         </div>
     
 
@@ -1031,6 +1032,7 @@
                     <div class="stat-label">Paid</div>
                 </div>
             </div>
+            
         
             <div class="filter-btns">
                 <button data-filter="all" onclick="filterInvoices('all')" class="active">All</button>
@@ -1058,6 +1060,30 @@
                 </table>
             </div>
         </div>
+        
+        <!-- BILLING & PAYROLL TAB -->
+        <div id="billingTab" style="display: none;">
+            <div class="table-section">
+                <h2><i class="fas fa-users"></i> Active Tutors</h2>
+                <p style="color: #64748b; margin-bottom: 15px;">Select a tutor to view their unbilled weekly logs and generate invoices for their students.</p>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tutor Name</th>
+                                <th>Email</th>
+                                <th>Unbilled Logs</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billingTutorsBody">
+                            <tr><td colspan="4" style="text-align:center; padding:30px;">Loading tutors...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ACCESS DENIED -->
@@ -1081,6 +1107,19 @@
             <button class="modal-close" onclick="closeModal('viewModal')">&times;</button>
             <h2 id="viewModalTitle">Details</h2>
             <div id="viewModalBody"></div>
+        </div>
+    </div>
+
+        <!-- BILLING MODAL -->
+    <div class="modal" id="billingModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" onclick="closeModal('billingModal')">&times;</button>
+            <h2><i class="fas fa-file-invoice-dollar"></i> Generate Invoice</h2>
+            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 15px;" id="billingModalSubtitle">Loading...</p>
+            
+            <div id="billingModalContent">
+                <!-- Logs will load here -->
+            </div>
         </div>
     </div>
 
@@ -1773,18 +1812,15 @@
                 });
         }
     
-        // ============================================================
-        // SWITCH TABS
-        // ============================================================
-        function switchTab(tab) {
+                function switchTab(tab) {
             document.querySelectorAll('.admin-tabs button').forEach(function(btn) {
                 btn.classList.remove('active');
             });
             
-            // Hide all tabs
             document.getElementById('applicationsTab').style.display = 'none';
             document.getElementById('requestsTab').style.display = 'none';
             document.getElementById('invoicesTab').style.display = 'none';
+            document.getElementById('billingTab').style.display = 'none';
             
             if (tab === 'applications') {
                 document.querySelector('.admin-tabs button:nth-child(1)').classList.add('active');
@@ -1797,8 +1833,14 @@
                 document.querySelector('.admin-tabs button:nth-child(3)').classList.add('active');
                 document.getElementById('invoicesTab').style.display = 'block';
                 loadInvoices();
+            } else if (tab === 'billing') {
+                document.querySelector('.admin-tabs button:nth-child(4)').classList.add('active');
+                document.getElementById('billingTab').style.display = 'block';
+                loadBillingTutors();
             }
-        }    
+        }  
+
+        
         // ============================================================
         // CART BADGE
         // ============================================================
@@ -2226,6 +2268,183 @@
             `;
             modal.classList.add('show');
         };
+                // ============================================================
+        // BILLING & PAYROLL LOGIC
+        // ============================================================
+        
+        async function loadBillingTutors() {
+            const db = firebase.firestore();
+            const tbody = document.getElementById('billingTutorsBody');
+            
+            try {
+                // Get all tutors
+                const snapshot = await db.collection('users').where('role', '==', 'tutor').get();
+                let html = '';
+                
+                for (const doc of snapshot.docs) {
+                    const tutor = doc.data();
+                    
+                    // Count their unbilled logs
+                    const logsSnapshot = await db.collection('weekly_logs')
+                        .where('tutorUid', '==', doc.id)
+                        .where('invoiceStatus', '==', 'unbilled')
+                        .get();
+                        
+                    const unbilledCount = logsSnapshot.size;
+                    
+                    html += `
+                        <tr>
+                            <td><strong>${tutor.fullName || 'Tutor'}</strong></td>
+                            <td>${tutor.email || 'N/A'}</td>
+                            <td>
+                                <span style="background: ${unbilledCount > 0 ? '#fff3cd' : '#f1f5f9'}; color: ${unbilledCount > 0 ? '#856404' : '#64748b'}; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem;">
+                                    ${unbilledCount} Logs
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-sm view" onclick="openBillingModal('${doc.id}', '${tutor.fullName || 'Tutor'}')" ${unbilledCount === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
+                                    <i class="fas fa-file-invoice"></i> Generate Bill
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                tbody.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading billing tutors:', error);
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#e74c3c;">Error loading tutors.</td></tr>`;
+            }
+        }
+
+        async function openBillingModal(tutorId, tutorName) {
+            const db = firebase.firestore();
+            const modal = document.getElementById('billingModal');
+            const content = document.getElementById('billingModalContent');
+            
+            document.getElementById('billingModalSubtitle').textContent = `Generating invoice for logs by ${tutorName}`;
+            content.innerHTML = '<p>Loading logs...</p>';
+            modal.classList.add('show');
+            
+            try {
+                // Get all unbilled logs for this tutor
+                const snapshot = await db.collection('weekly_logs')
+                    .where('tutorUid', '==', tutorId)
+                    .where('invoiceStatus', '==', 'unbilled')
+                    .get();
+                    
+                if (snapshot.empty) {
+                    content.innerHTML = '<p>No unbilled logs found.</p>';
+                    return;
+                }
+                
+                let totalHours = 0;
+                let logsByParent = {};
+                let logsByStudent = {};
+                
+                snapshot.forEach(doc => {
+                    const log = doc.data();
+                    totalHours += log.totalHours;
+                    
+                    // Group by parent
+                    if (!logsByParent[log.parentUid]) {
+                        logsByParent[log.parentUid] = {
+                            parentName: log.parentName,
+                            parentEmail: log.parentEmail,
+                            logs: []
+                        };
+                    }
+                    logsByParent[log.parentUid].logs.push({ id: doc.id, ...log });
+                });
+                
+                // Build the HTML for the modal
+                let html = `<p style="margin-bottom: 15px; font-weight: 600;">Total Hours Logged: ${totalHours}</p>`;
+                
+                for (const [parentUid, parentData] of Object.entries(logsByParent)) {
+                    html += `
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                            <h4 style="margin-bottom: 10px;">${parentData.parentName} (${parentData.parentEmail})</h4>
+                            <p style="font-size: 0.9rem; color: #64748b;">Logs: ${parentData.logs.length} sessions</p>
+                            
+                            <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
+                                <label style="font-size: 0.85rem; font-weight: 600;">Invoice Amount (R):</label>
+                                <input type="number" id="invoiceAmount_${parentUid}" value="600" style="padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100px;">
+                                <button class="btn-sm approve" onclick="generateInvoice('${parentUid}', '${tutorId}', '${tutorName}', '${parentData.parentEmail}', '${parentData.parentName}', ${JSON.stringify(parentData.logs.map(l => l.id)).replace(/"/g, '&quot;')})">
+                                    <i class="fas fa-check"></i> Create Invoice
+                                </button>
+                            </div>
+                            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">Tutor Payout (70%): R<span id="payoutDisplay_${parentUid}">420</span></p>
+                        </div>
+                    `;
+                }
+                
+                content.innerHTML = html;
+                
+                // Add event listeners to update the 70% payout live
+                for (const parentUid of Object.keys(logsByParent)) {
+                    const input = document.getElementById(`invoiceAmount_${parentUid}`);
+                    const display = document.getElementById(`payoutDisplay_${parentUid}`);
+                    input.addEventListener('input', function() {
+                        const amount = parseFloat(this.value) || 0;
+                        display.textContent = (amount * 0.70).toFixed(2);
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Error loading logs:', error);
+                content.innerHTML = `<p style="color: #e74c3c;">Error loading logs: ${error.message}</p>`;
+            }
+        }
+
+        async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr) {
+            if (!confirm('Are you sure you want to generate this invoice?')) return;
+            
+            const db = firebase.firestore();
+            const amount = parseFloat(document.getElementById(`invoiceAmount_${parentUid}`).value);
+            const logIds = JSON.parse(logIdsStr.replace(/&quot;/g, '"'));
+            const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            const dueDate = new Date();
+            dueDate.setDate(dueDate.getDate() + 7);
+            
+            try {
+                // 1. Create the invoice
+                await db.collection('invoices').add({
+                    invoiceNumber: invoiceNumber,
+                    parentName: parentName,
+                    parentEmail: parentEmail,
+                    parentPhone: '',
+                    total: amount,
+                    paymentRef: `ACE-${parentUid.slice(-6).toUpperCase()}`,
+                    items: [{
+                        name: `Monthly Tutoring (${tutorName})`,
+                        qty: 1,
+                        rate: amount,
+                        total: amount
+                    }],
+                    status: 'pending',
+                    issuedAt: new Date().toISOString(),
+                    dueAt: dueDate.toISOString()
+                });
+                
+                // 2. Mark logs as billed
+                const batch = db.batch();
+                logIds.forEach(id => {
+                    batch.update(db.collection('weekly_logs').doc(id), { invoiceStatus: 'billed' });
+                });
+                await batch.commit();
+                
+                // 3. Optional: Email the parent
+                // (We can add this later, but the invoice will appear on their dashboard)
+                
+                alert('✅ Invoice generated successfully!');
+                closeModal('billingModal');
+                loadBillingTutors(); // Refresh the list
+                
+            } catch (error) {
+                console.error('Error generating invoice:', error);
+                alert('Error: ' + error.message);
+            }
+        }
         
     </script>
 
