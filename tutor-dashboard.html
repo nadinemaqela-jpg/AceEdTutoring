@@ -7,19 +7,23 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
       gtag('config', 'AW-18521810069');
     </script>
-    
+    <!-- Event snippet for Add to basket conversion page --> 
+    <script> gtag('event', 'conversion', {'send_to': 'AW-18521810069/rDa0CPeXk6YdEJXJ8f9E'}); </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tutor Dashboard - AceEd Tutoring</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -35,792 +39,182 @@
             messagingSenderId: "225577605291",
             appId: "1:225577605291:web:75327bc4e1f644cef47fee"
         };
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
     </script>
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --bg-color: #f7f9fc;
+            --white: #ffffff;
+            --text-main: #1e2a3e;
+            --text-muted: #64748b;
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --wrap: 1100px;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        a { text-decoration: none; color: var(--primary); }
         
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            min-height: 100vh;
+        .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+            transition: all 0.2s; border: none; cursor: pointer; text-decoration: none;
         }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-outline:hover { background: var(--bg-color); }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-danger:hover { background: #c0392b; }
+
+        /* HEADER */
+        .site-header { position: sticky; top: 0; z-index: 100; background: white; border-bottom: 1px solid var(--border); }
+        .header-row { display: flex; align-items: center; justify-content: space-between; min-height: 72px; }
+        .brand img { height: 45px; width: auto; }
+        .nav { display: flex; align-items: center; gap: 24px; }
+        .nav-link { color: var(--text-muted); font-weight: 500; font-size: 0.95rem; background: none; border: none; cursor: pointer; padding: 8px 0; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary); }
+        .header-actions { display: flex; align-items: center; gap: 15px; margin-left: 20px; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
+        .icon-btn:hover { color: var(--primary); }
+
+        /* SIDEBARS */
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; opacity: 0; transition: opacity .2s; }
+        .sidebar-overlay.active { display: block; opacity: 1; }
+        .sidebar { position: fixed; top: 0; width: 300px; height: 100%; background: white; z-index: 1001; padding: 24px; overflow-y: auto; transition: transform .3s; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
+        .sidebar-left { left: 0; transform: translateX(-100%); }
+        .sidebar-left.open { transform: translateX(0); }
+        .sidebar-right { right: 0; transform: translateX(100%); }
+        .sidebar-right.open { transform: translateX(0); }
+        .sidebar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .sidebar-head h3 { font-size: 1.2rem; }
+        .sidebar-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-main); }
+        .sidebar a { display: flex; align-items: center; gap: 12px; padding: 12px 0; color: var(--text-muted); border-bottom: 1px solid var(--bg-color); font-weight: 500; }
+        .sidebar a:hover { color: var(--primary); }
+        .sidebar a i { width: 20px; color: var(--primary); }
+
+        /* DASHBOARD HERO */
+        .dashboard-hero { background: white; border-radius: var(--radius); padding: 30px; margin: 30px 0; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .dashboard-hero h1 { display: flex; align-items: center; gap: 15px; font-size: 1.8rem; color: var(--text-main); }
+        .dashboard-hero h1 i { color: var(--primary); }
+        .dashboard-hero .user-info { font-size: 1rem; color: var(--text-muted); margin-top: 5px; }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .bg-logo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .bg-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.06;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 100;
-        }
-        
-        .logo-image {
-            max-width: 250px;
-            margin: 0 auto;
-        }
-        .logo-image img {
-            width: 100%;
-            max-height: 80px;
-            object-fit: contain;
-        }
-        .tagline {
-            font-size: 1rem;
-            margin: 15px 0;
-            font-weight: 500;
-        }
-        
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #2c3e50;
-            min-width: 180px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-            border-radius: 12px;
-            top: 100%;
-            left: 0;
-            z-index: 10;
-            backdrop-filter: blur(2px);
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown-content a {
-            color: white;
-            padding: 10px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: background 0.2s;
-        }
-        .dropdown-content a:hover {
-            background-color: #3498db;
-        }
-        
-        .icon-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 30px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-btn:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        .profile-btn {
-            font-size: 1.2rem;
-        }
-        
-        .cart-link {
-            position: relative;
-            background-color: #f39c12;
-            border-radius: 40px;
-            padding: 6px 15px;
-            color: white !important;
-        }
-        .cart-link:hover {
-            background-color: #e67e22 !important;
-        }
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: none;
-        }
-        .cart-badge.show {
-            display: inline-block;
-        }
-        .auth-buttons {
-            display: none !important;
-        }
-        
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            width: 320px;
-            height: 100%;
-            background: #1e2a3a;
-            color: white;
-            z-index: 1001;
-            padding: 30px 20px;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-        }
-        .sidebar-left {
-            left: 0;
-            transform: translateX(-100%);
-        }
-        .sidebar-left.open {
-            transform: translateX(0);
-        }
-        .sidebar-right {
-            right: 0;
-            transform: translateX(100%);
-        }
-        .sidebar-right.open {
-            transform: translateX(0);
-        }
-        .sidebar-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            float: right;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-        }
-        .sidebar-close:hover {
-            transform: rotate(90deg);
-        }
-        .sidebar h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #f39c12;
-        }
-        .sidebar a {
-            display: block;
-            color: #cbd5e1;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none;
-            transition: all 0.2s;
-            font-size: 0.95rem;
-        }
-        .sidebar a:hover {
-            color: #fff;
-            padding-left: 5px;
-        }
-        .sidebar a i {
-            width: 25px;
-            color: #f39c12;
-        }
-        
-        .dashboard-hero {
-            background: linear-gradient(135deg, #2c3e50, #1e2a3a);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 30px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .dashboard-hero h1 {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.8rem;
-        }
-        .dashboard-hero h1 i {
-            color: #f39c12;
-        }
-        .dashboard-hero .user-info {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-        .dashboard-hero .user-info i {
-            color: #f39c12;
-            margin-right: 8px;
-        }
-        .dashboard-hero .status-badge {
-            background: #27ae60;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .btn-logout {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-logout:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .back-link {
-            display: inline-block;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 10px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .stat-card .label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        .stat-card .icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
+        /* STATS GRID */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
+        .stat-card { background: white; border-radius: var(--radius); padding: 25px; text-align: center; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .stat-card .number { font-size: 2.5rem; font-weight: 700; color: var(--text-main); }
+        .stat-card .label { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; font-weight: 500; }
+        .stat-card .icon { font-size: 2rem; margin-bottom: 10px; }
         .stat-card.assigned .icon { color: #f39c12; }
         .stat-card.accepted .icon { color: #27ae60; }
         .stat-card.helped .icon { color: #3498db; }
         .stat-card.rejected .icon { color: #e74c3c; }
+
+        /* SECTIONS */
+        .requests-section { background: white; border-radius: var(--radius); padding: 25px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 30px; }
+        .requests-section h2 { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; color: var(--text-main); }
+        .requests-section h2 .badge { background: var(--primary); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; }
         
-        .requests-section {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-        .requests-section h2 {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .requests-section h2 .badge {
-            background: #e74c3c;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
+        .request-card { border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 15px; transition: all 0.2s; background: var(--bg-color); }
+        .request-card:hover { border-color: var(--primary); background: white; }
+        .request-card .request-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+        .request-card .request-header h3 { font-size: 1.1rem; color: var(--text-main); }
+        .request-card .request-header .status { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .request-card .request-header .status.assigned { background: #fff3cd; color: #856404; }
+        .request-card .request-header .status.accepted { background: #d4edda; color: #155724; }
+        .request-card .request-header .status.declined { background: #f8d7da; color: #721c24; }
         
-        .request-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .request-card:hover {
-            border-color: #3498db;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .request-card .request-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-        .request-card .request-header h3 {
-            font-size: 1.1rem;
-            color: #1e2a3a;
-        }
-        .request-card .request-header .status {
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .request-card .request-header .status.assigned {
-            background: #cce5ff;
-            color: #004085;
-        }
-        .request-card .request-header .status.accepted {
-            background: #d4edda;
-            color: #155724;
-        }
-        .request-card .request-header .status.declined {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .request-card .request-header .status.completed {
-            background: #e8e8e8;
-            color: #555;
-        }
-        .request-card .request-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .request-card .request-details i {
-            color: #3498db;
-            width: 20px;
-        }
-        .request-card .request-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .request-card .request-actions .btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-        .request-card .request-actions .btn.accept {
-            background: #27ae60;
-            color: white;
-        }
-        .request-card .request-actions .btn.accept:hover {
-            background: #1e8449;
-        }
-        .request-card .request-actions .btn.decline {
-            background: #e74c3c;
-            color: white;
-        }
-        .request-card .request-actions .btn.decline:hover {
-            background: #c0392b;
-        }
+        .request-card .request-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; font-size: 0.9rem; color: var(--text-muted); }
+        .request-card .request-details i { color: var(--primary); width: 20px; }
         
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-        }
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
+        .request-card .request-actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         
-        .footer-modern {
-            background: #0f1720;
-            color: #e2e8f0;
-            margin-top: 60px;
-            padding: 50px 0 25px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 35px;
-            margin-bottom: 35px;
-        }
-        .footer-col h4 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 18px;
-            position: relative;
-            display: inline-block;
-        }
-        .footer-col h4:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -6px;
-            width: 40px;
-            height: 3px;
-            background: #e74c3c;
-            border-radius: 3px;
-        }
-        .footer-col p, .footer-col ul {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            opacity: 0.85;
-        }
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-        .footer-col ul li a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-col ul li a:hover {
-            color: #e74c3c;
-            padding-left: 4px;
-        }
-        .footer-register-btn {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 10px 28px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 700;
-            margin-top: 12px;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(231,76,60,0.3);
-        }
-        .footer-register-btn:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        .footer-dark-btn {
-            background: #2d3e50;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            display: inline-block;
-            margin-right: 10px;
-            margin-top: 8px;
-        }
-        .footer-dark-btn:hover {
-            background: #1e2f40;
-            transform: translateY(-1px);
-        }
-        .social-icons {
-            display: flex;
-            gap: 14px;
-            margin-top: 15px;
-        }
-        .social-icons a {
-            background: #1e2a3a;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.1rem;
-            transition: all 0.2s;
-        }
-        .social-icons a:hover {
-            background: #e74c3c;
-            transform: translateY(-3px);
-        }
-        .footer-bottom {
-            text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        .footer-bottom a {
-            color: #e2e8f0;
-            text-decoration: none;
-        }
-        .footer-bottom a:hover {
-            color: #e74c3c;
-        }
-        
-        .pending-message {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 30px 0;
-        }
-        .pending-message i {
-            font-size: 3rem;
-            color: #f39c12;
-            margin-bottom: 15px;
-        }
-        .pending-message h2 {
-            color: #856404;
-        }
-        .pending-message p {
-            color: #856404;
-            font-size: 1.1rem;
-        }
-        .pending-message .btn {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 40px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: 600;
-        }
-        
-        .access-denied {
-            background: #f8d7da;
-            border-left: 4px solid #e74c3c;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 30px 0;
-        }
-        .access-denied i {
-            font-size: 3rem;
-            color: #e74c3c;
-            margin-bottom: 15px;
-        }
-        .access-denied h2 {
-            color: #721c24;
-        }
-        .access-denied p {
-            color: #721c24;
-            font-size: 1.1rem;
-        }
-        .access-denied .btn {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 40px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: 600;
-        }
-        
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #cbd5e1; }
+
+        .footer-modern { background: white; color: var(--text-muted); margin-top: 60px; padding: 30px 0; border-top: 1px solid var(--border); text-align: center; font-size: 0.9rem; }
+
         @media (max-width: 768px) {
-            .dashboard-hero {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .request-card .request-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            .request-card .request-details {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .request-card .request-actions {
-                justify-content: center;
-            }
-            .footer-grid {
-                gap: 30px;
-            }
-        }
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+            .nav { display: none; }
+            .dashboard-hero { flex-direction: column; text-align: center; gap: 15px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-logo">
-        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
-    </div>
-
-    <!-- PROFILE SIDEBAR -->
+    <!-- SIDEBARS -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
-        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+        <div class="sidebar-head">
+            <h3>My Profile</h3>
+            <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        </div>
         <div id="profileLoggedIn" style="display: none;">
             <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Log out</a>
         </div>
         <div id="profileLoggedOut">
-            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign up</a>
         </div>
     </div>
 
-    <!-- DOT MENU SIDEBAR -->
     <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
     <div class="sidebar sidebar-right" id="dotSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
-        <h3><i class="fas fa-bars"></i> Menu</h3>
+        <div class="sidebar-head">
+            <h3>Menu</h3>
+            <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        </div>
         <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
         <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
-        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
         <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
-        <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
         <a href="tutor-application.html"><i class="fas fa-user-graduate"></i> Become a Tutor</a>
     </div>
 
     <!-- HEADER -->
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
-            </div>
-            <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
-            <div class="nav-links">
+    <header class="site-header">
+        <div class="wrap header-row">
+            <a class="brand" href="index.html">
+                <img src="logo.png" alt="AceEd Tutoring">
+            </a>
+            <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">ATP ▼</a>
-                    <div class="dropdown-content">
-                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
-                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
-                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
-                    </div>
-                </div>
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
-                    <i class="fas fa-user-circle"></i>
-                </button>
-                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="openSidebar('profile')"><i class="fas fa-user-circle"></i></button>
+                <button class="icon-btn" onclick="openSidebar('dot')"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <div class="container" id="tutorContent" style="display:none;">
-
+    <div class="wrap" id="tutorContent" style="display:none;">
         <!-- Dashboard Hero -->
         <div class="dashboard-hero">
             <div>
                 <h1><i class="fas fa-chalkboard-teacher"></i> Tutor Dashboard</h1>
-                <div class="user-info">
-                    <i class="fas fa-user"></i> Welcome, <span id="tutorName">Tutor</span>
-                </div>
+                <div class="user-info">Welcome, <span id="tutorName">Tutor</span></div>
             </div>
-            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                <span class="status-badge"><i class="fas fa-check-circle"></i> Approved</span>
-                <button class="btn-logout" onclick="handleLogout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+            <div style="display: flex; gap: 10px;">
+                <a href="log-session.html" class="btn btn-outline" style="color: #27ae60; border-color: #27ae60;"><i class="fas fa-plus-circle"></i> Log Session</a>
+                <button class="btn btn-danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </div>
 
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-
         <!-- Stats -->
-        <a href="log-session.html" class="btn" style="background: #27ae60; color: white; padding: 12px 25px; border-radius: 30px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
-            <i class="fas fa-plus-circle"></i> Log Weekly Session
-        </a>
-        
-        <a href="calendar.html" style="background: #3498db; color: white; padding: 12px 25px; border-radius: 30px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
-            <i class="fas fa-calendar-alt"></i> Calendar
-        </a>
-        
         <div class="stats-grid">
             <div class="stat-card assigned">
                 <div class="icon"><i class="fas fa-clock"></i></div>
@@ -831,7 +225,6 @@
                 <div class="icon"><i class="fas fa-check-circle"></i></div>
                 <div class="number" id="acceptedCount">0</div>
                 <div class="label">Accepted</div>
-                
             </div>
             <div class="stat-card helped">
                 <div class="icon"><i class="fas fa-users"></i></div>
@@ -841,30 +234,37 @@
             <div class="stat-card rejected">
                 <div class="icon"><i class="fas fa-times-circle"></i></div>
                 <div class="number" id="rejectedCount">0</div>
-                <div class="label">Rejected Requests</div>
+                <div class="label">Rejected</div>
             </div>
         </div>
 
-                <!-- MANAGE AVAILABILITY -->
-        <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #3498db;">
+        <!-- NEW: PENDING BOOKING REQUESTS -->
+        <div class="requests-section" style="border-left: 5px solid #8b5cf6;">
             <h2>
-                <span><i class="fas fa-calendar-alt" style="color: #3498db;"></i> Manage My Availability</span>
+                <span><i class="fas fa-calendar-check" style="color: #8b5cf6;"></i> 1-on-1 Booking Requests</span>
+                <span class="badge" id="bookingBadge" style="background: #8b5cf6;">0</span>
             </h2>
-            <p style="color: #64748b; margin-bottom: 20px; font-size: 0.9rem;">
-                Update the times you are available for once-off bookings. These will immediately update on your public tutor profile.
-            </p>
+            <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">These are once-off session requests from parents. Please accept or decline within 24 hours.</p>
             
-            <form id="availabilityForm">
-                <div class="availability-grid" id="tutorAvailabilityGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                    <!-- This will be generated by JavaScript -->
+            <div id="bookingRequestsList">
+                <div class="empty-state">
+                    <i class="fas fa-calendar"></i>
+                    <p>No new booking requests at the moment.</p>
                 </div>
-                
-                <div style="margin-top: 25px; text-align: right;">
-                    <button type="submit" id="saveAvailabilityBtn" style="background: #3498db; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;">
-                        <i class="fas fa-save"></i> Save Availability
-                    </button>
+            </div>
+        </div>
+
+        <!-- UPCOMING CONFIRMED SESSIONS -->
+        <div class="requests-section" style="border-left: 5px solid #27ae60;">
+            <h2>
+                <span><i class="fas fa-calendar-check" style="color: #27ae60;"></i> Upcoming Confirmed Sessions</span>
+            </h2>
+            <div id="confirmedSessionsList">
+                <div class="empty-state">
+                    <i class="fas fa-calendar-alt"></i>
+                    <p>No confirmed sessions yet.</p>
                 </div>
-            </form>
+            </div>
         </div>
 
         <!-- Assigned Requests -->
@@ -876,115 +276,54 @@
             <div id="assignedRequests">
                 <div class="empty-state">
                     <i class="fas fa-inbox"></i>
-                    <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
+                    <p>No assigned requests yet.</p>
                 </div>
             </div>
         </div>
 
-        <!-- NEW: PENDING BOOKING REQUESTS -->
-        <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #8b5cf6;">
+        <!-- MANAGE AVAILABILITY -->
+        <div class="requests-section" style="border-left: 5px solid #3498db;">
             <h2>
-                <span><i class="fas fa-calendar-check" style="color: #8b5cf6;"></i> 1-on-1 Booking Requests</span>
-                <span class="badge" id="bookingBadge" style="background: #8b5cf6;">0</span>
+                <span><i class="fas fa-calendar-alt" style="color: #3498db;"></i> Manage My Availability</span>
             </h2>
-            <p style="color: #64748b; margin-bottom: 15px; font-size: 0.9rem;">These are once-off session requests from parents. Please accept or decline within 24 hours.</p>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Update the times you are available for once-off bookings. These will immediately update on your public tutor profile.</p>
             
-            <div id="bookingRequestsList">
-                <div class="empty-state">
-                    <i class="fas fa-calendar" style="color: #8b5cf6;"></i>
-                    <p>No new booking requests at the moment.</p>
+            <form id="availabilityForm">
+                <div class="availability-grid" id="tutorAvailabilityGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;"></div>
+                
+                <div style="margin-top: 25px; text-align: right;">
+                    <button type="submit" id="saveAvailabilityBtn" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Availability
+                    </button>
                 </div>
-            </div>
-            <!-- UPCOMING CONFIRMED SESSIONS -->
-            <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #27ae60;">
-                <h2>
-                    <span><i class="fas fa-calendar-check" style="color: #27ae60;"></i> Upcoming Confirmed Sessions</span>
-                </h2>
-                <div id="confirmedSessionsList">
-                    <div class="empty-state">
-                        <i class="fas fa-calendar-alt"></i>
-                        <p>No confirmed sessions yet.</p>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
 
     </div>
 
     <!-- PENDING TUTOR MESSAGE -->
-    <div class="container" id="pendingTutorMessage" style="display:none;">
-        <div class="pending-message">
-            <i class="fas fa-clock"></i>
-            <h2>Application Under Review</h2>
-            <p>Your application is currently being reviewed by the AceEd team.<br>You will be notified once your application has been approved.</p>
-            <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+    <div class="wrap" id="pendingTutorMessage" style="display:none; margin-top: 50px;">
+        <div class="requests-section" style="text-align: center; padding: 50px; border-left: 5px solid #f39c12;">
+            <i class="fas fa-clock" style="font-size: 3rem; color: #f39c12; margin-bottom: 15px;"></i>
+            <h2 style="justify-content: center; color: #856404;">Application Under Review</h2>
+            <p style="color: var(--text-muted);">Your application is currently being reviewed by the AceEd team.<br>You will be notified once your application has been approved.</p>
+            <a href="index.html" class="btn btn-outline" style="margin-top: 20px;">Back to Home</a>
         </div>
     </div>
 
     <!-- ACCESS DENIED -->
-    <div class="container" id="accessDenied" style="display:none;">
-        <div class="access-denied">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h2>Access Denied</h2>
-            <p>You do not have permission to view this page.<br>Please contact AceEd Tutoring for assistance.</p>
-            <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+    <div class="wrap" id="accessDenied" style="display:none; margin-top: 50px;">
+        <div class="requests-section" style="text-align: center; padding: 50px; border-left: 5px solid #e74c3c;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px;"></i>
+            <h2 style="justify-content: center; color: #721c24;">Access Denied</h2>
+            <p style="color: var(--text-muted);">You do not have permission to view this page.<br>Please contact AceEd Tutoring for assistance.</p>
+            <a href="index.html" class="btn btn-outline" style="margin-top: 20px;">Back to Home</a>
         </div>
     </div>
 
     <!-- FOOTER -->
     <footer class="footer-modern">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring.</p>
-                    <div class="social-icons">
-                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="tutors.html">Our Tutors</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="tutor-application.html">Become a Tutor</a></li>
-                        <li><a href="register.html">Register Now</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Subjects We Cover</h4>
-                    <ul>
-                        <li>Mathematics & Maths Lit</li>
-                        <li>Physical Sciences & Life Science</li>
-                        <li>Accounting & Economics</li>
-                        <li>Geography & Business Studies</li>
-                        <li>History & Tourism</li>
-                        <li>CAT</li>
-                        <li>Afrikaans & English</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Get In Touch</h4>
-                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
-                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
-                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
-                    <div style="margin-top: 12px;">
-                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
-                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
-                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
-            </div>
-        </div>
+        <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a></p>
     </footer>
 
     <script>
@@ -1001,7 +340,7 @@
             }
             document.body.style.overflow = 'hidden';
         }
-    
+
         function closeSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.remove('open');
@@ -1012,16 +351,16 @@
             }
             document.body.style.overflow = 'auto';
         }
-    
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
                 closeSidebar('dot');
             }
         });
-    
+
         // ============================================================
-        // EMAIL HELPER - BRANDED TEMPLATE
+        // EMAIL HELPER
         // ============================================================
         function buildEmailBody(innerHtml) {
             return `
@@ -1035,14 +374,13 @@
                     </div>
                     <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
                         <p style="margin: 0;">© 2026 AceEd Tutoring</p>
-                        <p style="margin: 5px 0 0;">+27 65 529 4232 | clients@aceed.co.za</p>
                     </div>
                 </div>
             `;
         }
-    
+
         // ============================================================
-        // AUTH - CHECK USER ROLE
+        // AUTH CHECK
         // ============================================================
         firebase.auth().onAuthStateChanged(async function(user) {
             if (!user) {
@@ -1051,40 +389,25 @@
             }
     
             try {
-                // Fetch the user document from Firestore
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
-                
                 if (!doc.exists) {
-                    console.error("User document does not exist!");
                     document.getElementById('accessDenied').style.display = 'block';
                     return;
                 }
 
                 const userData = doc.data();
                 const role = userData.role;
-                
-                console.log("Current User Role:", role); // Check your browser console for this!
     
                 if (role === 'tutor') {
-                    // Hide other states just in case
-                    document.getElementById('accessDenied').style.display = 'none';
-                    document.getElementById('pendingTutorMessage').style.display = 'none';
-                    
-                    // Show Tutor Dashboard
                     document.getElementById('tutorContent').style.display = 'block';
                     document.getElementById('tutorName').textContent = userData.fullName || user.email || 'Tutor';
-                    
-                    // Load data
                     loadAssignedRequests();
-                    loadBookingRequests(); 
-                    loadTutorAvailability(); // If you added the availability manager earlier
+                    loadBookingRequests();
                     loadConfirmedSessions();
-                    
+                    loadTutorAvailability();
                 } else if (role === 'pending_tutor') {
                     document.getElementById('pendingTutorMessage').style.display = 'block';
                 } else {
-                    // If it's a parent or something else
-                    console.log("Access denied because role is:", role);
                     document.getElementById('accessDenied').style.display = 'block';
                 }
             } catch (error) {
@@ -1092,7 +415,7 @@
                 document.getElementById('accessDenied').style.display = 'block';
             }
         });
-    
+
         // ============================================================
         // LOGOUT
         // ============================================================
@@ -1101,7 +424,7 @@
                 window.location.href = 'index.html';
             });
         }
-    
+
         // ============================================================
         // LOAD ASSIGNED REQUESTS
         // ============================================================
@@ -1109,23 +432,15 @@
             const db = firebase.firestore();
             const tutorUid = firebase.auth().currentUser.uid;
             
-            console.log('🔍 Loading requests for tutor:', tutorUid);
-            
             db.collection('tutor_requests')
                 .where('tutorUid', '==', tutorUid)
                 .get()
                 .then(function(snapshot) {
-                    console.log('✅ Found', snapshot.size, 'requests');
                     const container = document.getElementById('assignedRequests');
                     const badge = document.getElementById('assignedBadge');
                     
                     if (snapshot.empty) {
-                        container.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-inbox"></i>
-                                <p>No assigned requests yet. You will be notified when a parent requests a tutor.</p>
-                            </div>
-                        `;
+                        container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No assigned requests yet.</p></div>`;
                         if (badge) badge.textContent = '0';
                         document.getElementById('pendingCount').textContent = '0';
                         document.getElementById('acceptedCount').textContent = '0';
@@ -1149,16 +464,12 @@
                     });
                     
                     requests.forEach(function(req) {
-                        // Match the status values coming from the admin dashboard
                         const isPending = req.status === 'matched' || req.status === 'assigned';
                         const isAccepted = req.status === 'accepted';
                         const isDeclined = req.status === 'declined';
                         
                         if (isPending) pendingCount++;
-                        if (isAccepted || req.status === 'completed') {
-                            acceptedCount++;
-                            helpedCount++;
-                        }
+                        if (isAccepted || req.status === 'completed') { acceptedCount++; helpedCount++; }
                         if (isDeclined) rejectedCount++;
                         
                         const statusClass = req.status || 'assigned';
@@ -1169,21 +480,15 @@
                         if (isAccepted) {
                             const subject = (req.subjects && req.subjects.length > 0) ? req.subjects[0] : '';
                             whatsappButton = `
-                                <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                    <span style="color: #27ae60; font-weight: 500;">
-                                        <i class="fas fa-check-circle"></i> You accepted this request from <strong>${req.parentName || 'Parent'}</strong>!
+                                <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <span style="color: #27ae60; font-weight: 500; font-size: 0.9rem;">
+                                        <i class="fas fa-check-circle"></i> Accepted from <strong>${req.parentName || 'Parent'}</strong>
                                     </span>
-                                    <button onclick="openWhatsAppParent('${req.parentUid}')" 
-                                            style="background: #25D366; color: white; padding: 8px 20px; 
-                                                   border: none; border-radius: 30px; cursor: pointer; 
-                                                   font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
-                                        <i class="fab fa-whatsapp"></i> Chat with Parent
+                                    <button class="btn btn-outline" onclick="openWhatsAppParent('${req.parentUid}')" style="color: #25D366; border-color: #25D366; padding: 6px 12px; font-size: 0.85rem;">
+                                        <i class="fab fa-whatsapp"></i> Chat
                                     </button>
-                                    <button onclick="viewStudentProgress('${req.childId}', '${subject.replace(/'/g, "\\'")}')" 
-                                            style="background: #3498db; color: white; padding: 8px 20px; 
-                                                   border: none; border-radius: 30px; cursor: pointer; 
-                                                   font-weight: 600; font-size: 0.85rem; transition: all 0.3s;">
-                                        <i class="fas fa-chart-line"></i> View Progress
+                                    <button class="btn btn-outline" onclick="viewStudentProgress('${req.childId}', '${subject.replace(/'/g, "\\'")}')" style="padding: 6px 12px; font-size: 0.85rem;">
+                                        <i class="fas fa-chart-line"></i> Progress
                                     </button>
                                 </div>
                             `;
@@ -1201,19 +506,10 @@
                                 </div>
                                 <div class="request-actions">
                                     ${isPending ? `
-                                        <button class="btn accept" onclick="acceptRequest('${req.id}')">
-                                            <i class="fas fa-check"></i> Accept
-                                        </button>
-                                        <button class="btn decline" onclick="declineRequest('${req.id}')">
-                                            <i class="fas fa-times"></i> Decline
-                                        </button>
+                                        <button class="btn btn-primary" onclick="acceptRequest('${req.id}')"><i class="fas fa-check"></i> Accept</button>
+                                        <button class="btn btn-danger" onclick="declineRequest('${req.id}')"><i class="fas fa-times"></i> Decline</button>
                                     ` : ''}
-                                    ${isAccepted ? `
-                                        <span style="color: #27ae60;"><i class="fas fa-check-circle"></i> Accepted</span>
-                                    ` : ''}
-                                    ${isDeclined ? `
-                                        <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>
-                                    ` : ''}
+                                    ${isDeclined ? `<span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Declined</span>` : ''}
                                 </div>
                                 ${whatsappButton}
                             </div>
@@ -1222,48 +518,34 @@
                     
                     container.innerHTML = html;
                     if (badge) badge.textContent = pendingCount;
-                    
                     document.getElementById('pendingCount').textContent = pendingCount;
                     document.getElementById('acceptedCount').textContent = acceptedCount;
                     document.getElementById('studentsCount').textContent = helpedCount;
                     document.getElementById('rejectedCount').textContent = rejectedCount;
                 })
                 .catch(function(error) {
-                    console.error('❌ Error loading assigned requests:', error);
-                    document.getElementById('assignedRequests').innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
-                            <p>Error loading requests: ${error.message}</p>
-                            <p style="font-size:0.8rem; margin-top:10px;">Please check the console for more details.</p>
-                        </div>
-                    `;
+                    console.error('Error:', error);
                 });
         }
-    
+
         // ============================================================
-        // ACCEPT REQUEST (WITH EMAILS)
+        // ACCEPT / DECLINE REQUEST
         // ============================================================
         async function acceptRequest(requestId) {
             if (!confirm('Do you want to accept this tutoring request?')) return;
-            
             const db = firebase.firestore();
             const user = firebase.auth().currentUser;
-    
             try {
-                // 1. Get request + tutor data
                 const reqDoc = await db.collection('tutor_requests').doc(requestId).get();
                 const req = reqDoc.data();
                 const tutorDoc = await db.collection('users').doc(user.uid).get();
                 const tutor = tutorDoc.data();
     
-                // 2. Update request
                 await db.collection('tutor_requests').doc(requestId).update({
                     status: 'accepted',
-                    acceptedAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
+                    acceptedAt: new Date().toISOString()
                 });
     
-                // 3. Email → PARENT with tutor contact
                 await db.collection('mail').add({
                     to: req.parentEmail,
                     message: {
@@ -1272,129 +554,56 @@
                             <h2>Your Tutor is Confirmed! 🎉</h2>
                             <p>Hi ${req.parentName || 'Parent'},</p>
                             <p>Great news! Your tutor for <strong>${req.childName}</strong> has been confirmed.</p>
-                            <hr>
-                            <p><strong>Tutor Details:</strong></p>
-                            <p><strong>Name:</strong> ${tutor.fullName || 'N/A'}<br>
+                            <p><strong>Tutor:</strong> ${tutor.fullName || 'N/A'}<br>
                                <strong>Email:</strong> ${tutor.email || 'N/A'}<br>
-                               <strong>Phone:</strong> ${tutor.phone || tutor.whatsapp || 'Not provided'}</p>
-                            <hr>
+                               <strong>Phone:</strong> ${tutor.phone || 'N/A'}</p>
                             <p>Please reach out to your tutor via WhatsApp to schedule your first session.</p>
                         `)
                     }
                 });
-    
-                // 4. Email → ADMIN
-                await db.collection('mail').add({
-                    to: 'admin@aceed.co.za',
-                    message: {
-                        subject: 'Tutor Accepted: ' + (tutor.fullName || 'Tutor'),
-                        html: buildEmailBody(`
-                            <h2>Tutor Accepted Match</h2>
-                            <p><strong>Tutor:</strong> ${tutor.fullName} (${tutor.email})</p>
-                            <p><strong>Student:</strong> ${req.childName} (Grade ${req.grade})</p>
-                            <p><strong>Parent:</strong> ${req.parentName} (${req.parentEmail})</p>
-                        `)
-                    }
-                });
-    
-                alert('✅ Request accepted! The parent has been notified with your contact info.');
+                alert('✅ Request accepted! The parent has been notified.');
                 loadAssignedRequests();
-    
             } catch (error) {
-                console.error('Error accepting request:', error);
                 alert('Error: ' + error.message);
             }
         }
-    
-        // ============================================================
-        // DECLINE REQUEST (WITH EMAIL)
-        // ============================================================
+
         async function declineRequest(requestId) {
             if (!confirm('Do you want to decline this tutoring request?')) return;
-            
             const db = firebase.firestore();
             const user = firebase.auth().currentUser;
-    
             try {
-                // 1. Get request + tutor data
                 const reqDoc = await db.collection('tutor_requests').doc(requestId).get();
                 const req = reqDoc.data();
                 const tutorDoc = await db.collection('users').doc(user.uid).get();
                 const tutor = tutorDoc.data();
     
-                // 2. Update request
                 await db.collection('tutor_requests').doc(requestId).update({
                     status: 'declined',
-                    declinedAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
+                    declinedAt: new Date().toISOString()
                 });
     
-                // 3. Email → ADMIN (needs to reassign)
                 await db.collection('mail').add({
                     to: 'admin@aceed.co.za',
                     message: {
                         subject: 'Tutor Declined - Action Needed',
                         html: buildEmailBody(`
                             <h2>Tutor Declined Match</h2>
-                            <p><strong>Tutor:</strong> ${tutor.fullName} (${tutor.email})</p>
+                            <p><strong>Tutor:</strong> ${tutor.fullName}</p>
                             <p><strong>Student:</strong> ${req.childName} (Grade ${req.grade})</p>
-                            <p><strong>Parent:</strong> ${req.parentName} (${req.parentEmail})</p>
-                            <hr>
-                            <p>Please reassign this request to another tutor from the admin dashboard.</p>
-                            <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Admin Dashboard</a></p>
+                            <p>Please reassign this request.</p>
                         `)
                     }
                 });
-    
-                alert('❌ Request declined. Admin has been notified.');
+                alert('❌ Request declined.');
                 loadAssignedRequests();
-    
             } catch (error) {
-                console.error('Error declining request:', error);
                 alert('Error: ' + error.message);
             }
         }
-    
-        // ============================================================
-        // WHATSAPP - OPEN CHAT WITH PARENT
-        // ============================================================
-        function openWhatsAppParent(parentUid) {
-            const db = firebase.firestore();
-            db.collection('users').doc(parentUid).get()
-                .then(function(doc) {
-                    const parentData = doc.data();
-                    const phone = parentData.phone || '';
-                    
-                    if (!phone) {
-                        alert('Parent contact number not available.');
-                        return;
-                    }
-                    
-                    const cleanPhone = phone.replace(/\D/g, '');
-                    if (cleanPhone.length < 10) {
-                        alert('Invalid phone number format.');
-                        return;
-                    }
-                    
-                    const message = encodeURIComponent('Hello! I am a tutor matched with your child through AceEd Tutoring. I would like to discuss our tutoring sessions.');
-                    window.open('https://wa.me/' + cleanPhone + '?text=' + message, '_blank');
-                })
-                .catch(function(error) {
-                    console.error('Error fetching parent contact:', error);
-                    alert('Error: Could not fetch parent contact details.');
-                });
-        }
 
-        function viewStudentProgress(childId, subject) {
-            if (!subject) {
-                alert('No subject found for this student.');
-                return;
-            }
-            window.location.href = 'progress.html?student=' + encodeURIComponent(childId) + '&subject=' + encodeURIComponent(subject);
-        }
-
-                // ============================================================
-        // LOAD & MANAGE BOOKING REQUESTS (1-on-1)
+        // ============================================================
+        // LOAD & MANAGE 1-ON-1 BOOKING REQUESTS
         // ============================================================
         async function loadBookingRequests() {
             const user = firebase.auth().currentUser;
@@ -1405,19 +614,13 @@
             const badge = document.getElementById('bookingBadge');
 
             try {
-                // Get all bookings for this tutor that are pending confirmation
                 const snapshot = await db.collection('bookings')
                     .where('tutorId', '==', user.uid)
                     .where('status', '==', 'pending_tutor_confirmation')
                     .get();
 
                 if (snapshot.empty) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-calendar" style="color: #8b5cf6;"></i>
-                            <p>No new booking requests at the moment.</p>
-                        </div>
-                    `;
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar"></i><p>No new booking requests at the moment.</p></div>`;
                     if (badge) badge.textContent = '0';
                     return;
                 }
@@ -1428,25 +631,20 @@
                 snapshot.forEach(doc => {
                     count++;
                     const req = doc.data();
-                    
                     html += `
                         <div class="request-card" style="border-left: 4px solid #8b5cf6;">
                             <div class="request-header">
                                 <h3>${req.parentEmail.split('@')[0]}</h3>
-                                <span class="status assigned">Pending Confirmation</span>
+                                <span class="status assigned">Pending</span>
                             </div>
                             <div class="request-details">
-                                <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
-                                <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
+                                <div><i class="fas fa-calendar-day"></i> ${req.timeSlot}</div>
+                                <div><i class="fas fa-clock"></i> ${req.duration} Hour(s)</div>
                                 <div><i class="fas fa-money-bill"></i> Payout: <strong>R${(req.duration * 100) * 0.70}</strong></div>
                             </div>
                             <div class="request-actions">
-                                <button class="btn accept" onclick="confirmBooking('${doc.id}', 'accept')">
-                                    <i class="fas fa-check"></i> Accept & Confirm
-                                </button>
-                                <button class="btn decline" onclick="confirmBooking('${doc.id}', 'decline')">
-                                    <i class="fas fa-times"></i> Decline
-                                </button>
+                                <button class="btn btn-primary" onclick="confirmBooking('${doc.id}', 'accept')"><i class="fas fa-check"></i> Accept & Confirm</button>
+                                <button class="btn btn-danger" onclick="confirmBooking('${doc.id}', 'decline')"><i class="fas fa-times"></i> Decline</button>
                             </div>
                         </div>
                     `;
@@ -1460,41 +658,26 @@
             }
         }
 
-                // ============================================================
-        // ACCEPT OR DECLINE BOOKING (WITH EMAILS & INVOICE)
-        // ============================================================
         async function confirmBooking(bookingId, action) {
             const isAccept = action === 'accept';
-            const confirmMsg = isAccept 
-                ? 'Accept this booking? The parent will be emailed an invoice to pay.' 
-                : 'Decline this booking? The parent will be notified.';
-            
-            if (!confirm(confirmMsg)) return;
+            if (!confirm(isAccept ? 'Accept this booking? The parent will be emailed an invoice.' : 'Decline this booking?')) return;
 
             const db = firebase.firestore();
-            const user = firebase.auth().currentUser;
-
             try {
-                // 1. Get the booking details
                 const bookingRef = db.collection('bookings').doc(bookingId);
                 const bookingDoc = await bookingRef.get();
                 const booking = bookingDoc.data();
 
-                // 2. Update the booking status
-                const newStatus = isAccept ? 'confirmed_pending_payment' : 'declined_by_tutor';
                 await bookingRef.update({
-                    status: newStatus,
+                    status: isAccept ? 'confirmed_pending_payment' : 'declined_by_tutor',
                     updatedAt: new Date().toISOString()
                 });
 
                 if (isAccept) {
-                    // 3. CREATE THE INVOICE
                     const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-                    
                     const dueDate = new Date();
                     dueDate.setDate(dueDate.getDate() + 7);
                     
-                    // Failsafe in case totalPrice was not saved by the booking page
                     const finalTotal = booking.totalPrice || (Number(booking.duration) * 100);
 
                     const invoiceRef = await db.collection('invoices').add({
@@ -1517,7 +700,6 @@
 
                     const newInvoiceId = invoiceRef.id;
 
-                    // 4. Send Email to Parent with the Invoice Link
                     await db.collection('mail').add({
                         to: booking.parentEmail,
                         message: {
@@ -1526,114 +708,73 @@
                                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
                                     <div style="background: #1e2a3a; color: white; padding: 30px 20px; text-align: center;">
                                         <h1 style="margin: 0; font-size: 24px;">AceEd Tutoring</h1>
-                                        <p style="color: #f39c12; margin: 5px 0 0; font-size: 14px;">✦ Affordable Services ✦</p>
                                     </div>
-                                    
                                     <div style="padding: 30px 20px;">
-                                        <h2 style="color: #1e2a3a; margin-top: 0;">Invoice ${invoiceNumber}</h2>
-                                        <p style="color: #666; font-size: 14px;"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-                                        
-                                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                                        
-                                        <h3 style="color: #1e2a3a; font-size: 16px; margin-bottom: 5px;">Billed to:</h3>
-                                        <p style="margin: 0; font-size: 14px;"><a href="mailto:${booking.parentEmail}">${booking.parentEmail}</a></p>
-                                        
-                                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                                        
-                                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                                            <thead>
-                                                <tr style="background: #1e2a3a; color: white;">
-                                                    <th style="padding: 10px; text-align: left;">Description</th>
-                                                    <th style="padding: 10px; text-align: right;">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td style="padding: 15px 10px; border-bottom: 1px solid #eee;">
-                                                        <strong>1-on-1 Tutoring (${booking.tutorName})</strong><br>
-                                                        <span style="color: #666; font-size: 12px;">${booking.timeSlot} (${booking.duration} Hours)</span>
-                                                    </td>
-                                                    <td style="padding: 15px 10px; border-bottom: 1px solid #eee; text-align: right; vertical-align: bottom;">
-                                                        R${finalTotal}.00
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        
-                                        <div style="text-align: right; margin-top: 20px;">
-                                            <h3 style="color: #1e2a3a; margin: 0;">TOTAL DUE: <span style="color: #27ae60;">R${finalTotal}.00</span></h3>
-                                        </div>
-                                        
-                                        <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-                                        
-                                        <h3 style="color: #1e2a3a; font-size: 16px; margin-bottom: 15px;">Payment Instructions</h3>
-                                        <p style="font-size: 14px; line-height: 1.8; margin: 0;">
-                                            <strong>Bank:</strong> Standard Bank<br>
-                                            <strong>Account Holder:</strong> AceEd Tutoring<br>
-                                            <strong>Account Number:</strong> 10271792580<br>
-                                            <strong>Branch Code:</strong> 000610<br>
-                                            <strong>PayShap ID:</strong> +27 65 529 4232<br>
-                                            <strong>Payment Reference:</strong> <span style="background: #fff3cd; padding: 2px 6px; border-radius: 4px;">ACE-${bookingId.slice(-6).toUpperCase()}</span>
-                                        </p>
-                                        
+                                        <h2>Invoice ${invoiceNumber}</h2>
+                                        <p>1-on-1 Tutoring: ${booking.timeSlot} (${booking.duration} Hours)</p>
+                                        <h3>TOTAL DUE: <span style="color: #27ae60;">R${finalTotal}.00</span></h3>
+                                        <p><strong>Bank:</strong> Standard Bank<br><strong>Account:</strong> 10271792580<br><strong>Branch:</strong> 000610<br><strong>Ref:</strong> ACE-${bookingId.slice(-6).toUpperCase()}</p>
                                         <div style="text-align: center; margin-top: 30px;">
-                                            <a href="https://aceed.co.za/confirm-payment.html?invoice=${newInvoiceId}" style="background: #27ae60; color: white; padding: 14px 30px; text-decoration: none; border-radius: 30px; display: inline-block; font-weight: bold; font-size: 16px;">
-                                                ✓ I've Made Payment
-                                            </a>
+                                            <a href="https://aceed.co.za/confirm-payment.html?invoice=${newInvoiceId}" style="background: #27ae60; color: white; padding: 14px 30px; text-decoration: none; border-radius: 30px; display: inline-block; font-weight: bold;">✓ I've Made Payment</a>
                                         </div>
-                                        
-                                        <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
-                                            Questions? Reply to this email or WhatsApp us at <a href="https://wa.me/27655294232">+27 65 529 4232</a>.
-                                        </p>
                                     </div>
                                 </div>
                             `
                         }
                     });
-
-                    // 5. Send Email to Admin
-                    await db.collection('mail').add({
-                        to: 'admin@aceed.co.za',
-                        message: {
-                            subject: `Tutor Accepted Booking - Invoice ${invoiceNumber}`,
-                            html: buildEmailBody(`
-                                <h2>Booking Accepted</h2>
-                                <p><strong>Tutor:</strong> ${booking.tutorName}</p>
-                                <p><strong>Parent:</strong> ${booking.parentEmail}</p>
-                                <p><strong>Time:</strong> ${booking.timeSlot}</p>
-                                <p><strong>Invoice:</strong> ${invoiceNumber}</p>
-                                <p><strong>Status:</strong> Waiting for Parent Payment.</p>
-                            `)
-                        }
-                    });
-
-                } else {
-                    // Decline Email to Parent
-                    await db.collection('mail').add({
-                        to: booking.parentEmail,
-                        message: {
-                            subject: 'Update on your booking request',
-                            html: buildEmailBody(`
-                                <h2>Booking Request Declined</h2>
-                                <p>Unfortunately, the tutor is no longer available for the time you requested:</p>
-                                <div style="background:#f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                                    <p style="margin: 0 0 5px 0;"><strong>Time:</strong> ${booking.timeSlot}</p>
-                                    <p style="margin: 0;"><strong>Tutor:</strong> ${booking.tutorName}</p>
-                                </div>
-                                <p>Our team has been notified and will help you find a new tutor or a new time slot.</p>
-                            `)
-                        }
-                    });
                 }
-
-                alert(isAccept ? '✅ Booking accepted! Invoice generated and parent notified.' : '❌ Booking declined.');
-                loadBookingRequests(); // Reload the list
-
+                alert(isAccept ? '✅ Booking accepted! Invoice generated.' : '❌ Booking declined.');
+                loadBookingRequests();
             } catch (error) {
-                console.error('Error updating booking:', error);
                 alert('Error: ' + error.message);
             }
-        }        // ============================================================
+        }
+
+        // ============================================================
+        // LOAD CONFIRMED SESSIONS
+        // ============================================================
+        async function loadConfirmedSessions() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            const db = firebase.firestore();
+            const container = document.getElementById('confirmedSessionsList');
+
+            try {
+                const snapshot = await db.collection('bookings')
+                    .where('tutorId', '==', user.uid)
+                    .where('status', '==', 'confirmed_paid')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><p>No confirmed sessions yet.</p></div>`;
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const req = doc.data();
+                    html += `
+                        <div class="request-card" style="border-left: 4px solid #27ae60; background: #f0fdf4;">
+                            <div class="request-header">
+                                <h3>${req.parentEmail.split('@')[0]}</h3>
+                                <span class="status accepted">Paid & Confirmed</span>
+                            </div>
+                            <div class="request-details">
+                                <div><i class="fas fa-calendar-day"></i> ${req.timeSlot}</div>
+                                <div><i class="fas fa-clock"></i> ${req.duration} Hour(s)</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+            }
+        }
+
+        // ============================================================
         // MANAGE AVAILABILITY
         // ============================================================
         const daysOfWeek = [
@@ -1660,33 +801,30 @@
                     let html = '';
 
                     daysOfWeek.forEach(day => {
-                        // Check if this day is saved in their profile
                         const isChecked = savedAvailability[day.name] ? 'checked' : '';
                         const startTime = savedAvailability[day.name] ? savedAvailability[day.name].start : '';
                         const endTime = savedAvailability[day.name] ? savedAvailability[day.name].end : '';
 
-                        // Build time dropdowns
                         let startOptions = `<option value="">Start Time</option>`;
                         let endOptions = `<option value="">End Time</option>`;
                         
                         for(let i=8; i<=20; i++) {
                             const time = i.toString().padStart(2, '0') + ':00';
                             const nextTime = (i+1).toString().padStart(2, '0') + ':00';
-                            
                             startOptions += `<option value="${time}" ${startTime === time ? 'selected' : ''}>${time}</option>`;
                             endOptions += `<option value="${nextTime}" ${endTime === nextTime ? 'selected' : ''}>${nextTime}</option>`;
                         }
 
                         html += `
-                            <div class="availability-day" style="background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e0e0e0;">
-                                <div class="day-label" style="font-weight: 600; color: #1e2a3a; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                                    <input type="checkbox" id="avail_${day.id}" style="width: 18px; height: 18px; cursor: pointer;" ${isChecked}>
-                                    <label for="avail_${day.id}" style="cursor: pointer; margin: 0;">${day.name}</label>
+                            <div class="availability-day" style="background: var(--bg-color); border-radius: 8px; padding: 15px; border: 1px solid var(--border);">
+                                <div class="day-label" style="font-weight: 600; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="avail_${day.id}" style="width: 16px; height: 16px; cursor: pointer;" ${isChecked}>
+                                    <label for="avail_${day.id}" style="cursor: pointer; margin: 0; font-size: 0.9rem;">${day.name}</label>
                                 </div>
-                                <select id="start_${day.id}" style="margin-bottom: 8px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; width: 100%;">
+                                <select id="start_${day.id}" style="margin-bottom: 8px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; width: 100%;">
                                     ${startOptions}
                                 </select>
-                                <select id="end_${day.id}" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; width: 100%;">
+                                <select id="end_${day.id}" style="padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; width: 100%;">
                                     ${endOptions}
                                 </select>
                             </div>
@@ -1699,10 +837,8 @@
             }
         }
 
-        // Handle Saving Availability
         document.getElementById('availabilityForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const user = firebase.auth().currentUser;
             if (!user) return;
 
@@ -1711,13 +847,11 @@
             btn.disabled = true;
 
             const newAvailability = {};
-            
             daysOfWeek.forEach(day => {
                 const isChecked = document.getElementById(`avail_${day.id}`).checked;
                 if (isChecked) {
                     const start = document.getElementById(`start_${day.id}`).value;
                     const end = document.getElementById(`end_${day.id}`).value;
-                    
                     if (start && end) {
                         newAvailability[day.name] = { start: start, end: end };
                     }
@@ -1728,67 +862,15 @@
                 await firebase.firestore().collection('users').doc(user.uid).update({
                     availability: newAvailability
                 });
-                
-                alert('✅ Availability saved successfully! It will now show on your public profile.');
+                alert('✅ Availability saved successfully!');
                 btn.innerHTML = '<i class="fas fa-save"></i> Save Availability';
                 btn.disabled = false;
             } catch (error) {
-                console.error('Error saving availability:', error);
                 alert('Error saving: ' + error.message);
                 btn.innerHTML = '<i class="fas fa-save"></i> Save Availability';
                 btn.disabled = false;
             }
         });
-                // ============================================================
-        // LOAD CONFIRMED SESSIONS
-        // ============================================================
-        async function loadConfirmedSessions() {
-            const user = firebase.auth().currentUser;
-            if (!user) return;
-
-            const db = firebase.firestore();
-            const container = document.getElementById('confirmedSessionsList');
-
-            try {
-                const snapshot = await db.collection('bookings')
-                    .where('tutorId', '==', user.uid)
-                    .where('status', '==', 'confirmed_paid')
-                    .get();
-
-                if (snapshot.empty) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-calendar-alt"></i>
-                            <p>No confirmed sessions yet.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '';
-                snapshot.forEach(doc => {
-                    const req = doc.data();
-                    html += `
-                        <div class="request-card" style="border-left: 4px solid #27ae60; background: #f0fdf4;">
-                            <div class="request-header">
-                                <h3>${req.parentEmail.split('@')[0]}</h3>
-                                <span class="status accepted">Paid & Confirmed</span>
-                            </div>
-                            <div class="request-details">
-                                <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
-                                <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-
-            } catch (error) {
-                console.error('Error loading sessions:', error);
-            }
-        }
-        
     </script>
-    
 </body>
 </html>
