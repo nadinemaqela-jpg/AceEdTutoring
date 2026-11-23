@@ -521,7 +521,7 @@
                                     <p><strong>Invoice:</strong> ${invoice.invoiceNumber}</p>
                                     <p><strong>Parent:</strong> ${invoice.parentName}</p>
                                     <p><strong>Email:</strong> ${invoice.parentEmail}</p>
-                                    <p><strong>Amount:</strong> R${invoice.total.toFixed(2)}</p>
+                                    <p><strong>Amount:</strong> R${(invoice.total || 0).toFixed(2)}</p>
                                     <p><strong>Method:</strong> ${methodLabel}</p>
                                     ${proofLine}
                                     <hr>
