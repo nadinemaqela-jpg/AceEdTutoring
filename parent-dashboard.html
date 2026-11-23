@@ -7,20 +7,23 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
       gtag('config', 'AW-18521810069');
     </script>
-    <!-- Event snippet for Add to basket conversion page --> <script> gtag('event', 'conversion', {'send_to': 'AW-18521810069/rDa0CPeXk6YdEJXJ8f9E'}); </script>
-    
+    <!-- Event snippet for Add to basket conversion page --> 
+    <script> gtag('event', 'conversion', {'send_to': 'AW-18521810069/rDa0CPeXk6YdEJXJ8f9E'}); </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Dashboard - AceEd Tutoring</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -28,958 +31,222 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <script src="js/auth.js"></script>
-    <script src="js/cart.js"></script>
-    
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1PUbGQSYXh41L4_NVX6_X57LDNlaAF4g",
+            authDomain: "aceed-tutoring.firebaseapp.com",
+            projectId: "aceed-tutoring",
+            storageBucket: "aceed-tutoring.firebasestorage.app",
+            messagingSenderId: "225577605291",
+            appId: "1:225577605291:web:75327bc4e1f644cef47fee"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --bg-color: #f7f9fc;
+            --white: #ffffff;
+            --text-main: #1e2a3e;
+            --text-muted: #64748b;
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --wrap: 1100px;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        a { text-decoration: none; color: var(--primary); }
         
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            min-height: 100vh;
+        .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+            transition: all 0.2s; border: none; cursor: pointer; text-decoration: none;
         }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-outline:hover { background: var(--bg-color); }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #1e8449; }
+
+        /* HEADER */
+        .site-header { position: sticky; top: 0; z-index: 100; background: white; border-bottom: 1px solid var(--border); }
+        .header-row { display: flex; align-items: center; justify-content: space-between; min-height: 72px; }
+        .brand img { height: 45px; width: auto; }
+        .nav { display: flex; align-items: center; gap: 24px; }
+        .nav-link { color: var(--text-muted); font-weight: 500; font-size: 0.95rem; background: none; border: none; cursor: pointer; padding: 8px 0; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary); }
+        .header-actions { display: flex; align-items: center; gap: 15px; margin-left: 20px; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
+        .icon-btn:hover { color: var(--primary); }
+
+        /* SIDEBARS */
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; opacity: 0; transition: opacity .2s; }
+        .sidebar-overlay.active { display: block; opacity: 1; }
+        .sidebar { position: fixed; top: 0; width: 300px; height: 100%; background: white; z-index: 1001; padding: 24px; overflow-y: auto; transition: transform .3s; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
+        .sidebar-left { left: 0; transform: translateX(-100%); }
+        .sidebar-left.open { transform: translateX(0); }
+        .sidebar-right { right: 0; transform: translateX(100%); }
+        .sidebar-right.open { transform: translateX(0); }
+        .sidebar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .sidebar-head h3 { font-size: 1.2rem; }
+        .sidebar-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-main); }
+        .sidebar a { display: flex; align-items: center; gap: 12px; padding: 12px 0; color: var(--text-muted); border-bottom: 1px solid var(--bg-color); font-weight: 500; }
+        .sidebar a:hover { color: var(--primary); }
+        .sidebar a i { width: 20px; color: var(--primary); }
+
+        /* DASHBOARD HERO */
+        .dashboard-hero { background: white; border-radius: var(--radius); padding: 30px; margin: 30px 0; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .dashboard-hero h1 { display: flex; align-items: center; gap: 15px; font-size: 1.8rem; color: var(--text-main); }
+        .dashboard-hero h1 i { color: var(--primary); }
+        .dashboard-hero .user-info { font-size: 1rem; color: var(--text-muted); margin-top: 5px; }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
-        }
+        /* STATS GRID */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
+        .stat-card { background: white; border-radius: var(--radius); padding: 25px; text-align: center; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .stat-card .number { font-size: 2.5rem; font-weight: 700; color: var(--text-main); }
+        .stat-card .label { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; font-weight: 500; }
+        .stat-card .icon { font-size: 2rem; margin-bottom: 10px; color: var(--primary); }
+
+        /* SECTIONS */
+        .requests-section { background: white; border-radius: var(--radius); padding: 25px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 30px; }
+        .requests-section h2 { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; color: var(--text-main); }
+        .requests-section h2 .badge { background: var(--primary); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; }
+
+        /* INVOICE CARD */
+        .invoice-card { border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 15px; background: var(--bg-color); }
+        .invoice-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .invoice-header h3 { font-size: 1.1rem; color: var(--text-main); }
+        .invoice-header .status { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .status.pending { background: #fff3cd; color: #856404; }
+        .status.payment_claimed { background: #cce5ff; color: #004085; }
+        .status.paid { background: #d4edda; color: #155724; }
         
-        .bg-logo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .bg-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.06;
-        }
+        .payment-box { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .payment-box h4 { font-size: 0.95rem; margin-bottom: 10px; color: var(--text-main); }
+        .payment-box p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; }
         
-        header {
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 100;
-        }
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #cbd5e1; }
+
+        .footer-modern { background: white; color: var(--text-muted); margin-top: 60px; padding: 30px 0; border-top: 1px solid var(--border); text-align: center; font-size: 0.9rem; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; border-radius: var(--radius); padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--text-main); }
+        .modal-content h2 { margin-bottom: 20px; color: var(--text-main); }
         
-        .logo-image {
-            max-width: 250px;
-            margin: 0 auto;
-        }
-        .logo-image img {
-            width: 100%;
-            max-height: 80px;
-            object-fit: contain;
-        }
-        .tagline {
-            font-size: 1rem;
-            margin: 15px 0;
-            font-weight: 500;
-        }
-        
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #2c3e50;
-            min-width: 180px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-            border-radius: 12px;
-            top: 100%;
-            left: 0;
-            z-index: 10;
-            backdrop-filter: blur(2px);
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown-content a {
-            color: white;
-            padding: 10px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: background 0.2s;
-        }
-        .dropdown-content a:hover {
-            background-color: #3498db;
-        }
-        
-        .icon-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 30px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-btn:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-        .profile-btn {
-            font-size: 1.2rem;
-        }
-        
-        .cart-link {
-            position: relative;
-            background-color: #f39c12;
-            border-radius: 40px;
-            padding: 6px 15px;
-            color: white !important;
-        }
-        .cart-link:hover {
-            background-color: #e67e22 !important;
-        }
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: none;
-        }
-        .cart-badge.show {
-            display: inline-block;
-        }
-        .auth-buttons {
-            display: none !important;
-        }
-        
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            width: 320px;
-            height: 100%;
-            background: #1e2a3a;
-            color: white;
-            z-index: 1001;
-            padding: 30px 20px;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-        }
-        .sidebar-left {
-            left: 0;
-            transform: translateX(-100%);
-        }
-        .sidebar-left.open {
-            transform: translateX(0);
-        }
-        .sidebar-right {
-            right: 0;
-            transform: translateX(100%);
-        }
-        .sidebar-right.open {
-            transform: translateX(0);
-        }
-        .sidebar-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            float: right;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-        }
-        .sidebar-close:hover {
-            transform: rotate(90deg);
-        }
-        .sidebar h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #f39c12;
-        }
-        .sidebar a {
-            display: block;
-            color: #cbd5e1;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none;
-            transition: all 0.2s;
-            font-size: 0.95rem;
-        }
-        .sidebar a:hover {
-            color: #fff;
-            padding-left: 5px;
-        }
-        .sidebar a i {
-            width: 25px;
-            color: #f39c12;
-        }
-        
-        .dashboard-hero {
-            background: linear-gradient(135deg, #2c3e50, #1e2a3a);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 30px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .dashboard-hero h1 {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.8rem;
-        }
-        .dashboard-hero h1 i {
-            color: #f39c12;
-        }
-        .dashboard-hero .user-info {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .btn-logout {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-logout:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .back-link {
-            display: inline-block;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 10px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .stat-card .label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        .stat-card .icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .children-section {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-        .children-section h2 {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .children-section h2 .btn-add {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .children-section h2 .btn-add:hover {
-            background: #1e8449;
-        }
-        
-        .child-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .child-card:hover {
-            border-color: #3498db;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .child-card .child-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-        .child-card .child-header h3 {
-            font-size: 1.1rem;
-            color: #1e2a3a;
-        }
-        .child-card .child-header .grade-badge {
-            background: #3498db;
-            color: white;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        .child-card .child-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .child-card .child-details i {
-            color: #3498db;
-            width: 20px;
-        }
-        .child-card .child-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .child-card .child-actions .btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-        .child-card .child-actions .btn.request {
-            background: #f39c12;
-            color: white;
-        }
-        .child-card .child-actions .btn.request:hover {
-            background: #e67e22;
-        }
-        .child-card .child-actions .btn.view {
-            background: #3498db;
-            color: white;
-        }
-        .child-card .child-actions .btn.view:hover {
-            background: #2471a3;
-        }
-        .child-card .child-actions .btn.remove {
-            background: #e74c3c;
-            color: white;
-        }
-        .child-card .child-actions .btn.remove:hover {
-            background: #c0392b;
-        }
-        
-        .requests-section {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-        .requests-section h2 {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .requests-section h2 .badge {
-            background: #e74c3c;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .request-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .request-card:hover {
-            border-color: #3498db;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .request-card .request-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-        .request-card .request-header h3 {
-            font-size: 1rem;
-            color: #1e2a3a;
-        }
-        .request-card .request-header .status {
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .request-card .request-header .status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .request-card .request-header .status.matched {
-            background: #cce5ff;
-            color: #004085;
-        }
-        .request-card .request-header .status.accepted {
-            background: #d4edda;
-            color: #155724;
-        }
-        .request-card .request-header .status.booked {
-            background: #d4edda;
-            color: #155724;
-        }
-        .request-card .request-header .status.completed {
-            background: #e8e8e8;
-            color: #555;
-        }
-        .request-card .request-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .request-card .request-details i {
-            color: #3498db;
-            width: 20px;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-        }
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-        
-        .pricing-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 16px;
-            padding: 20px;
-            background: #f8fafd;
-            transition: transform 0.3s;
-        }
-        .pricing-card:hover {
-            transform: translateY(-3px);
-        }
-        
-        .btn-add-cart {
-            padding: 8px 15px;
-            background: #f39c12;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-        }
-        .btn-add-cart:hover {
-            background: #e67e22;
-            transform: translateY(-2px);
-        }
-        
-        .btn-pay {
-            padding: 8px 15px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-pay:hover {
-            background: #1e8449;
-            transform: translateY(-2px);
-        }
-        
-        .btn-whatsapp {
-            padding: 8px 15px;
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-whatsapp:hover {
-            background: #128C7E;
-            transform: translateY(-2px);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .modal-close:hover {
-            color: #e74c3c;
-        }
-        .modal-content h2 {
-            margin-bottom: 20px;
-        }
-        .modal-content .form-group {
-            margin-bottom: 15px;
-        }
-        .modal-content .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-        .modal-content .form-group input, 
-        .modal-content .form-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-        .modal-content .form-group input:focus,
-        .modal-content .form-group select:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-        .modal-content .btn-submit {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        .modal-content .btn-submit:hover {
-            background: #1e8449;
-        }
-        
-        .footer-modern {
-            background: #0f1720;
-            color: #e2e8f0;
-            margin-top: 60px;
-            padding: 50px 0 25px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 35px;
-            margin-bottom: 35px;
-        }
-        .footer-col h4 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 18px;
-            position: relative;
-            display: inline-block;
-        }
-        .footer-col h4:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -6px;
-            width: 40px;
-            height: 3px;
-            background: #e74c3c;
-            border-radius: 3px;
-        }
-        .footer-col p, .footer-col ul {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            opacity: 0.85;
-        }
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-        .footer-col ul li a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-col ul li a:hover {
-            color: #e74c3c;
-            padding-left: 4px;
-        }
-        .footer-register-btn {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 10px 28px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 700;
-            margin-top: 12px;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(231,76,60,0.3);
-        }
-        .footer-register-btn:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        .footer-dark-btn {
-            background: #2d3e50;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            display: inline-block;
-            margin-right: 10px;
-            margin-top: 8px;
-        }
-        .footer-dark-btn:hover {
-            background: #1e2f40;
-            transform: translateY(-1px);
-        }
-        .social-icons {
-            display: flex;
-            gap: 14px;
-            margin-top: 15px;
-        }
-        .social-icons a {
-            background: #1e2a3a;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.1rem;
-            transition: all 0.2s;
-        }
-        .social-icons a:hover {
-            background: #e74c3c;
-            transform: translateY(-3px);
-        }
-        .footer-bottom {
-            text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        .footer-bottom a {
-            color: #e2e8f0;
-            text-decoration: none;
-        }
-        .footer-bottom a:hover {
-            color: #e74c3c;
-        }
-        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+
         @media (max-width: 768px) {
-            .dashboard-hero {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .child-card .child-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            .child-card .child-details {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .child-card .child-actions {
-                justify-content: center;
-            }
-            .request-card .request-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            .request-card .request-details {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .footer-grid {
-                gap: 30px;
-            }
-        }
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+            .nav { display: none; }
+            .dashboard-hero { flex-direction: column; text-align: center; gap: 15px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-logo">
-        <img src="logo.png" alt="AceEd Tutoring Background" onerror="this.style.display='none'">
-    </div>
-
-    <!-- PROFILE SIDEBAR -->
+    <!-- SIDEBARS -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
-        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+        <div class="sidebar-head">
+            <h3>My Profile</h3>
+            <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        </div>
         <div id="profileLoggedIn" style="display: none;">
             <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Log out</a>
         </div>
         <div id="profileLoggedOut">
-            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign up</a>
         </div>
     </div>
 
-    <!-- DOT MENU SIDEBAR -->
     <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
     <div class="sidebar sidebar-right" id="dotSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
-        <h3><i class="fas fa-bars"></i> Menu</h3>
+        <div class="sidebar-head">
+            <h3>Menu</h3>
+            <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        </div>
         <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
         <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
-        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
         <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
-        <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
-        <a href="tutor-application.html"><i class="fas fa-user-graduate"></i> Become a Tutor</a>
     </div>
 
     <!-- HEADER -->
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
-            </div>
-            <div class="tagline">Expert Tutoring for Grade 10 to 12 Students</div>
-            <div class="nav-links">
+    <header class="site-header">
+        <div class="wrap header-row">
+            <a class="brand" href="index.html">
+                <img src="logo.png" alt="AceEd Tutoring">
+            </a>
+            <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">ATP ▼</a>
-                    <div class="dropdown-content">
-                        <a href="atps/grade-10/index.html">Grade 10 ATPs</a>
-                        <a href="atps/grade-11/index.html">Grade 11 ATPs</a>
-                        <a href="atps/grade-12/index.html">Grade 12 ATPs</a>
-                    </div>
-                </div>
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <button class="icon-btn profile-btn" onclick="openSidebar('profile')" aria-label="Profile Menu">
-                    <i class="fas fa-user-circle"></i>
-                </button>
-                <a href="cart.html" class="nav-link cart-link">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                    <span class="cart-badge" id="cartCount">0</span>
-                </a>
-                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="openSidebar('profile')"><i class="fas fa-user-circle"></i></button>
+                <button class="icon-btn" onclick="openSidebar('dot')"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <div class="container" id="parentContent" style="display:none;">
-
+    <div class="wrap" id="parentContent" style="display:none;">
         <!-- Dashboard Hero -->
         <div class="dashboard-hero">
             <div>
                 <h1><i class="fas fa-user-friends"></i> Parent Dashboard</h1>
-                <div class="user-info">
-                    <i class="fas fa-user"></i> Welcome, <span id="parentName">Parent</span>
-                </div>
+                <div class="user-info">Welcome, <span id="parentName">Parent</span></div>
             </div>
-            <button class="btn-logout" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="openAddChildModal()"><i class="fas fa-plus"></i> Add Child</button>
+                <button class="btn btn-danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
         </div>
-
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-        
-        <a href="calendar.html" style="background: #3498db; color: white; padding: 12px 25px; border-radius: 30px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
-            <i class="fas fa-calendar-alt"></i> View Calendar
-        </a>
 
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="icon"><i class="fas fa-user-graduate" style="color: #3498db;"></i></div>
+                <div class="icon"><i class="fas fa-user-graduate"></i></div>
                 <div class="number" id="childrenCount">0</div>
                 <div class="label">Children</div>
             </div>
             <div class="stat-card">
-                <div class="icon"><i class="fas fa-clock" style="color: #f39c12;"></i></div>
+                <div class="icon"><i class="fas fa-clock"></i></div>
                 <div class="number" id="pendingRequestsCount">0</div>
                 <div class="label">Pending Requests</div>
             </div>
             <div class="stat-card">
-                <div class="icon"><i class="fas fa-check-circle" style="color: #27ae60;"></i></div>
+                <div class="icon"><i class="fas fa-check-circle"></i></div>
                 <div class="number" id="activeBookingsCount">0</div>
                 <div class="label">Active Bookings</div>
             </div>
         </div>
 
-        <!-- Children Section -->
-        <div class="children-section">
+        <!-- MY CHILDREN -->
+        <div class="requests-section">
             <h2>
                 <span><i class="fas fa-users"></i> My Children</span>
-                <button class="btn-add" onclick="openAddChildModal()">
-                    <i class="fas fa-plus"></i> Add Child
-                </button>
             </h2>
             <div id="childrenList">
                 <div class="empty-state">
@@ -989,145 +256,33 @@
             </div>
         </div>
 
-        <!-- Request a Tutor -->
+        <!-- REQUEST A LONG-TERM TUTOR -->
         <div class="requests-section">
             <h2>
-                <span><i class="fas fa-handshake"></i> Request a Tutor</span>
+                <span><i class="fas fa-handshake"></i> Request a Long-Term Tutor</span>
             </h2>
-            <div class="request-card" style="background: #f8fafd;">
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <p style="color: #555;">
-                        <i class="fas fa-info-circle" style="color: #3498db;"></i>
-                        Select a child to request a tutor for. The system will match you with an available tutor based on the subject and grade.
-                    </p>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <select id="requestChildSelect" style="flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; min-width: 200px;">
-                            <option value="">Select a child...</option>
-                        </select>
-                        <button class="btn" style="background: #f39c12; color: white; padding: 10px 25px; border: none; border-radius: 30px; cursor: pointer; font-weight: 600;" onclick="submitTutorRequest()">
-                            <i class="fas fa-paper-plane"></i> Request Tutor
-                        </button>
-                    </div>
+            <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px;">Select a child to request a tutor for. We will match you with an available tutor based on the subject and grade.</p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <select id="requestChildSelect" style="flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; min-width: 200px; font-size: 1rem; outline: none;">
+                        <option value="">Select a child...</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="submitTutorRequest()"><i class="fas fa-paper-plane"></i> Request Tutor</button>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Requests -->
+        <!-- MY BOOKINGS & INVOICES -->
         <div class="requests-section">
             <h2>
-                <span><i class="fas fa-history"></i> Recent Requests</span>
-                <span class="badge" id="requestsBadge">0</span>
+                <span><i class="fas fa-file-invoice"></i> My Bookings & Invoices</span>
             </h2>
-            <div id="recentRequests">
+            <div id="parentBookingsList">
                 <div class="empty-state">
                     <i class="fas fa-inbox"></i>
-                    <p>No recent requests.</p>
+                    <p>No bookings or invoices yet.</p>
                 </div>
             </div>
-            
-              <!-- MY CONFIRMED BOOKINGS -->
-            <div class="requests-section" style="margin-top: 30px; border-left: 5px solid #27ae60;">
-                <h2>
-                    <span><i class="fas fa-calendar-check" style="color: #27ae60;"></i> My Upcoming Sessions</span>
-                </h2>
-                <div id="parentBookingsList">
-                    <div class="empty-state">
-                        <i class="fas fa-calendar-alt"></i>
-                        <p>No upcoming sessions yet.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Services & Packages -->
-        <div class="requests-section">
-            <h2>
-                <span><i class="fas fa-credit-card"></i> Services & Packages</span>
-            </h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 15px;">
-                
-                <!-- 1-on-1 Tutoring -->
-                <div class="pricing-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="color: #1e2a3a; font-size: 1.1rem;">
-                            <i class="fas fa-user" style="color: #3498db;"></i> 1-on-1 Tutoring
-                        </h3>
-                        <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R100 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/hour</small></span>
-                    </div>
-                    <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">Personalized attention, 1-on-1 sessions</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <select id="childSelect_1on1" style="flex: 1; padding: 8px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; min-width: 120px;">
-                            <option value="">Select child...</option>
-                        </select>
-                        <button onclick="addServiceToCart(event, '1-on-1 Tutoring', 100, 'Hourly')" class="btn-add-cart">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Monthly Subscription -->
-                <div class="pricing-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="color: #1e2a3a; font-size: 1.1rem;">
-                            <i class="fas fa-calendar-alt" style="color: #f39c12;"></i> Monthly Subscription
-                        </h3>
-                        <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R600 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/month</small></span>
-                    </div>
-                    <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">2 sessions/week • Save 25%</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <select id="childSelect_monthly" style="flex: 1; padding: 8px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; min-width: 120px;">
-                            <option value="">Select child...</option>
-                        </select>
-                        <button onclick="addServiceToCart(event, 'Monthly Subscription', 600, 'Monthly')" class="btn-add-cart">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Group Sessions -->
-                <div class="pricing-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="color: #1e2a3a; font-size: 1.1rem;">
-                            <i class="fas fa-users" style="color: #8e44ad;"></i> Group Sessions
-                        </h3>
-                        <span style="font-size: 1.3rem; font-weight: bold; color: #27ae60;">R300 <small style="font-size: 0.7rem; font-weight: normal; color: #7f8c8d;">/month</small></span>
-                    </div>
-                    <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">2 sessions/week • Save 50%</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <select id="childSelect_group" style="flex: 1; padding: 8px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; min-width: 120px;">
-                            <option value="">Select child...</option>
-                        </select>
-                        <button onclick="addServiceToCart(event, 'Group Sessions', 300, 'Monthly')" class="btn-add-cart">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <!-- Go to Cart Button -->
-            <div style="text-align: center; margin-top: 25px;">
-                <a href="cart.html" class="btn" style="display: inline-block; background: #27ae60; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; font-weight: 600;">
-                    <i class="fas fa-shopping-cart"></i> View Cart & Checkout
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ACCESS DENIED -->
-    <div class="container" id="accessDenied" style="display:none;">
-        <div style="background: #f8d7da; border-left: 4px solid #e74c3c; padding: 40px; border-radius: 20px; text-align: center; margin: 30px 0;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px;"></i>
-            <h2 style="color: #721c24;">Access Denied</h2>
-            <p style="color: #721c24; font-size: 1.1rem;">
-                You do not have permission to view this page.<br>
-                Please contact AceEd Tutoring for assistance.
-            </p>
-            <a href="index.html" class="btn" style="display: inline-block; background: #3498db; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; margin-top: 20px;">
-                <i class="fas fa-home"></i> Back to Home
-            </a>
         </div>
     </div>
 
@@ -1135,16 +290,18 @@
     <div class="modal" id="addChildModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('addChildModal')">&times;</button>
-            <h2><i class="fas fa-user-plus"></i> Add Child</h2>
+            <h2>Add Child</h2>
             <form id="addChildForm">
                 <div class="form-group">
-                    <label>Child's Full Name <span class="required">*</span></label>
+                    <label>Child's Full Name *</label>
                     <input type="text" id="childName" required placeholder="e.g., Thabo Mbeki">
                 </div>
                 <div class="form-group">
-                    <label>Grade <span class="required">*</span></label>
+                    <label>Grade *</label>
                     <select id="childGrade" required>
                         <option value="">Select Grade</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
                         <option value="8">Grade 8</option>
                         <option value="9">Grade 9</option>
                         <option value="10">Grade 10</option>
@@ -1152,85 +309,16 @@
                         <option value="12">Grade 12</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Subject(s) Needing Help</label>
-                    <select id="childSubject" multiple style="height: 80px;">
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Mathematical Literacy">Mathematical Literacy</option>
-                        <option value="Physical Sciences">Physical Sciences</option>
-                        <option value="Life Sciences">Life Sciences</option>
-                        <option value="Accounting">Accounting</option>
-                        <option value="Economics">Economics</option>
-                        <option value="Business Studies">Business Studies</option>
-                        <option value="Geography">Geography</option>
-                        <option value="History">History</option>
-                        <option value="Tourism">Tourism</option>
-                        <option value="CAT">CAT</option>
-                        <option value="Afrikaans EAT">Afrikaans (EAT)</option>
-                        <option value="English HL">English HL</option>
-                    </select>
-                    <small style="color: #7f8c8d;">Hold Ctrl (Windows) or Cmd (Mac) to select multiple subjects</small>
-                </div>
-                <button type="submit" class="btn-submit"><i class="fas fa-plus"></i> Add Child</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Add Child</button>
             </form>
         </div>
     </div>
 
     <!-- FOOTER -->
     <footer class="footer-modern">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 10–12 students across South Africa with expert CAPS-aligned tutoring.</p>
-                    <div class="social-icons">
-                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="tutors.html">Our Tutors</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="tutor-application.html">Become a Tutor</a></li>
-                        <li><a href="register.html">Register Now</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Subjects We Cover</h4>
-                    <ul>
-                        <li>Mathematics & Maths Lit</li>
-                        <li>Physical Sciences & Life Science</li>
-                        <li>Accounting & Economics</li>
-                        <li>Geography & Business Studies</li>
-                        <li>History & Tourism</li>
-                        <li>CAT</li>
-                        <li>Afrikaans & English</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Get In Touch</h4>
-                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
-                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
-                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
-                    <div style="margin-top: 12px;">
-                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
-                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
-                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
-            </div>
-        </div>
+        <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a></p>
     </footer>
+
     <script>
         // ============================================================
         // SIDEBAR CONTROLS
@@ -1245,7 +333,7 @@
             }
             document.body.style.overflow = 'hidden';
         }
-    
+
         function closeSidebar(type) {
             if (type === 'profile') {
                 document.getElementById('profileSidebar').classList.remove('open');
@@ -1256,16 +344,16 @@
             }
             document.body.style.overflow = 'auto';
         }
-    
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSidebar('profile');
                 closeSidebar('dot');
             }
         });
-    
+
         // ============================================================
-        // AUTH - CHECK USER ROLE
+        // AUTH CHECK
         // ============================================================
         let parentUid = '';
         let parentEmail = '';
@@ -1273,7 +361,8 @@
         let parentPhone = '';
         let childrenData = [];
         let allRequests = [];
-    
+        let allInvoices = [];
+
         firebase.auth().onAuthStateChanged(async function(user) {
             if (!user) {
                 window.location.href = 'signin.html?redirect=parent-dashboard.html';
@@ -1283,74 +372,46 @@
             try {
                 const doc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = doc.data();
-                const role = userData.role;
                 
-                if (role === 'parent') {
+                if (userData.role === 'parent') {
                     parentUid = user.uid;
                     parentEmail = user.email;
-                    parentName = userData.fullName || user.email || 'Parent';
+                    parentName = userData.fullName || user.email;
                     parentPhone = userData.phone || '';
     
                     document.getElementById('parentContent').style.display = 'block';
                     document.getElementById('parentName').textContent = parentName;
                     loadParentData(user.uid);
-                    loadParentBookings();
                 } else {
-                    document.getElementById('accessDenied').style.display = 'block';
+                    alert('Access denied. This is the Parent Dashboard.');
+                    window.location.href = 'index.html';
                 }
             } catch (error) {
                 console.error('Error checking role:', error);
-                document.getElementById('accessDenied').style.display = 'block';
             }
         });
-    
-        // ============================================================
-        // LOGOUT
-        // ============================================================
+
         function handleLogout() {
             firebase.auth().signOut().then(function() {
                 window.location.href = 'index.html';
             });
         }
-    
+
         // ============================================================
         // MODAL CONTROLS
         // ============================================================
         function openAddChildModal() {
             document.getElementById('addChildModal').classList.add('show');
         }
-    
+
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('show');
         }
-    
+
         document.getElementById('addChildModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal('addChildModal');
-            }
+            if (e.target === this) closeModal('addChildModal');
         });
-    
-        // ============================================================
-        // EMAIL HELPER - BRANDED TEMPLATE
-        // ============================================================
-        function buildEmailBody(innerHtml) {
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
-                        <h1 style="margin: 0;">AceEd Tutoring</h1>
-                        <p style="color: #f39c12; margin: 5px 0 0;">✦ Affordable Services ✦</p>
-                    </div>
-                    <div style="padding: 25px; background: #f9f9f9;">
-                        ${innerHtml}
-                    </div>
-                    <div style="background: #0f1720; color: #a0aec0; padding: 15px; text-align: center; font-size: 12px;">
-                        <p style="margin: 0;">© 2026 AceEd Tutoring</p>
-                        <p style="margin: 5px 0 0;">+27 65 529 4232 | clients@aceed.co.za</p>
-                    </div>
-                </div>
-            `;
-        }
-    
+
         // ============================================================
         // LOAD PARENT DATA
         // ============================================================
@@ -1367,23 +428,48 @@
                         childrenData.push({ id: doc.id, ...doc.data() });
                     });
                     renderChildren();
-                    populateChildDropdown();
                     populateChildDropdowns();
+                    loadInvoices();
                     loadRequests();
                 })
                 .catch(function(error) {
                     console.error('Error loading children:', error);
-                    alert('Error loading children: ' + error.message);
                 });
         }
+
+        // ============================================================
+        // RENDER CHILDREN
+        // ============================================================
+        function renderChildren() {
+            const container = document.getElementById('childrenList');
+            document.getElementById('childrenCount').textContent = childrenData.length;
+            
+            if (childrenData.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-user-plus"></i><p>No children added yet.</p></div>`;
+                return;
+            }
     
+            let html = '';
+            childrenData.forEach(function(child) {
+                html += `
+                    <div class="invoice-card" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${child.fullName}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Grade ${child.grade}</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="submitTutorRequestForChild('${child.id}')"><i class="fas fa-handshake"></i> Request Tutor</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
         // ============================================================
-        // POPULATE CHILD DROPDOWN (Main)
+        // POPULATE CHILD DROPDOWNS
         // ============================================================
-        function populateChildDropdown() {
+        function populateChildDropdowns() {
             const select = document.getElementById('requestChildSelect');
             if (!select) return;
-            
             select.innerHTML = '<option value="">Select a child...</option>';
             childrenData.forEach(function(child) {
                 const option = document.createElement('option');
@@ -1392,75 +478,127 @@
                 select.appendChild(option);
             });
         }
-    
+
         // ============================================================
-        // POPULATE CHILD DROPDOWNS (For Services)
+        // ADD CHILD
         // ============================================================
-        function populateChildDropdowns() {
-            const selectors = ['childSelect_1on1', 'childSelect_monthly', 'childSelect_group'];
+        document.getElementById('addChildForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('childName').value.trim();
+            const grade = document.getElementById('childGrade').value;
             
-            selectors.forEach(function(selectorId) {
-                const select = document.getElementById(selectorId);
-                if (!select) return;
-                
-                select.innerHTML = '<option value="">Select child...</option>';
-                childrenData.forEach(function(child) {
-                    const option = document.createElement('option');
-                    option.value = child.id;
-                    option.textContent = child.fullName + ' (Grade ' + child.grade + ')';
-                    select.appendChild(option);
+            try {
+                await firebase.firestore().collection('children').add({
+                    parentUid: parentUid,
+                    fullName: name,
+                    grade: grade,
+                    createdAt: new Date().toISOString()
                 });
-            });
-        }
-    
-        // ============================================================
-        // RENDER CHILDREN
-        // ============================================================
-        function renderChildren() {
-            const container = document.getElementById('childrenList');
-            
-            if (childrenData.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-plus"></i>
-                        <p>No children added yet. Click "Add Child" to get started.</p>
-                    </div>
-                `;
-                return;
+                this.reset();
+                closeModal('addChildModal');
+                loadParentData(parentUid);
+            } catch (error) {
+                alert('Error: ' + error.message);
             }
-    
-            let html = '';
-            childrenData.forEach(function(child) {
-                const subjects = child.subjects ? child.subjects.join(', ') : 'Not specified';
-                html += `
-                    <div class="child-card">
-                        <div class="child-header">
-                            <h3>${child.fullName}</h3>
-                            <span class="grade-badge">Grade ${child.grade}</span>
-                        </div>
-                        <div class="child-details">
-                            <div><i class="fas fa-book"></i> Subjects: ${subjects}</div>
-                            <div><i class="fas fa-calendar-plus"></i> Added: ${child.createdAt ? new Date(child.createdAt).toLocaleDateString() : 'N/A'}</div>
-                        </div>
-                        <div class="child-actions">
-                            <button class="btn request" onclick="submitTutorRequestForChild('${child.id}')">
-                                <i class="fas fa-handshake"></i> Request Tutor
-                            </button>
-                            <button class="btn view" onclick="viewChildProgress('${child.id}')">
-                                <i class="fas fa-chart-line"></i> View Progress
-                            </button>
-                            <button class="btn remove" onclick="removeChildFromDashboard('${child.id}')">
-                                <i class="fas fa-trash"></i> Remove
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-    
+        });
+
         // ============================================================
-        // LOAD REQUESTS
+        // SUBMIT TUTOR REQUEST (LONG-TERM MATCHING)
+        // ============================================================
+        function submitTutorRequest() {
+            const childId = document.getElementById('requestChildSelect').value;
+            if (!childId) { alert('Please select a child.'); return; }
+            submitTutorRequestForChild(childId);
+        }
+
+        async function submitTutorRequestForChild(childId) {
+            const child = childrenData.find(c => c.id === childId);
+            if (!child) return;
+            
+            const db = firebase.firestore();
+            try {
+                await db.collection('tutor_requests').add({
+                    parentUid: parentUid,
+                    parentName: parentName,
+                    parentEmail: parentEmail,
+                    parentPhone: parentPhone,
+                    childId: childId,
+                    childName: child.fullName,
+                    grade: child.grade,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                });
+                alert('✅ Request sent! Our team will match you with a tutor.');
+                loadRequests();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // ============================================================
+        // LOAD INVOICES (BOOKINGS & PAYMENTS)
+        // ============================================================
+        async function loadInvoices() {
+            const db = firebase.firestore();
+            const container = document.getElementById('parentBookingsList');
+            
+            try {
+                const snapshot = await db.collection('invoices')
+                    .where('parentEmail', '==', parentEmail)
+                    .orderBy('issuedAt', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No bookings or invoices yet.</p></div>`;
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const inv = doc.data();
+                    const statusClass = inv.status || 'pending';
+                    const statusLabel = inv.status === 'payment_claimed' ? 'Claimed' : (inv.status === 'paid' ? 'Paid' : 'Pending');
+                    
+                    let actionHtml = '';
+                    if (inv.status === 'pending') {
+                        actionHtml = `
+                            <div class="payment-box">
+                                <h4>Payment Instructions</h4>
+                                <p><strong>Bank:</strong> Standard Bank</p>
+                                <p><strong>Account Number:</strong> 10271792580</p>
+                                <p><strong>Branch Code:</strong> 000610</p>
+                                <p><strong>Reference:</strong> ${inv.paymentRef}</p>
+                                <p style="margin-top: 10px;">Please use the reference above when making payment.</p>
+                                <a href="confirm-payment.html?invoice=${doc.id}" class="btn btn-success" style="margin-top: 10px; width: 100%;">I've Made Payment</a>
+                            </div>
+                        `;
+                    } else if (inv.status === 'payment_claimed') {
+                        actionHtml = `<p style="color: #3498db; font-size: 0.85rem; margin-top: 10px;"><i class="fas fa-clock"></i> Awaiting confirmation from AceEd.</p>`;
+                    } else if (inv.status === 'paid') {
+                        actionHtml = `<p style="color: #27ae60; font-size: 0.85rem; margin-top: 10px;"><i class="fas fa-check-circle"></i> Payment verified. Your session is confirmed!</p>`;
+                    }
+
+                    html += `
+                        <div class="invoice-card">
+                            <div class="invoice-header">
+                                <h3>${inv.invoiceNumber}</h3>
+                                <span class="status ${statusClass}">${statusLabel}</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Amount: <strong>R${(inv.total || 0).toFixed(2)}</strong></p>
+                            ${actionHtml}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading invoices:', error);
+                container.innerHTML = `<div class="empty-state"><p>Error loading invoices.</p></div>`;
+            }
+        }
+
+        // ============================================================
+        // LOAD REQUESTS (RECENT STATUS)
         // ============================================================
         function loadRequests() {
             const db = firebase.firestore();
@@ -1474,510 +612,16 @@
                     snapshot.forEach(function(doc) {
                         const req = doc.data();
                         allRequests.push({ id: doc.id, ...req });
-                        if (req.status === 'accepted' || req.status === 'booked' || req.status === 'completed') {
-                            activeBookings++;
-                        }
+                        if (req.status === 'accepted' || req.status === 'booked') activeBookings++;
                     });
-                    renderRequests();
-                    updateStats(activeBookings);
+                    
+                    document.getElementById('pendingRequestsCount').textContent = allRequests.filter(r => r.status === 'pending').length;
+                    document.getElementById('activeBookingsCount').textContent = activeBookings;
                 })
                 .catch(function(error) {
                     console.error('Error loading requests:', error);
                 });
         }
-    
-        // ============================================================
-        // RENDER REQUESTS
-        // ============================================================
-        function renderRequests() {
-            const container = document.getElementById('recentRequests');
-            
-            if (allRequests.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>No recent requests.</p>
-                    </div>
-                `;
-                return;
-            }
-    
-            let html = '';
-            allRequests.slice(0, 5).forEach(function(req) {
-                const statusClass = req.status || 'pending';
-                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
-                const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
-                
-                let actionButtons = '';
-                
-                if (req.status === 'pending') {
-                    actionButtons = `
-                        <span style="color: #f39c12; font-weight: 500;">
-                            <i class="fas fa-clock"></i> Waiting for matching...
-                        </span>
-                    `;
-                } else if (req.status === 'matched' || req.status === 'assigned') {
-                    actionButtons = `
-                        <span style="color: #3498db; font-weight: 500;">
-                            <i class="fas fa-user-check"></i> Matched with ${req.tutorName || 'a tutor'}! Awaiting their confirmation.
-                        </span>
-                    `;
-                } else if (req.status === 'accepted' || req.status === 'booked') {
-                    actionButtons = `
-                        <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                            <span style="color: #27ae60; font-weight: 500;">
-                                <i class="fas fa-check-circle"></i> Confirmed with ${req.tutorName || 'Tutor'}!
-                            </span>
-                            <button onclick="openWhatsApp('${req.tutorUid}')" 
-                                    style="background: #25D366; color: white; padding: 8px 20px; 
-                                           border: none; border-radius: 30px; cursor: pointer; 
-                                           font-weight: 600; font-size: 0.85rem;">
-                                <i class="fab fa-whatsapp"></i> Chat Now
-                            </button>
-                        </div>
-                    `;
-                } else if (req.status === 'declined') {
-                    actionButtons = `
-                        <span style="color: #e74c3c; font-weight: 500;">
-                            <i class="fas fa-times-circle"></i> Tutor declined. Admin is finding a replacement.
-                        </span>
-                    `;
-                } else if (req.status === 'completed') {
-                    actionButtons = `
-                        <span style="color: #27ae60; font-weight: 500;">
-                            <i class="fas fa-check-double"></i> Completed
-                        </span>
-                    `;
-                }
-    
-                html += `
-                    <div class="request-card">
-                        <div class="request-header">
-                            <h3>${req.childName} - ${req.grade}</h3>
-                            <span class="status ${statusClass}">${statusLabel}</span>
-                        </div>
-                        <div class="request-details">
-                            <div><i class="fas fa-book"></i> Subjects: ${req.subjects ? req.subjects.join(', ') : 'N/A'}</div>
-                            <div><i class="fas fa-calendar"></i> Requested: ${date}</div>
-                        </div>
-                        ${actionButtons}
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-    
-        // ============================================================
-        // UPDATE STATS
-        // ============================================================
-        function updateStats(activeBookings) {
-            const db = firebase.firestore();
-            
-            document.getElementById('childrenCount').textContent = childrenData.length;
-            
-            db.collection('tutor_requests')
-                .where('parentUid', '==', parentUid)
-                .where('status', '==', 'pending')
-                .get()
-                .then(function(snapshot) {
-                    const pendingCount = snapshot.size;
-                    document.getElementById('pendingRequestsCount').textContent = pendingCount;
-                    document.getElementById('requestsBadge').textContent = pendingCount;
-                })
-                .catch(function(error) {
-                    console.error('Error counting pending requests:', error);
-                });
-            
-            document.getElementById('activeBookingsCount').textContent = activeBookings || 0;
-        }
-    
-        // ============================================================
-        // SUBMIT TUTOR REQUEST (From Dropdown)
-        // ============================================================
-        function submitTutorRequest() {
-            const select = document.getElementById('requestChildSelect');
-            const childId = select.value;
-            
-            if (!childId) {
-                alert('Please select a child first.');
-                return;
-            }
-            
-            submitTutorRequestForChild(childId);
-        }
-    
-        // ============================================================
-        // SUBMIT TUTOR REQUEST (For a specific child)
-        // ============================================================
-        async function submitTutorRequestForChild(childId) {
-            const child = childrenData.find(c => c.id === childId);
-            if (!child) {
-                alert('Child not found.');
-                return;
-            }
-            
-            const db = firebase.firestore();
-            
-            try {
-                // Check for existing pending/matched request
-                const existing = await db.collection('tutor_requests')
-                    .where('childId', '==', childId)
-                    .where('status', 'in', ['pending', 'matched', 'assigned'])
-                    .get();
-    
-                if (!existing.empty) {
-                    alert('This child already has a pending or matched tutor request.');
-                    return;
-                }
-    
-                // 1. Create the request
-                const docRef = await db.collection('tutor_requests').add({
-                    parentUid: parentUid,
-                    parentName: parentName,
-                    parentEmail: parentEmail,
-                    parentPhone: parentPhone,
-                    childId: childId,
-                    childName: child.fullName,
-                    grade: child.grade,
-                    subjects: child.subjects || [],
-                    status: 'pending',
-                    tutorUid: null,
-                    tutorName: null,
-                    tutorEmail: null,
-                    tutorPhone: null,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                });
-    
-                // 2. Email to ADMIN
-                await db.collection('mail').add({
-                    to: 'admin@aceed.co.za',
-                    message: {
-                        subject: 'New Tutor Request: ' + child.fullName + ' (Grade ' + child.grade + ')',
-                        html: buildEmailBody(`
-                            <h2>New Tutor Request</h2>
-                            <p><strong>Parent:</strong> ${parentName}</p>
-                            <p><strong>Email:</strong> ${parentEmail}</p>
-                            <p><strong>Phone:</strong> ${parentPhone || 'Not provided'}</p>
-                            <hr>
-                            <p><strong>Student:</strong> ${child.fullName}</p>
-                            <p><strong>Grade:</strong> ${child.grade}</p>
-                            <p><strong>Subjects:</strong> ${(child.subjects || []).join(', ')}</p>
-                            <hr>
-                            <p><a href="https://aceed.co.za/admin.html" style="background: #3498db; color: white; padding: 10px 25px; text-decoration: none; border-radius: 30px;">Match a Tutor</a></p>
-                        `)
-                    }
-                });
-    
-                // 3. Email to PARENT
-                await db.collection('mail').add({
-                    to: parentEmail,
-                    message: {
-                        subject: 'We received your tutor request - AceEd Tutoring',
-                        html: buildEmailBody(`
-                            <h2>Request Received</h2>
-                            <p>Hi ${parentName},</p>
-                            <p>We've received your request for a tutor for <strong>${child.fullName}</strong> (Grade ${child.grade}).</p>
-                            <p><strong>Subjects:</strong> ${(child.subjects || []).join(', ')}</p>
-                            <p>Our team is finding the best match. You'll hear from us within 24-48 hours.</p>
-                            <p>Questions? Reply to this email or WhatsApp us at +27 65 529 4232.</p>
-                        `)
-                    }
-                });
-    
-                console.log('✅ Request created and emails queued');
-                alert('✅ Tutor request sent successfully! We\'ll notify you once matched.');
-                loadParentData(parentUid);
-    
-            } catch (error) {
-                console.error('Error submitting request:', error);
-                alert('Error: ' + error.message);
-            }
-        }
-    
-        // ============================================================
-        // ADD SERVICE TO CART
-        // ============================================================
-        function addServiceToCart(event, serviceName, price, serviceType) {
-            const button = event.target;
-            const parentDiv = button.closest('.pricing-card');
-            const select = parentDiv.querySelector('select');
-            
-            let selectedChildId = '';
-            let selectedChildName = '';
-            
-            if (select) {
-                selectedChildId = select.value;
-                if (selectedChildId) {
-                    const child = childrenData.find(c => c.id === selectedChildId);
-                    if (child) {
-                        selectedChildName = child.fullName;
-                    }
-                }
-            }
-            
-            if (!selectedChildId) {
-                alert('Please select a child first.');
-                return;
-            }
-            
-            const item = {
-                id: serviceName.replace(/\s/g, '-').toLowerCase() + '-' + Date.now(),
-                name: serviceName + ' (' + selectedChildName + ')',
-                price: price,
-                type: serviceType,
-                childId: selectedChildId,
-                childName: selectedChildName,
-                description: serviceName + ' for ' + selectedChildName
-            };
-            
-            addToCart(item);
-            
-            const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check"></i> Added!';
-            button.style.backgroundColor = '#27ae60';
-            setTimeout(function() {
-                button.innerHTML = originalText;
-                button.style.backgroundColor = '#f39c12';
-            }, 2000);
-            
-            updateCartBadge();
-        }
-    
-        // ============================================================
-        // WHATSAPP - OPEN CHAT WITH TUTOR
-        // ============================================================
-        function openWhatsApp(tutorUid) {
-            if (!tutorUid) {
-                alert('Tutor contact not yet available.');
-                return;
-            }
-            const db = firebase.firestore();
-            db.collection('users').doc(tutorUid).get()
-                .then(function(doc) {
-                    const data = doc.data();
-                    const phone = data.whatsapp || data.phone || '';
-                    
-                    if (!phone) {
-                        alert('Tutor contact number not available.');
-                        return;
-                    }
-                    
-                    const cleanPhone = phone.replace(/\D/g, '');
-                    if (cleanPhone.length < 10) {
-                        alert('Invalid phone number format.');
-                        return;
-                    }
-                    
-                    const message = encodeURIComponent('Hello! I am a parent of a student matched with you through AceEd Tutoring. I would like to discuss our tutoring sessions.');
-                    window.open('https://wa.me/' + cleanPhone + '?text=' + message, '_blank');
-                })
-                .catch(function(error) {
-                    console.error('Error fetching contact:', error);
-                    alert('Error: Could not fetch contact details.');
-                });
-        }
-    
-        // ============================================================
-        // REMOVE CHILD
-        // ============================================================
-        function removeChildFromDashboard(childId) {
-            if (!confirm('Are you sure you want to remove this child?')) return;
-    
-            const db = firebase.firestore();
-            
-            db.collection('children').doc(childId).delete()
-                .then(function() {
-                    return db.collection('tutor_requests')
-                        .where('childId', '==', childId)
-                        .get();
-                })
-                .then(function(snapshot) {
-                    var batch = db.batch();
-                    snapshot.forEach(function(doc) {
-                        batch.delete(doc.ref);
-                    });
-                    return batch.commit();
-                })
-                .then(function() {
-                    alert('Child removed successfully.');
-                    loadParentData(parentUid);
-                })
-                .catch(function(error) {
-                    console.error('Error removing child:', error);
-                    alert('Error: ' + error.message);
-                });
-        }
-    
-        // ============================================================
-        // VIEW CHILD PROGRESS (Placeholder)
-        // ============================================================
-
-        function viewChildProgress(childId) {
-            // Find the child's subjects
-            const child = childrenData.find(c => c.id === childId);
-            if (!child || !child.subjects || child.subjects.length === 0) {
-                alert('No subjects on this child yet.');
-                return;
-            }
-        
-            if (child.subjects.length === 1) {
-                // Only one subject — go directly
-                window.location.href = 'progress.html?student=' + childId + '&subject=' + encodeURIComponent(child.subjects[0]);
-            } else {
-                // Multiple subjects — ask which one
-                const options = child.subjects.join('\n');
-                const chosen = prompt('Which subject do you want to view?\n\n' + child.subjects.map((s, i) => (i+1) + '. ' + s).join('\n'));
-                if (chosen) {
-                    const idx = parseInt(chosen) - 1;
-                    if (idx >= 0 && idx < child.subjects.length) {
-                        window.location.href = 'progress.html?student=' + childId + '&subject=' + encodeURIComponent(child.subjects[idx]);
-                    }
-                }
-            }
-        }
-        
-    
-        // ============================================================
-        // ADD CHILD FORM
-        // ============================================================
-        document.getElementById('addChildForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const fullName = document.getElementById('childName').value.trim();
-            const grade = document.getElementById('childGrade').value;
-            const subjectSelect = document.getElementById('childSubject');
-            const subjects = Array.from(subjectSelect.selectedOptions).map(opt => opt.value);
-    
-            if (!fullName || !grade) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-    
-            if (subjects.length === 0) {
-                alert('Please select at least one subject.');
-                return;
-            }
-    
-            try {
-                const db = firebase.firestore();
-    
-                // 1. Save child
-                await db.collection('children').add({
-                    parentUid: parentUid,
-                    fullName: fullName,
-                    grade: grade,
-                    subjects: subjects,
-                    createdAt: new Date().toISOString()
-                });
-    
-                // 2. Email → PARENT
-                await db.collection('mail').add({
-                    to: parentEmail,
-                    message: {
-                        subject: 'Child Added Successfully - AceEd Tutoring',
-                        html: buildEmailBody(`
-                            <h2>Child Added</h2>
-                            <p>Hi ${parentName},</p>
-                            <p>You've added <strong>${fullName}</strong> to your AceEd Tutoring profile.</p>
-                            <p><strong>Grade:</strong> ${grade}</p>
-                            <p><strong>Subjects:</strong> ${subjects.join(', ')}</p>
-                            <p>You can now request a tutor for them from your dashboard.</p>
-                        `)
-                    }
-                });
-    
-                closeModal('addChildModal');
-                document.getElementById('addChildForm').reset();
-                loadParentData(parentUid);
-                alert('Child added successfully!');
-                console.log('✅ Child added and email queued');
-    
-            } catch (error) {
-                console.error('Error adding child:', error);
-                alert('Error adding child: ' + error.message);
-            }
-        });
-    
-        // ============================================================
-        // CART BADGE
-        // ============================================================
-        function updateCartBadge() {
-            if (typeof getCart === 'function') {
-                const cart = getCart();
-                const count = cart.reduce(function(total, item) {
-                    return total + item.quantity;
-                }, 0);
-                const badge = document.getElementById('cartCount');
-                if (badge) {
-                    badge.textContent = count;
-                    badge.classList.toggle('show', count > 0);
-                }
-            }
-        }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartBadge();
-        });
-    
-        document.addEventListener('cartUpdated', function() {
-            updateCartBadge();
-        });
-    
-        if (typeof getCart === 'function') {
-            updateCartBadge();
-        }
-
-                // ============================================================
-        // LOAD PARENT BOOKINGS
-        // ============================================================
-        async function loadParentBookings() {
-            const user = firebase.auth().currentUser;
-            if (!user) return;
-
-            const db = firebase.firestore();
-            const container = document.getElementById('parentBookingsList');
-
-            try {
-                // Get bookings for this parent that are paid/confirmed
-                const snapshot = await db.collection('bookings')
-                    .where('parentEmail', '==', user.email)
-                    .where('status', '==', 'confirmed_paid')
-                    .get();
-
-                if (snapshot.empty) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-calendar-alt"></i>
-                            <p>No upcoming sessions yet.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '';
-                snapshot.forEach(doc => {
-                    const req = doc.data();
-                    html += `
-                        <div class="request-card" style="border-left: 4px solid #27ae60; background: #f0fdf4;">
-                            <div class="request-header">
-                                <h3>${req.tutorName}</h3>
-                                <span class="status accepted">Confirmed & Paid</span>
-                            </div>
-                            <div class="request-details">
-                                <div><i class="fas fa-calendar-day"></i> Time: <strong>${req.timeSlot}</strong></div>
-                                <div><i class="fas fa-clock"></i> Duration: <strong>${req.duration} Hour(s)</strong></div>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-
-            } catch (error) {
-                console.error('Error loading bookings:', error);
-            }
-        }
     </script>
-    
 </body>
 </html>
