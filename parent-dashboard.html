@@ -535,7 +535,7 @@
             }
         }
 
-        // ============================================================
+                // ============================================================
         // LOAD INVOICES (BOOKINGS & PAYMENTS)
         // ============================================================
         async function loadInvoices() {
@@ -563,13 +563,17 @@
                     if (inv.status === 'pending') {
                         actionHtml = `
                             <div class="payment-box">
-                                <h4>Payment Instructions</h4>
+                                <h4><i class="fas fa-university"></i> Payment Instructions</h4>
                                 <p><strong>Bank:</strong> Standard Bank</p>
                                 <p><strong>Account Number:</strong> 10271792580</p>
                                 <p><strong>Branch Code:</strong> 000610</p>
-                                <p><strong>Reference:</strong> ${inv.paymentRef}</p>
-                                <p style="margin-top: 10px;">Please use the reference above when making payment.</p>
-                                <a href="confirm-payment.html?invoice=${doc.id}" class="btn btn-success" style="margin-top: 10px; width: 100%;">I've Made Payment</a>
+                                <p><strong>PayShap:</strong> +27 65 529 4232</p>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                                    <p style="margin: 0;"><strong>Reference:</strong> <span style="background: #fff3cd; padding: 2px 6px; border-radius: 4px;">${inv.paymentRef}</span></p>
+                                    <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="copyToClipboard('${inv.paymentRef}')"><i class="fas fa-copy"></i> Copy</button>
+                                </div>
+                                <p style="margin-top: 15px; font-size: 0.85rem; color: #475569;">Please use the exact reference above so we can match your payment.</p>
+                                <a href="confirm-payment.html?invoice=${doc.id}" class="btn btn-success" style="margin-top: 15px; width: 100%;">I've Made Payment</a>
                             </div>
                         `;
                     } else if (inv.status === 'payment_claimed') {
@@ -597,6 +601,14 @@
             }
         }
 
+        // Helper function for copy button
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Reference copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
         // ============================================================
         // LOAD REQUESTS (RECENT STATUS)
         // ============================================================
