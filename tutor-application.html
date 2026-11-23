@@ -12,17 +12,19 @@
     <!-- Event snippet for Add to basket conversion page --> 
     <script> gtag('event', 'conversion', {'send_to': 'AW-18521810069/rDa0CPeXk6YdEJXJ8f9E'}); </script>
 
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Become a Tutor | Join AceEd Tutoring</title>
     <meta name="description" content="Apply to become a tutor with AceEd. Flexible hours, competitive rates, and support for university students and graduates.">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -44,66 +46,69 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const storage = firebase.storage();
-        
-        console.log('✅ Firebase initialized on tutor-application page');
     </script>
 
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        body { background: linear-gradient(135deg, #f8f9fa 0%, #e9edf2 100%); color: #333; line-height: 1.6; position: relative; min-height: 100vh; }
+        :root {
+            --bg-color: #f7f9fc;
+            --white: #ffffff;
+            --text-main: #1e2a3e;
+            --text-muted: #64748b;
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --wrap: 1000px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); line-height: 1.6; position: relative; min-height: 100vh; }
         
         .bg-logo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; }
-        .bg-logo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.06; }
+        .bg-logo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.03; }
         
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
+        .container { max-width: var(--wrap); margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
         
-        header { background: linear-gradient(135deg, #1e2a3a, #2c3e50); color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); position: relative; z-index: 100; }
-        .logo-image { max-width: 250px; margin: 0 auto; }
-        .logo-image img { width: 100%; max-height: 80px; object-fit: contain; }
-        .tagline { font-size: 1rem; margin: 15px 0; font-weight: 500; }
-        
-        .nav-links { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        .nav-link { color: white; text-decoration: none; padding: 6px 12px; border-radius: 30px; font-size: 0.9rem; transition: all 0.2s ease; }
-        .nav-link:hover { background-color: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
-        
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { display: none; position: absolute; background-color: #2c3e50; min-width: 180px; box-shadow: 0 12px 25px rgba(0,0,0,0.2); border-radius: 12px; top: 100%; left: 0; z-index: 10; backdrop-filter: blur(2px); }
-        .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content a { color: white; padding: 10px 16px; text-decoration: none; display: block; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); transition: background 0.2s; }
-        .dropdown-content a:hover { background-color: #3498db; }
-        
-        .icon-btn { background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer; padding: 6px 10px; border-radius: 30px; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
-        .icon-btn:hover { background-color: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
-        
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease; }
+        /* HEADER */
+        .site-header { position: sticky; top: 0; z-index: 100; background: white; border-bottom: 1px solid var(--border); }
+        .header-row { display: flex; align-items: center; justify-content: space-between; min-height: 72px; padding: 0 20px; max-width: 1100px; margin: 0 auto; }
+        .brand img { height: 45px; width: auto; }
+        .nav { display: flex; align-items: center; gap: 24px; }
+        .nav-link { color: var(--text-muted); font-weight: 500; font-size: 0.95rem; background: none; border: none; cursor: pointer; padding: 8px 0; transition: color 0.2s; text-decoration: none; }
+        .nav-link:hover { color: var(--primary); }
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
+        .icon-btn:hover { color: var(--primary); }
+
+        /* SIDEBARS */
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; opacity: 0; transition: opacity .2s; }
         .sidebar-overlay.active { display: block; opacity: 1; }
-        .sidebar { position: fixed; top: 0; width: 320px; height: 100%; background: #1e2a3a; color: white; z-index: 1001; padding: 30px 20px; overflow-y: auto; transition: transform 0.3s ease; box-shadow: 0 0 30px rgba(0,0,0,0.3); }
+        .sidebar { position: fixed; top: 0; width: 300px; height: 100%; background: white; z-index: 1001; padding: 24px; overflow-y: auto; transition: transform .3s; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
         .sidebar-left { left: 0; transform: translateX(-100%); }
         .sidebar-left.open { transform: translateX(0); }
         .sidebar-right { right: 0; transform: translateX(100%); }
         .sidebar-right.open { transform: translateX(0); }
-        .sidebar-close { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; float: right; margin-bottom: 20px; transition: transform 0.2s; }
-        .sidebar-close:hover { transform: rotate(90deg); }
-        .sidebar h3 { font-size: 1.2rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #f39c12; }
-        .sidebar a { display: block; color: #cbd5e1; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); text-decoration: none; transition: all 0.2s; font-size: 0.95rem; }
-        .sidebar a:hover { color: #fff; padding-left: 5px; }
-        .sidebar a i { width: 25px; color: #f39c12; }
+        .sidebar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .sidebar-head h3 { font-size: 1.2rem; }
+        .sidebar-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-main); }
+        .sidebar a { display: flex; align-items: center; gap: 12px; padding: 12px 0; color: var(--text-muted); border-bottom: 1px solid var(--bg-color); font-weight: 500; text-decoration: none; }
+        .sidebar a:hover { color: var(--primary); }
+        .sidebar a i { width: 20px; color: var(--primary); }
+
+        /* FORM CARD */
+        .form-card { background: white; border-radius: var(--radius); padding: 40px; margin: 40px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .form-card h1 { font-size: 2rem; color: var(--text-main); margin-bottom: 5px; }
+        .form-card .subtitle { color: var(--text-muted); margin-bottom: 30px; }
         
-        .form-card { background: white; border-radius: 24px; padding: 40px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .form-card h1 { font-size: 2rem; color: #1e2a3a; margin-bottom: 5px; }
-        .form-card .subtitle { color: #7f8c8d; margin-bottom: 30px; }
-        
-        .notice-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 12px; margin-bottom: 30px; }
-        .notice-box h3 { color: #856404; margin-bottom: 5px; }
+        .notice-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .notice-box h3 { color: #856404; margin-bottom: 5px; font-size: 1.1rem; }
         .notice-box p { color: #856404; font-size: 0.95rem; }
         
         .form-group { margin-bottom: 22px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #2c3e50; font-size: 0.95rem; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); font-size: 0.9rem; }
         label .required { color: #e74c3c; }
-        input, select, textarea { width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1rem; transition: border-color 0.3s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #3498db; }
+        input, select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; transition: border 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
         
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
@@ -111,56 +116,47 @@
         .radio-group label { display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer; }
         .radio-group input[type="radio"] { width: auto; padding: 0; }
         
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
-        .checkbox-group label { display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer; background: #f8fafd; padding: 8px 16px; border-radius: 30px; border: 1px solid #e0e0e0; transition: all 0.3s; }
-        .checkbox-group label:hover { background: #eef2fc; border-color: #3498db; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+        .checkbox-group label { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.85rem; cursor: pointer; background: var(--bg-color); padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); transition: all 0.2s; }
+        .checkbox-group label:hover { background: white; border-color: var(--primary); }
         .checkbox-group input[type="checkbox"] { width: auto; padding: 0; }
         
-        .file-upload { border: 2px dashed #e0e0e0; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .file-upload:hover { border-color: #3498db; background: #f8fcff; }
-        .file-upload i { font-size: 2rem; color: #3498db; margin-bottom: 8px; }
-        .file-upload p { color: #7f8c8d; font-size: 0.9rem; }
+        .file-upload { border: 1px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg-color); }
+        .file-upload:hover { border-color: var(--primary); background: white; }
+        .file-upload i { font-size: 1.8rem; color: var(--primary); margin-bottom: 8px; }
+        .file-upload p { color: var(--text-muted); font-size: 0.9rem; }
         .file-upload .file-name { color: #e74c3c; margin-top: 5px; font-size: 0.85rem; font-weight: 500; }
         .file-upload .file-name.uploaded { color: #27ae60; font-weight: 600; }
         .file-upload input[type="file"] { display: none; }
         
-        .availability-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
-        .availability-day { background: #f8fafd; border-radius: 12px; padding: 15px; border: 1px solid #e0e0e0; }
-        .availability-day .day-label { font-weight: 600; color: #1e2a3a; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .availability-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .availability-day { background: var(--bg-color); border-radius: 8px; padding: 15px; border: 1px solid var(--border); }
+        .availability-day .day-label { font-weight: 600; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
         .availability-day .day-label input[type="checkbox"] { width: auto; }
-        .availability-day select { margin-bottom: 8px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; width: 100%; }
+        .availability-day select { margin-bottom: 8px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; width: 100%; }
         .availability-day select:last-child { margin-bottom: 0; }
         
-        .btn-submit { background: linear-gradient(135deg, #27ae60, #1e8449); color: white; border: none; padding: 16px 30px; border-radius: 40px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s; margin-top: 10px; }
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 16px 30px; border-radius: 8px; font-size: 1.05rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.2s; margin-top: 10px; }
+        .btn-submit:hover { background: var(--primary-hover); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         
-        .success-box { background: #d4edda; border-radius: 16px; padding: 40px; text-align: center; display: none; }
+        .success-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 40px; text-align: center; display: none; }
         .success-box i { font-size: 4rem; color: #27ae60; margin-bottom: 15px; }
-        .success-box h2 { color: #155724; }
-        .success-box p { color: #155724; margin-top: 10px; }
+        .success-box h2 { color: #166534; }
+        .success-box p { color: #15803d; margin-top: 10px; }
         
-        .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
         
-        .section-title { color: #1e2a3a; margin: 30px 0 20px; padding-bottom: 10px; border-bottom: 2px solid #eef2f6; display: flex; align-items: center; gap: 10px; }
-        .section-title i { color: #3498db; width: 28px; }
+        .section-title { color: var(--text-main); margin: 35px 0 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+        .section-title i { color: var(--primary); width: 24px; }
         
-        .footer-modern { background: #0f1720; color: #e2e8f0; margin-top: 60px; padding: 50px 0 25px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 35px; margin-bottom: 35px; }
-        .footer-col h4 { color: white; font-size: 1.2rem; margin-bottom: 18px; position: relative; display: inline-block; }
-        .footer-col h4:after { content: ''; position: absolute; left: 0; bottom: -6px; width: 40px; height: 3px; background: #e74c3c; border-radius: 3px; }
-        .footer-col p, .footer-col ul { font-size: 0.9rem; line-height: 1.7; opacity: 0.85; }
-        .footer-col ul { list-style: none; padding: 0; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: #cbd5e1; text-decoration: none; transition: color 0.2s; }
-        .footer-col ul li a:hover { color: #e74c3c; padding-left: 4px; }
-        .footer-bottom { text-align: center; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.7; }
+        .site-footer { background: white; color: var(--text-muted); padding: 40px 0 20px; border-top: 1px solid var(--border); margin-top: 60px; text-align: center; font-size: 0.9rem; }
         
         @media (max-width: 768px) {
             .form-card { padding: 25px; }
             .form-row { grid-template-columns: 1fr; }
             .availability-grid { grid-template-columns: 1fr; }
-            .radio-group { flex-direction: column; gap: 10px; }
+            .nav { display: none; }
         }
     </style>
 </head>
@@ -172,55 +168,48 @@
     <!-- SIDEBARS -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
-        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+        <div class="sidebar-head">
+            <h3>My Profile</h3>
+            <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        </div>
         <div id="profileLoggedIn" style="display: none;">
             <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Log out</a>
         </div>
         <div id="profileLoggedOut">
-            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign up</a>
         </div>
     </div>
 
     <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
     <div class="sidebar sidebar-right" id="dotSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
-        <h3><i class="fas fa-bars"></i> Menu</h3>
+        <div class="sidebar-head">
+            <h3>Menu</h3>
+            <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        </div>
         <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
         <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
-        <a href="promotions.html"><i class="fas fa-tags"></i> Promotions</a>
         <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
         <a href="partnerships.html"><i class="fas fa-handshake"></i> School Partnerships</a>
-        <a href="tutor-application.html"><i class="fas fa-user-graduate"></i> Become a Tutor</a>
     </div>
 
     <!-- HEADER -->
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x80?text=AceEd'">
-            </div>
-            <div class="tagline">Expert Tutoring for Grade 6 to 12 Students</div>
-            <div class="nav-links">
+    <header class="site-header">
+        <div class="header-row">
+            <a class="brand" href="index.html">
+                <img src="logo.png" alt="AceEd Tutoring">
+            </a>
+            <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-06/index.html">Grade 6</a>
-                        <a href="grades/grade-07/index.html">Grade 7</a>
-                        <a href="grades/grade-08/index.html">Grade 8</a>
-                        <a href="grades/grade-09/index.html">Grade 9</a>
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
                 <a href="tutors.html" class="nav-link">Our Tutors</a>
-                <button class="icon-btn profile-btn" onclick="openSidebar('profile')"><i class="fas fa-user-circle"></i></button>
-                <button class="icon-btn" onclick="openSidebar('dot')"><i class="fas fa-ellipsis-v"></i></button>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="openSidebar('profile')"><i class="fas fa-user-circle"></i></button>
+                <button class="icon-btn" onclick="openSidebar('dot')"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
@@ -234,14 +223,14 @@
                 <h2>Application Received! 🎉</h2>
                 <p>Your application has been submitted and is currently under review.</p>
                 <p style="margin-top: 10px; font-weight: 500;">You will be notified via email once your application has been reviewed.</p>
-                <a href="index.html" class="btn-submit" style="display: inline-block; width: auto; padding: 12px 30px; margin-top: 20px; text-decoration: none; background: #3498db;"><i class="fas fa-home"></i> Return to Home</a>
+                <a href="index.html" class="btn-submit" style="display: inline-block; width: auto; padding: 12px 30px; margin-top: 20px; text-decoration: none; background: var(--primary);"><i class="fas fa-home"></i> Return to Home</a>
             </div>
         </div>
 
         <!-- APPLICATION FORM -->
         <div id="applicationForm">
             <div class="form-card">
-                <h1><i class="fas fa-user-graduate"></i> Become an AceEd Tutor</h1>
+                <h1>Become an AceEd Tutor</h1>
                 <p class="subtitle">Join our team of passionate tutors and help students succeed.</p>
 
                 <div class="notice-box">
@@ -328,7 +317,7 @@
 
                     <!-- DOCUMENTS -->
                     <h3 class="section-title"><i class="fas fa-file-upload"></i> Documents</h3>
-                    <p style="color: #7f8c8d; margin-bottom: 20px;">Please upload the following documents (PDF, PNG, or JPG format). All documents are required.</p>
+                    <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Please upload the following documents (PDF, PNG, or JPG format). All documents are required.</p>
 
                     <div class="form-group">
                         <label>ID / Passport <span class="required">*</span></label>
@@ -399,11 +388,11 @@
                     <div class="form-group">
                         <label>Subjects You Can Tutor <span class="required">*</span></label>
                         <div class="checkbox-group" id="subjectsGroup">
-                            <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%;">Grade 8 &amp; 9</label>
+                            <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%; font-size: 0.95rem;">Grade 8 &amp; 9</label>
                             <label><input type="checkbox" value="Mathematics (Gr 8-9)"> Mathematics <span style="font-size:0.7rem; color:#999;">Gr 8-9</span></label>
                             <label><input type="checkbox" value="Natural Sciences (Gr 8-9)"> Natural Sciences <span style="font-size:0.7rem; color:#999;">Gr 8-9</span></label>
 
-                            <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%; margin-top:10px;">Grade 10, 11 &amp; 12</label>
+                            <label style="font-weight:600; background:transparent; border:none; cursor:default; padding:0; width:100%; margin-top:10px; font-size: 0.95rem;">Grade 10, 11 &amp; 12</label>
                             <label><input type="checkbox" value="Mathematics (Gr 10-12)"> Mathematics <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
                             <label><input type="checkbox" value="Mathematical Literacy (Gr 10-12)"> Mathematical Literacy <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
                             <label><input type="checkbox" value="Physical Sciences (Gr 10-12)"> Physical Sciences <span style="font-size:0.7rem; color:#999;">Gr 10-12</span></label>
@@ -443,7 +432,7 @@
 
                     <div class="form-group">
                         <label>Weekly Availability <span class="required">*</span></label>
-                        <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 0.9rem;">Select the days you are available and indicate your start and end times.</p>
+                        <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Select the days you are available and indicate your start and end times.</p>
 
                         <div class="availability-grid" id="availabilityGrid">
                             <!-- Monday -->
@@ -543,7 +532,7 @@
                         </div>
                     </div>
 
-                    <p style="margin-top: 10px; font-weight: 500;">A temporary password has been created. You can reset it using the "Forgot Password" link on the sign-in page.</p>
+                    <p style="margin-top: 10px; font-weight: 500; font-size: 0.9rem; color: var(--text-muted);">A temporary password will be created. You can reset it using the "Forgot Password" link on the sign-in page.</p>
 
                     <button type="submit" class="btn-submit" id="submitBtn">
                         <i class="fas fa-paper-plane"></i> Create Account & Submit Application
@@ -554,59 +543,8 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="footer-modern">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>AceEd Tutoring</h4>
-                    <p>Empowering Grade 6–12 students across South Africa with expert CAPS-aligned tutoring.</p>
-                    <div class="social-icons">
-                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/27698251610" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="tutors.html">Our Tutors</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="tutor-application.html">Become a Tutor</a></li>
-                        <li><a href="register.html">Register Now</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Subjects We Cover</h4>
-                    <ul>
-                        <li>Mathematics & Maths Lit</li>
-                        <li>Physical Sciences & Life Science</li>
-                        <li>Accounting & Economics</li>
-                        <li>Geography & Business Studies</li>
-                        <li>History & Tourism</li>
-                        <li>CAT</li>
-                        <li>Afrikaans & English</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Get In Touch</h4>
-                    <p><i class="fas fa-envelope"></i> info@aceed.co.za</p>
-                    <p><i class="fas fa-phone-alt"></i> +27 63 115 8739</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Bizana, Stellenbosch, Durban</p>
-                    <a href="register.html" class="footer-register-btn"><i class="fas fa-user-graduate"></i> Register Now</a>
-                    <div style="margin-top: 12px;">
-                        <a href="tutors.html" class="footer-dark-btn"><i class="fas fa-chalkboard-user"></i> Meet Tutors</a>
-                        <a href="pricing.html" class="footer-dark-btn"><i class="fas fa-tag"></i> Pricing</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
-                <p style="margin-top: 8px;">📍 Service Areas: Bizana (Eastern Cape) • Stellenbosch (Western Cape) • Durban (KZN) • Online Nationwide</p>
-            </div>
-        </div>
+    <footer class="site-footer">
+        <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html" style="color: var(--primary);">Terms & Conditions</a></p>
     </footer>
 
 <script>
@@ -764,7 +702,6 @@
             grades.push(cb.value);
         });
 
-        // NEW: Extract the exact same availability structure used in the dashboard
         const availability = {};
         const days = [
             { id: 'mon', name: 'Monday' },
@@ -844,11 +781,9 @@
         const randomPassword = generateRandomPassword();
 
         try {
-            // 1. Create user account
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, randomPassword);
             const user = userCredential.user;
 
-            // 2. Upload all documents
             const docUrls = {};
 
             for (var docKey in docFiles) {
@@ -859,7 +794,6 @@
                 docUrls[docKey] = url;
             }
 
-            // 3. Save to tutor_applications
             await firebase.firestore().collection('tutor_applications').doc(user.uid).set({
                 uid: user.uid,
                 fullName: fullName,
@@ -875,8 +809,8 @@
                 isTeachingGraduate: isTeachingGraduate.value === 'yes',
                 subjects: subjects,
                 grades: grades,
-                hoursTutored: parseInt(hoursTutored) || 0, // SAVED HERE
-                availability: availability,              // SAVED HERE
+                hoursTutored: parseInt(hoursTutored) || 0,
+                availability: availability,
                 showProfile: showProfile ? showProfile.value === 'yes' : true,
                 documents: docUrls,
                 status: 'pending',
@@ -884,7 +818,6 @@
                 updatedAt: new Date().toISOString()
             });
 
-            // 4. Save to users collection
             await firebase.firestore().collection('users').doc(user.uid).set({
                 uid: user.uid,
                 fullName: fullName,
@@ -892,12 +825,11 @@
                 phone: phone,
                 role: 'pending_tutor',
                 status: 'pending',
-                tempPassword: randomPassword, // <--- ADD THIS LINE
+                tempPassword: randomPassword,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             });
 
-            // 5. Email to ADMIN
             await firebase.firestore().collection('mail').add({
                 to: 'admin@aceed.co.za',
                 message: {
@@ -938,7 +870,6 @@
                 }
             });
 
-            // 6. Confirmation email to TUTOR
             await firebase.firestore().collection('mail').add({
                 to: email,
                 message: {
@@ -965,10 +896,6 @@
                 }
             });
 
-            console.log('✅ Application submitted and emails queued');
-            console.log('🔑 Temporary password for ' + email + ': ' + randomPassword);
-
-            // 7. Show success
             document.getElementById('applicationForm').style.display = 'none';
             document.getElementById('successBox').style.display = 'block';
 
