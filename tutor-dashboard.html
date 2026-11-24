@@ -144,13 +144,6 @@
         .status.paid { background: #d4edda; color: #155724; }
         .status.pending { background: #fff3cd; color: #856404; }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal.show { display: flex; }
-        .modal-content { background: white; border-radius: var(--radius); padding: 30px; max-width: 500px; width: 100%; position: relative; }
-        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--text-main); }
-        .modal-content h2 { margin-bottom: 20px; color: var(--text-main); }
-
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .nav { display: none; }
@@ -254,13 +247,13 @@
             </div>
         </div>
 
-        <!-- MY 1-ON-1 BOOKINGS (Individual Sessions) -->
+        <!-- MY ONCE-OFF LESSONS (Individual Sessions) -->
         <div class="section-card">
-            <h2><i class="fas fa-calendar-check"></i> My 1-on-1 Bookings</h2>
+            <h2><i class="fas fa-calendar-check"></i> My Once-Off Lessons</h2>
             <div id="bookingsList">
                 <div class="empty-state">
                     <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading bookings...</p>
+                    <p>Loading lessons...</p>
                 </div>
             </div>
         </div>
@@ -299,6 +292,20 @@
             });
         }
 
+        // Helper to format emails
+        function buildEmailBody(innerHtml) {
+            return `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0;">AceEd Tutoring</h1>
+                    </div>
+                    <div style="padding: 25px; background: #f9f9f9;">
+                        ${innerHtml}
+                    </div>
+                </div>
+            `;
+        }
+
         // ============================================================
         // INITIALIZE DASHBOARD
         // ============================================================
@@ -320,14 +327,13 @@
 
                 currentTutorUid = user.uid;
                 currentTutorName = userData.fullName || 'Tutor';
-                currentTutorEmail = user.email; // Crucial for 1-on-1 bookings
+                currentTutorEmail = user.email;
                 
                 document.getElementById('tutorContent').style.display = 'block';
                 document.getElementById('tutorNameDisplay').textContent = currentTutorName;
                 document.getElementById('profileLoggedIn').style.display = 'block';
                 document.getElementById('totalHoursCount').textContent = userData.hoursTutored || 0;
 
-                // Load all data
                 await loadActiveStudents();
                 await loadUnbilledLogsCount();
                 await loadIndividualBookings();
@@ -339,7 +345,7 @@
         });
 
         // ============================================================
-        // LOAD ACTIVE STUDENTS & CONTACT INFO (Ongoing Matches)
+        // LOAD ACTIVE STUDENTS (Ongoing)
         // ============================================================
         async function loadActiveStudents() {
             const db = firebase.firestore();
@@ -417,20 +423,19 @@
         }
 
         // ============================================================
-        // LOAD 1-ON-1 INDIVIDUAL BOOKINGS
+        // LOAD ONCE-OFF LESSONS
         // ============================================================
         async function loadIndividualBookings() {
             const db = firebase.firestore();
             const container = document.getElementById('bookingsList');
             
             try {
-                // Fetch bookings where this tutor's email matches
                 const snapshot = await db.collection('bookings')
                     .where('tutorEmail', '==', currentTutorEmail)
                     .get();
 
                 if (snapshot.empty) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No 1-on-1 bookings yet.</p></div>`;
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No once-off lessons yet.</p></div>`;
                     return;
                 }
 
@@ -440,142 +445,35 @@
                     bookings.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Sort newest first
                 bookings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
                 bookings.forEach(booking => {
-                    if (booking.status !== 'confirmed_paid' && booking.status !== 'confirmed_pending_payment') return;
-
-                    const isPaid = booking.status === 'confirmed_paid';
-                    const statusBadge = isPaid 
-                        ? `<span class="status paid">Paid & Confirmed</span>`
-                        : `<span class="status pending">Awaiting Payment</span>`;
-
-                    html += `
-                        <div class="student-card" style="border-left-color: ${isPaid ? 'var(--success)' : 'var(--warning)'};">
-                            <div class="student-card-header">
-                                <div>
-                                    <h3>${booking.parentName || 'Parent'} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(${booking.studentName || 'Student'})</span></h3>
-                                    <p style="margin-bottom: 8px;">
-                                        <strong>Date & Time:</strong> ${booking.timeSlot} <br>
-                                        <strong>Duration:</strong> ${booking.duration} hour(s) <br>
-                                        <strong>Subject:</strong> ${booking.subject || 'N/A'}
-                                    </p>
-                                    <div class="contact-info" style="margin-bottom: 10px;">
-                                        <span><i class="fas fa-envelope"></i> ${booking.parentEmail}</span>
-                                        ${booking.parentPhone ? `<span><i class="fas fa-phone"></i> ${booking.parentPhone}</span>` : ''}
-                                    </div>
-                                    ${statusBadge}
-                                </div>
-                                <div class="action-buttons">
-                                    <a href="mailto:${booking.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
-                                        <i class="fas fa-envelope"></i> Email
-                                    </a>
-                                    ${booking.parentPhone ? `
-                                    <a href="https://wa.me/${booking.parentPhone.replace(/\s+/g, '').replace(/^0/, '+27').replace('+','')}?text=Hi%20${encodeURIComponent(booking.parentName)},%20I%20am%20your%20tutor%20for%20the%20upcoming%20session." target="_blank" class="btn btn-success">
-                                        <i class="fab fa-whatsapp"></i> WhatsApp
-                                    </a>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                if (html === '') {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No confirmed 1-on-1 bookings yet.</p></div>`;
-                } else {
-                    container.innerHTML = html;
-                }
-
-            } catch (error) {
-                console.error("Error loading bookings:", error);
-                container.innerHTML = `<p style="color:var(--danger)">Error loading bookings.</p>`;
-            }
-        }
-
-        // ============================================================
-        // HELPERS
-        // ============================================================
-        function viewStudentProgress(studentUid, subject) {
-            if (!studentUid || !subject || subject === 'N/A') {
-                alert('Missing student or subject details.');
-                return;
-            }
-            window.location.href = `progress.html?student=${encodeURIComponent(studentUid)}&subject=${encodeURIComponent(subject)}`;
-        }
-
-        async function loadUnbilledLogsCount() {
-            const db = firebase.firestore();
-            try {
-                const snapshot = await db.collection('weekly_logs')
-                    .where('tutorUid', '==', currentTutorUid)
-                    .where('invoiceStatus', '==', 'unbilled')
-                    .get();
-                
-                document.getElementById('unbilledLogsCount').textContent = snapshot.size;
-            } catch (error) {
-                console.error("Error counting logs:", error);
-            }
-        }
-        
-        // ============================================================
-        // LOAD 1-ON-1 INDIVIDUAL BOOKINGS
-        // ============================================================
-        async function loadIndividualBookings() {
-            const db = firebase.firestore();
-            const container = document.getElementById('bookingsList');
-            
-            try {
-                // Fetch all bookings for this tutor
-                const snapshot = await db.collection('bookings')
-                    .where('tutorEmail', '==', currentTutorEmail)
-                    .get();
-
-                if (snapshot.empty) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No 1-on-1 bookings yet.</p></div>`;
-                    return;
-                }
-
-                let html = '';
-                const bookings = [];
-                snapshot.forEach(doc => {
-                    bookings.push({ id: doc.id, ...doc.data() });
-                });
-
-                // Sort newest first
-                bookings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-
-                bookings.forEach(booking => {
-                    // Skip cancelled bookings
-                    if (booking.status === 'cancelled') return;
+                    if (booking.status === 'cancelled' || booking.status === 'declined_by_tutor') return;
 
                     const isPendingTutor = booking.status === 'pending_tutor_confirmation';
                     const isPendingPayment = booking.status === 'confirmed_pending_payment';
                     const isPaid = booking.status === 'confirmed_paid';
 
-                    // Format status badge
                     let statusBadge = '';
                     if (isPendingTutor) {
-                        statusBadge = `<span class="status pending" style="background:#e0f2fe; color:#0284c7;">Action Required: Accept or Decline</span>`;
+                        statusBadge = `<span class="status pending" style="background:#e0f2fe; color:#0284c7;">Action Required</span>`;
                     } else if (isPendingPayment) {
-                        statusBadge = `<span class="status pending">Awaiting Parent Payment</span>`;
+                        statusBadge = `<span class="status pending">Awaiting Payment</span>`;
                     } else if (isPaid) {
                         statusBadge = `<span class="status paid">Paid & Confirmed</span>`;
                     }
 
-                    // Format Action Buttons
                     let actionButtons = '';
                     if (isPendingTutor) {
                         actionButtons = `
                             <button class="btn btn-success" onclick="updateBookingStatus('${booking.id}', 'accept', '${booking.parentEmail}', '${booking.tutorName}', '${booking.timeSlot}', '${booking.duration}', '${booking.subject || 'Tutoring'}')" style="padding: 8px 12px; font-size: 0.8rem;">
-                                <i class="fas fa-check"></i> Accept Request
+                                <i class="fas fa-check"></i> Accept
                             </button>
                             <button class="btn btn-danger" onclick="updateBookingStatus('${booking.id}', 'decline', '${booking.parentEmail}', '', '', '', '')" style="padding: 8px 12px; font-size: 0.8rem;">
                                 <i class="fas fa-times"></i> Decline
                             </button>
                         `;
                     } else {
-                        // For accepted/paid bookings, show contact buttons
                         actionButtons = `
                             <a href="mailto:${booking.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary); padding: 8px 12px; font-size: 0.8rem;">
                                 <i class="fas fa-envelope"></i> Email
@@ -607,7 +505,7 @@
                 });
 
                 if (html === '') {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No bookings found.</p></div>`;
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No active once-off lessons.</p></div>`;
                 } else {
                     container.innerHTML = html;
                 }
@@ -634,12 +532,10 @@
                 const booking = bookingDoc.data();
 
                 if (action === 'accept') {
-                    // 1. Update booking status
                     await db.collection('bookings').doc(bookingId).update({
                         status: 'confirmed_pending_payment'
                     });
 
-                    // 2. Generate Sequential Reference (same logic as Admin Billing)
                     const counterRef = db.collection('settings').doc('counters');
                     let finalPaymentRef = '';
 
@@ -652,11 +548,10 @@
                         transaction.set(counterRef, { invoiceCount: newCount }, { merge: true });
                     });
 
-                    // 3. Create an Invoice so it shows on the Parent Dashboard
-                    const amount = (booking.totalPrice || (booking.duration * 100)); // Fallback to R100/hr
+                    const amount = (booking.totalPrice || (booking.duration * 100));
                     const invoiceNumber = `INV-${finalPaymentRef}`;
                     const dueDate = new Date();
-                    dueDate.setDate(dueDate.getDate() + 2); // Due in 2 days
+                    dueDate.setDate(dueDate.getDate() + 2);
 
                     await db.collection('invoices').add({
                         invoiceNumber: invoiceNumber,
@@ -675,7 +570,6 @@
                         dueAt: dueDate.toISOString()
                     });
 
-                    // 4. Email Parent
                     await db.collection('mail').add({
                         to: parentEmail,
                         message: {
@@ -694,13 +588,10 @@
                     alert("✅ Session accepted! Invoice generated and parent notified.");
 
                 } else {
-                    // DECLINE
-                    // 1. Update booking status
                     await db.collection('bookings').doc(bookingId).update({
                         status: 'declined_by_tutor'
                     });
 
-                    // 2. Email Parent
                     await db.collection('mail').add({
                         to: parentEmail,
                         message: {
@@ -715,7 +606,6 @@
                         }
                     });
 
-                    // Note: You can also email the Admin here so they know to find a replacement tutor!
                     await db.collection('mail').add({
                         to: 'admin@aceed.co.za',
                         message: {
@@ -739,20 +629,30 @@
             }
         }
 
-        // Helper to format emails
-        function buildEmailBody(innerHtml) {
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
-                        <h1 style="margin: 0;">AceEd Tutoring</h1>
-                    </div>
-                    <div style="padding: 25px; background: #f9f9f9;">
-                        ${innerHtml}
-                    </div>
-                </div>
-            `;
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function viewStudentProgress(studentUid, subject) {
+            if (!studentUid || !subject || subject === 'N/A') {
+                alert('Missing student or subject details.');
+                return;
+            }
+            window.location.href = `progress.html?student=${encodeURIComponent(studentUid)}&subject=${encodeURIComponent(subject)}`;
         }
-        
+
+        async function loadUnbilledLogsCount() {
+            const db = firebase.firestore();
+            try {
+                const snapshot = await db.collection('weekly_logs')
+                    .where('tutorUid', '==', currentTutorUid)
+                    .where('invoiceStatus', '==', 'unbilled')
+                    .get();
+                
+                document.getElementById('unbilledLogsCount').textContent = snapshot.size;
+            } catch (error) {
+                console.error("Error counting logs:", error);
+            }
+        }
     </script>
 </body>
 </html>
