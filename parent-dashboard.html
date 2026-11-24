@@ -534,42 +534,17 @@
     
             let html = '';
             childrenData.forEach(function(child) {
-                // Find if there is a tutor request for this specific child & subject
-                const existingRequest = allRequests.find(r => 
-                    (r.childId === child.id || r.childName === child.fullName) && 
-                    (r.subjects && r.subjects.includes(child.subject))
-                );
-
-                // Determine billing text
-                let billingText = '<span style="color: var(--warning);">No active request (Choose cycle below)</span>';
-                
-                if (existingRequest && existingRequest.billingCycle) {
-                    const cycleText = existingRequest.billingCycle === 'monthly' ? 'Monthly' : 'Weekly';
-                    billingText = `<i class="fas fa-calendar-alt"></i> Billing: ${cycleText} on ${existingRequest.billingDay}`;
-                }
-
                 html += `
-                    <div class="invoice-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-left: 4px solid var(--primary);">
-                        <div>
-                            <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${child.fullName}</h3>
-                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 3px;">
-                                <strong>Grade:</strong> ${child.grade} &nbsp;|&nbsp; <strong>Subject:</strong> ${child.subject || 'Not specified'}
-                            </p>
-                            <p style="color: var(--primary); font-size: 0.85rem; font-weight: 500;">
-                                ${billingText}
-                            </p>
-                        </div>
-                        <div>
-                            <button class="btn btn-outline" onclick="submitTutorRequestForChild('${child.id}')">
-                                <i class="fas fa-handshake"></i> ${existingRequest ? 'Request Another' : 'Request Tutor'}
-                            </button>
-                        </div>
+                    <div class="invoice-card" style="border-left: 4px solid var(--primary); margin-bottom: 10px;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${child.fullName}</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+                            <strong>Grade:</strong> ${child.grade} &nbsp;|&nbsp; <strong>Subject:</strong> ${child.subject || 'Not specified'}
+                        </p>
                     </div>
                 `;
             });
             container.innerHTML = html;
         }
-
         
         // ============================================================
         // POPULATE CHILD DROPDOWNS
