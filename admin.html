@@ -1671,25 +1671,62 @@
             document.getElementById(`profitDisplay_${parentUid}`).textContent = (num * 0.30).toFixed(2);
         }
 
-        async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr, invoiceTitle) {
-            if (!confirm('Are you sure you want to generate this invoice? This will immediately notify the parent.')) return;
+                async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr, invoiceTitle) {
+            if (!confirm('Are you sure you want to generate this invoice?')) return;
 
             const db = firebase.firestore();
             const amount = parseFloat(document.getElementById(`invoiceAmount_${parentUid}`).value);
             const logIds = JSON.parse(logIdsStr.replace(/&quot;/g, '"'));
             
-            const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            // Find the child's name from the first log to get the surname
+            const firstLog = allRequests.find(r => r.parentUid === parentUid); 
+            let childName = "Student";
+            if (firstLog && firstLog.childName) {
+                childName = firstLog.childName;
+            } else {
+                // Fallback: search in the weekly logs we have locally
+                const logData = allInvoices.length > 0 ? null : null; // (Just ensuring we don't crash)
+            }
+            
+            // Extract surname (last word of the child's name)
+            const nameParts = childName.trim().split(' ');
+            const surname = nameParts.length > 1 ? nameParts[nameParts.length - 1] : nameParts[0];
+            const cleanSurname = surname.replace(/[^a-zA-Z0-9]/g, ''); // Remove weird characters
+
             const dueDate = new Date();
             dueDate.setDate(dueDate.getDate() + 7); // Due in 7 days
 
             try {
+                const counterRef = db.collection('settings').doc('counters');
+                let finalInvoiceNumber = '';
+                let finalPaymentRef = '';
+
+                // Use a transaction to prevent duplicate numbers
+                await db.runTransaction(async (transaction) => {
+                    const counterDoc = await transaction.get(counterRef);
+                    let currentCount = 0;
+                    
+                    if (counterDoc.exists) {
+                        currentCount = counterDoc.data().invoiceCount || 0;
+                    }
+
+                    const newCount = currentCount + 1;
+                    const paddedCount = newCount.toString().padStart(3, '0'); // e.g., 001
+
+                    finalInvoiceNumber = `ACE-2026-${paddedCount}`;
+                    finalPaymentRef = `ACE-${cleanSurname}-${paddedCount}`;
+
+                    // Update the counter
+                    transaction.set(counterRef, { invoiceCount: newCount }, { merge: true });
+                });
+
                 // 1. Create the invoice
                 await db.collection('invoices').add({
-                    invoiceNumber: invoiceNumber,
+                    invoiceNumber: finalInvoiceNumber,
                     parentName: parentName,
                     parentEmail: parentEmail,
                     total: amount,
-                    paymentRef: `ACE-${parentUid.slice(-6).toUpperCase()}`,
+                    paymentRef: finalPaymentRef,
                     items: [{
                         name: invoiceTitle,
                         qty: 1,
@@ -1712,12 +1749,13 @@
                 await db.collection('mail').add({
                     to: parentEmail,
                     message: {
-                        subject: `New Invoice from AceEd Tutoring - ${invoiceNumber}`,
+                        subject: `New Invoice from AceEd Tutoring - ${finalInvoiceNumber}`,
                         html: buildEmailBody(`
                             <h2>New Invoice Generated</h2>
                             <p>Hi ${parentName},</p>
                             <p>A new invoice has been generated for your tutoring sessions.</p>
-                            <p><strong>Invoice Number:</strong> ${invoiceNumber}<br>
+                            <p><strong>Invoice Number:</strong> ${finalInvoiceNumber}<br>
+                               <strong>Reference:</strong> ${finalPaymentRef}<br>
                                <strong>Amount Due:</strong> R${amount.toFixed(2)}</p>
                             <p>Please log in to your Parent Dashboard to view the payment instructions and complete the payment.</p>
                             <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">View Dashboard</a></p>
@@ -1725,7 +1763,7 @@
                     }
                 });
 
-                alert('✅ Invoice generated! The parent has been emailed and the logs are marked as billed.');
+                alert(`✅ Invoice ${finalInvoiceNumber} generated! Ref: ${finalPaymentRef}`);
                 closeModal('billingModal');
                 loadBillingTutors(); // Refresh the list
                 loadInvoices(); // Update stats
