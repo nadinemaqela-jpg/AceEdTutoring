@@ -372,7 +372,34 @@
 
     <script>
 
-       
+        // ============================================================
+        // MISSING FUNCTIONS (WhatsApp & Progress)
+        // ============================================================
+        
+        // 1. Open WhatsApp with the parent
+        function openWhatsAppParent(phone, studentName) {
+            if (!phone) {
+                alert('This parent has not provided a phone number on their profile.');
+                return;
+            }
+            
+            // Clean the phone number (remove spaces, ensure it starts with +27)
+            let cleanPhone = phone.replace(/\s+/g, '').replace(/^0/, '+27');
+            
+            const message = encodeURIComponent(`Hi, this is your tutor from AceEd Tutoring regarding ${studentName}'s lessons.`);
+            window.open(`https://wa.me/${cleanPhone.replace('+', '')}?text=${message}`, '_blank');
+        }
+
+        // 2. View Student Progress
+        function viewStudentProgress(studentUid, subject) {
+            if (!studentUid || !subject) {
+                alert('Missing student or subject details.');
+                return;
+            }
+            // Redirect to the progress.html page with the correct URL parameters
+            window.location.href = `progress.html?student=${encodeURIComponent(studentUid)}&subject=${encodeURIComponent(subject)}`;
+        }
+        
         // Update your submitTutorRequestForChild function to include these fields:
         async function submitTutorRequestForChild(childId) {
             const child = childrenData.find(c => c.id === childId);
