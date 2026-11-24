@@ -517,6 +517,175 @@
                 console.error("Error counting logs:", error);
             }
         }
+        
+        // ============================================================
+        // LOAD 1-ON-1 INDIVIDUAL BOOKINGS
+        // ============================================================
+        async function loadIndividualBookings() {
+            const db = firebase.firestore();
+            const container = document.getElementById('bookingsList');
+            
+            try {
+                // Fetch all bookings for this tutor
+                const snapshot = await db.collection('bookings')
+                    .where('tutorEmail', '==', currentTutorEmail)
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No 1-on-1 bookings yet.</p></div>`;
+                    return;
+                }
+
+                let html = '';
+                const bookings = [];
+                snapshot.forEach(doc => {
+                    bookings.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort newest first
+                bookings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+                bookings.forEach(booking => {
+                    // Skip cancelled bookings
+                    if (booking.status === 'cancelled') return;
+
+                    const isPendingTutor = booking.status === 'pending_tutor_confirmation';
+                    const isPendingPayment = booking.status === 'confirmed_pending_payment';
+                    const isPaid = booking.status === 'confirmed_paid';
+
+                    // Format status badge
+                    let statusBadge = '';
+                    if (isPendingTutor) {
+                        statusBadge = `<span class="status pending" style="background:#e0f2fe; color:#0284c7;">Action Required: Accept or Decline</span>`;
+                    } else if (isPendingPayment) {
+                        statusBadge = `<span class="status pending">Awaiting Parent Payment</span>`;
+                    } else if (isPaid) {
+                        statusBadge = `<span class="status paid">Paid & Confirmed</span>`;
+                    }
+
+                    // Format Action Buttons
+                    let actionButtons = '';
+                    if (isPendingTutor) {
+                        actionButtons = `
+                            <button class="btn btn-success" onclick="updateBookingStatus('${booking.id}', 'accept', '${booking.parentEmail}', '${booking.tutorName}', '${booking.timeSlot}', '${booking.duration}', '${booking.subject || 'Tutoring'}')" style="padding: 8px 12px; font-size: 0.8rem;">
+                                <i class="fas fa-check"></i> Accept Request
+                            </button>
+                            <button class="btn btn-danger" onclick="updateBookingStatus('${booking.id}', 'decline', '${booking.parentEmail}', '', '', '', '')" style="padding: 8px 12px; font-size: 0.8rem;">
+                                <i class="fas fa-times"></i> Decline
+                            </button>
+                        `;
+                    } else {
+                        // For accepted/paid bookings, show contact buttons
+                        actionButtons = `
+                            <a href="mailto:${booking.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary); padding: 8px 12px; font-size: 0.8rem;">
+                                <i class="fas fa-envelope"></i> Email
+                            </a>
+                        `;
+                    }
+
+                    html += `
+                        <div class="student-card" style="border-left-color: ${isPendingTutor ? 'var(--warning)' : (isPaid ? 'var(--success)' : 'var(--primary)')};">
+                            <div class="student-card-header">
+                                <div>
+                                    <h3>${booking.parentName || 'Parent'} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(${booking.studentName || 'Student'})</span></h3>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Date & Time:</strong> ${booking.timeSlot} <br>
+                                        <strong>Duration:</strong> ${booking.duration} hour(s) <br>
+                                        <strong>Subject:</strong> ${booking.subject || 'N/A'}
+                                    </p>
+                                    <div class="contact-info" style="margin-bottom: 10px;">
+                                        <span><i class="fas fa-envelope"></i> ${booking.parentEmail}</span>
+                                    </div>
+                                    ${statusBadge}
+                                </div>
+                                <div class="action-buttons">
+                                    ${actionButtons}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (html === '') {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No bookings found.</p></div>`;
+                } else {
+                    container.innerHTML = html;
+                }
+
+            } catch (error) {
+                console.error("Error loading bookings:", error);
+                container.innerHTML = `<p style="color:var(--danger)">Error loading bookings.</p>`;
+            }
+        }
+
+        // ============================================================
+        // ACCEPT / DECLINE BOOKING
+        // ============================================================
+        async function updateBookingStatus(bookingId, action, parentEmail, tutorName, timeSlot, duration, subject) {
+            const confirmMsg = action === 'accept' 
+                ? "Are you sure you want to ACCEPT this session? The parent will be sent an invoice." 
+                : "Are you sure you want to DECLINE this session?";
+
+            if (!confirm(confirmMsg)) return;
+
+            const db = firebase.firestore();
+            try {
+                if (action === 'accept') {
+                    // 1. Update booking status
+                    await db.collection('bookings').doc(bookingId).update({
+                        status: 'confirmed_pending_payment'
+                    });
+
+                    // 2. Email Parent with payment details
+                    await db.collection('mail').add({
+                        to: parentEmail,
+                        message: {
+                            subject: 'Session Accepted! - Payment Required',
+                            html: buildEmailBody(`
+                                <h2>Your session is confirmed!</h2>
+                                <p>Hi there,</p>
+                                <p><strong>${tutorName}</strong> has accepted your request for <strong>${subject}</strong> on <strong>${timeSlot}</strong> (${duration} hours).</p>
+                                <p>To finalize the booking, please log in to your Parent Dashboard to view the invoice and complete the payment.</p>
+                                <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Go to Dashboard</a></p>
+                            `)
+                        }
+                    });
+
+                    alert("✅ Session accepted! The parent has been notified to pay.");
+
+                } else {
+                    // 1. Update booking status
+                    await db.collection('bookings').doc(bookingId).update({
+                        status: 'declined_by_tutor'
+                    });
+
+                    // 2. Email Parent
+                    await db.collection('mail').add({
+                        to: parentEmail,
+                        message: {
+                            subject: 'Update on your booking request',
+                            html: buildEmailBody(`
+                                <h2>Booking Update</h2>
+                                <p>Hi there,</p>
+                                <p>Unfortunately, <strong>${tutorName}</strong> is unable to take your session at this time.</p>
+                                <p>Please log in to your dashboard to request a different time slot or choose another tutor.</p>
+                                <p><a href="https://aceed.co.za/tutors.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Find Another Tutor</a></p>
+                            `)
+                        }
+                    });
+
+                    alert("Session declined. The parent has been notified.");
+                }
+
+                // Refresh the list
+                loadIndividualBookings();
+
+            } catch (error) {
+                console.error("Error updating booking:", error);
+                alert("Error: " + error.message);
+            }
+        }
+        
     </script>
 </body>
 </html>
