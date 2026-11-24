@@ -269,7 +269,21 @@
                         </select>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Billing Cycle</label>
+                            <select id="billingCycleSelect" onchange="toggleBillingDays()" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                                <option value="monthly">Monthly</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Preferred Day</label>
+                            <select id="billingDaySelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; position: relative; z-index: 100;">
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                    </div>
 
                     <div style="margin-top: 10px;">
                         <button class="btn btn-primary" onclick="submitTutorRequest()" style="width: 100%;">
