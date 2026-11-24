@@ -248,13 +248,39 @@
             <h2>
                 <span><i class="fas fa-handshake"></i> Request a Long-Term Tutor</span>
             </h2>
-            <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
+                        <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px;">Select a child to request a tutor for. We will match you with an available tutor based on the subject and grade.</p>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <select id="requestChildSelect" style="flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; min-width: 200px; font-size: 1rem; outline: none;">
-                        <option value="">Select a child...</option>
-                    </select>
-                    <button class="btn btn-primary" onclick="submitTutorRequest()"><i class="fas fa-paper-plane"></i> Request Tutor</button>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                    <div>
+                        <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Select Child</label>
+                        <select id="requestChildSelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                            <option value="">Select a child...</option>
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Billing Cycle</label>
+                            <select id="billingCycleSelect" onchange="toggleBillingDays()" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                                <option value="monthly">Monthly</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Preferred Day</label>
+                            <select id="billingDaySelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary" onclick="submitTutorRequest()" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Request Tutor
+                        </button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
