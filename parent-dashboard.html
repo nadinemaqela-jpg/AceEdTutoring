@@ -522,7 +522,7 @@
             }
         }
 
-                // ============================================================
+        // ============================================================
         // LOAD INVOICES (BOOKINGS & PAYMENTS)
         // ============================================================
         async function loadInvoices() {
@@ -536,7 +536,7 @@
                     .get();
 
                 if (snapshot.empty) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No bookings or invoices yet.</p></div>`;
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No invoices yet.</p></div>`;
                     return;
                 }
 
@@ -549,33 +549,61 @@
                     let actionHtml = '';
                     if (inv.status === 'pending') {
                         actionHtml = `
-                            <div class="payment-box">
-                                <h4><i class="fas fa-university"></i> Payment Instructions</h4>
+                            <div class="payment-box" style="background: #fffdf5; border-color: #f39c12;">
+                                <h4 style="color: #856404;"><i class="fas fa-university"></i> Payment Instructions</h4>
                                 <p><strong>Bank:</strong> Standard Bank</p>
                                 <p><strong>Account Number:</strong> 10271792580</p>
                                 <p><strong>Branch Code:</strong> 000610</p>
                                 <p><strong>PayShap:</strong> +27 65 529 4232</p>
-                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                                    <p style="margin: 0;"><strong>Reference:</strong> <span style="background: #fff3cd; padding: 2px 6px; border-radius: 4px;">${inv.paymentRef}</span></p>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                                    <p style="margin: 0;"><strong>Reference:</strong> <span style="background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid #ddd;">${inv.paymentRef}</span></p>
                                     <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="copyToClipboard('${inv.paymentRef}')"><i class="fas fa-copy"></i> Copy</button>
                                 </div>
                                 <p style="margin-top: 15px; font-size: 0.85rem; color: #475569;">Please use the exact reference above so we can match your payment.</p>
-                                <a href="confirm-payment.html?invoice=${doc.id}" class="btn btn-success" style="margin-top: 15px; width: 100%;">I've Made Payment</a>
+                                
+                                <!-- Link to upload proof -->
+                                <a href="confirm-payment.html?invoice=${doc.id}" class="btn btn-primary" style="margin-top: 15px; width: 100%;">
+                                    <i class="fas fa-check-circle"></i> I've Made Payment
+                                </a>
                             </div>
                         `;
                     } else if (inv.status === 'payment_claimed') {
-                        actionHtml = `<p style="color: #3498db; font-size: 0.85rem; margin-top: 10px;"><i class="fas fa-clock"></i> Awaiting confirmation from AceEd.</p>`;
+                        actionHtml = `
+                            <div style="background: #e0f2fe; border-left: 4px solid #3498db; padding: 12px; border-radius: 8px; margin-top: 15px;">
+                                <p style="color: #0284c7; font-size: 0.9rem; margin: 0; font-weight: 500;">
+                                    <i class="fas fa-clock"></i> Payment claimed. Awaiting confirmation from AceEd. We will notify you once it reflects.
+                                </p>
+                            </div>
+                        `;
                     } else if (inv.status === 'paid') {
-                        actionHtml = `<p style="color: #27ae60; font-size: 0.85rem; margin-top: 10px;"><i class="fas fa-check-circle"></i> Payment verified. Your session is confirmed!</p>`;
+                        actionHtml = `
+                            <div style="background: #d4edda; border-left: 4px solid #27ae60; padding: 12px; border-radius: 8px; margin-top: 15px;">
+                                <p style="color: #155724; font-size: 0.9rem; margin: 0; font-weight: 500;">
+                                    <i class="fas fa-check-circle"></i> Payment verified. Thank you!
+                                </p>
+                            </div>
+                        `;
+                    }
+
+                    // Format items if they exist (Monthly Tutoring, etc)
+                    let itemsHtml = '';
+                    if (inv.items && inv.items.length > 0) {
+                        itemsHtml = `<div style="margin-bottom: 10px; font-size: 0.85rem; color: var(--text-muted);">
+                            ${inv.items.map(item => `<div>• ${item.name}</div>`).join('')}
+                        </div>`;
                     }
 
                     html += `
-                        <div class="invoice-card">
-                            <div class="invoice-header">
-                                <h3>${inv.invoiceNumber}</h3>
+                        <div class="invoice-card" style="border-left: 4px solid ${inv.status === 'paid' ? 'var(--success)' : (inv.status === 'payment_claimed' ? '#3498db' : 'var(--warning)')};">
+                            <div class="invoice-header" style="margin-bottom: 10px;">
+                                <div>
+                                    <h3 style="font-size: 1.1rem;">${inv.invoiceNumber}</h3>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">Issued: ${new Date(inv.issuedAt).toLocaleDateString()}</span>
+                                </div>
                                 <span class="status ${statusClass}">${statusLabel}</span>
                             </div>
-                            <p style="font-size: 0.9rem; color: var(--text-muted);">Amount: <strong>R${(inv.total || 0).toFixed(2)}</strong></p>
+                            ${itemsHtml}
+                            <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 10px;">Total Due: <strong>R${(inv.total || 0).toFixed(2)}</strong></p>
                             ${actionHtml}
                         </div>
                     `;
@@ -587,7 +615,6 @@
                 container.innerHTML = `<div class="empty-state"><p>Error loading invoices.</p></div>`;
             }
         }
-
         // Helper function for copy button
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
