@@ -273,6 +273,9 @@
         let currentTutorName = '';
         let currentTutorEmail = '';
         let acceptedStudents = [];
+        
+        // THIS holds the bookings so we don't have to pass strings in the HTML
+        let globalBookingsList = []; 
 
         function openSidebar(type) {
             document.getElementById(type + 'Sidebar').classList.add('open');
@@ -439,15 +442,15 @@
                     return;
                 }
 
-                let html = '';
-                const bookings = [];
+                globalBookingsList = []; // Reset global list
                 snapshot.forEach(doc => {
-                    bookings.push({ id: doc.id, ...doc.data() });
+                    globalBookingsList.push({ id: doc.id, ...doc.data() });
                 });
 
-                bookings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                globalBookingsList.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
-                bookings.forEach(booking => {
+                let html = '';
+                globalBookingsList.forEach(booking => {
                     if (booking.status === 'cancelled' || booking.status === 'declined_by_tutor') return;
 
                     const isPendingTutor = booking.status === 'pending_tutor_confirmation';
@@ -465,11 +468,12 @@
 
                     let actionButtons = '';
                     if (isPendingTutor) {
+                        // We ONLY pass the booking ID. The function handles the rest.
                         actionButtons = `
-                            <button class="btn btn-success" onclick="updateBookingStatus('${booking.id}', 'accept', '${booking.parentEmail}', '${booking.tutorName}', '${booking.timeSlot}', '${booking.duration}', '${booking.subject || 'Tutoring'}')" style="padding: 8px 12px; font-size: 0.8rem;">
+                            <button class="btn btn-success" onclick="updateBookingStatus('${booking.id}', 'accept')" style="padding: 8px 12px; font-size: 0.8rem;">
                                 <i class="fas fa-check"></i> Accept
                             </button>
-                            <button class="btn btn-danger" onclick="updateBookingStatus('${booking.id}', 'decline', '${booking.parentEmail}', '', '', '', '')" style="padding: 8px 12px; font-size: 0.8rem;">
+                            <button class="btn btn-danger" onclick="updateBookingStatus('${booking.id}', 'decline')" style="padding: 8px 12px; font-size: 0.8rem;">
                                 <i class="fas fa-times"></i> Decline
                             </button>
                         `;
@@ -519,7 +523,11 @@
         // ============================================================
         // ACCEPT / DECLINE BOOKING
         // ============================================================
-        async function updateBookingStatus(bookingId, action, parentEmail, tutorName, timeSlot, duration, subject) {
+        async function updateBookingStatus(bookingId, action) {
+            // Look up the booking from the global list
+            const booking = globalBookingsList.find(b => b.id === bookingId);
+            if (!booking) return;
+
             const confirmMsg = action === 'accept' 
                 ? "Are you sure you want to ACCEPT this session? An invoice will be generated for the parent." 
                 : "Are you sure you want to DECLINE this session?";
@@ -528,9 +536,6 @@
 
             const db = firebase.firestore();
             try {
-                const bookingDoc = await db.collection('bookings').doc(bookingId).get();
-                const booking = bookingDoc.data();
-
                 if (action === 'accept') {
                     await db.collection('bookings').doc(bookingId).update({
                         status: 'confirmed_pending_payment'
@@ -556,11 +561,11 @@
                     await db.collection('invoices').add({
                         invoiceNumber: invoiceNumber,
                         parentName: booking.parentName || 'Parent',
-                        parentEmail: parentEmail,
+                        parentEmail: booking.parentEmail,
                         total: amount,
                         paymentRef: finalPaymentRef,
                         items: [{
-                            name: `${subject} Tutoring (${timeSlot})`,
+                            name: `${booking.subject || 'Tutoring'} (${booking.timeSlot})`,
                             qty: 1,
                             rate: amount,
                             total: amount
@@ -571,13 +576,13 @@
                     });
 
                     await db.collection('mail').add({
-                        to: parentEmail,
+                        to: booking.parentEmail,
                         message: {
                             subject: 'Session Accepted! - Payment Required',
                             html: buildEmailBody(`
                                 <h2>Your session is confirmed!</h2>
                                 <p>Hi ${booking.parentName || 'there'},</p>
-                                <p><strong>${tutorName}</strong> has accepted your request for <strong>${subject}</strong> on <strong>${timeSlot}</strong> (${duration} hours).</p>
+                                <p><strong>${currentTutorName}</strong> has accepted your request for <strong>${booking.subject || 'Tutoring'}</strong> on <strong>${booking.timeSlot}</strong> (${booking.duration} hours).</p>
                                 <p>To finalize the booking, please log in to your Parent Dashboard to view the invoice and complete the payment.</p>
                                 <p><strong>Amount Due:</strong> R${amount.toFixed(2)}</p>
                                 <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Go to Dashboard</a></p>
@@ -593,13 +598,13 @@
                     });
 
                     await db.collection('mail').add({
-                        to: parentEmail,
+                        to: booking.parentEmail,
                         message: {
                             subject: 'Update on your booking request',
                             html: buildEmailBody(`
                                 <h2>Booking Update</h2>
                                 <p>Hi ${booking.parentName || 'there'},</p>
-                                <p>Unfortunately, <strong>${tutorName}</strong> is unable to take your session at this time.</p>
+                                <p>Unfortunately, <strong>${currentTutorName}</strong> is unable to take your session at this time.</p>
                                 <p>Don't worry! Our team will find an available tutor for you shortly. We will email you once a new match is found.</p>
                                 <p><a href="https://aceed.co.za/tutors.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Browse Other Tutors</a></p>
                             `)
@@ -612,7 +617,7 @@
                             subject: 'Tutor Declined Booking - Action Needed',
                             html: buildEmailBody(`
                                 <h2>Booking Declined</h2>
-                                <p><strong>${tutorName}</strong> declined a session with <strong>${parentEmail}</strong> for <strong>${subject}</strong>.</p>
+                                <p><strong>${currentTutorName}</strong> declined a session with <strong>${booking.parentEmail}</strong> for <strong>${booking.subject || 'Tutoring'}</strong>.</p>
                                 <p>Please assign a new tutor to this request.</p>
                             `)
                         }
