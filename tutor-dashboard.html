@@ -623,37 +623,78 @@
         // ============================================================
         async function updateBookingStatus(bookingId, action, parentEmail, tutorName, timeSlot, duration, subject) {
             const confirmMsg = action === 'accept' 
-                ? "Are you sure you want to ACCEPT this session? The parent will be sent an invoice." 
+                ? "Are you sure you want to ACCEPT this session? An invoice will be generated for the parent." 
                 : "Are you sure you want to DECLINE this session?";
 
             if (!confirm(confirmMsg)) return;
 
             const db = firebase.firestore();
             try {
+                const bookingDoc = await db.collection('bookings').doc(bookingId).get();
+                const booking = bookingDoc.data();
+
                 if (action === 'accept') {
                     // 1. Update booking status
                     await db.collection('bookings').doc(bookingId).update({
                         status: 'confirmed_pending_payment'
                     });
 
-                    // 2. Email Parent with payment details
+                    // 2. Generate Sequential Reference (same logic as Admin Billing)
+                    const counterRef = db.collection('settings').doc('counters');
+                    let finalPaymentRef = '';
+
+                    await db.runTransaction(async (transaction) => {
+                        const counterDoc = await transaction.get(counterRef);
+                        let currentCount = counterDoc.exists ? (counterDoc.data().invoiceCount || 0) : 0;
+                        const newCount = currentCount + 1;
+                        const paddedCount = newCount.toString().padStart(3, '0');
+                        finalPaymentRef = `ACE-Student-${paddedCount}`; 
+                        transaction.set(counterRef, { invoiceCount: newCount }, { merge: true });
+                    });
+
+                    // 3. Create an Invoice so it shows on the Parent Dashboard
+                    const amount = (booking.totalPrice || (booking.duration * 100)); // Fallback to R100/hr
+                    const invoiceNumber = `INV-${finalPaymentRef}`;
+                    const dueDate = new Date();
+                    dueDate.setDate(dueDate.getDate() + 2); // Due in 2 days
+
+                    await db.collection('invoices').add({
+                        invoiceNumber: invoiceNumber,
+                        parentName: booking.parentName || 'Parent',
+                        parentEmail: parentEmail,
+                        total: amount,
+                        paymentRef: finalPaymentRef,
+                        items: [{
+                            name: `${subject} Tutoring (${timeSlot})`,
+                            qty: 1,
+                            rate: amount,
+                            total: amount
+                        }],
+                        status: 'pending',
+                        issuedAt: new Date().toISOString(),
+                        dueAt: dueDate.toISOString()
+                    });
+
+                    // 4. Email Parent
                     await db.collection('mail').add({
                         to: parentEmail,
                         message: {
                             subject: 'Session Accepted! - Payment Required',
                             html: buildEmailBody(`
                                 <h2>Your session is confirmed!</h2>
-                                <p>Hi there,</p>
+                                <p>Hi ${booking.parentName || 'there'},</p>
                                 <p><strong>${tutorName}</strong> has accepted your request for <strong>${subject}</strong> on <strong>${timeSlot}</strong> (${duration} hours).</p>
                                 <p>To finalize the booking, please log in to your Parent Dashboard to view the invoice and complete the payment.</p>
+                                <p><strong>Amount Due:</strong> R${amount.toFixed(2)}</p>
                                 <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Go to Dashboard</a></p>
                             `)
                         }
                     });
 
-                    alert("✅ Session accepted! The parent has been notified to pay.");
+                    alert("✅ Session accepted! Invoice generated and parent notified.");
 
                 } else {
+                    // DECLINE
                     // 1. Update booking status
                     await db.collection('bookings').doc(bookingId).update({
                         status: 'declined_by_tutor'
@@ -666,24 +707,50 @@
                             subject: 'Update on your booking request',
                             html: buildEmailBody(`
                                 <h2>Booking Update</h2>
-                                <p>Hi there,</p>
+                                <p>Hi ${booking.parentName || 'there'},</p>
                                 <p>Unfortunately, <strong>${tutorName}</strong> is unable to take your session at this time.</p>
-                                <p>Please log in to your dashboard to request a different time slot or choose another tutor.</p>
-                                <p><a href="https://aceed.co.za/tutors.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Find Another Tutor</a></p>
+                                <p>Don't worry! Our team will find an available tutor for you shortly. We will email you once a new match is found.</p>
+                                <p><a href="https://aceed.co.za/tutors.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">Browse Other Tutors</a></p>
                             `)
                         }
                     });
 
-                    alert("Session declined. The parent has been notified.");
+                    // Note: You can also email the Admin here so they know to find a replacement tutor!
+                    await db.collection('mail').add({
+                        to: 'admin@aceed.co.za',
+                        message: {
+                            subject: 'Tutor Declined Booking - Action Needed',
+                            html: buildEmailBody(`
+                                <h2>Booking Declined</h2>
+                                <p><strong>${tutorName}</strong> declined a session with <strong>${parentEmail}</strong> for <strong>${subject}</strong>.</p>
+                                <p>Please assign a new tutor to this request.</p>
+                            `)
+                        }
+                    });
+
+                    alert("Session declined. The parent has been notified, and the admin has been alerted.");
                 }
 
-                // Refresh the list
                 loadIndividualBookings();
 
             } catch (error) {
                 console.error("Error updating booking:", error);
                 alert("Error: " + error.message);
             }
+        }
+
+        // Helper to format emails
+        function buildEmailBody(innerHtml) {
+            return `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: #1e2a3a; color: white; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0;">AceEd Tutoring</h1>
+                    </div>
+                    <div style="padding: 25px; background: #f9f9f9;">
+                        ${innerHtml}
+                    </div>
+                </div>
+            `;
         }
         
     </script>
