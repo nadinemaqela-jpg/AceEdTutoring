@@ -348,7 +348,7 @@
         });
 
         // ============================================================
-        // LOAD ACTIVE STUDENTS (Ongoing)
+        // LOAD ACTIVE STUDENTS (Child + Subject)
         // ============================================================
         async function loadActiveStudents() {
             const db = firebase.firestore();
@@ -357,66 +357,107 @@
             try {
                 const snapshot = await db.collection('tutor_requests')
                     .where('tutorUid', '==', currentTutorUid)
-                    .where('status', 'in', ['accepted', 'matched'])
+                    .where('status', 'in', ['accepted', 'matched', 'pending_tutor_confirmation'])
                     .get();
 
                 acceptedStudents = [];
+                let pendingRequests = [];
+
                 snapshot.forEach(doc => {
-                    acceptedStudents.push({ id: doc.id, ...doc.data() });
+                    const data = doc.data();
+                    if (data.status === 'pending_tutor_confirmation') {
+                        pendingRequests.push({ id: doc.id, ...data });
+                    } else {
+                        acceptedStudents.push({ id: doc.id, ...data });
+                    }
                 });
 
+                // Count only the fully accepted ones
                 document.getElementById('activeStudentsCount').textContent = acceptedStudents.length;
 
-                if (acceptedStudents.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-user-friends"></i><p>You have no active ongoing students yet.</p></div>`;
-                    return;
-                }
-
                 let html = '';
-                acceptedStudents.forEach(student => {
-                    let cleanPhone = student.parentPhone ? student.parentPhone.replace(/\s+/g, '').replace(/^0/, '+27') : '';
-                    let waLink = cleanPhone 
-                        ? `https://wa.me/${cleanPhone.replace('+', '')}?text=Hi%20${encodeURIComponent(student.parentName)},%20I%20am%20${encodeURIComponent(currentTutorName)},%20${encodeURIComponent(student.childName)}'s%20tutor%20from%20AceEd.` 
-                        : '#';
 
-                    const subjectsText = student.subjects ? student.subjects.join(', ') : 'N/A';
+                // 1. RENDER PENDING REQUESTS FIRST
+                if (pendingRequests.length > 0) {
+                    html += `<h3 style="color: var(--warning); margin-bottom: 15px;"><i class="fas fa-exclamation-circle"></i> Action Required: New Match Requests</h3>`;
                     
-                    let progressButtons = '';
-                    if (student.subjects && student.subjects.length > 0) {
-                        student.subjects.forEach(subject => {
-                            progressButtons += `
-                                <button class="btn btn-outline" onclick="viewStudentProgress('${student.childId}', '${subject.replace(/'/g, "\\'")}')">
-                                    <i class="fas fa-chart-line"></i> ${subject} Progress
-                                </button>
-                            `;
-                        });
-                    }
-
-                    html += `
-                        <div class="student-card">
-                            <div class="student-card-header">
-                                <div>
-                                    <h3>${student.childName} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(Grade ${student.grade})</span></h3>
-                                    <p><strong>Subjects:</strong> ${subjectsText}</p>
-                                    <div class="contact-info">
-                                        <span><i class="fas fa-user"></i> Parent: ${student.parentName}</span>
-                                        <span><i class="fas fa-envelope"></i> ${student.parentEmail || 'No email provided'}</span>
-                                        <span><i class="fas fa-phone"></i> ${student.parentPhone || 'No phone provided'}</span>
+                    pendingRequests.forEach(req => {
+                        const subjectList = req.subjects ? req.subjects.join(', ') : 'N/A';
+                        
+                        html += `
+                            <div class="student-card" style="border-left-color: var(--warning); background: #fffdf5;">
+                                <div class="student-card-header">
+                                    <div>
+                                        <h3>${req.childName} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(Grade ${req.grade})</span></h3>
+                                        <p><strong>Subject:</strong> ${subjectList}</p>
+                                        <p style="font-size:0.85rem; color:var(--text-muted);">Parent: ${req.parentName}</p>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success" onclick="respondToRequest('${req.id}', 'accept')">
+                                            <i class="fas fa-check"></i> Accept
+                                        </button>
+                                        <button class="btn btn-danger" onclick="respondToRequest('${req.id}', 'decline')">
+                                            <i class="fas fa-times"></i> Decline
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="action-buttons">
-                                    <a href="mailto:${student.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
-                                        <i class="fas fa-envelope"></i> Email Parent
-                                    </a>
-                                    <a href="${waLink}" target="_blank" class="btn btn-success">
-                                        <i class="fab fa-whatsapp"></i> WhatsApp
-                                    </a>
-                                    ${progressButtons}
+                            </div>
+                        `;
+                    });
+                    
+                    html += `<hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);"><h3 style="margin-bottom: 15px;">My Active Students</h3>`;
+                }
+
+                // 2. RENDER ACTIVE STUDENTS (Showing every subject as a separate card/tag)
+                if (acceptedStudents.length === 0) {
+                    html += `<div class="empty-state"><i class="fas fa-user-friends"></i><p>You have no active ongoing students yet.</p></div>`;
+                } else {
+                    acceptedStudents.forEach(student => {
+                        let cleanPhone = student.parentPhone ? student.parentPhone.replace(/\s+/g, '').replace(/^0/, '+27') : '';
+                        let waLink = cleanPhone 
+                            ? `https://wa.me/${cleanPhone.replace('+', '')}?text=Hi%20${encodeURIComponent(student.parentName)},%20I%20am%20${encodeURIComponent(currentTutorName)},%20${encodeURIComponent(student.childName)}'s%20tutor%20from%20AceEd.` 
+                            : '#';
+
+                        const subjectsText = student.subjects ? student.subjects.join(', ') : 'N/A';
+                        
+                        let progressButtons = '';
+                        if (student.subjects && student.subjects.length > 0) {
+                            student.subjects.forEach(subject => {
+                                progressButtons += `
+                                    <button class="btn btn-outline" style="margin-bottom: 5px;" onclick="viewStudentProgress('${student.childId}', '${subject.replace(/'/g, "\\'")}')">
+                                        <i class="fas fa-chart-line"></i> ${subject} Progress
+                                    </button>
+                                `;
+                            });
+                        }
+
+                        html += `
+                            <div class="student-card">
+                                <div class="student-card-header">
+                                    <div>
+                                        <h3>${student.childName} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(Grade ${student.grade})</span></h3>
+                                        <p><strong>Subjects:</strong> ${subjectsText}</p>
+                                        <div class="contact-info">
+                                            <span><i class="fas fa-user"></i> Parent: ${student.parentName}</span>
+                                            <span><i class="fas fa-envelope"></i> ${student.parentEmail || 'No email provided'}</span>
+                                            <span><i class="fas fa-phone"></i> ${student.parentPhone || 'No phone provided'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <a href="mailto:${student.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
+                                            <i class="fas fa-envelope"></i> Email Parent
+                                        </a>
+                                        <a href="${waLink}" target="_blank" class="btn btn-success">
+                                            <i class="fab fa-whatsapp"></i> WhatsApp
+                                        </a>
+                                        ${progressButtons}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                }
+                
                 container.innerHTML = html;
 
             } catch (error) {
@@ -424,7 +465,6 @@
                 container.innerHTML = `<p style="color:var(--danger)">Error loading students.</p>`;
             }
         }
-
         // ============================================================
         // LOAD ONCE-OFF LESSONS
         // ============================================================
@@ -658,6 +698,53 @@
                 console.error("Error counting logs:", error);
             }
         }
+
+        // ============================================================
+        // RESPOND TO NEW MATCH REQUEST (Child + Subject)
+        // ============================================================
+        async function respondToRequest(requestId, action) {
+            if (!confirm(`Are you sure you want to ${action} this subject request?`)) return;
+
+            const db = firebase.firestore();
+            try {
+                if (action === 'accept') {
+                    await db.collection('tutor_requests').doc(requestId).update({
+                        status: 'accepted',
+                        acceptedAt: new Date().toISOString()
+                    });
+
+                    const reqDoc = await db.collection('tutor_requests').doc(requestId).get();
+                    const req = reqDoc.data();
+
+                    await db.collection('mail').add({
+                        to: req.parentEmail,
+                        message: {
+                            subject: 'Tutor Matched!',
+                            html: buildEmailBody(`
+                                <h2>Good news!</h2>
+                                <p>Your tutor, <strong>${currentTutorName}</strong>, has accepted the request for <strong>${req.childName}</strong> in <strong>${req.subjects.join(', ')}</strong>.</p>
+                                <p>They will be in touch shortly to schedule your first session.</p>
+                                <p><a href="https://aceed.co.za/parent-dashboard.html">Go to Dashboard</a></p>
+                            `)
+                        }
+                    });
+                    alert("✅ Accepted! The parent has been notified.");
+                } else {
+                    await db.collection('tutor_requests').doc(requestId).update({
+                        status: 'declined',
+                        declinedAt: new Date().toISOString()
+                    });
+                    alert("Declined. The admin will reassign this student.");
+                }
+                
+                loadActiveStudents(); 
+                
+            } catch (error) {
+                console.error("Error responding to request:", error);
+                alert("Error: " + error.message);
+            }
+        }
+        
     </script>
 </body>
 </html>
