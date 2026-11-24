@@ -1010,24 +1010,77 @@
                 });
         }
 
-        function renderRequests(filter) {
-            currentReqFilter = filter;
-            const filtered = filter === 'all' ? allRequests : allRequests.filter(r => r.status === filter);
-            const tbody = document.getElementById('requestsBody');
+            filtered.forEach(function(req) {
+                const statusClass = req.status || 'pending';
+                
+                // Format status label nicely
+                let statusLabel = 'Pending';
+                if (req.status === 'pending_tutor_confirmation' || req.status === 'assigned' || req.status === 'matched') {
+                    statusLabel = 'Waiting for Tutor';
+                } else if (req.status === 'accepted' || req.status === 'booked') {
+                    statusLabel = 'Accepted';
+                } else if (req.status === 'declined') {
+                    statusLabel = 'Declined';
+                }
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `
-                    <tr><td colspan="7" class="empty-state">
-                        <i class="fas fa-inbox"></i><br>No ${filter !== 'all' ? filter : ''} requests found
-                    </td></tr>
+                const subjects = req.subjects ? req.subreatedAt).toLocaleDateString() : 'N/A';
+
+                html += `
+                    <tr>
+                        <td><strong>${req.childName || 'N/A'}</strong></td>
+                        <td>${req.grade || 'N/A'}</td>
+                        <td>${subjects}</td>
+                        <td>${req.parentName || 'N/A'}</td>
+                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
+                        <td>${date}</td>
+                        <td>
+                            ${req.status === 'pending' || req.status === 'declined' ? `
+                                <button class="btn-sm assign" onclick="openAssignModal('${req.id}')">
+                                    <i class="fas fa-user-plus"></i> ${req.status === 'declined' ? 'Reassign' : 'Assign'}jects.join(', ') : 'N/A';
+                const date = req.createdAt ? new Date(req.c
+                                </button>
+                            ` : ''}
+                            
+                            ${(req.status === 'assigned' || req.status === 'matched' || req.status === 'pending_tutor_confirmation') ? `
+                                <span style="font-size:0.72rem; color:#3498db; display:block; margin-bottom:5px;">
+                                    <i class="fas fa-spinner fa-spin"></i> Waiting for Tutor
+                                </span>
+                                <button class="btn-sm assign" onclick="openAssignModal('${req.id}')" style="background:#64748b;">
+                                    <i class="fas fa-edit"></i> Change Tutor
+                                </button>
+                            ` : ''}
+
+                            ${req.status === 'accepted' ? `
+                                <span style="font-size:0.72rem; color:#27ae60; display:block; margin-bottom:5px;">
+                                    <i class="fas fa-check-circle"></i> Tutor Accepted
+                                </span>
+                                <button class="btn-sm view" onclick="viewStudentProgress('${req.childId}', '${(req.subjects && req.subjects[0]) ? req.subjects[0].replace(/'/g, "\\'") : ''}')" title="View Progress" style="background:#3498db; color:white;">
+                                    <i class="fas fa-chart-line"></i>
+                                </button>
+                            ` : ''}
+                            
+                            <button class="btn-sm delete" onclick="deleteRequest('${req.id}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
                 `;
-                return;
-            }
-
+            });
+        
             let html = '';
             filtered.forEach(function(req) {
                 const statusClass = req.status || 'pending';
-                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : 'Pending';
+                
+                // Format status label
+                let statusLabel = 'Pending';
+                if (req.status === 'pending_tutor_confirmation' || req.status === 'assigned' || req.status === 'matched') {
+                    statusLabel = 'Waiting for Tutor';
+                } else if (req.status === 'accepted' || req.status === 'booked') {
+                    statusLabel = 'Accepted';
+                } else if (req.status === 'declined') {
+                    statusLabel = 'Declined';
+                }
+
                 const subjects = req.subjects ? req.subjects.join(', ') : 'N/A';
                 const date = req.createdAt ? new Date(req.createdAt).toLocaleDateString() : 'N/A';
 
@@ -1045,19 +1098,25 @@
                                     <i class="fas fa-user-plus"></i> ${req.status === 'declined' ? 'Reassign' : 'Assign'}
                                 </button>
                             ` : ''}
-                            ${(req.status === 'assigned' || req.status === 'matched') ? `
-                                <span style="font-size:0.72rem; color:#3498db;">
-                                    <i class="fas fa-spinner fa-spin"></i> Waiting
+                            
+                            ${(req.status === 'assigned' || req.status === 'matched' || req.status === 'pending_tutor_confirmation') ? `
+                                <span style="font-size:0.72rem; color:#3498db; display:block; margin-bottom:5px;">
+                                    <i class="fas fa-spinner fa-spin"></i> Waiting for Tutor
                                 </span>
+                                <button class="btn-sm assign" onclick="openAssignModal('${req.id}')" style="background:#64748b;">
+                                    <i class="fas fa-edit"></i> Change Tutor
+                                </button>
                             ` : ''}
+
                             ${req.status === 'accepted' ? `
-                                <span style="font-size:0.72rem; color:#27ae60;">
-                                    <i class="fas fa-check"></i> Accepted
+                                <span style="font-size:0.72rem; color:#27ae60; display:block; margin-bottom:5px;">
+                                    <i class="fas fa-check-circle"></i> Tutor Accepted
                                 </span>
-                                <button class="btn-sm view" onclick="viewStudentProgress('${req.childId}', '${(req.subjects && req.subjects[0]) ? req.subjects[0].replace(/'/g, "\\'") : ''}')" title="View Progress">
+                                <button class="btn-sm view" onclick="viewStudentProgress('${req.childId}', '${(req.subjects && req.subjects[0]) ? req.subjects[0].replace(/'/g, "\\'") : ''}')" title="View Progress" style="background:#3498db; color:white;">
                                     <i class="fas fa-chart-line"></i>
                                 </button>
                             ` : ''}
+                            
                             <button class="btn-sm delete" onclick="deleteRequest('${req.id}')" title="Delete">
                                 <i class="fas fa-trash"></i>
                             </button>
