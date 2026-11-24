@@ -249,7 +249,15 @@
                         <p style="margin: 0 0 5px 0;"><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> <strong>Strictly for Parents/Guardians</strong></p>
                         <p style="margin: 0;">Students high school learners are <strong>not permitted</strong> to make bookings for themselves.</p>
                     </div>
-
+                    
+                    <div class="form-group">
+                        <label>Subject Needed *</label>
+                        <select id="bookingSubject" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none;">
+                            <option value="">Select a subject...</option>
+                            ${(tutor.subjects || []).map(s => `<option value="${s}">${s}</option>`).join('')}
+                        </select>
+                    </div>
+                    
                     <div class="form-group">
                         <label>Lesson Duration</label>
                         <select id="sessionDuration" onchange="updateSelection()" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none;">
@@ -333,11 +341,17 @@
             }
 
             // 2. Get the form values
-            const selectedTime = document.querySelector('.time-slot.selected');
+                        const selectedTime = document.querySelector('.time-slot.selected');
             const parentEmail = document.getElementById('parentEmail').value;
             const duration = document.getElementById('sessionDuration').value;
+            const subject = document.getElementById('bookingSubject').value; // Get Subject
             const btn = document.querySelector('.btn-book');
 
+            // 3. Validation
+            if (!subject) {
+                alert("Please select a subject.");
+                return;
+            }
             // 3. Validation
             if (!selectedTime) {
                 alert("Please select a time slot first.");
@@ -356,12 +370,13 @@
 
             try {
                 // 4. Save to database
-                await db.collection('bookings').add({
+            await db.collection('bookings').add({
                     tutorId: currentTutor.id,
                     tutorName: currentTutor.fullName,
                     tutorEmail: currentTutor.email || 'tutor@aceed.co.za',
                     parentEmail: parentEmail,
-                    timeSlot: selectedTime.textContent.trim(), // .trim() removes extra spaces
+                    subject: subject, // <--- ADD THIS LINE
+                    timeSlot: selectedTime.textContent.trim(),
                     duration: duration,
                     totalPrice: totalPrice,
                     status: 'pending_tutor_confirmation',
