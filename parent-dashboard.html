@@ -304,11 +304,12 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('addChildModal')">&times;</button>
             <h2>Add Child</h2>
-            <form id="addChildForm">
+                        <form id="addChildForm">
                 <div class="form-group">
                     <label>Child's Full Name *</label>
                     <input type="text" id="childName" required placeholder="e.g., Thabo Mbeki">
                 </div>
+                
                 <div class="form-group">
                     <label>Grade *</label>
                     <select id="childGrade" required>
@@ -322,7 +323,31 @@
                         <option value="12">Grade 12</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Add Child</button>
+
+                <div class="form-group">
+                    <label>Subject *</label>
+                    <input type="text" id="childSubject" required placeholder="e.g., Mathematics">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Billing Cycle *</label>
+                        <select id="billingCycleSelect" onchange="toggleBillingDays()" required>
+                            <option value="monthly">Monthly</option>
+                            <option value="weekly">Weekly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Day *</label>
+                        <select id="billingDaySelect" required>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-plus"></i> Add Child & Subject
+                </button>
             </form>
         </div>
     </div>
