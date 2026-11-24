@@ -272,16 +272,26 @@
                 <span><i class="fas fa-handshake"></i> Request a Long-Term Tutor</span>
             </h2>
             <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px;">Select a child to request a tutor for. We will match you with an available tutor based on the subject and grade.</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px;">Select a child, the subject they need help with, and your preferred billing cycle.</p>
                 
                 <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                    <!-- Child Dropdown -->
                     <div>
                         <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Select Child</label>
-                        <select id="requestChildSelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                        <select id="requestChildSelect" onchange="updateSubjectDropdown()" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
                             <option value="">Select a child...</option>
                         </select>
                     </div>
 
+                    <!-- Subject Dropdown (Populated by JS) -->
+                    <div>
+                        <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Subject Needed</label>
+                        <select id="requestSubjectSelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                            <option value="">Select a child first...</option>
+                        </select>
+                    </div>
+
+                    <!-- Billing Info -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div>
                             <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Billing Cycle</label>
@@ -303,11 +313,9 @@
                             <i class="fas fa-paper-plane"></i> Request Tutor
                         </button>
                     </div>
-                    
                 </div>
             </div>
         </div>
-
         <!-- MY BOOKINGS & INVOICES -->
         <div class="requests-section">
             <h2>
@@ -635,42 +643,57 @@
             submitTutorRequestForChild(childId);
         }
 
+          // ============================================================
+        // UPDATE SUBJECT DROPDOWN BASED ON SELECTED CHILD
         // ============================================================
-        // SUBMIT TUTOR REQUEST
-        // ============================================================
-        async function submitTutorRequestForChild(childId) {
-            const child = childrenData.find(c => c.id === childId);
-            if (!child) return;
+        function updateSubjectDropdown() {
+            const childId = document.getElementById('requestChildSelect').value;
+            const subjectSelect = document.getElementById('requestSubjectSelect');
             
-            // Grab the billing info from the selection box above
-            const billingCycle = document.getElementById('billingCycleSelect').value;
-            const billingDay = document.getElementById('billingDaySelect').value;
+            // Reset the subject dropdown
+            subjectSelect.innerHTML = '<option value="">Select a subject...</option>';
             
-            if (!billingCycle || !billingDay) {
-                alert("Please select a Billing Cycle and Preferred Day above.");
+            if (!childId) {
+                subjectSelect.innerHTML = '<option value="">Select a child first...</option>';
                 return;
             }
 
-            const db = firebase.firestore();
-            try {
-                await db.collection('tutor_requests').add({
-                    parentUid: parentUid,
-                    parentName: parentName,
-                    parentEmail: parentEmail,
-                    parentPhone: parentPhone,
-                    childId: childId,
-                    childName: child.fullName,
-                    grade: child.grade,
-                    subjects: [child.subject], // Array of subjects
-                    billingCycle: billingCycle,
-                    billingDay: billingDay,
-                    status: 'pending',
-                    createdAt: new Date().toISOString()
-                });
-                alert('✅ Request sent! Our team will match you with a tutor.');
-                loadRequests(); // Refresh the requests list
-            } catch (error) {
-                alert('Error: ' + error.message);
+            // Find the child's data
+            const child = childrenData.find(c => c.id === childId);
+            if (child && child.subject) {
+                // Add the subject as an option
+                const option = document.createElement('option');
+                option.value = child.subject;
+                option.textContent = child.subject;
+                subjectSelect.appendChild(option);
+                subjectSelect.value = child.subject; // Auto-select it
+            }
+        }
+
+        // ============================================================
+        // UPDATE SUBJECT DROPDOWN BASED ON SELECTED CHILD
+        // ============================================================
+        function updateSubjectDropdown() {
+            const childId = document.getElementById('requestChildSelect').value;
+            const subjectSelect = document.getElementById('requestSubjectSelect');
+            
+            // Reset the subject dropdown
+            subjectSelect.innerHTML = '<option value="">Select a subject...</option>';
+            
+            if (!childId) {
+                subjectSelect.innerHTML = '<option value="">Select a child first...</option>';
+                return;
+            }
+
+            // Find the child's data
+            const child = childrenData.find(c => c.id === childId);
+            if (child && child.subject) {
+                // Add the subject as an option
+                const option = document.createElement('option');
+                option.value = child.subject;
+                option.textContent = child.subject;
+                subjectSelect.appendChild(option);
+                subjectSelect.value = child.subject; // Auto-select it
             }
         }
 
