@@ -451,7 +451,7 @@
                     </div>
                 </div>
 
-                <!-- ===== INVOICES TAB ===== -->
+                                <!-- ===== INVOICES TAB ===== -->
                 <div id="invoicesTab" style="display:none;">
                     <div class="stats-grid" style="margin-bottom: 20px;">
                         <div class="stat-card">
@@ -493,7 +493,7 @@
                                         <th>Invoice #</th>
                                         <th>Parent</th>
                                         <th>Amount</th>
-                                        <th>Reference</th>
+                                        <th>Type</th> <!-- NEW COLUMN -->
                                         <th>Status</th>
                                         <th>Issued</th>
                                         <th>Actions</th>
@@ -511,10 +511,10 @@
                 <div id="billingTab" style="display:none;">
                     <div class="card">
                         <div class="card-head">
-                            <h2><i class="fas fa-users"></i> Active Tutors</h2>
+                            <h2><i class="fas fa-users"></i> Active Tutors &amp; Unbilled Logs</h2>
                         </div>
                         <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">
-                            Select a tutor to view their unbilled weekly logs and generate invoices for their students.
+                            Select a tutor to view their unbilled weekly logs. The system automatically detects the parent's billing cycle (Weekly/Monthly) before generating an invoice.
                         </p>
                         <div class="table-scroll">
                             <table>
@@ -533,7 +533,6 @@
                         </div>
                     </div>
                 </div>
-
             </div><!-- /#adminContent -->
 
             <!-- ============ ACCESS DENIED ============ -->
@@ -1221,107 +1220,6 @@
             }
         }
 
-        // ============================================================
-        // INVOICES
-        // ============================================================
-        function loadInvoices() {
-            const db = firebase.firestore();
-            db.collection('invoices')
-                .orderBy('issuedAt', 'desc')
-                .get()
-                .then(function(snapshot) {
-                    allInvoices = [];
-                    let total = 0, pending = 0, claimed = 0, paid = 0;
-
-                    snapshot.forEach(function(doc) {
-                        const inv = doc.data();
-                        allInvoices.push({ id: doc.id, ...inv });
-                        total++;
-                        if (inv.status === 'pending') pending++;
-                        if (inv.status === 'payment_claimed') claimed++;
-                        if (inv.status === 'paid') paid++;
-                    });
-
-                    document.getElementById('totalInvoices').textContent = total;
-                    document.getElementById('pendingInvoices').textContent = pending;
-                    document.getElementById('claimedInvoices').textContent = claimed;
-                    document.getElementById('paidInvoices').textContent = paid;
-
-                    renderInvoices(currentInvFilter);
-                })
-                .catch(function(error) {
-                    console.error('Error loading invoices:', error);
-                    document.getElementById('invoicesBody').innerHTML = `
-                        <tr><td colspan="7" style="text-align:center; padding:30px; color:#e74c3c;">Error: ${error.message}</td></tr>
-                    `;
-                });
-        }
-
-        function renderInvoices(filter) {
-            currentInvFilter = filter;
-            const filtered = filter === 'all' ? allInvoices : allInvoices.filter(i => i.status === filter);
-            const tbody = document.getElementById('invoicesBody');
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `
-                    <tr><td colspan="7" class="empty-state">
-                        <i class="fas fa-inbox"></i><br>No invoices found
-                    </td></tr>
-                `;
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(function(inv) {
-                const statusClass = inv.status || 'pending';
-                let statusLabel = inv.status === 'payment_claimed' ? 'Claimed' :
-                                  inv.status ? inv.status.charAt(0).toUpperCase() + inv.status.slice(1) : 'Pending';
-                const date = inv.issuedAt ? new Date(inv.issuedAt).toLocaleDateString() : 'N/A';
-
-                let actionButtons = '';
-                if (inv.status === 'payment_claimed') {
-                    actionButtons = `
-                        <button class="btn-sm approve" onclick="markInvoicePaid('${inv.id}')">
-                            <i class="fas fa-check"></i> Mark Paid
-                        </button>
-                    `;
-                } else if (inv.status === 'pending') {
-                    actionButtons = `
-                        <span style="font-size:0.72rem; color:#f39c12;">
-                            <i class="fas fa-clock"></i> Awaiting
-                        </span>
-                    `;
-                } else if (inv.status === 'paid') {
-                    actionButtons = `
-                        <span style="font-size:0.72rem; color:#27ae60;">
-                            <i class="fas fa-check-circle"></i> Paid
-                        </span>
-                    `;
-                }
-
-                html += `
-                    <tr>
-                        <td><strong>${inv.invoiceNumber}</strong></td>
-                        <td>${inv.parentName || 'N/A'}<br>
-                            <span style="font-size:0.75rem; color:var(--text-muted);">${inv.parentEmail || ''}</span>
-                        </td>
-                        <td><strong>R${(inv.total || 0).toFixed(2)}</strong></td>
-                        <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:0.8rem;">${inv.paymentRef || 'N/A'}</code></td>
-                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
-                        <td>${date}</td>
-                        <td>
-                            <button class="btn-sm view" onclick="window.viewInvoice('${inv.id}')" title="View">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            ${actionButtons}
-                        </td>
-                    </tr>
-                `;
-            });
-
-            tbody.innerHTML = html;
-        }
-
         function filterInvoices(filter) {
             document.querySelectorAll('#invoicesTab .filter-btns button').forEach(function(btn) {
                 btn.classList.toggle('active', btn.dataset.filter === filter);
@@ -1441,12 +1339,16 @@
         // ============================================================
         // MARK INVOICE PAID (+ emails to parent & tutor)
         // ============================================================
-        async function markInvoicePaid(invoiceId) {
+                async function markInvoicePaid(invoiceId) {
             if (!confirm('Have you verified this payment in your bank account?')) return;
 
             try {
                 const db = firebase.firestore();
                 const invDoc = await db.collection('invoices').doc(invoiceId).get();
+                if (!invDoc.exists) {
+                    alert('Invoice not found.');
+                    return;
+                }
                 const inv = invDoc.data();
 
                 // 1. Mark Invoice as Paid
@@ -1455,7 +1357,7 @@
                     paidAt: new Date().toISOString()
                 });
 
-                // 2. Find matching booking and confirm it
+                // 2. Try to find matching booking (if it was a 1-on-1 booking)
                 let bookingId = null;
                 const bookingsSnapshot = await db.collection('bookings')
                     .where('parentEmail', '==', inv.parentEmail)
@@ -1471,47 +1373,129 @@
                     });
                 }
 
-                // 3. Email → Parent
+                // 3. Email → Parent (Always send this)
                 await db.collection('mail').add({
                     to: inv.parentEmail,
                     message: {
-                        subject: 'Session Confirmed! - ' + inv.invoiceNumber,
+                        subject: 'Payment Confirmed! - ' + inv.invoiceNumber,
                         html: buildEmailBody(`
-                            <h2>Payment Verified & Session Confirmed! 🎉</h2>
+                            <h2>Payment Verified! 🎉</h2>
                             <p>Hi ${inv.parentName},</p>
                             <p>We have verified your payment for invoice <strong>${inv.invoiceNumber}</strong> (R${inv.total.toFixed(2)}).</p>
-                            <p>Your session is now officially confirmed. You can view the details in your Parent Dashboard.</p>
+                            <p>Thank you! You can view the updated status in your Parent Dashboard.</p>
                             <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #27ae60; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">Go to Parent Dashboard</a></p>
                         `)
                     }
                 });
 
-                // 4. Email → Tutor (if booking found)
+                // 4. Email → Tutor (Only if a booking was found)
                 if (bookingId) {
                     const bookingData = (await db.collection('bookings').doc(bookingId).get()).data();
-                    await db.collection('mail').add({
-                        to: bookingData.tutorEmail,
-                        message: {
-                            subject: 'New Confirmed Session! 🎓',
-                            html: buildEmailBody(`
-                                <h2>You have a confirmed session!</h2>
-                                <p>A parent has paid for their booking with you. Here are the details:</p>
-                                <p><strong>Time:</strong> ${bookingData.timeSlot}</p>
-                                <p><strong>Duration:</strong> ${bookingData.duration} Hour(s)</p>
-                                <p>Log into your Tutor Dashboard to view your upcoming schedule.</p>
-                                <p><a href="https://aceed.co.za/tutor-dashboard.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">View Dashboard</a></p>
-                            `)
-                        }
-                    });
+                    if (bookingData && bookingData.tutorEmail) {
+                        await db.collection('mail').add({
+                            to: bookingData.tutorEmail,
+                            message: {
+                                subject: 'New Confirmed Session! 🎓',
+                                html: buildEmailBody(`
+                                    <h2>You have a confirmed session!</h2>
+                                    <p>A parent has paid for their booking with you. Here are the details:</p>
+                                    <p><strong>Time:</strong> ${bookingData.timeSlot}</p>
+                                    <p><strong>Duration:</strong> ${bookingData.duration} Hour(s)</p>
+                                    <p>Log into your Tutor Dashboard to view your upcoming schedule.</p>
+                                    <p><a href="https://aceed.co.za/tutor-dashboard.html" style="background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px;">View Dashboard</a></p>
+                                `)
+                            }
+                        });
+                    }
                 }
 
-                alert('✅ Invoice marked as paid. Parent and Tutor have been notified.');
-                loadInvoices();
+                alert('✅ Invoice marked as paid.');
+                loadInvoices(); // Refresh the table
 
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error: ' + error.message);
             }
+        }
+
+                // ============================================================
+        // INVOICES
+        // ============================================================
+        function loadInvoices() {
+            const db = firebase.firestore();
+            db.collection('invoices')
+                .orderBy('issuedAt', 'desc')
+                .get()
+                .then(function(snapshot) {
+                    allInvoices = [];
+                    let total = 0, pending = 0, claimed = 0, paid = 0;
+
+                    snapshot.forEach(function(doc) {
+                        const inv = doc.data();
+                        allInvoices.push({ id: doc.id, ...inv });
+                        total++;
+                        if (inv.status === 'pending') pending++;
+                        if (inv.status === 'payment_claimed') claimed++;
+                        if (inv.status === 'paid') paid++;
+                    });
+
+                    document.getElementById('totalInvoices').textContent = total;
+                    document.getElementById('pendingInvoices').textContent = pending;
+                    document.getElementById('claimedInvoices').textContent = claimed;
+                    document.getElementById('paidInvoices').textContent = paid;
+
+                    renderInvoices(currentInvFilter);
+                })
+                .catch(function(error) {
+                    console.error('Error loading invoices:', error);
+                });
+        }
+
+        function renderInvoices(filter) {
+            currentInvFilter = filter;
+            const filtered = filter === 'all' ? allInvoices : allInvoices.filter(i => i.status === filter);
+            const tbody = document.getElementById('invoicesBody');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><i class="fas fa-inbox"></i><br>No invoices found</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(function(inv) {
+                const statusClass = inv.status || 'pending';
+                let statusLabel = inv.status === 'payment_claimed' ? 'Claimed' : (inv.status ? inv.status.charAt(0).toUpperCase() + inv.status.slice(1) : 'Pending');
+                const date = inv.issuedAt ? new Date(inv.issuedAt).toLocaleDateString() : 'N/A';
+                
+                // Show billing cycle type in table
+                const billingType = inv.items && inv.items[0] && inv.items[0].name.includes('Monthly') ? 'Monthly' : 'Weekly / Ad-Hoc';
+
+                let actionButtons = '';
+                if (inv.status === 'payment_claimed') {
+                    actionButtons = `<button class="btn-sm approve" onclick="markInvoicePaid('${inv.id}')"><i class="fas fa-check"></i> Mark Paid</button>`;
+                } else if (inv.status === 'pending') {
+                    actionButtons = `<span style="font-size:0.72rem; color:#f39c12;"><i class="fas fa-clock"></i> Awaiting</span>`;
+                } else if (inv.status === 'paid') {
+                    actionButtons = `<span style="font-size:0.72rem; color:#27ae60;"><i class="fas fa-check-circle"></i> Paid</span>`;
+                }
+
+                html += `
+                    <tr>
+                        <td><strong>${inv.invoiceNumber}</strong></td>
+                        <td>${inv.parentName || 'N/A'}<br><span style="font-size:0.75rem; color:var(--text-muted);">${inv.parentEmail || ''}</span></td>
+                        <td><strong>R${(inv.total || 0).toFixed(2)}</strong></td>
+                        <td><span style="font-size:0.8rem; background:var(--bg-color); padding:2px 8px; border-radius:4px;">${billingType}</span></td>
+                        <td><span class="status ${statusClass}">${statusLabel}</span></td>
+                        <td>${date}</td>
+                        <td>
+                            <button class="btn-sm view" onclick="window.viewInvoice('${inv.id}')" title="View"><i class="fas fa-eye"></i></button>
+                            ${actionButtons}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
         }
 
         // ============================================================
@@ -1566,7 +1550,7 @@
             const content = document.getElementById('billingModalContent');
 
             document.getElementById('billingModalSubtitle').textContent = `Generating invoice for logs by ${tutorName}`;
-            content.innerHTML = '<p>Loading logs...</p>';
+            content.innerHTML = '<p style="text-align:center; padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading logs & parent info...</p>';
             modal.classList.add('show');
 
             try {
@@ -1580,81 +1564,119 @@
                     return;
                 }
 
-                let totalHours = 0;
                 let logsByParent = {};
 
+                // Group logs by parent
                 snapshot.forEach(doc => {
                     const log = doc.data();
-                    totalHours += log.totalHours;
-
                     if (!logsByParent[log.parentUid]) {
                         logsByParent[log.parentUid] = {
                             parentName: log.parentName,
                             parentEmail: log.parentEmail,
+                            totalHours: 0,
+                            billingCycle: 'monthly', // Default fallback
                             logs: []
                         };
                     }
                     logsByParent[log.parentUid].logs.push({ id: doc.id, ...log });
+                    logsByParent[log.parentUid].totalHours += (log.totalHours || 0);
                 });
 
-                let html = `<p style="margin-bottom: 15px; font-weight: 600;">Total Hours Logged: ${totalHours}</p>`;
+                // Fetch parent info to check billing cycle
+                for (const [parentUid, parentData] of Object.entries(logsByParent)) {
+                    const parentDoc = await db.collection('users').doc(parentUid).get();
+                    if (parentDoc.exists) {
+                        const pData = parentDoc.data();
+                        // Check billingCycle, fallback to monthly
+                        logsByParent[parentUid].billingCycle = pData.billingCycle || 'monthly';
+                    }
+                }
+
+                let html = '';
+                const now = new Date();
+                const monthName = now.toLocaleString('default', { month: 'long' });
 
                 for (const [parentUid, parentData] of Object.entries(logsByParent)) {
                     const logIdsJson = JSON.stringify(parentData.logs.map(l => l.id)).replace(/"/g, '&quot;');
-                    html += `
-                        <div style="background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
-                            <h4 style="margin-bottom: 10px;">${parentData.parentName} (${parentData.parentEmail})</h4>
-                            <p style="font-size: 0.9rem; color: var(--text-muted);">Logs: ${parentData.logs.length} sessions</p>
+                    
+                    // Default Math based on Billing Cycle
+                    let defaultAmount = 600; // Monthly default
+                    let invoiceTitle = `Monthly Tutoring (${monthName})`;
+                    let cycleBadge = `<span style="background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600;">Monthly Subscription</span>`;
 
-                            <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <label style="font-size: 0.85rem; font-weight: 600;">Invoice Amount (R):</label>
-                                <input type="number" id="invoiceAmount_${parentUid}" value="600" style="padding: 8px; border: 1px solid var(--border); border-radius: 6px; width: 110px; font-family: inherit;">
-                                <button class="btn-sm approve" onclick="generateInvoice('${parentUid}', '${tutorId}', '${tutorName}', '${parentData.parentEmail}', '${parentData.parentName}', '${logIdsJson}')">
-                                    <i class="fas fa-check"></i> Create Invoice
-                                </button>
+                    if (parentData.billingCycle === 'weekly' || parentData.billingCycle === 'payg') {
+                        defaultAmount = parentData.totalHours * 100; // R100/hr Pay-as-you-go
+                        invoiceTitle = `Tutoring Hours (${parentData.totalHours} hrs)`;
+                        cycleBadge = `<span style="background:#fce7f3; color:#9d174d; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600;">Pay-As-You-Go</span>`;
+                    }
+
+                    html += `
+                        <div style="background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 15px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                                <h4 style="margin:0;">${parentData.parentName}</h4>
+                                ${cycleBadge}
                             </div>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Tutor Payout (70%): R<span id="payoutDisplay_${parentUid}">420</span></p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                                ${parentData.parentEmail} <br>
+                                <strong>${parentData.logs.length} sessions</strong> logged (${parentData.totalHours} hours total).
+                            </p>
+
+                            <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; background: white; padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                                <div style="flex: 1; min-width: 120px;">
+                                    <label style="font-size: 0.8rem; font-weight: 600; display:block; margin-bottom:5px;">Invoice Amount (R)</label>
+                                    <input type="number" id="invoiceAmount_${parentUid}" value="${defaultAmount}" 
+                                           style="padding: 8px; border: 1px solid var(--border); border-radius: 6px; width: 100%; font-family: inherit; font-size: 1rem;"
+                                           oninput="updatePayoutDisplay('${parentUid}', this.value)">
+                                </div>
+                                <div style="flex: 1; min-width: 120px; font-size: 0.85rem;">
+                                    <div style="color: var(--success); font-weight: 600;">Tutor Payout (70%): R<span id="payoutDisplay_${parentUid}">${(defaultAmount * 0.70).toFixed(2)}</span></div>
+                                    <div style="color: var(--text-muted); font-size: 0.75rem;">AceEd Profit (30%): R<span id="profitDisplay_${parentUid}">${(defaultAmount * 0.30).toFixed(2)}</span></div>
+                                </div>
+                                <div>
+                                    <button class="btn-sm approve" style="padding: 10px 16px; font-size: 0.85rem;" onclick="generateInvoice('${parentUid}', '${tutorId}', '${tutorName}', '${parentData.parentEmail}', '${parentData.parentName}', '${logIdsJson}', '${invoiceTitle}')">
+                                        <i class="fas fa-paper-plane"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     `;
                 }
 
                 content.innerHTML = html;
 
-                for (const parentUid of Object.keys(logsByParent)) {
-                    const input = document.getElementById(`invoiceAmount_${parentUid}`);
-                    const display = document.getElementById(`payoutDisplay_${parentUid}`);
-                    input.addEventListener('input', function() {
-                        const amount = parseFloat(this.value) || 0;
-                        display.textContent = (amount * 0.70).toFixed(2);
-                    });
-                }
-
             } catch (error) {
                 console.error('Error loading logs:', error);
-                content.innerHTML = `<p style="color: var(--danger);">Error loading logs: ${error.message}</p>`;
+                content.innerHTML = `<p style="color: var(--danger);">Error: ${error.message}</p>`;
             }
         }
 
-        async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr) {
-            if (!confirm('Are you sure you want to generate this invoice?')) return;
+        function updatePayoutDisplay(parentUid, amount) {
+            const num = parseFloat(amount) || 0;
+            document.getElementById(`payoutDisplay_${parentUid}`).textContent = (num * 0.70).toFixed(2);
+            document.getElementById(`profitDisplay_${parentUid}`).textContent = (num * 0.30).toFixed(2);
+        }
+
+        async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr, invoiceTitle) {
+            if (!confirm('Are you sure you want to generate this invoice? This will immediately notify the parent.')) return;
 
             const db = firebase.firestore();
             const amount = parseFloat(document.getElementById(`invoiceAmount_${parentUid}`).value);
             const logIds = JSON.parse(logIdsStr.replace(/&quot;/g, '"'));
+            
             const invoiceNumber = `ACE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
             const dueDate = new Date();
-            dueDate.setDate(dueDate.getDate() + 7);
+            dueDate.setDate(dueDate.getDate() + 7); // Due in 7 days
 
             try {
+                // 1. Create the invoice
                 await db.collection('invoices').add({
                     invoiceNumber: invoiceNumber,
                     parentName: parentName,
                     parentEmail: parentEmail,
-                    parentPhone: '',
                     total: amount,
                     paymentRef: `ACE-${parentUid.slice(-6).toUpperCase()}`,
                     items: [{
-                        name: `Monthly Tutoring (${tutorName})`,
+                        name: invoiceTitle,
                         qty: 1,
                         rate: amount,
                         total: amount
@@ -1663,22 +1685,42 @@
                     issuedAt: new Date().toISOString(),
                     dueAt: dueDate.toISOString()
                 });
-
+                
+                // 2. Mark logs as billed so they don't show up again
                 const batch = db.batch();
                 logIds.forEach(id => {
                     batch.update(db.collection('weekly_logs').doc(id), { invoiceStatus: 'billed' });
                 });
                 await batch.commit();
 
-                alert('✅ Invoice generated successfully!');
+                // 3. Email the Parent
+                await db.collection('mail').add({
+                    to: parentEmail,
+                    message: {
+                        subject: `New Invoice from AceEd Tutoring - ${invoiceNumber}`,
+                        html: buildEmailBody(`
+                            <h2>New Invoice Generated</h2>
+                            <p>Hi ${parentName},</p>
+                            <p>A new invoice has been generated for your tutoring sessions.</p>
+                            <p><strong>Invoice Number:</strong> ${invoiceNumber}<br>
+                               <strong>Amount Due:</strong> R${amount.toFixed(2)}</p>
+                            <p>Please log in to your Parent Dashboard to view the payment instructions and complete the payment.</p>
+                            <p><a href="https://aceed.co.za/parent-dashboard.html" style="background: #1e3a8a; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">View Dashboard</a></p>
+                        `)
+                    }
+                });
+
+                alert('✅ Invoice generated! The parent has been emailed and the logs are marked as billed.');
                 closeModal('billingModal');
-                loadBillingTutors();
+                loadBillingTutors(); // Refresh the list
+                loadInvoices(); // Update stats
 
             } catch (error) {
                 console.error('Error generating invoice:', error);
                 alert('Error: ' + error.message);
             }
         }
+    
     </script>
 
 </body>
