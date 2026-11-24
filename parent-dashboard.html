@@ -674,8 +674,8 @@
             }
         }
 
-                // ============================================================
-        // LOAD MATCHED TUTORS
+         // ============================================================
+        // LOAD MATCHED TUTORS (With Progress Buttons)
         // ============================================================
         function loadMatchedTutors() {
             const db = firebase.firestore();
@@ -699,6 +699,18 @@
                         let cleanPhone = req.tutorPhone ? req.tutorPhone.replace(/\s+/g, '').replace(/^0/, '+27') : '';
                         let waLink = cleanPhone ? `https://wa.me/${cleanPhone.replace('+', '')}?text=Hi%20${encodeURIComponent(req.tutorName)},%20I%20am%20${encodeURIComponent(parentName)},%20${encodeURIComponent(req.childName)}'s%20parent.` : '#';
 
+                        // Generate Progress buttons for each subject
+                        let progressButtons = '';
+                        if (req.subjects && req.subjects.length > 0) {
+                            req.subjects.forEach(subject => {
+                                progressButtons += `
+                                    <button class="btn btn-primary" onclick="window.location.href='progress.html?student=${req.childId}&subject=${encodeURIComponent(subject)}'" style="padding: 8px 12px; font-size: 0.8rem; width: 100%;">
+                                        <i class="fas fa-chart-line"></i> ${subject} Progress
+                                    </button>
+                                `;
+                            });
+                        }
+
                         html += `
                             <div class="invoice-card" style="border-left: 4px solid var(--success); margin-bottom: 15px;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
@@ -707,16 +719,20 @@
                                         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">
                                             <strong>Student:</strong> ${req.childName} (${req.subjects.join(', ')})
                                         </p>
-                                        <p style="font-size: 0.85rem; color: var(--text-muted);">
+                                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
                                             <i class="fas fa-envelope"></i> ${req.tutorEmail || 'No email'} <br>
                                             <i class="fas fa-phone"></i> ${req.tutorPhone || 'No phone'}
                                         </p>
+                                        <!-- Add the Progress buttons here -->
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                            ${progressButtons}
+                                        </div>
                                     </div>
-                                    <div style="display: flex; gap: 8px; flex-direction: column;">
+                                    <div style="display: flex; gap: 8px; flex-direction: column; min-width: 130px;">
                                         <a href="mailto:${req.tutorEmail}" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.8rem;">
-                                            <i class="fas fa-envelope"></i> Email
+                                            <i class="fas fa-envelope"></i> Email Tutor
                                         </a>
-                                        <a href="${waLink}" target="_blank" class="btn btn-primary" style="background: #27ae60; padding: 8px 12px; font-size: 0.8rem;">
+                                        <a href="${waLink}" target="_blank" class="btn btn-success" style="padding: 8px 12px; font-size: 0.8rem;">
                                             <i class="fab fa-whatsapp"></i> WhatsApp
                                         </a>
                                     </div>
@@ -731,7 +747,6 @@
                     container.innerHTML = `<p style="color: var(--danger);">Error loading matched tutors.</p>`;
                 });
         }
-        
         // ============================================================
         // LOAD INVOICES (BOOKINGS & PAYMENTS)
         // ============================================================
