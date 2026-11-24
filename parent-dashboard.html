@@ -485,7 +485,6 @@
         // ============================================================
         function openAddChildModal() {
             document.getElementById('addChildModal').classList.add('show');
-            toggleBillingDays();
         }
 
         function closeModal(modalId) {
@@ -583,25 +582,17 @@
             e.preventDefault();
             const name = document.getElementById('childName').value.trim();
             const grade = document.getElementById('childGrade').value;
-            const subject = document.getElementById('childSubject').value.trim();
-            const billingCycle = document.getElementById('billingCycleSelect').value;
-            const billingDay = document.getElementById('billingDaySelect').value;
+            const subject = document.getElementById('childSubject').value;
             
             try {
                 await firebase.firestore().collection('children').add({
                     parentUid: parentUid,
                     fullName: name,
                     grade: grade,
-                    subject: subject,           // NEW
-                    billingCycle: billingCycle, // NEW
-                    billingDay: billingDay,     // NEW
+                    subject: subject,
                     createdAt: new Date().toISOString()
                 });
                 this.reset();
-                // Reset the dropdown back to monthly
-                document.getElementById('billingCycleSelect').value = 'monthly';
-                toggleBillingDays();
-                
                 closeModal('addChildModal');
                 loadParentData(parentUid);
             } catch (error) {
@@ -620,9 +611,13 @@
         // ============================================================
         // SUBMIT TUTOR REQUEST
         // ============================================================
-        async function submitTutorRequestForChild(childId) {
+                async function submitTutorRequestForChild(childId) {
             const child = childrenData.find(c => c.id === childId);
             if (!child) return;
+            
+            // Grab the billing info from the form
+            const billingCycle = document.getElementById('billingCycleSelect').value;
+            const billingDay = document.getElementById('billingDaySelect').value;
             
             const db = firebase.firestore();
             try {
@@ -634,9 +629,9 @@
                     childId: childId,
                     childName: child.fullName,
                     grade: child.grade,
-                    subjects: [child.subject], // Send as array for Admin compatibility
-                    billingCycle: child.billingCycle,
-                    billingDay: child.billingDay,
+                    subjects: [child.subject], // Array of subjects (just the one they chose)
+                    billingCycle: billingCycle,
+                    billingDay: billingDay,
                     status: 'pending',
                     createdAt: new Date().toISOString()
                 });
@@ -781,12 +776,13 @@
         const weeklyDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
         function toggleBillingDays() {
-            const cycle = document.getElementById('billingCycleSelect').value;
+            const cycleSelect = document.getElementById('billingCycleSelect');
             const daySelect = document.getElementById('billingDaySelect');
             
-            // Safety check
-            if (!daySelect) return;
-            
+            // If the elements don't exist on the page, just stop.
+            if (!cycleSelect || !daySelect) return;
+
+            const cycle = cycleSelect.value;
             daySelect.innerHTML = '';
 
             if (cycle === 'monthly') {
@@ -799,7 +795,6 @@
                 });
             }
         }
-
         // Initialize the days on page load
         document.addEventListener('DOMContentLoaded', function() {
             toggleBillingDays();
