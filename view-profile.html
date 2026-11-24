@@ -369,16 +369,40 @@
             const totalPrice = parseInt(duration) * 100;
 
             try {
-                // 4. Save to database
-            await db.collection('bookings').add({
+                // 4. Generate Sequential Booking Reference
+                const counterRef = db.collection('settings').doc('counters');
+                let finalBookingRef = '';
+
+                await db.runTransaction(async (transaction) => {
+                    const counterDoc = await transaction.get(counterRef);
+                    let currentCount = 0;
+                    
+                    if (counterDoc.exists) {
+                        currentCount = counterDoc.data().invoiceCount || 0; 
+                    }
+
+                    const newCount = currentCount + 1;
+                    const paddedCount = newCount.toString().padStart(3, '0'); // e.g., 001
+
+                    // Since it's a 1-on-1 booking without a specific child profile attached yet, 
+                    // we default to 'Student'. If you later ask for the child's name on this form, 
+                    // you can swap 'Student' for their surname!
+                    finalBookingRef = `ACE-Student-${paddedCount}`; 
+
+                    transaction.set(counterRef, { invoiceCount: newCount }, { merge: true });
+                });
+
+                // 5. Save to database
+                await db.collection('bookings').add({
                     tutorId: currentTutor.id,
                     tutorName: currentTutor.fullName,
                     tutorEmail: currentTutor.email || 'tutor@aceed.co.za',
                     parentEmail: parentEmail,
-                    subject: subject, // <--- ADD THIS LINE
+                    subject: subject,
                     timeSlot: selectedTime.textContent.trim(),
                     duration: duration,
                     totalPrice: totalPrice,
+                    paymentRef: finalBookingRef, // <-- Added the reference
                     status: 'pending_tutor_confirmation',
                     createdAt: new Date().toISOString()
                 });
