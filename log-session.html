@@ -14,10 +14,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log Weekly Session - AceEd Tutoring</title>
 
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -35,139 +41,180 @@
         firebase.initializeApp(firebaseConfig);
     </script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%); min-height: 100vh; padding: 30px 20px; }
-
-        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-
-        .page-header { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .page-header i { font-size: 2rem; color: #f39c12; }
-        h1 { color: #1e2a3a; font-size: 1.6rem; }
-        .subtitle { color: #7f8c8d; margin-bottom: 30px; font-size: 0.95rem; }
-
-        .form-section { background: #f9f9f9; border-radius: 15px; padding: 25px; margin-bottom: 25px; }
-        .form-section h3 { color: #1e2a3a; font-size: 1.05rem; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-        .form-section h3 i { color: #f39c12; }
-
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; color: #1e2a3a; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px;
-            font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white;
+        :root {
+            --bg-color: #f7f9fc;
+            --white: #ffffff;
+            --text-main: #1e2a3e;
+            --text-muted: #64748b;
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --wrap: 800px;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #3498db; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); line-height: 1.6; padding: 30px 20px; }
+        a { text-decoration: none; color: var(--primary); }
+        img { max-width: 100%; display: block; }
+
+        .wrap { max-width: var(--wrap); margin: 0 auto; }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+            transition: all 0.2s; border: none; cursor: pointer; text-decoration: none;
+        }
+        .btn-primary { background: var(--success); color: white; }
+        .btn-primary:hover { background: #1e8449; }
+        .btn-secondary { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--bg-color); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* PAGE HEADER */
+        .page-header {
+            background: white; border-radius: var(--radius); padding: 30px;
+            margin-bottom: 24px; border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center;
+        }
+        .page-header i { font-size: 2.2rem; color: var(--primary); margin-bottom: 12px; }
+        .page-header h1 { font-size: 1.8rem; letter-spacing: -0.02em; margin-bottom: 8px; }
+        .page-header p { color: var(--text-muted); font-size: 1rem; }
+
+        /* FORM SECTIONS */
+        .form-section {
+            background: white; border-radius: var(--radius); padding: 30px;
+            margin-bottom: 24px; border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .form-section h3 {
+            font-size: 1.15rem; margin-bottom: 20px; display: flex; align-items: center;
+            gap: 10px; color: var(--text-main); font-weight: 700;
+            border-bottom: 1px solid var(--bg-color); padding-bottom: 12px;
+        }
+        .form-section h3 i { color: var(--primary); }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px;
+            font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s; background: white;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
         .form-group textarea { resize: vertical; min-height: 80px; }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 
-        .session-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #3498db; }
-        .session-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .session-number { font-weight: 700; color: #3498db; font-size: 0.9rem; }
-        .remove-session {
-            background: none; border: none; color: #e74c3c; cursor: pointer;
-            font-size: 1rem; padding: 5px 10px; border-radius: 6px; transition: background 0.2s;
+        .helper-text { color: var(--text-muted); font-size: 0.8rem; margin-top: 6px; }
+
+        /* SESSION CARDS */
+        .session-card {
+            background: var(--bg-color); border-radius: 8px; padding: 20px; margin-bottom: 15px;
+            border: 1px solid var(--border); border-left: 4px solid var(--primary);
         }
-        .remove-session:hover { background: #fee; }
+        .session-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .session-number { font-weight: 600; color: var(--primary); font-size: 0.9rem; }
+        .remove-session {
+            background: none; border: none; color: var(--danger); cursor: pointer;
+            font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; transition: background 0.2s; font-weight: 500;
+        }
+        .remove-session:hover { background: #fef2f2; }
 
         .add-session-btn {
-            display: block; width: 100%; padding: 15px; background: white;
-            border: 2px dashed #3498db; border-radius: 12px; color: #3498db;
-            font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px;
+            background: white; border: 2px dashed var(--border); border-radius: 8px; color: var(--primary);
+            font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; font-family: inherit;
         }
-        .add-session-btn:hover { background: #f0f8ff; border-style: solid; }
+        .add-session-btn:hover { border-color: var(--primary); background: #f8fafc; }
 
+        /* FILE UPLOAD */
         .file-input-wrapper { position: relative; overflow: hidden; display: block; }
         .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
         .file-input-btn {
-            display: block; width: 100%; padding: 12px 20px; background: white;
-            border: 2px dashed #3498db; border-radius: 10px; color: #3498db;
-            font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px;
+            background: white; border: 2px dashed var(--border); border-radius: 8px; color: var(--primary);
+            font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; font-size: 0.95rem;
         }
-        .file-input-btn:hover { background: #f0f8ff; border-style: solid; }
+        .file-input-btn:hover { border-color: var(--primary); background: #f8fafc; }
 
-        .file-name { margin-top: 8px; font-size: 0.85rem; color: #27ae60; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .file-name.error { color: #e74c3c; }
-        .file-name .remove-file { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; }
-        .file-name .remove-file:hover { background: #fee; }
+        .file-name { margin-top: 10px; font-size: 0.85rem; color: var(--success); font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .file-name.error { color: var(--danger); }
+        .file-name .remove-file { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; }
+        .file-name .remove-file:hover { background: #fef2f2; }
 
+        /* ACTIONS */
         .actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px; flex-wrap: wrap; }
 
-        .btn {
-            padding: 14px 30px; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
-            cursor: pointer; border: none; text-decoration: none; display: inline-flex;
-            align-items: center; gap: 8px; transition: all 0.3s;
-        }
-        .btn-primary { background: linear-gradient(135deg, #27ae60, #1e8449); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
-        .btn-secondary { background: #ecf0f1; color: #1e2a3a; }
-        .btn-secondary:hover { background: #d5dbdb; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .alert { padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: none; font-size: 0.9rem; }
+        /* ALERTS */
+        .alert { padding: 16px 20px; border-radius: 8px; margin-bottom: 24px; display: none; font-size: 0.95rem; font-weight: 500; }
         .alert.show { display: block; }
-        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #27ae60; }
-        .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #e74c3c; }
-        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid var(--success); }
+        .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid var(--danger); }
+        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid var(--warning); }
 
-        .loading-screen { text-align: center; padding: 60px 20px; }
-        .loading-screen .spinner { font-size: 3rem; color: #f39c12; animation: spin 1s linear infinite; }
+        /* LOADING SCREEN */
+        .loading-screen { text-align: center; padding: 80px 20px; background: white; border-radius: var(--radius); border: 1px solid var(--border); }
+        .loading-screen .spinner { font-size: 3rem; color: var(--primary); animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .helper-text { color: #7f8c8d; font-size: 0.8rem; margin-top: -8px; margin-bottom: 12px; }
-
+        /* RESPONSIVE */
         @media (max-width: 600px) {
-            .container { padding: 25px 20px; }
             .form-row, .form-row-3 { grid-template-columns: 1fr; }
             .actions { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
+            .form-section, .page-header { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="wrap">
+        <!-- LOADING -->
         <div id="loadingScreen" class="loading-screen">
             <i class="fas fa-spinner spinner"></i>
-            <p style="margin-top: 15px; color: #7f8c8d;">Loading...</p>
+            <p style="margin-top: 15px; color: var(--text-muted); font-weight: 500;">Loading your profile...</p>
         </div>
 
+        <!-- MAIN CONTENT -->
         <div id="mainContent" style="display: none;">
             <div class="page-header">
                 <i class="fas fa-calendar-check"></i>
                 <h1>Log Weekly Session</h1>
+                <p>Log all sessions for a student this week. This will be sent to the parent.</p>
             </div>
-            <p class="subtitle">Log all sessions for a student this week. This will be sent to the parent.</p>
 
             <div id="alertBox" class="alert"></div>
 
             <form id="logForm">
-                <!-- Student & Subject -->
+                <!-- STUDENT & SUBJECT -->
                 <div class="form-section">
                     <h3><i class="fas fa-user-graduate"></i> Student & Subject</h3>
 
                     <div class="form-group">
-                        <label>Student *</label>
+                        <label>Student <span style="color:var(--danger);">*</span></label>
                         <select id="studentSelect" required>
                             <option value="">Select a student...</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Subject *</label>
+                        <label>Subject <span style="color:var(--danger);">*</span></label>
                         <input type="text" id="subject" placeholder="e.g. Economics" required>
                     </div>
 
-                    <div class="form-group">
-                        <label>Week Of *</label>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Week Of <span style="color:var(--danger);">*</span></label>
                         <input type="date" id="weekOf" required>
+                        <div class="helper-text">This defaults to the Monday of the current week.</div>
                     </div>
                 </div>
 
-                <!-- Sessions -->
+                <!-- SESSIONS -->
                 <div class="form-section">
                     <h3><i class="fas fa-clock"></i> Sessions This Week</h3>
                     <div id="sessionsContainer"></div>
@@ -176,18 +223,18 @@
                     </button>
                 </div>
 
-                <!-- Weekly Summary -->
+                <!-- WEEKLY SUMMARY -->
                 <div class="form-section">
                     <h3><i class="fas fa-star"></i> Weekly Summary</h3>
 
                     <div class="form-group">
-                        <label>Tutor Test Mark (%) *</label>
+                        <label>Tutor Test Mark (%) <span style="color:var(--danger);">*</span></label>
                         <input type="number" id="tutorAssessment" min="0" max="100" placeholder="e.g. 65" required>
                         <div class="helper-text">The mark from the test you gave this week.</div>
                     </div>
 
                     <div class="form-group">
-                        <label>Tutor Test Paper * (PDF or image, max 5MB)</label>
+                        <label>Tutor Test Paper <span style="color:var(--danger);">*</span> (PDF or image, max 5MB)</label>
                         <div class="file-input-wrapper">
                             <input type="file" id="tutorTestFile" accept=".pdf,.png,.jpg,.jpeg" onchange="handleTutorTestSelect(event)">
                             <label for="tutorTestFile" class="file-input-btn">
@@ -197,16 +244,16 @@
                         <div id="tutorTestName" class="file-name"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Weekly Notes *</label>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Weekly Notes <span style="color:var(--danger);">*</span></label>
                         <textarea id="weeklyNotes" placeholder="How did the student do this week? What needs more focus next week?" required></textarea>
                     </div>
                 </div>
 
-                <!-- School Test (Optional) -->
+                <!-- SCHOOL TEST (OPTIONAL) -->
                 <div class="form-section">
                     <h3><i class="fas fa-file-alt"></i> School Test (Optional)</h3>
-                    <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 15px;">
+                    <p class="helper-text" style="margin-top:0; margin-bottom: 15px;">
                         Only fill in if the parent has told you about a school test result. Leave empty if not.
                     </p>
 
@@ -226,13 +273,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom:0;">
                         <label>Test Date</label>
                         <input type="date" id="testDate">
                     </div>
                 </div>
 
-                <!-- Actions -->
+                <!-- ACTIONS -->
                 <div class="actions">
                     <a href="tutor-dashboard.html" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Cancel
@@ -271,10 +318,10 @@
 
                 if (userData.role !== 'tutor') {
                     document.getElementById('loadingScreen').innerHTML = `
-                        <i class="fas fa-lock" style="font-size: 3rem; color: #e74c3c;"></i>
-                        <h2 style="color: #e74c3c; margin-top: 15px;">Access Denied</h2>
-                        <p style="color: #7f8c8d;">Only tutors can access this page.</p>
-                        <a href="index.html" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: #3498db; color: white; text-decoration: none; border-radius: 30px;">Go Home</a>
+                        <i class="fas fa-lock" style="font-size: 3rem; color: var(--danger); margin-bottom: 15px;"></i>
+                        <h2 style="color: var(--danger); margin-bottom: 10px;">Access Denied</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">Only tutors can access this page.</p>
+                        <a href="index.html" class="btn btn-primary">Go Home</a>
                     `;
                     return;
                 }
@@ -373,15 +420,15 @@
                 </div>
                 <div class="form-row-3">
                     <div class="form-group">
-                        <label>Date</label>
+                        <label>Date <span style="color:var(--danger);">*</span></label>
                         <input type="date" class="session-date" required>
                     </div>
                     <div class="form-group">
-                        <label>Time</label>
+                        <label>Time <span style="color:var(--danger);">*</span></label>
                         <input type="time" class="session-time" required>
                     </div>
                     <div class="form-group">
-                        <label>Duration (hours)</label>
+                        <label>Duration (hours) <span style="color:var(--danger);">*</span></label>
                         <select class="session-duration" required>
                             <option value="0.5">0.5 hr</option>
                             <option value="1" selected>1 hr</option>
@@ -392,8 +439,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Topics Covered</label>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Topics Covered <span style="color:var(--danger);">*</span></label>
                     <textarea class="session-topics" placeholder="What was covered in this session?" required></textarea>
                 </div>
             `;
@@ -460,7 +507,6 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
             try {
-                // Validate student
                 const requestId = document.getElementById('studentSelect').value;
                 if (!requestId) throw new Error('Please select a student.');
 
@@ -478,7 +524,6 @@
                 if (!weeklyNotes) throw new Error('Please write weekly notes.');
                 if (!tutorTestFile) throw new Error('Please upload the tutor test paper. It is required every week.');
 
-                // Gather sessions
                 const sessions = [];
                 let totalHours = 0;
                 document.querySelectorAll('.session-card').forEach(function(card) {
@@ -497,7 +542,6 @@
 
                 if (sessions.length === 0) throw new Error('Add at least one session.');
 
-                // School test (optional, no paper)
                 const testName = document.getElementById('testName').value.trim();
                 const testMark = document.getElementById('testMark').value;
                 const testTotal = document.getElementById('testTotal').value;
@@ -520,7 +564,6 @@
 
                 const db = firebase.firestore();
 
-                // Check existing log
                 const existingSnapshot = await db.collection('weekly_logs')
                     .where('tutorUid', '==', currentTutorUid)
                     .where('studentUid', '==', student.studentUid)
@@ -541,7 +584,6 @@
                     isOverwrite = true;
                 }
 
-                // Upload tutor test paper
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading paper...';
                 const timestamp = Date.now();
                 const safeName = tutorTestFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -557,7 +599,6 @@
                     uploadedBy: currentTutorUid
                 };
 
-                // Log data
                 const logData = {
                     tutorUid: currentTutorUid,
                     tutorName: currentTutorName,
@@ -586,20 +627,17 @@
                 let docRef;
                 if (isOverwrite && !existingSnapshot.empty) {
                     docRef = existingSnapshot.docs[0].ref;
-                    // We don't increment the user total here because it's an overwrite
                     await docRef.update(logData);
                 } else {
                     logData.createdAt = new Date().toISOString();
                     logData.submittedAt = new Date().toISOString();
                     docRef = await db.collection('weekly_logs').add(logData);
 
-                    // NEW: Add these hours to the tutor's public profile
                     await db.collection('users').doc(currentTutorUid).update({
                         hoursTutored: firebase.firestore.FieldValue.increment(totalHours)
                     });
                 }
 
-                // Build email
                 const sessionRows = sessions.map(function(s) {
                     const d = new Date(s.date + 'T' + s.time);
                     const dateStr = d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -623,7 +661,6 @@
                 const weekLabel = weekStartDate.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) +
                                   ' - ' + weekEndDate.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
 
-                // Email to parent
                 await db.collection('mail').add({
                     to: student.parentEmail,
                     message: {
