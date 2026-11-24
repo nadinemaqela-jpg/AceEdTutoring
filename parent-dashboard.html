@@ -283,14 +283,6 @@
                         </select>
                     </div>
 
-                    <!-- Subject Dropdown (Populated by JS) -->
-                    <div>
-                        <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Subject Needed</label>
-                        <select id="requestSubjectSelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
-                            <option value="">Select a child first...</option>
-                        </select>
-                    </div>
-
 
                     <!-- Billing Info -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -420,36 +412,6 @@
             }
             // Redirect to the progress.html page with the correct URL parameters
             window.location.href = `progress.html?student=${encodeURIComponent(studentUid)}&subject=${encodeURIComponent(subject)}`;
-        }
-        
-        // Update your submitTutorRequestForChild function to include these fields:
-        async function submitTutorRequestForChild(childId) {
-            const child = childrenData.find(c => c.id === childId);
-            if (!child) return;
-            
-            const billingCycle = document.getElementById('billingCycleSelect').value;
-            const billingDay = document.getElementById('billingDaySelect').value;
-            
-            const db = firebase.firestore();
-            try {
-                await db.collection('tutor_requests').add({
-                    parentUid: parentUid,
-                    parentName: parentName,
-                    parentEmail: parentEmail,
-                    parentPhone: parentPhone,
-                    childId: childId,
-                    childName: child.fullName,
-                    grade: child.grade,
-                    billingCycle: billingCycle, // NEW
-                    billingDay: billingDay,     // NEW
-                    status: 'pending',
-                    createdAt: new Date().toISOString()
-                });
-                alert('✅ Request sent! Our team will match you with a tutor.');
-                loadRequests();
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
         }
         
         // ============================================================
@@ -638,12 +600,40 @@
             }
         });
         // ============================================================
-        // SUBMIT TUTOR REQUEST (LONG-TERM MATCHING)
+        // SUBMIT TUTOR REQUEST
         // ============================================================
-        function submitTutorRequest() {
+        async function submitTutorRequest() {
             const childId = document.getElementById('requestChildSelect').value;
-            if (!childId) { alert('Please select a child.'); return; }
-            submitTutorRequestForChild(childId);
+            const billingCycle = document.getElementById('billingCycleSelect').value;
+            const billingDay = document.getElementById('billingDaySelect').value;
+
+            if (!childId) { alert('Please select a child & subject.'); return; }
+
+            // Find the child to get their subject
+            const child = childrenData.find(c => c.id === childId);
+            if (!child) return;
+            
+            const db = firebase.firestore();
+            try {
+                await db.collection('tutor_requests').add({
+                    parentUid: parentUid,
+                    parentName: parentName,
+                    parentEmail: parentEmail,
+                    parentPhone: parentPhone,
+                    childId: childId,
+                    childName: child.fullName,
+                    grade: child.grade,
+                    subjects: [child.subject], // <--- THIS FIXES THE "N/A" IN ADMIN
+                    billingCycle: billingCycle,
+                    billingDay: billingDay,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                });
+                alert('✅ Request sent! Our team will match you with a tutor.');
+                loadRequests();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
         }
 
           // ============================================================
