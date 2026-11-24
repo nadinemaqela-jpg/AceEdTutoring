@@ -1582,30 +1582,28 @@
                     logsByParent[log.parentUid].totalHours += (log.totalHours || 0);
                 });
 
-                                // Fetch parent info to check billing cycle
+                // Fetch parent info to check billing cycle
                 for (const [parentUid, parentData] of Object.entries(logsByParent)) {
-                    // 1. Try to find the preference in the tutor_requests first
-                    let preference = 'monthly';
                     
-                    // Check if we have the request ID or can find an active request for this parent/tutor
+                    let prefCycle = 'monthly';
+                    let prefDay = 'Day 1';
+
+                    // Look for their active request to get the preference
                     const reqQuery = await db.collection('tutor_requests')
                         .where('parentUid', '==', parentUid)
                         .where('tutorUid', '==', tutorId)
                         .where('status', '==', 'accepted')
                         .limit(1)
                         .get();
-                
+
                     if (!reqQuery.empty) {
-                        preference = reqQuery.docs[0].data().billingPreference || 'monthly';
-                    } else {
-                        // Fallback to the parent's user profile if it exists there
-                        const parentDoc = await db.collection('users').doc(parentUid).get();
-                        if (parentDoc.exists && parentDoc.data().billingCycle) {
-                            preference = parentDoc.data().billingCycle;
-                        }
+                        const reqData = reqQuery.docs[0].data();
+                        prefCycle = reqData.billingCycle || 'monthly';
+                        prefDay = reqData.billingDay || (prefCycle === 'monthly' ? 'Day 1' : 'Monday');
                     }
-                
-                    logsByParent[parentUid].billingCycle = preference;
+
+                    logsByParent[parentUid].billingCycle = prefCycle;
+                    logsByParent[parentUid].billingDay = prefDay;
                 }
 
                 let html = '';
@@ -1615,19 +1613,17 @@
                 for (const [parentUid, parentData] of Object.entries(logsByParent)) {
                     const logIdsJson = JSON.stringify(parentData.logs.map(l => l.id)).replace(/"/g, '&quot;');
                     
-                let defaultAmount = 600;
-                let invoiceTitle = `Monthly Tutoring (${monthName})`;
-                let cycleBadge = `<span style="background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-alt"></i> Monthly (1st of Month)</span>`;
-                
-                if (parentData.billingCycle === 'weekly') {
-                    defaultAmount = parentData.totalHours * 100; 
-                    invoiceTitle = `Weekly Tutoring (${parentData.totalHours} hrs)`;
-                    cycleBadge = `<span style="background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-week"></i> Weekly (Fridays)</span>`;
-                } else if (parentData.billingCycle === 'payg') {
-                    defaultAmount = parentData.totalHours * 100; 
-                    invoiceTitle = `Tutoring Hours (${parentData.totalHours} hrs)`;
-                    cycleBadge = `<span style="background:#fce7f3; color:#9d174d; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-clock"></i> Pay-As-You-Go</span>`;
-                }
+                    let defaultAmount = 600;
+                    let invoiceTitle = `Monthly Tutoring (${monthName})`;
+                    
+                    // Create the badge showing exactly when they want to be billed
+                    let cycleBadge = `<span style="background:#e0e7ff; color:#3730a3; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-alt"></i> Monthly: ${parentData.billingDay}</span>`;
+
+                    if (parentData.billingCycle === 'weekly' || parentData.billingCycle === 'payg') {
+                        defaultAmount = parentData.totalHours * 100; 
+                        invoiceTitle = `Tutoring Hours (${parentData.totalHours} hrs)`;
+                        cycleBadge = `<span style="background:#fce7f3; color:#9d174d; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-week"></i> Weekly: ${parentData.billingDay}s</span>`;
+                    }
 
                     html += `
                         <div style="background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 15px;">
