@@ -545,13 +545,26 @@
     
             let html = '';
             childrenData.forEach(function(child) {
+                // Format the billing text (e.g., "Monthly on Day 30")
+                const cycleText = child.billingCycle === 'monthly' ? 'Monthly' : 'Weekly';
+                const billingText = child.billingDay ? `${cycleText} on ${child.billingDay}` : cycleText;
+
                 html += `
-                    <div class="invoice-card" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="invoice-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-left: 4px solid var(--primary);">
                         <div>
                             <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${child.fullName}</h3>
-                            <p style="color: var(--text-muted); font-size: 0.9rem;">Grade ${child.grade}</p>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 3px;">
+                                <strong>Grade:</strong> ${child.grade} &nbsp;|&nbsp; <strong>Subject:</strong> ${child.subject || 'Not specified'}
+                            </p>
+                            <p style="color: var(--primary); font-size: 0.85rem; font-weight: 500;">
+                                <i class="fas fa-calendar-alt"></i> Billing: ${billingText}
+                            </p>
                         </div>
-                        <button class="btn btn-outline" onclick="submitTutorRequestForChild('${child.id}')"><i class="fas fa-handshake"></i> Request Tutor</button>
+                        <div>
+                            <button class="btn btn-outline" onclick="submitTutorRequestForChild('${child.id}')">
+                                <i class="fas fa-handshake"></i> Request Tutor
+                            </button>
+                        </div>
                     </div>
                 `;
             });
@@ -580,22 +593,31 @@
             e.preventDefault();
             const name = document.getElementById('childName').value.trim();
             const grade = document.getElementById('childGrade').value;
+            const subject = document.getElementById('childSubject').value.trim();
+            const billingCycle = document.getElementById('billingCycleSelect').value;
+            const billingDay = document.getElementById('billingDaySelect').value;
             
             try {
                 await firebase.firestore().collection('children').add({
                     parentUid: parentUid,
                     fullName: name,
                     grade: grade,
+                    subject: subject,           // NEW
+                    billingCycle: billingCycle, // NEW
+                    billingDay: billingDay,     // NEW
                     createdAt: new Date().toISOString()
                 });
                 this.reset();
+                // Reset the dropdown back to monthly
+                document.getElementById('billingCycleSelect').value = 'monthly';
+                toggleBillingDays();
+                
                 closeModal('addChildModal');
                 loadParentData(parentUid);
             } catch (error) {
                 alert('Error: ' + error.message);
             }
         });
-
         // ============================================================
         // SUBMIT TUTOR REQUEST (LONG-TERM MATCHING)
         // ============================================================
@@ -605,6 +627,9 @@
             submitTutorRequestForChild(childId);
         }
 
+        // ============================================================
+        // SUBMIT TUTOR REQUEST
+        // ============================================================
         async function submitTutorRequestForChild(childId) {
             const child = childrenData.find(c => c.id === childId);
             if (!child) return;
@@ -619,6 +644,9 @@
                     childId: childId,
                     childName: child.fullName,
                     grade: child.grade,
+                    subjects: [child.subject], // Send as array for Admin compatibility
+                    billingCycle: child.billingCycle,
+                    billingDay: child.billingDay,
                     status: 'pending',
                     createdAt: new Date().toISOString()
                 });
@@ -755,6 +783,36 @@
                     console.error('Error loading requests:', error);
                 });
         }
+
+                // ============================================================
+        // BILLING DAY LOGIC
+        // ============================================================
+        const monthlyDays = Array.from({length: 31}, (_, i) => `Day ${i + 1}`);
+        const weeklyDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        function toggleBillingDays() {
+            const cycle = document.getElementById('billingCycleSelect').value;
+            const daySelect = document.getElementById('billingDaySelect');
+            if (!daySelect) return;
+            
+            daySelect.innerHTML = '';
+
+            if (cycle === 'monthly') {
+                monthlyDays.forEach(day => {
+                    daySelect.innerHTML += `<option value="${day}">${day}</option>`;
+                });
+            } else {
+                weeklyDays.forEach(day => {
+                    daySelect.innerHTML += `<option value="${day}">${day}</option>`;
+                });
+            }
+        }
+
+        // Initialize the days on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleBillingDays();
+        });
+        
     </script>
 </body>
 </html>
