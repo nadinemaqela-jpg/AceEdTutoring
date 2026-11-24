@@ -491,6 +491,7 @@
         // ============================================================
         function openAddChildModal() {
             document.getElementById('addChildModal').classList.add('show');
+            toggleBillingDays();
         }
 
         function closeModal(modalId) {
@@ -779,7 +780,7 @@
                 });
         }
 
-                // ============================================================
+        // ============================================================
         // BILLING DAY LOGIC
         // ============================================================
         const monthlyDays = Array.from({length: 31}, (_, i) => `Day ${i + 1}`);
@@ -788,6 +789,8 @@
         function toggleBillingDays() {
             const cycle = document.getElementById('billingCycleSelect').value;
             const daySelect = document.getElementById('billingDaySelect');
+            
+            // Safety check
             if (!daySelect) return;
             
             daySelect.innerHTML = '';
