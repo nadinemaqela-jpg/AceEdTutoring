@@ -277,9 +277,9 @@
                 <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
                     <!-- Child Dropdown -->
                     <div>
-                        <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Select Child</label>
+                        <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Select Child &amp; Subject</label>
                         <select id="requestChildSelect" onchange="updateSubjectDropdown()" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
-                            <option value="">Select a child...</option>
+                            <option value="">Select a child & subject...</option>
                         </select>
                     </div>
 
@@ -601,15 +601,17 @@
         function populateChildDropdowns() {
             const select = document.getElementById('requestChildSelect');
             if (!select) return;
-            select.innerHTML = '<option value="">Select a child...</option>';
+            
+            select.innerHTML = '<option value="">Select a child & subject...</option>';
+            
             childrenData.forEach(function(child) {
                 const option = document.createElement('option');
                 option.value = child.id;
-                option.textContent = child.fullName + ' (Grade ' + child.grade + ')';
+                // THIS IS THE FIX: Shows "Name - Subject" in the dropdown
+                option.textContent = `${child.fullName} - ${child.subject}`; 
                 select.appendChild(option);
             });
         }
-
         // ============================================================
         // ADD CHILD
         // ============================================================
