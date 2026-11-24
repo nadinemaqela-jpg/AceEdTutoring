@@ -253,6 +253,19 @@
             </div>
         </div>
 
+        <!-- MATCHED TUTORS -->
+        <div class="requests-section">
+            <h2>
+                <span><i class="fas fa-chalkboard-teacher"></i> My Matched Tutors</span>
+            </h2>
+            <div id="matchedTutorsList">
+                <div class="empty-state">
+                    <i class="fas fa-handshake"></i>
+                    <p>No active tutors yet. Once a tutor accepts your request, they will appear here.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- REQUEST A LONG-TERM TUTOR -->
         <div class="requests-section">
             <h2>
@@ -541,6 +554,7 @@
                     populateChildDropdowns();
                     loadInvoices();
                     loadRequests();
+                    loadMatchedTutors();
                 })
                 .catch(function(error) {
                     console.error('Error loading children:', error);
@@ -658,6 +672,64 @@
             } catch (error) {
                 alert('Error: ' + error.message);
             }
+        }
+
+                // ============================================================
+        // LOAD MATCHED TUTORS
+        // ============================================================
+        function loadMatchedTutors() {
+            const db = firebase.firestore();
+            const container = document.getElementById('matchedTutorsList');
+            
+            db.collection('tutor_requests')
+                .where('parentUid', '==', parentUid)
+                .where('status', '==', 'accepted')
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        container.innerHTML = `<div class="empty-state"><i class="fas fa-handshake"></i><p>No active tutors yet.</p></div>`;
+                        return;
+                    }
+
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const req = doc.data();
+                        
+                        // Format phone for WhatsApp
+                        let cleanPhone = req.tutorPhone ? req.tutorPhone.replace(/\s+/g, '').replace(/^0/, '+27') : '';
+                        let waLink = cleanPhone ? `https://wa.me/${cleanPhone.replace('+', '')}?text=Hi%20${encodeURIComponent(req.tutorName)},%20I%20am%20${encodeURIComponent(parentName)},%20${encodeURIComponent(req.childName)}'s%20parent.` : '#';
+
+                        html += `
+                            <div class="invoice-card" style="border-left: 4px solid var(--success); margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                                    <div>
+                                        <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${req.tutorName}</h3>
+                                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">
+                                            <strong>Student:</strong> ${req.childName} (${req.subjects.join(', ')})
+                                        </p>
+                                        <p style="font-size: 0.85rem; color: var(--text-muted);">
+                                            <i class="fas fa-envelope"></i> ${req.tutorEmail || 'No email'} <br>
+                                            <i class="fas fa-phone"></i> ${req.tutorPhone || 'No phone'}
+                                        </p>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; flex-direction: column;">
+                                        <a href="mailto:${req.tutorEmail}" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.8rem;">
+                                            <i class="fas fa-envelope"></i> Email
+                                        </a>
+                                        <a href="${waLink}" target="_blank" class="btn btn-primary" style="background: #27ae60; padding: 8px 12px; font-size: 0.8rem;">
+                                            <i class="fab fa-whatsapp"></i> WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading tutors:", error);
+                    container.innerHTML = `<p style="color: var(--danger);">Error loading matched tutors.</p>`;
+                });
         }
         
         // ============================================================
