@@ -196,6 +196,88 @@
         @media (max-width: 480px) {
             .subjects-grid { grid-template-columns: 1fr; }
         }
+
+                /* ============ FULL FOOTER ============ */
+        .site-footer {
+            background: white;
+            color: var(--text-muted);
+            padding: 60px 0 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 50px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .site-footer h4 {
+            color: var(--text-main);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .site-footer p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+        .site-footer i {
+            color: var(--primary);
+            width: 16px;
+            text-align: center;
+            margin-top: 4px; /* Aligns icon with first line of text */
+        }
+        .site-footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        .site-footer li {
+            margin-bottom: 10px;
+        }
+        .site-footer a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .site-footer a:hover {
+            color: var(--primary);
+        }
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .social-icons a {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        .social-icons a:hover {
+            color: var(--primary-hover);
+        }
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .footer-bottom a {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Footer Responsive */
+        @media (max-width: 900px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+        
     </style>
 </head>
 <body>
@@ -399,7 +481,18 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+            <!-- ============ CTA ============ -->
+            <div class="cta-band">
+                <h2><i class="fas fa-chalkboard-user"></i> Ready to Excel?</h2>
+                <p>Book a session with one of our expert tutors today!</p>
+                <!-- Changed to Enquire Now -->
+                <a href="enquiry.html" class="btn-cta"><i class="fas fa-envelope"></i> Enquire Now</a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ============ FULL FOOTER ============ -->
     <footer class="site-footer">
         <div class="wrap">
             <div class="footer-grid">
@@ -407,9 +500,9 @@
                     <h4>AceEd Tutoring</h4>
                     <p>Empowering Grade 6–12 students across South Africa with CAPS-aligned tutoring.</p>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://web.facebook.com/profile.php?id=61587810847633" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/aceedtutoring/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/27698251610" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div>
@@ -424,10 +517,10 @@
                 <div>
                     <h4>Subjects</h4>
                     <ul>
-                        <li>Mathematics & Maths Lit</li>
-                        <li>Physical & Life Sciences</li>
-                        <li>Accounting & Economics</li>
-                        <li>Geography & Business Studies</li>
+                        <li>Mathematics &amp; Maths Lit</li>
+                        <li>Physical &amp; Life Sciences</li>
+                        <li>Accounting &amp; Economics</li>
+                        <li>Geography &amp; Business Studies</li>
                     </ul>
                 </div>
                 <div>
@@ -438,11 +531,10 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms & Conditions</a></p>
+                <p>© 2026 AceEd Tutoring. All rights reserved. | <a href="terms.html">Terms &amp; Conditions</a></p>
             </div>
         </div>
     </footer>
-
 
     <script>
         // SIDEBAR CONTROLS
