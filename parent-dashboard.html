@@ -359,31 +359,7 @@
 
     <script>
 
-                // Add this near the top of your script
-        const monthlyDays = Array.from({length: 28}, (_, i) => `Day ${i + 1}`);
-        const weeklyDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-        function toggleBillingDays() {
-            const cycle = document.getElementById('billingCycleSelect').value;
-            const daySelect = document.getElementById('billingDaySelect');
-            daySelect.innerHTML = '';
-
-            if (cycle === 'monthly') {
-                monthlyDays.forEach(day => {
-                    daySelect.innerHTML += `<option value="${day}">${day}</option>`;
-                });
-            } else {
-                weeklyDays.forEach(day => {
-                    daySelect.innerHTML += `<option value="${day}">${day}</option>`;
-                });
-            }
-        }
-
-        // Call this on page load to populate the initial days
-        document.addEventListener('DOMContentLoaded', () => {
-             toggleBillingDays();
-        });
-
+       
         // Update your submitTutorRequestForChild function to include these fields:
         async function submitTutorRequestForChild(childId) {
             const child = childrenData.find(c => c.id === childId);
