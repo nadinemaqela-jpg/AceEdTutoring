@@ -348,7 +348,7 @@
         });
 
         // ============================================================
-        // LOAD ACTIVE STUDENTS (Child + Subject)
+        // LOAD ACTIVE STUDENTS & PENDING REQUESTS
         // ============================================================
         async function loadActiveStudents() {
             const db = firebase.firestore();
@@ -372,12 +372,12 @@
                     }
                 });
 
-                // Count only the fully accepted ones
+                // Only count fully accepted students in the top stat card
                 document.getElementById('activeStudentsCount').textContent = acceptedStudents.length;
 
                 let html = '';
 
-                // 1. RENDER PENDING REQUESTS FIRST
+                // 1. RENDER PENDING REQUESTS (Action Required)
                 if (pendingRequests.length > 0) {
                     html += `<h3 style="color: var(--warning); margin-bottom: 15px;"><i class="fas fa-exclamation-circle"></i> Action Required: New Match Requests</h3>`;
                     
@@ -405,13 +405,13 @@
                         `;
                     });
                     
-                    html += `<hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);"><h3 style="margin-bottom: 15px;">My Active Students</h3>`;
+                    html += `<hr style="margin: 25px 0; border: none; border-top: 1px solid var(--border);">`;
                 }
 
-                // 2. RENDER ACTIVE STUDENTS (Showing every subject as a separate card/tag)
-                if (acceptedStudents.length === 0) {
-                    html += `<div class="empty-state"><i class="fas fa-user-friends"></i><p>You have no active ongoing students yet.</p></div>`;
-                } else {
+                // 2. RENDER ACCEPTED STUDENTS
+                if (acceptedStudents.length > 0) {
+                    html += `<h3 style="color: var(--text-main); margin-bottom: 15px;">My Active Students</h3>`;
+                    
                     acceptedStudents.forEach(student => {
                         let cleanPhone = student.parentPhone ? student.parentPhone.replace(/\s+/g, '').replace(/^0/, '+27') : '';
                         let waLink = cleanPhone 
@@ -456,6 +456,9 @@
                             </div>
                         `;
                     });
+                } else if (pendingRequests.length === 0) {
+                    // Only show empty state if BOTH lists are empty
+                    html += `<div class="empty-state"><i class="fas fa-user-friends"></i><p>You have no active ongoing students yet.</p></div>`;
                 }
                 
                 container.innerHTML = html;
@@ -464,8 +467,7 @@
                 console.error("Error loading students:", error);
                 container.innerHTML = `<p style="color:var(--danger)">Error loading students.</p>`;
             }
-        }
-        // ============================================================
+        }        // ============================================================
         // LOAD ONCE-OFF LESSONS
         // ============================================================
         async function loadIndividualBookings() {
