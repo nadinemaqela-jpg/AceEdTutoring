@@ -9,7 +9,7 @@
         gtag('js', new Date());
         gtag('config', 'AW-18209594553');
     </script>
-    <!-- Event snippet for Add to basket conversion page --> 
+    <!-- Event snippet for Add to basket conversion page -->
     <script> gtag('event', 'conversion', {'send_to': 'AW-18521810069/rDa0CPeXk6YdEJXJ8f9E'}); </script>
 
     <meta charset="UTF-8">
@@ -20,6 +20,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -42,301 +46,168 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            min-height: 100vh;
-            padding: 20px;
+        :root {
+            --bg-color: #f7f9fc;
+            --white: #ffffff;
+            --text-main: #1e2a3e;
+            --text-muted: #64748b;
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --wrap: 900px;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); line-height: 1.6; padding: 30px 20px; }
+        a { text-decoration: none; color: var(--primary); }
+        
+        .wrap { max-width: var(--wrap); margin: 0 auto; }
 
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .page-header h1 {
-            color: #1e2a3a;
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-
-        .page-header .subtitle {
-            color: #7f8c8d;
-            font-size: 0.95rem;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        /* BUTTONS */
         .btn {
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-            font-family: inherit;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+            transition: all 0.2s; border: none; cursor: pointer; text-decoration: none;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--bg-color); }
+
+        /* CARDS */
+        .card {
+            background: white; border-radius: var(--radius); padding: 30px;
+            margin-bottom: 24px; border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
 
-        .btn-primary { background: #3498db; color: white; }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-secondary { background: #ecf0f1; color: #1e2a3a; }
-        .btn-secondary:hover { background: #d5dbdb; }
-        .btn-green { background: #27ae60; color: white; }
-        .btn-green:hover { background: #1e8449; }
+        /* PAGE HEADER */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 20px; flex-wrap: wrap;
+        }
+        .page-header h1 { font-size: 1.8rem; letter-spacing: -0.02em; margin-bottom: 4px; color: var(--text-main); }
+        .page-header .subtitle { color: var(--text-muted); font-size: 0.95rem; }
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        /* Stats Grid */
+        /* STATS GRID */
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px; margin-top: 25px;
         }
-
         .stat-card {
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
-            color: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
+            background: var(--bg-color); border: 1px solid var(--border);
+            border-radius: 8px; padding: 20px; text-align: center;
+            transition: transform 0.2s;
         }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card .stat-value { font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .stat-card .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; color: var(--text-muted); }
+        
+        .stat-card.positive .stat-value { color: var(--success); }
+        .stat-card.negative .stat-value { color: var(--danger); }
 
-        .stat-card .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #f39c12;
-            margin-bottom: 5px;
-        }
+        /* CHART */
+        .chart-container { position: relative; height: 350px; margin-top: 20px; }
 
-        .stat-card .stat-label {
-            font-size: 0.8rem;
-            opacity: 0.85;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-card.positive .stat-value { color: #27ae60; }
-        .stat-card.negative .stat-value { color: #e74c3c; }
-
-        /* Chart */
-        .chart-container {
-            position: relative;
-            height: 350px;
-            margin-top: 20px;
-        }
-
-        /* Weekly Logs */
+        /* WEEKLY LOGS */
         .log-entry {
-            border-left: 4px solid #3498db;
-            padding: 18px 20px;
-            margin-bottom: 12px;
-            background: #f9f9f9;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
+            border-left: 4px solid var(--primary);
+            padding: 20px; margin-bottom: 15px;
+            background: var(--bg-color); border-radius: 8px;
+            cursor: pointer; transition: all 0.2s;
         }
-
-        .log-entry:hover {
-            background: #f0f8ff;
-            transform: translateX(3px);
-        }
-
-        .log-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .log-week {
-            font-weight: 700;
-            color: #1e2a3a;
-            font-size: 1rem;
-        }
-
-        .log-meta {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-        }
-
-        .log-badges {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-
+        .log-entry:hover { border-color: var(--primary-hover); background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        
+        .log-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .log-week { font-weight: 600; color: var(--text-main); font-size: 1rem; }
+        .log-meta { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+        
+        .log-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
         .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px;
         }
-
         .badge-assessment { background: #fff3cd; color: #856404; }
         .badge-test { background: #d4edda; color: #155724; }
 
-        .log-details {
-            display: none;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e0e0e0;
-        }
-
+        .log-details { display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
         .log-entry.open .log-details { display: block; }
 
         .session-item {
-            background: white;
-            border-radius: 10px;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-left: 3px solid #3498db;
+            background: white; border-radius: 8px; padding: 15px; margin-bottom: 10px;
+            border: 1px solid var(--border); border-left: 3px solid var(--primary);
         }
-
-        .session-item .s-when {
-            font-weight: 700;
-            color: #3498db;
-            font-size: 0.85rem;
-        }
-
-        .session-item .s-topics {
-            color: #555;
-            font-size: 0.9rem;
-            margin-top: 4px;
-        }
+        .session-item .s-when { font-weight: 600; color: var(--primary); font-size: 0.85rem; margin-bottom: 4px; }
+        .session-item .s-topics { color: var(--text-main); font-size: 0.9rem; }
 
         .notes-box {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.6;
+            background: white; border-radius: 8px; padding: 15px; margin-top: 15px;
+            font-size: 0.9rem; color: var(--text-muted); border: 1px solid var(--border);
         }
+        .notes-box strong { color: var(--text-main); display: block; margin-bottom: 5px; }
 
-        .notes-box strong {
-            color: #1e2a3a;
-            display: block;
-            margin-bottom: 5px;
+        /* TEST DETAILS */
+        .test-box {
+            background: white; border-radius: 8px; padding: 15px; margin-top: 10px;
+            border: 1px solid var(--border); border-left: 4px solid var(--warning);
         }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
+        .test-box .test-header { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 8px; }
+        .test-box .test-mark { font-size: 1.3rem; color: var(--warning); font-weight: 700; margin-bottom: 8px; }
+        
+        /* EMPTY / ERROR STATES */
+        .empty-state, .access-denied, .loading-screen {
+            text-align: center; padding: 60px 20px; background: white;
+            border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
+        .empty-state i, .access-denied i, .loading-screen .spinner { font-size: 3rem; margin-bottom: 15px; }
+        .empty-state i { color: #cbd5e1; }
+        .access-denied i { color: var(--danger); }
+        .loading-screen .spinner { color: var(--primary); animation: spin 1s linear infinite; }
+        
+        .empty-state h2, .access-denied h2 { color: var(--text-main); margin-bottom: 10px; font-size: 1.4rem; }
+        .empty-state p, .access-denied p { color: var(--text-muted); max-width: 400px; margin: 0 auto 20px; }
 
-        .empty-state i {
-            font-size: 4rem;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .empty-state h2 {
-            color: #1e2a3a;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #7f8c8d;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* Loading */
-        .loading-screen {
-            text-align: center;
-            padding: 80px 20px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-        }
-
-        .loading-screen .spinner {
-            font-size: 3rem;
-            color: #f39c12;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .access-denied {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-        }
-
-        .access-denied i {
-            font-size: 4rem;
-            color: #e74c3c;
-            margin-bottom: 20px;
-        }
-
-        .access-denied h2 { color: #721c24; margin-bottom: 10px; }
-        .access-denied p { color: #7f8c8d; margin-bottom: 20px; }
-
-        /* Print */
+        /* PRINT STYLES */
         @media print {
             body { background: white; padding: 0; }
-            .card { box-shadow: none; border-radius: 0; padding: 20px; }
+            .card { box-shadow: none; border: none; padding: 0 0 20px 0; margin-bottom: 20px; border-bottom: 1px solid #eee; border-radius: 0; }
             .no-print { display: none !important; }
             .log-details { display: block !important; }
-            .log-entry { background: white; border-left-width: 3px; }
-            .log-entry { page-break-inside: avoid; }
+            .log-entry { background: white; border: 1px solid #ddd; page-break-inside: avoid; }
+            .stat-card { background: white; border: 1px solid #ddd; }
+            .session-item, .notes-box { border: 1px solid #ddd; }
         }
 
+        /* RESPONSIVE */
         @media (max-width: 600px) {
-            .container { padding: 0; }
-            .card { padding: 20px; }
-            .page-header h1 { font-size: 1.4rem; }
+            .page-header { flex-direction: column; }
+            .header-actions { width: 100%; flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
             .chart-container { height: 280px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="wrap">
+        <!-- LOADING -->
         <div id="loadingScreen" class="loading-screen">
             <i class="fas fa-spinner spinner"></i>
-            <p style="margin-top: 15px; color: #7f8c8d;">Loading progress report...</p>
+            <p style="margin-top: 15px; color: var(--text-muted); font-weight: 500;">Loading progress report...</p>
         </div>
 
+        <!-- MAIN CONTENT -->
         <div id="mainContent" style="display: none;"></div>
 
+        <!-- ACCESS DENIED -->
         <div id="accessDenied" class="access-denied" style="display: none;">
             <i class="fas fa-lock"></i>
             <h2>Access Denied</h2>
@@ -372,12 +243,10 @@
             }
 
             try {
-                // Get role
                 const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
                 const userData = userDoc.data() || {};
                 let role = userData.role || 'student';
 
-                // Admin check
                 if (role === 'admin') {
                     const adminDoc = await firebase.firestore().collection('admins').doc('admin').get();
                     const isAdmin = adminDoc.exists && adminDoc.data().email === user.email;
@@ -398,7 +267,6 @@
         async function loadReport(user, role, userData) {
             const db = firebase.firestore();
 
-            // Load all weekly logs for this student + subject
             const snapshot = await db.collection('weekly_logs')
                 .where('studentUid', '==', studentUid)
                 .where('subject', '==', subject)
@@ -414,7 +282,6 @@
                 return;
             }
 
-            // ---- Access Control ----
             const sample = logs[0];
 
             if (role === 'parent') {
@@ -428,11 +295,8 @@
                     return;
                 }
             }
-            // admin — allowed
 
-            // ---- Sort by week ----
             logs.sort((a, b) => (a.weekOf || '').localeCompare(b.weekOf || ''));
-
             renderReport(logs, sample);
         }
 
@@ -440,18 +304,15 @@
         // RENDER REPORT
         // ============================================================
         function renderReport(logs, sample) {
-            // Calculate stats
             let totalSessions = 0;
             let totalHours = 0;
-
-            const tutorData = [];      // {week, mark}
-            const testData = [];       // {week, mark, name, date}
+            const tutorData = [];
+            const testData = [];
             let startingMark = null;
 
             logs.forEach(function(log) {
                 totalSessions += log.sessionCount || 0;
                 totalHours += log.totalHours || 0;
-
                 const weekLabel = formatWeekShort(log.weekOf);
 
                 if (log.tutorAssessment != null) {
@@ -464,32 +325,23 @@
                 }
             });
 
-            // Starting mark: first school test, else first tutor assessment
-            if (testData.length > 0) {
-                startingMark = testData[0].mark;
-            } else if (tutorData.length > 0) {
-                startingMark = tutorData[0].mark;
-            }
+            if (testData.length > 0) { startingMark = testData[0].mark; }
+            else if (tutorData.length > 0) { startingMark = tutorData[0].mark; }
 
-            // Current mark: latest of either (prefer school test if same week)
             let currentMark = null;
-            if (testData.length > 0) {
-                currentMark = testData[testData.length - 1].mark;
-            } else if (tutorData.length > 0) {
-                currentMark = tutorData[tutorData.length - 1].mark;
-            }
+            if (testData.length > 0) { currentMark = testData[testData.length - 1].mark; }
+            else if (tutorData.length > 0) { currentMark = tutorData[tutorData.length - 1].mark; }
 
             const change = (startingMark != null && currentMark != null) ? (currentMark - startingMark) : null;
             const changeClass = change > 0 ? 'positive' : change < 0 ? 'negative' : '';
 
-            // Build HTML
             const html = `
                 <div class="card">
                     <div class="page-header">
                         <div>
                             <h1>${escapeHtml(sample.studentName)} — ${escapeHtml(subject)}</h1>
                             <div class="subtitle">
-                                Grade ${escapeHtml(sample.grade || 'N/A')} · Tutor: ${escapeHtml(sample.tutorName || 'N/A')}
+                                Grade ${escapeHtml(sample.grade || 'N/A')} &nbsp;|&nbsp; Tutor: ${escapeHtml(sample.tutorName || 'N/A')}
                             </div>
                         </div>
                         <div class="header-actions no-print">
@@ -517,22 +369,22 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${totalSessions}</div>
-                            <div class="stat-label">Total Sessions</div>
+                            <div class="stat-label">Sessions</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${totalHours}</div>
-                            <div class="stat-label">Total Hours</div>
+                            <div class="stat-label">Hours</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${logs.length}</div>
-                            <div class="stat-label">Weeks Logged</div>
+                            <div class="stat-label">Weeks</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2 style="color: #1e2a3a; margin-bottom: 10px; font-size: 1.2rem;">
-                        <i class="fas fa-chart-line" style="color: #f39c12;"></i> Mark Progression
+                    <h2 style="color: var(--text-main); margin-bottom: 10px; font-size: 1.2rem; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-chart-line" style="color: var(--primary);"></i> Mark Progression
                     </h2>
                     <div class="chart-container">
                         <canvas id="progressChart"></canvas>
@@ -540,8 +392,8 @@
                 </div>
 
                 <div class="card">
-                    <h2 style="color: #1e2a3a; margin-bottom: 15px; font-size: 1.2rem;">
-                        <i class="fas fa-book-open" style="color: #f39c12;"></i> Weekly Logs
+                    <h2 style="color: var(--text-main); margin-bottom: 20px; font-size: 1.2rem; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-book-open" style="color: var(--primary);"></i> Weekly Logs
                     </h2>
                     <div id="logsContainer">${buildLogsHtml(logs)}</div>
                 </div>
@@ -552,7 +404,6 @@
             main.style.display = 'block';
             document.getElementById('loadingScreen').style.display = 'none';
 
-            // Draw chart after render
             drawChart(tutorData, testData);
         }
 
@@ -560,7 +411,6 @@
         // BUILD WEEKLY LOG ENTRIES
         // ============================================================
         function buildLogsHtml(logs) {
-            // Reverse — newest first
             const reversed = logs.slice().reverse();
 
             return reversed.map(function(log) {
@@ -581,12 +431,10 @@
                     const pct = log.schoolTest.total ? Math.round(log.schoolTest.mark / log.schoolTest.total * 100) : null;
                     testHtml = `
                         <div class="badge badge-test">
-                            🏫 School: ${escapeHtml(log.schoolTest.name)} — ${log.schoolTest.mark}/${log.schoolTest.total}${pct != null ? ' (' + pct + '%)' : ''}
+                            <i class="fas fa-school"></i> School: ${escapeHtml(log.schoolTest.name)} — ${log.schoolTest.mark}/${log.schoolTest.total}${pct != null ? ' (' + pct + '%)' : ''}
                         </div>
                     `;
                 }
-                
-                
 
                 return `
                     <div class="log-entry" onclick="toggleLog(this)">
@@ -595,12 +443,12 @@
                             <div class="log-meta">${log.sessionCount} session${log.sessionCount > 1 ? 's' : ''} · ${log.totalHours} hrs</div>
                         </div>
                         <div class="log-badges">
-                            <div class="badge badge-assessment">🎯 Assessment: ${log.tutorAssessment}%</div>
+                            <div class="badge badge-assessment"><i class="fas fa-bullseye"></i> Assessment: ${log.tutorAssessment}%</div>
                             ${testHtml}
                         </div>
 
                         <div class="log-details">
-                            <h4 style="color: #1e2a3a; margin-bottom: 10px; font-size: 0.95rem;">Sessions</h4>
+                            <h4 style="color: var(--text-main); margin-bottom: 12px; font-size: 0.95rem;">Sessions</h4>
                             ${sessionsHtml}
                             <div class="notes-box">
                                 <strong>Weekly Notes:</strong>
@@ -608,34 +456,26 @@
                             </div>
                             ${buildTestDetails(log)}
                         </div>
-                        
                     </div>
                 `;
             }).join('');
         }
 
-         function buildTestDetails(log) {
+        function buildTestDetails(log) {
             let html = '';
         
-            // ---- Tutor's own weekly test ----
             if (log.tutorTest && log.tutorTest.url) {
                 html += `
-                    <div style="background: white; border-radius: 10px; padding: 15px; margin-top: 10px; border-left: 4px solid #f39c12;">
-                        <div style="color: #7f8c8d; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 8px;">
-                            Tutor Test
-                        </div>
-                        <div style="font-size: 1.3rem; color: #f39c12; font-weight: 700; margin-bottom: 8px;">
-                            ${log.tutorAssessment}%
-                        </div>
-                        <a href="${log.tutorTest.url}" target="_blank" rel="noopener"
-                           style="display: inline-flex; align-items: center; gap: 8px; background: #3498db; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
-                            <i class="fas fa-file-download"></i> View Tutor Test Paper
+                    <div class="test-box">
+                        <div class="test-header">Tutor Test</div>
+                        <div class="test-mark">${log.tutorAssessment}%</div>
+                        <a href="${log.tutorTest.url}" target="_blank" rel="noopener" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">
+                            <i class="fas fa-file-download"></i> View Test Paper
                         </a>
                     </div>
                 `;
             }
         
-            // ---- School test (optional, no paper) ----
             if (log.schoolTest && log.schoolTest.name) {
                 const test = log.schoolTest;
                 const pct = test.total ? Math.round(test.mark / test.total * 100) : null;
@@ -644,14 +484,12 @@
                     : '';
         
                 html += `
-                    <div style="background: white; border-radius: 10px; padding: 15px; margin-top: 10px; border-left: 4px solid #3498db;">
-                        <div style="color: #7f8c8d; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 8px;">
-                            School Test
-                        </div>
-                        <div style="font-weight: 700; color: #1e2a3a; margin-bottom: 5px;">
+                    <div class="test-box" style="border-left-color: var(--primary);">
+                        <div class="test-header" style="color: var(--primary);">School Test</div>
+                        <div style="font-weight: 600; color: var(--text-main); margin-bottom: 5px;">
                             ${escapeHtml(test.name)}${dateStr ? ' — ' + dateStr : ''}
                         </div>
-                        <div style="font-size: 1.3rem; color: #3498db; font-weight: 700;">
+                        <div class="test-mark" style="color: var(--primary);">
                             ${test.mark} / ${test.total}${pct != null ? ' (' + pct + '%)' : ''}
                         </div>
                     </div>
@@ -660,7 +498,6 @@
         
             return html;
         }
-        
 
         function toggleLog(el) {
             el.classList.toggle('open');
@@ -672,13 +509,11 @@
         function drawChart(tutorData, testData) {
             const ctx = document.getElementById('progressChart').getContext('2d');
 
-            // Merge weeks into one timeline for the x-axis
             const allWeeks = new Set();
             tutorData.forEach(t => allWeeks.add(t.week));
             testData.forEach(t => allWeeks.add(t.week));
             const weeks = Array.from(allWeeks);
 
-            // Map data to that timeline (null for missing weeks)
             const tutorLine = weeks.map(w => {
                 const found = tutorData.find(t => t.week === w);
                 return found ? found.mark : null;
@@ -700,21 +535,21 @@
                             backgroundColor: 'rgba(243, 156, 18, 0.1)',
                             tension: 0.3,
                             spanGaps: true,
-                            pointRadius: 6,
-                            pointHoverRadius: 8,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
                             pointBackgroundColor: '#f39c12',
                             borderWidth: 3
                         },
                         {
                             label: 'School Test',
                             data: testLine,
-                            borderColor: '#3498db',
-                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            borderColor: '#1e3a8a',
+                            backgroundColor: 'rgba(30, 58, 138, 0.1)',
                             tension: 0.3,
                             spanGaps: true,
-                            pointRadius: 6,
-                            pointHoverRadius: 8,
-                            pointBackgroundColor: '#3498db',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: '#1e3a8a',
                             borderWidth: 3
                         }
                     ]
@@ -726,16 +561,16 @@
                         legend: {
                             position: 'top',
                             labels: {
-                                font: { size: 13, weight: '600' },
+                                font: { family: 'Inter', size: 12, weight: '600' },
                                 usePointStyle: true,
-                                padding: 15
+                                padding: 20
                             }
                         },
                         tooltip: {
                             backgroundColor: '#1e2a3a',
                             padding: 12,
-                            titleFont: { size: 13, weight: '700' },
-                            bodyFont: { size: 12 },
+                            titleFont: { family: 'Inter', size: 13, weight: '600' },
+                            bodyFont: { family: 'Inter', size: 12 },
                             callbacks: {
                                 label: function(context) {
                                     return context.dataset.label + ': ' + context.parsed.y + '%';
@@ -749,12 +584,13 @@
                             max: 100,
                             ticks: {
                                 callback: function(value) { return value + '%'; },
-                                color: '#7f8c8d'
+                                color: '#64748b',
+                                font: { family: 'Inter' }
                             },
-                            grid: { color: '#f0f0f0' }
+                            grid: { color: '#e2e8f0' }
                         },
                         x: {
-                            ticks: { color: '#7f8c8d' },
+                            ticks: { color: '#64748b', font: { family: 'Inter' } },
                             grid: { display: false }
                         }
                     }
@@ -801,7 +637,7 @@
                     <i class="fas fa-chart-line"></i>
                     <h2>No Progress Data Yet</h2>
                     <p>No sessions have been logged for this student in <strong>${escapeHtml(subject)}</strong> yet.<br>Your tutor will log sessions soon.</p>
-                    <a href="javascript:history.back()" class="btn btn-primary" style="margin-top: 20px;">
+                    <a href="javascript:history.back()" class="btn btn-primary" style="margin-top: 15px;">
                         <i class="fas fa-arrow-left"></i> Go Back
                     </a>
                 </div>
@@ -818,11 +654,11 @@
             document.getElementById('loadingScreen').style.display = 'none';
             const main = document.getElementById('mainContent');
             main.innerHTML = `
-                <div class="card" style="text-align: center; padding: 60px 20px;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;"></i>
-                    <h2 style="color: #e74c3c; margin-bottom: 10px;">Something went wrong</h2>
-                    <p style="color: #7f8c8d;">${escapeHtml(message)}</p>
-                    <a href="javascript:history.back()" class="btn btn-primary" style="margin-top: 20px;">
+                <div class="card empty-state">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                    <h2>Something went wrong</h2>
+                    <p>${escapeHtml(message)}</p>
+                    <a href="javascript:history.back()" class="btn btn-primary" style="margin-top: 15px;">
                         <i class="fas fa-arrow-left"></i> Go Back
                     </a>
                 </div>
