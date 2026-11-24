@@ -130,13 +130,19 @@
 
         /* ACTIVE STUDENT CARDS */
         .student-card { border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 15px; background: var(--bg-color); border-left: 4px solid var(--primary); }
-        .student-card-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .student-card-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
         .student-card h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 5px; }
         .student-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px; }
-        .contact-info { font-size: 0.85rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px; }
+        .contact-info { font-size: 0.85rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
         .contact-info span { display: flex; align-items: center; gap: 6px; }
-        .action-buttons { display: flex; gap: 8px; flex-direction: column; min-width: 130px; }
+        
+        .action-buttons { display: flex; gap: 8px; flex-direction: column; min-width: 140px; }
         .action-buttons .btn { padding: 8px 12px; font-size: 0.8rem; width: 100%; }
+
+        /* STATUS BADGES */
+        .status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .status.paid { background: #d4edda; color: #155724; }
+        .status.pending { background: #fff3cd; color: #856404; }
 
         /* MODAL */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
@@ -151,7 +157,8 @@
             .dashboard-hero { flex-direction: column; text-align: center; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .student-card-header { flex-direction: column; }
-            .action-buttons { flex-direction: row; width: 100%; }
+            .action-buttons { flex-direction: row; flex-wrap: wrap; width: 100%; }
+            .action-buttons .btn { width: auto; flex: 1; }
         }
     </style>
 </head>
@@ -177,6 +184,7 @@
             <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
         </div>
         <a href="log-session.html"><i class="fas fa-calendar-plus"></i> Log Session</a>
+        <a href="calendar.html"><i class="fas fa-calendar-alt"></i> My Calendar</a>
         <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
         <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
@@ -209,8 +217,9 @@
                 <h1><i class="fas fa-chalkboard-teacher"></i> Tutor Dashboard</h1>
                 <div class="user-info">Welcome back, <span id="tutorNameDisplay">Tutor</span></div>
             </div>
-            <div style="display: flex; gap: 10px;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <a href="log-session.html" class="btn btn-primary"><i class="fas fa-plus"></i> Log Session</a>
+                <a href="calendar.html" class="btn btn-outline"><i class="fas fa-calendar-alt"></i> Calendar</a>
                 <button class="btn btn-danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </div>
@@ -234,13 +243,24 @@
             </div>
         </div>
 
-        <!-- MY ACTIVE STUDENTS -->
+        <!-- MY ACTIVE STUDENTS (Ongoing Matches) -->
         <div class="section-card">
-            <h2><i class="fas fa-users"></i> My Active Students</h2>
+            <h2><i class="fas fa-users"></i> My Ongoing Students</h2>
             <div id="studentsList">
                 <div class="empty-state">
                     <i class="fas fa-spinner fa-spin"></i>
                     <p>Loading students...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MY 1-ON-1 BOOKINGS (Individual Sessions) -->
+        <div class="section-card">
+            <h2><i class="fas fa-calendar-check"></i> My 1-on-1 Bookings</h2>
+            <div id="bookingsList">
+                <div class="empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading bookings...</p>
                 </div>
             </div>
         </div>
@@ -258,6 +278,7 @@
         // ============================================================
         let currentTutorUid = '';
         let currentTutorName = '';
+        let currentTutorEmail = '';
         let acceptedStudents = [];
 
         function openSidebar(type) {
@@ -299,14 +320,17 @@
 
                 currentTutorUid = user.uid;
                 currentTutorName = userData.fullName || 'Tutor';
+                currentTutorEmail = user.email; // Crucial for 1-on-1 bookings
                 
                 document.getElementById('tutorContent').style.display = 'block';
                 document.getElementById('tutorNameDisplay').textContent = currentTutorName;
                 document.getElementById('profileLoggedIn').style.display = 'block';
                 document.getElementById('totalHoursCount').textContent = userData.hoursTutored || 0;
 
+                // Load all data
                 await loadActiveStudents();
                 await loadUnbilledLogsCount();
+                await loadIndividualBookings();
 
             } catch (error) {
                 console.error('Error:', error);
@@ -314,8 +338,8 @@
             }
         });
 
-                // ============================================================
-        // LOAD ACTIVE STUDENTS & CONTACT INFO
+        // ============================================================
+        // LOAD ACTIVE STUDENTS & CONTACT INFO (Ongoing Matches)
         // ============================================================
         async function loadActiveStudents() {
             const db = firebase.firestore();
@@ -335,22 +359,19 @@
                 document.getElementById('activeStudentsCount').textContent = acceptedStudents.length;
 
                 if (acceptedStudents.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-user-friends"></i><p>You have no active students yet. We will email you when you are matched!</p></div>`;
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-user-friends"></i><p>You have no active ongoing students yet.</p></div>`;
                     return;
                 }
 
                 let html = '';
                 acceptedStudents.forEach(student => {
-                    // Format WhatsApp link
                     let cleanPhone = student.parentPhone ? student.parentPhone.replace(/\s+/g, '').replace(/^0/, '+27') : '';
                     let waLink = cleanPhone 
                         ? `https://wa.me/${cleanPhone.replace('+', '')}?text=Hi%20${encodeURIComponent(student.parentName)},%20I%20am%20${encodeURIComponent(currentTutorName)},%20${encodeURIComponent(student.childName)}'s%20tutor%20from%20AceEd.` 
                         : '#';
 
-                    // Format Subjects
                     const subjectsText = student.subjects ? student.subjects.join(', ') : 'N/A';
                     
-                    // Generate Progress Buttons for EACH subject
                     let progressButtons = '';
                     if (student.subjects && student.subjects.length > 0) {
                         student.subjects.forEach(subject => {
@@ -360,8 +381,6 @@
                                 </button>
                             `;
                         });
-                    } else {
-                        progressButtons = `<button class="btn btn-outline" disabled><i class="fas fa-chart-line"></i> No Subject</button>`;
                     }
 
                     html += `
@@ -369,7 +388,7 @@
                             <div class="student-card-header">
                                 <div>
                                     <h3>${student.childName} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(Grade ${student.grade})</span></h3>
-                                    <p><strong>Subject(s):</strong> ${subjectsText}</p>
+                                    <p><strong>Subjects:</strong> ${subjectsText}</p>
                                     <div class="contact-info">
                                         <span><i class="fas fa-user"></i> Parent: ${student.parentName}</span>
                                         <span><i class="fas fa-envelope"></i> ${student.parentEmail || 'No email provided'}</span>
@@ -383,7 +402,6 @@
                                     <a href="${waLink}" target="_blank" class="btn btn-success">
                                         <i class="fab fa-whatsapp"></i> WhatsApp
                                     </a>
-                                    <!-- Render all progress buttons here -->
                                     ${progressButtons}
                                 </div>
                             </div>
@@ -398,7 +416,83 @@
             }
         }
 
-        
+        // ============================================================
+        // LOAD 1-ON-1 INDIVIDUAL BOOKINGS
+        // ============================================================
+        async function loadIndividualBookings() {
+            const db = firebase.firestore();
+            const container = document.getElementById('bookingsList');
+            
+            try {
+                // Fetch bookings where this tutor's email matches
+                const snapshot = await db.collection('bookings')
+                    .where('tutorEmail', '==', currentTutorEmail)
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No 1-on-1 bookings yet.</p></div>`;
+                    return;
+                }
+
+                let html = '';
+                const bookings = [];
+                snapshot.forEach(doc => {
+                    bookings.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort newest first
+                bookings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+                bookings.forEach(booking => {
+                    if (booking.status !== 'confirmed_paid' && booking.status !== 'confirmed_pending_payment') return;
+
+                    const isPaid = booking.status === 'confirmed_paid';
+                    const statusBadge = isPaid 
+                        ? `<span class="status paid">Paid & Confirmed</span>`
+                        : `<span class="status pending">Awaiting Payment</span>`;
+
+                    html += `
+                        <div class="student-card" style="border-left-color: ${isPaid ? 'var(--success)' : 'var(--warning)'};">
+                            <div class="student-card-header">
+                                <div>
+                                    <h3>${booking.parentName || 'Parent'} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(${booking.studentName || 'Student'})</span></h3>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Date & Time:</strong> ${booking.timeSlot} <br>
+                                        <strong>Duration:</strong> ${booking.duration} hour(s) <br>
+                                        <strong>Subject:</strong> ${booking.subject || 'N/A'}
+                                    </p>
+                                    <div class="contact-info" style="margin-bottom: 10px;">
+                                        <span><i class="fas fa-envelope"></i> ${booking.parentEmail}</span>
+                                        ${booking.parentPhone ? `<span><i class="fas fa-phone"></i> ${booking.parentPhone}</span>` : ''}
+                                    </div>
+                                    ${statusBadge}
+                                </div>
+                                <div class="action-buttons">
+                                    <a href="mailto:${booking.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
+                                        <i class="fas fa-envelope"></i> Email
+                                    </a>
+                                    ${booking.parentPhone ? `
+                                    <a href="https://wa.me/${booking.parentPhone.replace(/\s+/g, '').replace(/^0/, '+27').replace('+','')}?text=Hi%20${encodeURIComponent(booking.parentName)},%20I%20am%20your%20tutor%20for%20the%20upcoming%20session." target="_blank" class="btn btn-success">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (html === '') {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No confirmed 1-on-1 bookings yet.</p></div>`;
+                } else {
+                    container.innerHTML = html;
+                }
+
+            } catch (error) {
+                console.error("Error loading bookings:", error);
+                container.innerHTML = `<p style="color:var(--danger)">Error loading bookings.</p>`;
+            }
+        }
+
         // ============================================================
         // HELPERS
         // ============================================================
