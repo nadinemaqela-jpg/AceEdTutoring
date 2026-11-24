@@ -314,7 +314,7 @@
             }
         });
 
-        // ============================================================
+                // ============================================================
         // LOAD ACTIVE STUDENTS & CONTACT INFO
         // ============================================================
         async function loadActiveStudents() {
@@ -322,7 +322,6 @@
             const container = document.getElementById('studentsList');
             
             try {
-                // Get requests where this tutor is matched/accepted
                 const snapshot = await db.collection('tutor_requests')
                     .where('tutorUid', '==', currentTutorUid)
                     .where('status', 'in', ['accepted', 'matched'])
@@ -350,13 +349,27 @@
 
                     // Format Subjects
                     const subjectsText = student.subjects ? student.subjects.join(', ') : 'N/A';
+                    
+                    // Generate Progress Buttons for EACH subject
+                    let progressButtons = '';
+                    if (student.subjects && student.subjects.length > 0) {
+                        student.subjects.forEach(subject => {
+                            progressButtons += `
+                                <button class="btn btn-outline" onclick="viewStudentProgress('${student.childId}', '${subject.replace(/'/g, "\\'")}')">
+                                    <i class="fas fa-chart-line"></i> ${subject} Progress
+                                </button>
+                            `;
+                        });
+                    } else {
+                        progressButtons = `<button class="btn btn-outline" disabled><i class="fas fa-chart-line"></i> No Subject</button>`;
+                    }
 
                     html += `
                         <div class="student-card">
                             <div class="student-card-header">
                                 <div>
                                     <h3>${student.childName} <span style="font-size:0.85rem; font-weight:400; color:var(--text-muted);">(Grade ${student.grade})</span></h3>
-                                    <p><strong>Subject:</strong> ${subjectsText}</p>
+                                    <p><strong>Subject(s):</strong> ${subjectsText}</p>
                                     <div class="contact-info">
                                         <span><i class="fas fa-user"></i> Parent: ${student.parentName}</span>
                                         <span><i class="fas fa-envelope"></i> ${student.parentEmail || 'No email provided'}</span>
@@ -364,15 +377,14 @@
                                     </div>
                                 </div>
                                 <div class="action-buttons">
-                                    <a href="mailto:${student.parentEmail}" class="btn btn-outline">
+                                    <a href="mailto:${student.parentEmail}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
                                         <i class="fas fa-envelope"></i> Email Parent
                                     </a>
                                     <a href="${waLink}" target="_blank" class="btn btn-success">
                                         <i class="fab fa-whatsapp"></i> WhatsApp
                                     </a>
-                                    <button class="btn btn-primary" onclick="viewStudentProgress('${student.childId}', '${subjectsText.split(',')[0].trim()}')">
-                                        <i class="fas fa-chart-line"></i> View Progress
-                                    </button>
+                                    <!-- Render all progress buttons here -->
+                                    ${progressButtons}
                                 </div>
                             </div>
                         </div>
@@ -386,6 +398,7 @@
             }
         }
 
+        
         // ============================================================
         // HELPERS
         // ============================================================
