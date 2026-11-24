@@ -132,13 +132,23 @@
         /* MODAL */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .modal.show { display: flex; }
-        .modal-content { background: white; border-radius: var(--radius); padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
+                .modal-content { 
+            background: white; 
+            border-radius: var(--radius); 
+            padding: 30px; 
+            max-width: 500px; 
+            width: 90%; 
+            max-height: 85vh; /* Let's increase it slightly */
+            overflow-y: auto; 
+            position: relative; 
+            z-index: 2001; /* Ensure it's above the overlay */
+        }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--text-main); }
         .modal-content h2 { margin-bottom: 20px; color: var(--text-main); }
         
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none;position: relative; z-index: 10;}
         .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
 
         @media (max-width: 768px) {
@@ -269,7 +279,7 @@
                         </div>
                         <div>
                             <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:5px;">Preferred Day</label>
-                            <select id="billingDaySelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;">
+                            <select id="billingDaySelect" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; position: relative; z-index: 100;">
                                 <!-- Populated by JS -->
                             </select>
                         </div>
