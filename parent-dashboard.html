@@ -523,7 +523,7 @@
         // ============================================================
         // RENDER CHILDREN
         // ============================================================
-        function renderChildren() {
+                function renderChildren() {
             const container = document.getElementById('childrenList');
             document.getElementById('childrenCount').textContent = childrenData.length;
             
@@ -534,9 +534,19 @@
     
             let html = '';
             childrenData.forEach(function(child) {
-                // Format the billing text (e.g., "Monthly on Day 30")
-                const cycleText = child.billingCycle === 'monthly' ? 'Monthly' : 'Weekly';
-                const billingText = child.billingDay ? `${cycleText} on ${child.billingDay}` : cycleText;
+                // Find if there is a tutor request for this specific child & subject
+                const existingRequest = allRequests.find(r => 
+                    (r.childId === child.id || r.childName === child.fullName) && 
+                    (r.subjects && r.subjects.includes(child.subject))
+                );
+
+                // Determine billing text
+                let billingText = '<span style="color: var(--warning);">No active request (Choose cycle below)</span>';
+                
+                if (existingRequest && existingRequest.billingCycle) {
+                    const cycleText = existingRequest.billingCycle === 'monthly' ? 'Monthly' : 'Weekly';
+                    billingText = `<i class="fas fa-calendar-alt"></i> Billing: ${cycleText} on ${existingRequest.billingDay}`;
+                }
 
                 html += `
                     <div class="invoice-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-left: 4px solid var(--primary);">
@@ -546,12 +556,12 @@
                                 <strong>Grade:</strong> ${child.grade} &nbsp;|&nbsp; <strong>Subject:</strong> ${child.subject || 'Not specified'}
                             </p>
                             <p style="color: var(--primary); font-size: 0.85rem; font-weight: 500;">
-                                <i class="fas fa-calendar-alt"></i> Billing: ${billingText}
+                                ${billingText}
                             </p>
                         </div>
                         <div>
                             <button class="btn btn-outline" onclick="submitTutorRequestForChild('${child.id}')">
-                                <i class="fas fa-handshake"></i> Request Tutor
+                                <i class="fas fa-handshake"></i> ${existingRequest ? 'Request Another' : 'Request Tutor'}
                             </button>
                         </div>
                     </div>
@@ -560,6 +570,7 @@
             container.innerHTML = html;
         }
 
+        
         // ============================================================
         // POPULATE CHILD DROPDOWNS
         // ============================================================
@@ -611,14 +622,19 @@
         // ============================================================
         // SUBMIT TUTOR REQUEST
         // ============================================================
-                async function submitTutorRequestForChild(childId) {
+        async function submitTutorRequestForChild(childId) {
             const child = childrenData.find(c => c.id === childId);
             if (!child) return;
             
-            // Grab the billing info from the form
+            // Grab the billing info from the selection box above
             const billingCycle = document.getElementById('billingCycleSelect').value;
             const billingDay = document.getElementById('billingDaySelect').value;
             
+            if (!billingCycle || !billingDay) {
+                alert("Please select a Billing Cycle and Preferred Day above.");
+                return;
+            }
+
             const db = firebase.firestore();
             try {
                 await db.collection('tutor_requests').add({
@@ -629,19 +645,19 @@
                     childId: childId,
                     childName: child.fullName,
                     grade: child.grade,
-                    subjects: [child.subject], // Array of subjects (just the one they chose)
+                    subjects: [child.subject], // Array of subjects
                     billingCycle: billingCycle,
                     billingDay: billingDay,
                     status: 'pending',
                     createdAt: new Date().toISOString()
                 });
                 alert('✅ Request sent! Our team will match you with a tutor.');
-                loadRequests();
+                loadRequests(); // Refresh the requests list
             } catch (error) {
                 alert('Error: ' + error.message);
             }
         }
-
+        
         // ============================================================
         // LOAD INVOICES (BOOKINGS & PAYMENTS)
         // ============================================================
