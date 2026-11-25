@@ -1673,7 +1673,7 @@
                                 </div>
                                 <div>
                                     <!-- We pass childData.childName to the invoice generator -->
-                                    <button class="btn-sm approve" style="padding: 10px 16px; font-size: 0.85rem;" onclick="generateInvoice('${childData.parentUid}', '${tutorId}', '${tutorName}', '${childData.parentEmail}', '${childData.parentName}', '${logIdsJson}', '${invoiceTitle}', '${childData.childName}', '${childKey}')"
+                                    <button class="btn-sm approve" style="padding: 10px 16px; font-size: 0.85rem;" onclick="generateInvoice('${childData.parentUid}', '${tutorId}', '${tutorName}', '${childData.parentEmail}', '${childData.parentName}', '${logIdsJson}', '${invoiceTitle}', '${childData.childName}', '${childKey}')">
                                         <i class="fas fa-paper-plane"></i> Bill ${childData.childName.split(' ')[0]}
                                     </button>
                                 </div>
@@ -1700,22 +1700,16 @@
             if (!confirm('Are you sure you want to generate this invoice?')) return;
 
             const db = firebase.firestore();
+            
+            // Get the amount from the specific input box for this child
             const amount = parseFloat(document.getElementById(`invoiceAmount_${childKey}`).value);
             const logIds = JSON.parse(logIdsStr.replace(/&quot;/g, '"'));
             
-            // Extract surname from the child's name
+            // Extract surname from the child's name for the reference (e.g., "ACE-Maqela-001")
             const nameParts = childName.trim().split(' ');
             const surname = nameParts.length > 1 ? nameParts[nameParts.length - 1] : nameParts[0];
             const cleanSurname = surname.replace(/[^a-zA-Z0-9]/g, '');
-            
-            let childName = "Student";
-            if (firstLog && firstLog.childName) {
-                childName = firstLog.childName;
-            } else {
-                // Fallback: search in the weekly logs we have locally
-                const logData = allInvoices.length > 0 ? null : null; // (Just ensuring we don't crash)
-            }
-            
+
             const dueDate = new Date();
             dueDate.setDate(dueDate.getDate() + 7); // Due in 7 days
 
@@ -1776,7 +1770,7 @@
                         html: buildEmailBody(`
                             <h2>New Invoice Generated</h2>
                             <p>Hi ${parentName},</p>
-                            <p>A new invoice has been generated for your tutoring sessions.</p>
+                            <p>A new invoice has been generated for ${childName}'s tutoring sessions.</p>
                             <p><strong>Invoice Number:</strong> ${finalInvoiceNumber}<br>
                                <strong>Reference:</strong> ${finalPaymentRef}<br>
                                <strong>Amount Due:</strong> R${amount.toFixed(2)}</p>
@@ -1786,7 +1780,7 @@
                     }
                 });
 
-                alert(`✅ Invoice ${finalInvoiceNumber} generated! Ref: ${finalPaymentRef}`);
+                alert(`✅ Invoice ${finalInvoiceNumber} generated for ${childName}! Ref: ${finalPaymentRef}`);
                 closeModal('billingModal');
                 loadBillingTutors(); // Refresh the list
                 loadInvoices(); // Update stats
@@ -1796,7 +1790,7 @@
                 alert('Error: ' + error.message);
             }
         }
-    
+        
     </script>
 
 </body>
