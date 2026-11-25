@@ -328,12 +328,14 @@
                     window.location.href = 'admin.html';
                 } else if (role === 'tutor' || role === 'pending_tutor') {
                     window.location.href = 'tutor-dashboard.html';
+                } else if (role === 'student') { // <--- ADD STUDENT CHECK FIRST
+                    window.location.href = 'member-dashboard.html';
                 } else if (role === 'parent') {
                     window.location.href = 'parent-dashboard.html';
                 } else {
-                    window.location.href = 'member-dashboard.html'; // Students go here (view-only)
-                }
-            } catch (error) {
+                    // Fallback for unknown roles
+                    window.location.href = 'member-dashboard.html';
+                }            } catch (error) {
                 console.error('Signin error:', error);
                 errorDiv.textContent = '❌ ' + error.message;
                 errorDiv.style.display = 'block';
