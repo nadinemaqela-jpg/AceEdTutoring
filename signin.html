@@ -40,6 +40,7 @@
             --primary-hover: #172554;
             --border: #e2e8f0;
             --radius: 12px;
+            --warning: #f39c12;
             --danger: #e74c3c;
         }
 
@@ -60,7 +61,7 @@
             background: var(--white);
             border-radius: var(--radius);
             padding: 40px;
-            max-width: 420px;
+            max-width: 440px;
             width: 100%;
             border: 1px solid var(--border);
             box-shadow: 0 10px 30px rgba(0,0,0,0.04);
@@ -68,7 +69,7 @@
 
         .auth-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .auth-header img {
@@ -86,6 +87,24 @@
         .auth-header p {
             color: var(--text-muted);
             font-size: 0.95rem;
+        }
+
+        /* NEW STUDENT NOTICE BANNER */
+        .student-notice {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.4;
+        }
+        .student-notice i {
+            margin-top: 2px;
         }
         
         .form-group {
@@ -205,6 +224,15 @@
             <h1>Welcome Back</h1>
             <p>Sign in to access your dashboard</p>
         </div>
+
+        <!-- NEW: Student Notice -->
+        <div class="student-notice">
+            <i class="fas fa-info-circle" style="font-size: 1.1rem;"></i>
+            <div>
+                <strong>Are you a high school student?</strong><br>
+                Student accounts have <strong>view-only</strong> access. Only a parent or legal guardian can make bookings or request tutors.
+            </div>
+        </div>
         
         <div id="errorMessage" class="error-message"></div>
         
@@ -303,7 +331,7 @@
                 } else if (role === 'parent') {
                     window.location.href = 'parent-dashboard.html';
                 } else {
-                    window.location.href = 'member-dashboard.html';
+                    window.location.href = 'member-dashboard.html'; // Students go here (view-only)
                 }
             } catch (error) {
                 console.error('Signin error:', error);
