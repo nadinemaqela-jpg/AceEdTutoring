@@ -405,27 +405,17 @@
             const term = document.getElementById('resTerm').value;
             const type = document.getElementById('resType').value;
 
-            if (!grade || !subject || !term || !type) {
-                alert("Please select Grade, Subject, Term, and Type to find your resource.");
+            if (!grade || !subject) {
+                alert("Please select at least a Grade and Subject.");
                 return;
             }
 
-            // BUILD YOUR URL HERE
-            // Assuming structure: grades/grade-10/mathematics/term-1/p1.html
-            // Adjust this path to match your actual folder structure!
-            let url = '';
-            
-            if (type === 'atp') {
-                // If it's an ATP, maybe it's in the atps folder
-                url = `atps/${grade}/${subject}/${term}/index.html`; 
-            } else {
-                // If it's a paper, maybe it's in the grades folder
-                url = `grades/${grade}/${subject}/${term}/${type}.html`;
-            }
+            // Since everything is in one file per subject, we only need grade and subject.
+            // E.g., grades/grade-10/life-sciences.html
+            const url = `grades/${grade}/${subject}.html`;
 
             // Redirect the student
             window.location.href = url;
-        }
-    </script>
+        }    </script>
 </body>
 </html>
