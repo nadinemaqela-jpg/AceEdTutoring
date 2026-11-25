@@ -1716,11 +1716,6 @@
                 const logData = allInvoices.length > 0 ? null : null; // (Just ensuring we don't crash)
             }
             
-            // Extract surname (last word of the child's name)
-            const nameParts = childName.trim().split(' ');
-            const surname = nameParts.length > 1 ? nameParts[nameParts.length - 1] : nameParts[0];
-            const cleanSurname = surname.replace(/[^a-zA-Z0-9]/g, ''); // Remove weird characters
-
             const dueDate = new Date();
             dueDate.setDate(dueDate.getDate() + 7); // Due in 7 days
 
