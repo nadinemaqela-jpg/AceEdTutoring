@@ -134,52 +134,55 @@
     </style>
 </head>
 <body>
+    
+    <!-- ============ PROFILE SIDEBAR (LEFT) ============ -->
     <div class="sidebar-overlay" id="profileOverlay" onclick="closeSidebar('profile')"></div>
     <div class="sidebar sidebar-left" id="profileSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
-        <h3>My Profile</h3>
+        <div class="sidebar-head">
+            <h3>My Profile</h3>
+            <button class="sidebar-close" onclick="closeSidebar('profile')">&times;</button>
+        </div>
         <div id="profileLoggedIn" style="display: none;">
-            <a href="parent-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="member-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#" onclick="handleLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Log out</a>
         </div>
         <div id="profileLoggedOut">
-            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign up</a>
         </div>
     </div>
-    
+
+    <!-- ============ MENU SIDEBAR (RIGHT) ============ -->
     <div class="sidebar-overlay" id="dotOverlay" onclick="closeSidebar('dot')"></div>
     <div class="sidebar sidebar-right" id="dotSidebar">
-        <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
-        <h3>Menu</h3>
+        <div class="sidebar-head">
+            <h3>Menu</h3>
+            <button class="sidebar-close" onclick="closeSidebar('dot')">&times;</button>
+        </div>
         <a href="free-classes.html"><i class="fas fa-graduation-cap"></i> Free Classes</a>
+        <a href="subjects.html"><i class="fas fa-book"></i> Subjects Covered</a>
         <a href="pricing.html"><i class="fas fa-tag"></i> Pricing</a>
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+        <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
     </div>
 
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img src="logo.png" alt="AceEd Tutoring Logo" onerror="this.src='https://via.placeholder.com/250x60?text=AceEd'">
-            </div>
-            <div class="tagline">Tutoring for Grade 6 to 12 Students</div>
-            <div class="nav-links">
+    <!-- ============ HEADER ============ -->
+    <header class="site-header">
+        <div class="wrap header-row">
+            <a class="brand" href="index.html">
+                <img src="logo.png" alt="AceEd Tutoring">
+            </a>
+            <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Grades ▼</a>
-                    <div class="dropdown-content">
-                        <a href="grades/grade-06/index.html">Grade 6</a>
-                        <a href="grades/grade-07/index.html">Grade 7</a>
-                        <a href="grades/grade-08/index.html">Grade 8</a>
-                        <a href="grades/grade-09/index.html">Grade 9</a>
-                        <a href="grades/grade-10/index.html">Grade 10</a>
-                        <a href="grades/grade-11/index.html">Grade 11</a>
-                        <a href="grades/grade-12/index.html">Grade 12</a>
-                    </div>
-                </div>
-                <a href="tutors.html" class="nav-link" style="color:#2563eb; font-weight:700;">Tutors</a>
-                <button class="icon-btn" onclick="openSidebar('profile')"><i class="fas fa-user-circle"></i></button>
-                <button class="icon-btn" onclick="openSidebar('dot')"><i class="fas fa-ellipsis-v"></i></button>
+                <a href="tutors.html" class="nav-link">Our Tutors</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <!-- FIXED ONCLICK HERE -->
+                <button class="icon-btn" onclick="openSidebar('profile')" aria-label="Profile"><i class="fas fa-user-circle"></i></button>
+                <!-- FIXED ONCLICK HERE -->
+                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
