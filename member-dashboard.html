@@ -123,7 +123,7 @@
         }
 
         .filter-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;
         }
 
         .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main); }
@@ -233,7 +233,7 @@
             <!-- Filter Dropdowns -->
             <div class="filter-grid">
                 <div class="form-group">
-                    <label>Grade</label>
+                    <label>Select Grade</label>
                     <select id="resGrade" onchange="updateTracker()">
                         <option value="">Select Grade...</option>
                         <option value="grade-10">Grade 10</option>
@@ -243,23 +243,32 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Subject</label>
-                    <select id="resSubject" onchange="updateTracker()">
-                        <option value="">Select Subject...</option>
-                        <option value="mathematics">Mathematics</option>
-                        <option value="physical-sciences">Physical Sciences</option>
-                        <option value="life-sciences">Life Sciences</option>
-                        <option value="accounting">Accounting</option>
-                        <option value="geography">Geography</option>
+                    <label>Select Resource</label>
+                    <select id="resType" onchange="handleResourceTypeChange()">
+                        <option value="">Select Resource...</option>
+                        <option value="atp">ATP (Annual Teaching Plan)</option>
+                        <option value="papers">Question Papers & Memos</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Resource Type</label>
-                    <select id="resType" onchange="updateTracker()">
-                        <option value="">Select Type...</option>
-                        <option value="atp">ATP (Annual Teaching Plan)</option>
-                        <option value="papers">Past Papers & Memos</option>
+                <!-- Hidden by default, shown only for Question Papers -->
+                <div class="form-group" id="subjectGroup" style="display: none;">
+                    <label>Select Subject</label>
+                    <select id="resSubject" onchange="updateTracker()">
+                        <option value="">Select Subject...</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="mathematical-literacy">Mathematical Literacy</option>
+                        <option value="physical-sciences">Physical Sciences</option>
+                        <option value="life-sciences">Life Sciences</option>
+                        <option value="accounting">Accounting</option>
+                        <option value="economics">Economics</option>
+                        <option value="business-studies">Business Studies</option>
+                        <option value="geography">Geography</option>
+                        <option value="history">History</option>
+                        <option value="tourism">Tourism</option>
+                        <option value="cat">CAT</option>
+                        <option value="afrikaans">Afrikaans</option>
+                        <option value="english">English</option>
                     </select>
                 </div>
             </div>
@@ -359,10 +368,26 @@
         // ============================================================
         // RESOURCE FILTER LOGIC
         // ============================================================
+        
+        // This handles showing/hiding the subject dropdown based on the resource type
+        function handleResourceTypeChange() {
+            const type = document.getElementById('resType').value;
+            const subjectGroup = document.getElementById('subjectGroup');
+            const subjectSelect = document.getElementById('resSubject');
+
+            if (type === 'papers') {
+                subjectGroup.style.display = 'block';
+            } else {
+                subjectGroup.style.display = 'none';
+                subjectSelect.value = ''; // Reset subject if they switch back to ATP
+            }
+            updateTracker();
+        }
+
         function updateTracker() {
             const grade = document.getElementById('resGrade').value;
-            const subject = document.getElementById('resSubject').value;
             const type = document.getElementById('resType').value;
+            const subject = document.getElementById('resSubject').value;
 
             const tracker = document.getElementById('breadcrumbText');
 
@@ -371,7 +396,7 @@
             
             let typeText = '';
             if (type === 'atp') typeText = 'ATP';
-            else if (type === 'papers') typeText = 'Past Papers & Memos';
+            else if (type === 'papers') typeText = 'Question Papers & Memos';
 
             const selected = [gradeText, subjectText, typeText].filter(Boolean);
 
@@ -384,25 +409,25 @@
 
         function goToResource() {
             const grade = document.getElementById('resGrade').value;
-            const subject = document.getElementById('resSubject').value;
             const type = document.getElementById('resType').value;
+            const subject = document.getElementById('resSubject').value;
 
             if (!grade || !type) {
-                alert("Please select at least a Grade and Resource Type.");
+                alert("Please select a Grade and a Resource Type.");
                 return;
             }
 
             let url = '';
 
             if (type === 'atp') {
-                // Links to: atps/grade-11/index.html
+                // Leads to: atps/grade-11/index.html
                 url = `atps/${grade}/index.html`;
             } else if (type === 'papers') {
-                // Links to: grades/grade-11/mathematics/index.html
                 if (!subject) {
-                    alert("Please select a Subject for Past Papers.");
+                    alert("Please select a Subject for Question Papers.");
                     return;
                 }
+                // Leads to: grades/grade-11/mathematics/index.html
                 url = `grades/${grade}/${subject}/index.html`;
             }
 
