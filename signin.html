@@ -4,165 +4,207 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18521810069"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'AW-18521810069');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18521810069');
     </script>
-    <!-- Event snippet for Add to basket conversion page --> 
+    <!-- Event snippet for Add to basket conversion page -->
     <script> gtag('event', 'conversion', {'send_to': 'AW-18521810069/rDa0CPeXk6YdEJXJ8f9E'}); </script>
 
-                <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - AceEd Tutoring</title>
-    
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --bg-color: #f7f9fc;
+            --white: #ffffff;
+            --text-main: #1e2a3e;
+            --text-muted: #64748b;
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --danger: #e74c3c;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            background: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            line-height: 1.6;
         }
         
-        .signin-container {
-            background: white;
-            border-radius: 24px;
+        .auth-card {
+            background: var(--white);
+            border-radius: var(--radius);
             padding: 40px;
             max-width: 420px;
             width: 100%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
         }
-        
-        .signin-container h1 {
-            color: #1e2a3a;
+
+        .auth-header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
         }
-        
-        .signin-container p {
-            color: #7f8c8d;
-            text-align: center;
-            margin-bottom: 25px;
+
+        .auth-header img {
+            height: 45px;
+            margin: 0 auto 15px;
+        }
+
+        .auth-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
         
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-main);
             font-size: 0.9rem;
         }
         
-        input {
+        .form-group input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus {
+            font-family: inherit;
             outline: none;
-            border-color: #3498db;
+            transition: border-color 0.2s;
+            background: var(--bg-color);
         }
         
-        .btn-signin {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+        .form-group input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+        }
+        
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 14px;
-            border-radius: 40px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s;
+            transition: background 0.2s;
+            font-family: inherit;
         }
         
-        .btn-signin:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        .btn-primary:hover {
+            background: var(--primary-hover);
         }
         
-        .btn-signin:disabled {
-            opacity: 0.6;
+        .btn-primary:disabled {
+            opacity: 0.7;
             cursor: not-allowed;
-            transform: none;
         }
         
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
             padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
-        }
-        
-        .signup-link {
+            font-size: 0.9rem;
             text-align: center;
-            margin-top: 20px;
-            color: #7f8c8d;
         }
         
-        .signup-link a {
-            color: #3498db;
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
         
-        .signup-link a:hover {
+        .auth-footer a:hover {
             text-decoration: underline;
         }
         
         .forgot-password {
             text-align: right;
-            margin-top: 5px;
+            margin-bottom: 20px;
+            margin-top: -10px;
         }
         
         .forgot-password a {
-            color: #3498db;
+            color: var(--text-muted);
             font-size: 0.85rem;
             text-decoration: none;
             cursor: pointer;
+            font-weight: 500;
         }
         
         .forgot-password a:hover {
-            text-decoration: underline;
+            color: var(--primary);
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="signin-container">
-        <h1><i class="fas fa-sign-in-alt"></i> Welcome Back</h1>
-        <p>Sign in to access your account</p>
+    <div class="auth-card">
+        <div class="auth-header">
+            <img src="logo.png" alt="AceEd Tutoring" onerror="this.style.display='none'">
+            <h1>Welcome Back</h1>
+            <p>Sign in to access your dashboard</p>
+        </div>
         
         <div id="errorMessage" class="error-message"></div>
         
@@ -182,10 +224,12 @@
                 <a onclick="resetPassword()">Forgot password?</a>
             </div>
             
-            <button type="submit" class="btn-signin" id="signinBtn"><i class="fas fa-arrow-right"></i> Sign In</button>
+            <button type="submit" class="btn-primary" id="signinBtn">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
         </form>
         
-        <div class="signup-link">
+        <div class="auth-footer">
             Don't have an account? <a href="signup.html">Sign Up</a>
         </div>
     </div>
@@ -266,7 +310,7 @@
                 errorDiv.textContent = '❌ ' + error.message;
                 errorDiv.style.display = 'block';
                 signinBtn.disabled = false;
-                signinBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sign In';
+                signinBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
             }
         });
     </script>
