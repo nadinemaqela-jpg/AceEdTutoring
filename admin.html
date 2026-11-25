@@ -291,8 +291,8 @@
                 <a href="contact.html" class="nav-link">Contact</a>
             </nav>
             <div class="header-actions">
-                <button class="icon-btn" onclick="openSidebar('profile')" aria-label="Profile"><i class="fas fa-user-circle"></i></button>
-                <button class="icon-btn" onclick="openSidebar('dot')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+                <button class="icon-btn" "openSidebar('profile')" aria-label="Profile"><i class="fas fa-user-circle"></i></button>
+                <button class="icon-btn" "openSidebar('dot')" aria-label="Menu"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
@@ -309,7 +309,7 @@
                         <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
                         <div class="user-info">Welcome, <span id="adminName">Admin</span></div>
                     </div>
-                    <button class="btn btn-danger" onclick="handleLogout()">
+                    <button class="btn btn-danger" "handleLogout()">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
                 </div>
@@ -1562,7 +1562,7 @@
             const content = document.getElementById('billingModalContent');
 
             document.getElementById('billingModalSubtitle').textContent = `Generating invoice for logs by ${tutorName}`;
-            content.innerHTML = '<p style="text-align:center; padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading logs & parent info...</p>';
+            content.innerHTML = '<p style="text-align:center; padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading logs...</p>';
             modal.classList.add('show');
 
             try {
@@ -1576,33 +1576,36 @@
                     return;
                 }
 
-                let logsByParent = {};
+                // WE GROUP BY CHILD NOW, NOT JUST PARENT
+                let logsByChild = {};
 
-                // Group logs by parent
                 snapshot.forEach(doc => {
                     const log = doc.data();
-                    if (!logsByParent[log.parentUid]) {
-                        logsByParent[log.parentUid] = {
+                    // Create a unique key for the child (using studentUid)
+                    const childKey = log.studentUid; 
+
+                    if (!logsByChild[childKey]) {
+                        logsByChild[childKey] = {
+                            childName: log.studentName,
                             parentName: log.parentName,
                             parentEmail: log.parentEmail,
+                            parentUid: log.parentUid,
                             totalHours: 0,
-                            billingCycle: 'monthly', // Default fallback
+                            billingCycle: 'monthly',
+                            billingDay: 'Day 1',
                             logs: []
                         };
                     }
-                    logsByParent[log.parentUid].logs.push({ id: doc.id, ...log });
-                    logsByParent[log.parentUid].totalHours += (log.totalHours || 0);
+                    logsByChild[childKey].logs.push({ id: doc.id, ...log });
+                    logsByChild[childKey].totalHours += (log.totalHours || 0);
                 });
 
-                // Fetch parent info to check billing cycle
-                for (const [parentUid, parentData] of Object.entries(logsByParent)) {
+                // Fetch the billing preference for each child
+                for (const [childKey, childData] of Object.entries(logsByChild)) {
                     
-                    let prefCycle = 'monthly';
-                    let prefDay = 'Day 1';
-
-                    // Look for their active request to get the preference
+                    // Look for the specific request for this child AND this tutor
                     const reqQuery = await db.collection('tutor_requests')
-                        .where('parentUid', '==', parentUid)
+                        .where('childId', '==', childKey)
                         .where('tutorUid', '==', tutorId)
                         .where('status', '==', 'accepted')
                         .limit(1)
@@ -1610,58 +1613,68 @@
 
                     if (!reqQuery.empty) {
                         const reqData = reqQuery.docs[0].data();
-                        prefCycle = reqData.billingCycle || 'monthly';
-                        prefDay = reqData.billingDay || (prefCycle === 'monthly' ? 'Day 1' : 'Monday');
+                        logsByChild[childKey].billingCycle = reqData.billingCycle || 'monthly';
+                        logsByChild[childKey].billingDay = reqData.billingDay || 'Day 1';
                     }
-
-                    logsByParent[parentUid].billingCycle = prefCycle;
-                    logsByParent[parentUid].billingDay = prefDay;
                 }
 
                 let html = '';
                 const now = new Date();
                 const monthName = now.toLocaleString('default', { month: 'long' });
 
-                for (const [parentUid, parentData] of Object.entries(logsByParent)) {
-                    const logIdsJson = JSON.stringify(parentData.logs.map(l => l.id)).replace(/"/g, '&quot;');
+                for (const [childKey, childData] of Object.entries(logsByChild)) {
+                    const logIdsJson = JSON.stringify(childData.logs.map(l => l.id)).replace(/"/g, '&quot;');
                     
                     let defaultAmount = 600;
-                    let invoiceTitle = `Monthly Tutoring (${monthName})`;
+                    let invoiceTitle = `Monthly Tutoring for ${childData.childName} (${monthName})`;
                     
-                    // Create the badge showing exactly when they want to be billed
-                    let cycleBadge = `<span style="background:#e0e7ff; color:#3730a3; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-alt"></i> Monthly: ${parentData.billingDay}</span>`;
+                    let cycleBadge = `<span style="background:#e0e7ff; color:#3730a3; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-alt"></i> Monthly: ${childData.billingDay}</span>`;
 
-                    if (parentData.billingCycle === 'weekly' || parentData.billingCycle === 'payg') {
-                        defaultAmount = parentData.totalHours * 100; 
-                        invoiceTitle = `Tutoring Hours (${parentData.totalHours} hrs)`;
-                        cycleBadge = `<span style="background:#fce7f3; color:#9d174d; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-week"></i> Weekly: ${parentData.billingDay}s</span>`;
+                    if (childData.billingCycle === 'weekly' || childData.billingCycle === 'payg') {
+                        defaultAmount = childData.totalHours * 100; 
+                        invoiceTitle = `Weekly Tutoring for ${childData.childName} (${childData.totalHours} hrs)`;
+                        cycleBadge = `<span style="background:#fce7f3; color:#9d174d; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:600;"><i class="fas fa-calendar-week"></i> Weekly: ${childData.billingDay}s</span>`;
                     }
 
                     html += `
-                        <div style="background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 15px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-                                <h4 style="margin:0;">${parentData.parentName}</h4>
+                        <div style="background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                            
+                            <!-- HEADER: Showing both Parent and Child -->
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 10px;">
+                                <div>
+                                    <h4 style="margin:0 0 4px 0;">Student: ${childData.childName}</h4>
+                                    <span style="font-size:0.85rem; color:var(--text-muted);">Parent: ${childData.parentName} (${childData.parentEmail})</span>
+                                </div>
                                 ${cycleBadge}
                             </div>
-                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-                                ${parentData.parentEmail} <br>
-                                <strong>${parentData.logs.length} sessions</strong> logged (${parentData.totalHours} hours total).
-                            </p>
+                            
+                            <!-- LOG BREAKDOWN -->
+                            <div style="background: white; border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 15px;">
+                                <p style="margin: 0 0 5px 0; font-size: 0.85rem; font-weight: 600; color: var(--text-main);">Unbilled Logs:</p>
+                                <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">
+                                    📚 <strong>${childData.logs.length} Sessions</strong> logged (${childData.totalHours} total hours).
+                                </p>
+                                <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 0.8rem; color: var(--text-muted);">
+                                    ${childData.logs.map(log => `<li>${log.subject}: Week of ${new Date(log.weekOf).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' })} - ${log.totalHours} hrs</li>`).join('')}
+                                </ul>
+                            </div>
 
+                            <!-- INVOICE GENERATOR -->
                             <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; background: white; padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
                                 <div style="flex: 1; min-width: 120px;">
                                     <label style="font-size: 0.8rem; font-weight: 600; display:block; margin-bottom:5px;">Invoice Amount (R)</label>
-                                    <input type="number" id="invoiceAmount_${parentUid}" value="${defaultAmount}" 
+                                    <input type="number" id="invoiceAmount_${childKey}" value="${defaultAmount}" 
                                            style="padding: 8px; border: 1px solid var(--border); border-radius: 6px; width: 100%; font-family: inherit; font-size: 1rem;"
-                                           oninput="updatePayoutDisplay('${parentUid}', this.value)">
+                                           oninput="updatePayoutDisplay('${childKey}', this.value)">
                                 </div>
                                 <div style="flex: 1; min-width: 120px; font-size: 0.85rem;">
-                                    <div style="color: var(--success); font-weight: 600;">Tutor Payout (70%): R<span id="payoutDisplay_${parentUid}">${(defaultAmount * 0.70).toFixed(2)}</span></div>
-                                    <div style="color: var(--text-muted); font-size: 0.75rem;">AceEd Profit (30%): R<span id="profitDisplay_${parentUid}">${(defaultAmount * 0.30).toFixed(2)}</span></div>
+                                    <div style="color: var(--success); font-weight: 600;">Tutor Payout (70%): R<span id="payoutDisplay_${childKey}">${(defaultAmount * 0.70).toFixed(2)}</span></div>
+                                    <div style="color: var(--text-muted); font-size: 0.75rem;">AceEd Profit (30%): R<span id="profitDisplay_${childKey}">${(defaultAmount * 0.30).toFixed(2)}</span></div>
                                 </div>
                                 <div>
-                                    <button class="btn-sm approve" style="padding: 10px 16px; font-size: 0.85rem;" onclick="generateInvoice('${parentUid}', '${tutorId}', '${tutorName}', '${parentData.parentEmail}', '${parentData.parentName}', '${logIdsJson}', '${invoiceTitle}')">
-                                        <i class="fas fa-paper-plane"></i> Generate
+                                    <!-- We pass childData.childName to the invoice generator -->
+                                    <button class="btn-sm approve" style="padding: 10px 16px; font-size: 0.85rem;" onclick="generateInvoice('${childData.parentUid}', '${tutorId}', '${tutorName}', '${childData.parentEmail}', '${childData.parentName}', '${logIdsJson}', '${invoiceTitle}', '${childData.childName}', '${childKey}')"
+                                        <i class="fas fa-paper-plane"></i> Bill ${childData.childName.split(' ')[0]}
                                     </button>
                                 </div>
                             </div>
@@ -1683,15 +1696,18 @@
             document.getElementById(`profitDisplay_${parentUid}`).textContent = (num * 0.30).toFixed(2);
         }
 
-                async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr, invoiceTitle) {
+        async function generateInvoice(parentUid, tutorId, tutorName, parentEmail, parentName, logIdsStr, invoiceTitle, childName, childKey) {
             if (!confirm('Are you sure you want to generate this invoice?')) return;
 
             const db = firebase.firestore();
-            const amount = parseFloat(document.getElementById(`invoiceAmount_${parentUid}`).value);
+            const amount = parseFloat(document.getElementById(`invoiceAmount_${childKey}`).value);
             const logIds = JSON.parse(logIdsStr.replace(/&quot;/g, '"'));
             
-            // Find the child's name from the first log to get the surname
-            const firstLog = allRequests.find(r => r.parentUid === parentUid); 
+            // Extract surname from the child's name
+            const nameParts = childName.trim().split(' ');
+            const surname = nameParts.length > 1 ? nameParts[nameParts.length - 1] : nameParts[0];
+            const cleanSurname = surname.replace(/[^a-zA-Z0-9]/g, '');
+            
             let childName = "Student";
             if (firstLog && firstLog.childName) {
                 childName = firstLog.childName;
